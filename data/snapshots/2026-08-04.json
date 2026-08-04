@@ -1,18 +1,9 @@
 {
   "date": "2026-08-04",
-  "capturedAt": "2026-08-04T17:47:22.689Z",
+  "capturedAt": "2026-08-04T18:04:03.122Z",
   "capture": {
     "method": "scrape",
-    "errors": [
-      {
-        "source": "therealreal",
-        "error": "no marketplace data parsed (bot-block or layout change)"
-      },
-      {
-        "source": "fashionphile",
-        "error": "identical low ($765) across brands — page-wide element, not per-brand results"
-      }
-    ]
+    "errors": []
   },
   "sources": {
     "mirror": {
@@ -203,15 +194,90 @@
         }
       ]
     },
-    "therealreal": {
-      "status": "unavailable",
-      "name": "The RealReal",
-      "focus": []
-    },
     "fashionphile": {
-      "status": "unavailable",
+      "status": "ok",
       "name": "Fashionphile",
-      "focus": []
+      "via": "algolia",
+      "focus": [
+        {
+          "brand": "Hermès",
+          "low": 95,
+          "count": 2782
+        },
+        {
+          "brand": "Chanel",
+          "low": 190,
+          "count": 7093
+        },
+        {
+          "brand": "Louis Vuitton",
+          "low": 115,
+          "count": 7923
+        },
+        {
+          "brand": "Goyard",
+          "low": 225,
+          "count": 347
+        },
+        {
+          "brand": "Dior",
+          "low": 150,
+          "count": 1194
+        },
+        {
+          "brand": "Fendi",
+          "low": 65,
+          "count": 694
+        },
+        {
+          "brand": "The Row",
+          "low": 685,
+          "count": 147
+        },
+        {
+          "brand": "Cartier",
+          "low": 470,
+          "count": 481
+        }
+      ]
+    },
+    "therealreal": {
+      "status": "reference",
+      "source": "The RealReal — 2025 Resale Report",
+      "asOf": "2025-09-04",
+      "url": "https://investor.therealreal.com/node/11426/pdf",
+      "mostSearchedBrands": [
+        "Louis Vuitton",
+        "Chanel",
+        "Prada",
+        "Miu Miu",
+        "Gucci",
+        "Loewe",
+        "Bottega Veneta",
+        "Celine",
+        "Dior",
+        "The Row",
+        "Fendi"
+      ],
+      "valueClimbers": [
+        {
+          "item": "Van Cleef & Arpels Alhambra",
+          "yoyPct": 20
+        },
+        {
+          "item": "Goyard Saint Louis Tote",
+          "yoyPct": 18
+        },
+        {
+          "item": "Rolex Datejust",
+          "yoyPct": 17
+        },
+        {
+          "item": "Hermès Birkin 30",
+          "yoyPct": 15
+        }
+      ],
+      "note": "Louis Vuitton is the #1 most-searched brand for a consecutive year; Chanel bags the most-searched item. Timeworn bags +45% YoY (LV, Chanel, Hermès, Balenciaga in demand). 47% of consumers weigh resale value before buying new."
     },
     "indices": {
       "status": "reference",
