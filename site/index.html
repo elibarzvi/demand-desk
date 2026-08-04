@@ -231,6 +231,12 @@
   </section>
 
   <section class="card full" style="margin-top:16px">
+    <div class="chead"><h2>Pre-owned marketplaces — entry price by brand</h2><span class="src-tag">The RealReal · Fashionphile</span></div>
+    <p class="cnote">Lowest live listing price (and count) per brand on each resale marketplace, captured daily. Blank = no capture that day or source unavailable.</p>
+    <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">The RealReal</th><th style="text-align:right">Fashionphile</th></tr></thead><tbody id="mktBody"></tbody></table></div>
+  </section>
+
+  <section class="card full" style="margin-top:16px">
     <div class="chead"><h2>Buy Signals</h2><span class="src-tag">Synthesis</span></div>
     <p class="cnote">Reading demand against value-retention and supply, for purchasing decisions.</p>
     <div class="sig" id="signals"></div>
@@ -243,7 +249,7 @@
   </section>
 
   <footer>
-    <div id="sources">Sources — Mirror Concierge, myGemma, Lyst, Rebag, StockX.</div>
+    <div id="sources">Sources — Mirror Concierge, StockX, The RealReal, Fashionphile, myGemma, Lyst, Rebag.</div>
     <div class="disc">
       Retention figures blend Rebag's 6th annual Clair Report (Dec 2025, Hermès &amp; Goyard) and the 5th annual (2024, others), labeled by year. Supply-mix share is derived from the visible feed. Mirror is an independent marketplace, not affiliated with the brands shown. Point-in-time reads for buying research, not investment advice.
     </div>
@@ -385,6 +391,20 @@ function render(latest, history, exports){
     <td><span class="b">${esc(p.brand)}</span></td><td>${esc(p.item)}</td>
     <td><span class="chip">${esc(p.category||'—')}</span></td>
     <td class="price">${p.price?fmt(p.price):'—'}</td></tr>`).join('');
+
+  // ---- Pre-owned marketplaces ----
+  const trr = latest.sources.therealreal?.focus || [];
+  const fp = latest.sources.fashionphile?.focus || [];
+  const mktBrands = [...new Set([...trr, ...fp].map(x=>x.brand))];
+  const cell = v => (v && v.low!=null)
+    ? `${fmt(v.low)}${v.count?` <span style="color:var(--ink-3);font-size:11px">· ${v.count.toLocaleString('en-US')}</span>`:''}`
+    : '<span style="color:var(--ink-3)">—</span>';
+  $('#mktBody').innerHTML = mktBrands.length
+    ? mktBrands.map(b=>{
+        const t = trr.find(x=>x.brand===b), f = fp.find(x=>x.brand===b);
+        return `<tr><td><span class="b">${esc(b)}</span></td><td class="price">${cell(t)}</td><td class="price">${cell(f)}</td></tr>`;
+      }).join('')
+    : '<tr><td colspan="3" style="color:var(--ink-3)">Awaiting first capture from these sources — populates on the next daily run.</td></tr>';
 
   // ---- Signals (curated, with live figures injected) ----
   const chanelReq = brandTot['Chanel']||0;

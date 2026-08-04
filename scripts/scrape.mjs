@@ -96,6 +96,40 @@ async function scrapeMirror(browser) {
   }
 }
 
+// Pre-owned marketplaces: for a focus set of brands, capture the lowest live
+// listing price + result count from each site's price-ascending search.
+const FOCUS_BRANDS = ['Hermès', 'Chanel', 'Louis Vuitton', 'Goyard', 'Dior', 'Fendi', 'The Row', 'Cartier'];
+const MARKETPLACES = [
+  { key: 'therealreal', name: 'The RealReal', url: b => `https://www.therealreal.com/shop?keywords=${encodeURIComponent(b)}&sort=price_low_to_high` },
+  { key: 'fashionphile', name: 'Fashionphile', url: b => `https://www.fashionphile.com/shop?q=${encodeURIComponent(b)}&sort=price-low-to-high` }
+];
+const deaccent = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+async function scrapeMarketplace(browser, mp) {
+  const ctx = await browser.newContext({ userAgent: UA });
+  const page = await ctx.newPage();
+  try {
+    const focus = [];
+    for (const brand of FOCUS_BRANDS) {
+      try {
+        await page.goto(mp.url(deaccent(brand)), { waitUntil: 'domcontentloaded', timeout: 45000 });
+        await page.waitForTimeout(2500);
+        const body = await page.innerText('body');
+        if (/Access Denied|captcha|unusual traffic|are you a human|Pardon Our Interruption/i.test(body)) throw new Error('bot-blocked');
+        const prices = [...body.matchAll(/\$\s?([\d][\d,]{2,})/g)].map(m => Number(m[1].replace(/,/g, ''))).filter(n => n >= 50);
+        const cm = body.match(/([\d,]{1,7})\s+(?:results|items|products)/i);
+        focus.push({ brand, low: prices.length ? Math.min(...prices) : null, count: cm ? Number(cm[1].replace(/,/g, '')) : null });
+      } catch (e) {
+        focus.push({ brand, low: null, count: null, error: String(e.message || e) });
+      }
+    }
+    if (!focus.some(f => f.low != null)) throw new Error('no marketplace data parsed (bot-block or layout change)');
+    return { status: 'ok', name: mp.name, focus };
+  } finally {
+    await ctx.close();
+  }
+}
+
 async function scrapeStockxGoyard(browser) {
   const ctx = await browser.newContext({ userAgent: UA });
   const page = await ctx.newPage();
@@ -130,6 +164,7 @@ async function main() {
 
   const browser = await chromium.launch({ args: ['--no-sandbox'] });
   let mirror, stockx;
+  const marketplaces = {};
   try {
     try { mirror = await scrapeMirror(browser); }
     catch (e) {
@@ -140,6 +175,13 @@ async function main() {
     catch (e) {
       errors.push({ source: 'stockx_goyard', error: String(e.message || e) });
       stockx = prev?.sources?.stockx_goyard ? { ...prev.sources.stockx_goyard, status: 'carried' } : { status: 'error', items: [] };
+    }
+    for (const mp of MARKETPLACES) {
+      try { marketplaces[mp.key] = await scrapeMarketplace(browser, mp); }
+      catch (e) {
+        errors.push({ source: mp.key, error: String(e.message || e) });
+        marketplaces[mp.key] = prev?.sources?.[mp.key] ? { ...prev.sources[mp.key], status: 'carried' } : { status: 'error', name: mp.name, focus: [] };
+      }
     }
   } finally {
     await browser.close();
@@ -152,13 +194,15 @@ async function main() {
     sources: {
       mirror,
       stockx_goyard: stockx,
+      therealreal: marketplaces.therealreal,
+      fashionphile: marketplaces.fashionphile,
       indices: { status: 'reference', ...indices }
     }
   };
 
   ensureDir(SNAP_DIR);
   writeFile(path.join(SNAP_DIR, `${date}.json`), JSON.stringify(snapshot, null, 2) + '\n');
-  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status}` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
+  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status} therealreal:${marketplaces.therealreal?.status} fashionphile:${marketplaces.fashionphile?.status}` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
 }
 
 main().catch(e => { console.error(e); process.exit(1); });
