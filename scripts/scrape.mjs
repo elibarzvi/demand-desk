@@ -184,7 +184,9 @@ async function main() {
       try { marketplaces[mp.key] = await scrapeMarketplace(browser, mp); }
       catch (e) {
         errors.push({ source: mp.key, error: String(e.message || e) });
-        marketplaces[mp.key] = prev?.sources?.[mp.key] ? { ...prev.sources[mp.key], status: 'carried' } : { status: 'error', name: mp.name, focus: [] };
+        // Don't carry marketplace data forward yet: the selectors aren't proven, so
+        // a failed run stays empty rather than propagating a possibly-bad prior value.
+        marketplaces[mp.key] = { status: 'unavailable', name: mp.name, focus: [] };
       }
     }
   } finally {
