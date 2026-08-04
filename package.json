@@ -1,0 +1,17 @@
+{
+  "name": "demand-desk",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Daily luxury demand, supply and resale-value tracker with append-only snapshots and CSV exports.",
+  "scripts": {
+    "scrape": "node scripts/scrape.mjs",
+    "export": "node scripts/export-csv.mjs",
+    "build": "node scripts/build-site.mjs",
+    "all": "npm run scrape && npm run export && npm run build",
+    "serve": "node scripts/serve.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}

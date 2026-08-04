@@ -1,0 +1,44 @@
+{
+  "_comment": "Periodic index/report data (myGemma / Lyst / Rebag). These sources publish quarterly or annually, not daily, so they are carried into each daily snapshot as reference values with their own asOf dates. Update this file when a new edition is published; the scraper copies it into every snapshot verbatim.",
+  "mygemma": {
+    "source": "myGemma Luxury Resale Index",
+    "asOf": "2026-07-31",
+    "period": "2026-01-01..2026-07-31",
+    "url": "https://mygemma.com/blogs/news/luxury-resale-index-2026",
+    "brands": ["Tiffany & Co.", "Chanel", "Cartier", "Hermès", "Goyard", "Van Cleef & Arpels", "David Yurman", "Louis Vuitton", "Buccellati", "Gucci"],
+    "handbags": ["Hermès Kelly", "Hermès Birkin", "Louis Vuitton Speedy", "Hermès Lindy", "Chanel 25", "Louis Vuitton Neverfull", "Louis Vuitton Alma BB", "Chanel 22", "Chanel Deauville", "Hermès Birkin 25"]
+  },
+  "lyst": {
+    "source": "The Lyst Index",
+    "asOf": "2026-03-31",
+    "period": "Q1 2026",
+    "url": "https://www.lyst.com/the-lyst-index/q1-26/",
+    "brands": [
+      {"rank": 1, "name": "Chanel", "move": "new #1"},
+      {"rank": 2, "name": "Saint Laurent", "move": "-1"},
+      {"rank": 3, "name": "Dior", "move": "new"},
+      {"rank": 4, "name": "Miu Miu", "move": "-2"},
+      {"rank": 5, "name": "Gucci", "move": "+4"},
+      {"rank": 6, "name": "Ralph Lauren", "move": "-2"},
+      {"rank": 7, "name": "Prada", "move": "-2"},
+      {"rank": 8, "name": "Coach", "move": "-2"},
+      {"rank": 9, "name": "Burberry", "move": "-1"},
+      {"rank": 10, "name": "COS", "move": "-7"},
+      {"rank": 11, "name": "The Row", "move": "-4"},
+      {"rank": 19, "name": "Fendi", "move": "re-entry"},
+      {"rank": 20, "name": "Céline", "move": "new"}
+    ]
+  },
+  "rebag": {
+    "source": "Rebag Clair Report",
+    "url": "https://www.prnewswire.com/news-releases/rebag-releases-its-sixth-annual-clair-report-a-comprehensive-luxury-appraisal-index-for-resale-302637452.html",
+    "note": "Hermès & Goyard from the 6th annual report (Dec 2025); Chanel, Louis Vuitton & Celine from the 5th annual (2024) for a consistent brand set. Year labeled per row.",
+    "retention": [
+      {"brand": "Hermès", "pct": 138, "reportYear": 2025, "appreciates": true},
+      {"brand": "Goyard", "pct": 132, "reportYear": 2025, "appreciates": true},
+      {"brand": "Chanel", "pct": 92, "reportYear": 2024, "appreciates": false},
+      {"brand": "Louis Vuitton", "pct": 88, "reportYear": 2024, "appreciates": false},
+      {"brand": "Celine", "pct": 64, "reportYear": 2024, "appreciates": false}
+    ]
+  }
+}

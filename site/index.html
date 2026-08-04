@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Demand Desk</title>
+<style>
+  :root{
+    --bg:#14110e; --surface:#1c1815; --surface-2:#241f1b; --line:#332b25;
+    --ink:#ede7dd; --ink-2:#b7ac9f; --ink-3:#7d7269;
+    --gold:#d4b678; --gold-strong:#c79a3f; --gold-dim:#8a7448;
+    --cool:#6f8ea3; --heat:#c8894a; --good:#7fae6b; --warn:#c98b45;
+    --radius:14px; --maxw:1240px;
+    --serif:"Hoefler Text","Baskerville Old Face","Big Caslon",Palatino,Georgia,serif;
+    --sans:"Neue Haas Grotesk Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,"Roboto Mono",monospace;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f3efe8; --surface:#fbf9f5; --surface-2:#f6f1e8; --line:#e3dccf;
+      --ink:#201b15; --ink-2:#5f574c; --ink-3:#928777;
+      --gold:#9a7b3f; --gold-strong:#8a6a2c; --gold-dim:#b79a63;
+      --cool:#5a7d94; --heat:#b06a2e; --good:#4f7d3c; --warn:#a76a24;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14110e; --surface:#1c1815; --surface-2:#241f1b; --line:#332b25;
+    --ink:#ede7dd; --ink-2:#b7ac9f; --ink-3:#7d7269;
+    --gold:#d4b678; --gold-strong:#c79a3f; --gold-dim:#8a7448;
+    --cool:#6f8ea3; --heat:#c8894a; --good:#7fae6b; --warn:#c98b45;
+  }
+  :root[data-theme="light"]{
+    --bg:#f3efe8; --surface:#fbf9f5; --surface-2:#f6f1e8; --line:#e3dccf;
+    --ink:#201b15; --ink-2:#5f574c; --ink-3:#928777;
+    --gold:#9a7b3f; --gold-strong:#8a6a2c; --gold-dim:#b79a63;
+    --cool:#5a7d94; --heat:#b06a2e; --good:#4f7d3c; --warn:#a76a24;
+  }
+  *{box-sizing:border-box}
+  html{color-scheme:light dark}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.5;-webkit-font-smoothing:antialiased;font-size:15px}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 22px 60px}
+
+  .mast{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
+    gap:18px;border-bottom:1px solid var(--line);padding-bottom:22px}
+  .mast .eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);
+    margin:.18em 0 .12em;letter-spacing:-.01em;text-wrap:balance;line-height:1.02}
+  .mast p{margin:0;color:var(--ink-2);max-width:56ch;font-size:14px}
+  .stamp{text-align:right;font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.7;white-space:nowrap}
+  .stamp b{color:var(--ink-2);font-weight:600}
+  .live{display:inline-flex;align-items:center;gap:6px;color:var(--good)}
+  .live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--good);animation:pulse 2.4s ease-out infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(127,174,107,.5)}70%,100%{box-shadow:0 0 0 7px rgba(127,174,107,0)}}
+  @media (prefers-reduced-motion: reduce){.live::before{animation:none}}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0 8px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 16px 15px;position:relative;overflow:hidden}
+  .kpi::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold)}
+  .kpi .lab{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+  .kpi .val{font-family:var(--serif);font-size:26px;margin-top:7px;line-height:1.05;letter-spacing:-.01em}
+  .kpi .sub{font-size:12px;color:var(--ink-2);margin-top:5px}
+  .kpi .src{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--gold-dim);text-transform:uppercase;margin-top:9px}
+
+  .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-top:16px}
+  .col{display:flex;flex-direction:column;gap:16px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px 16px}
+  .card.full{grid-column:1 / -1}
+  .chead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:2px}
+  .chead h2{font-family:var(--serif);font-weight:500;font-size:19px;margin:0;letter-spacing:-.01em}
+  .src-tag{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);
+    border:1px solid var(--line);border-radius:999px;padding:3px 9px;white-space:nowrap}
+  .cnote{color:var(--ink-2);font-size:12.5px;margin:2px 0 15px}
+
+  .bars{display:flex;flex-direction:column;gap:11px}
+  .bar{display:grid;grid-template-columns:1fr auto auto;gap:4px 10px;align-items:center}
+  .bar .name{font-size:13px;color:var(--ink)}
+  .bar .name .brand{font-family:var(--serif);font-size:14px;margin-right:7px}
+  .bar .name .desc{color:var(--ink-2);font-size:12px}
+  .bar .spark{align-self:center}
+  .bar .fig{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--gold);text-align:right;min-width:26px}
+  .delta{font-family:var(--mono);font-size:10.5px;font-variant-numeric:tabular-nums;text-align:right;min-width:30px}
+  .delta.up{color:var(--good)}.delta.down{color:var(--heat)}.delta.flat{color:var(--ink-3)}
+  .track{grid-column:1 / -1;height:9px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+  .fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold-dim),var(--gold));width:0;transition:width 1s cubic-bezier(.22,.61,.36,1)}
+  @media (prefers-reduced-motion: reduce){.fill{transition:none}}
+
+  .rank{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .rank h3{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;
+    margin:0 0 10px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  ol.rl{list-style:none;margin:0;padding:0;counter-reset:r}
+  ol.rl li{counter-increment:r;display:flex;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px dotted var(--line);font-size:13.5px}
+  ol.rl li:last-child{border-bottom:0}
+  ol.rl li::before{content:counter(r);font-family:var(--mono);font-size:11px;color:var(--gold);width:16px;flex:none;text-align:right;font-variant-numeric:tabular-nums}
+  ol.rl li .b{font-family:var(--serif);font-size:14px}
+  ol.rl li .m{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+  .up{color:var(--good)}.down{color:var(--heat)}
+
+  .ret{position:relative}
+  .retrow{display:grid;grid-template-columns:82px 1fr 58px;align-items:center;gap:10px;margin-bottom:10px}
+  .retrow .rn{font-family:var(--serif);font-size:14px}
+  .retrack{height:16px;background:var(--surface-2);border-radius:4px;overflow:hidden;position:relative}
+  .retfill{height:100%;width:0;border-radius:4px;transition:width 1s ease}
+  .retfill.app{background:linear-gradient(90deg,var(--gold-dim),var(--gold-strong))}
+  .retfill.dep{background:var(--cool);opacity:.75}
+  .retrow .rv{font-family:var(--mono);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+  .yr{font-family:var(--mono);font-size:9px;color:var(--ink-3);margin-left:5px}
+  .refnote{font-family:var(--mono);font-size:9.5px;color:var(--ink-3);text-align:center;margin-top:2px}
+
+  .twrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;padding:0 12px 8px 0;border-bottom:1px solid var(--line)}
+  td{padding:9px 12px 9px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+  tr:last-child td{border-bottom:0}
+  td .b{font-family:var(--serif);font-size:14px}
+  td.price{font-family:var(--mono);text-align:right;color:var(--gold);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .chip{display:inline-block;font-size:10px;font-family:var(--mono);letter-spacing:.05em;padding:2px 7px;border-radius:999px;border:1px solid var(--line);color:var(--ink-2);text-transform:uppercase}
+
+  .comp{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+  .comp span{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10.5px;color:#14110e;font-weight:600;min-width:0;overflow:hidden;white-space:nowrap}
+  .complegend{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:12px;font-size:12px;color:var(--ink-2)}
+  .complegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+
+  .sig{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .sigcard{border:1px solid var(--line);border-radius:12px;padding:15px 15px 14px;background:var(--surface-2)}
+  .sigcard .tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+  .sigcard .tag.buy{color:var(--good)}.sigcard .tag.hold{color:var(--warn)}.sigcard .tag.watch{color:var(--cool)}
+  .sigcard h4{font-family:var(--serif);font-weight:500;font-size:17px;margin:8px 0 6px}
+  .sigcard p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.5}
+
+  .exports{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .exp{display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:10px;padding:13px 14px;
+    background:var(--surface-2);text-decoration:none;color:var(--ink);transition:border-color .15s}
+  .exp:hover{border-color:var(--gold)}
+  .exp .fn{font-family:var(--mono);font-size:12.5px;color:var(--gold)}
+  .exp .meta{font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+  .exp .arrow{font-size:11px;color:var(--ink-3)}
+
+  footer{margin-top:26px;border-top:1px solid var(--line);padding-top:18px;color:var(--ink-3);font-size:12px}
+  footer a{color:var(--gold-dim);text-decoration:none;border-bottom:1px solid transparent}
+  footer a:hover{border-bottom-color:var(--gold-dim)}
+  footer .disc{margin-top:10px;font-size:11px;line-height:1.6}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
+  #err{display:none;margin:20px 0;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink-2);font-size:13px}
+
+  @media (max-width:860px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .grid{grid-template-columns:1fr}
+    .rank,.sig,.exports{grid-template-columns:1fr}
+    .stamp{text-align:left}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <div class="eyebrow">Demand Desk · Luxury Buying Intelligence</div>
+      <h1>The Demand Desk</h1>
+      <p>What luxury buyers are requesting, what's being supplied and at what price, and which pieces hold value. Captured daily, logged forever.</p>
+    </div>
+    <div class="stamp" id="stamp">
+      <div><span class="live">LIVE</span></div>
+      <div>loading…</div>
+    </div>
+  </header>
+
+  <div id="err"></div>
+
+  <section class="kpis" id="kpis"></section>
+
+  <div class="grid">
+    <div class="col">
+      <section class="card">
+        <div class="chead"><h2>Live Demand — what buyers are requesting</h2><span class="src-tag">Mirror · The Hunt</span></div>
+        <p class="cnote">Public request feed on mirrorconcierge.com, by number of buyers who requested each exact piece. Trend vs the previous snapshot.</p>
+        <div class="bars" id="demandBars"></div>
+      </section>
+
+      <section class="card">
+        <div class="chead"><h2>Search Demand — most-searched luxury</h2><span class="src-tag" id="mgTag">myGemma Index</span></div>
+        <p class="cnote" id="mgNote">Authenticated luxury search &amp; transaction data.</p>
+        <div class="rank">
+          <div><h3>Brands</h3><ol class="rl" id="mgBrands"></ol></div>
+          <div><h3>Handbags</h3><ol class="rl" id="mgBags"></ol></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="chead"><h2>Brand Heat — fashion-wide</h2><span class="src-tag" id="lystTag">Lyst Index</span></div>
+        <p class="cnote">Desire + Demand + Discovery across 200M+ shoppers. Quarterly movement shown.</p>
+        <ol class="rl" id="lystList" style="columns:2;column-gap:22px"></ol>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="card">
+        <div class="chead"><h2>Value Retention</h2><span class="src-tag">Rebag Clair</span></div>
+        <p class="cnote">Resale value as % of original retail. Beyond the marker = holds or gains value.</p>
+        <div class="ret" id="retChart"></div>
+        <div class="refnote">▏ marker = 100% (holds value) · year labeled per row</div>
+      </section>
+
+      <section class="card">
+        <div class="chead"><h2>Goyard — resale floors</h2><span class="src-tag">StockX</span></div>
+        <p class="cnote">Lowest ask on the secondary market. The rising brand's liquid price band.</p>
+        <div class="twrap"><table><thead><tr><th>Item</th><th style="text-align:right">Lowest ask</th></tr></thead><tbody id="stockxBody"></tbody></table></div>
+      </section>
+
+      <section class="card">
+        <div class="chead"><h2>Supply Mix</h2><span class="src-tag">Mirror · Discover</span></div>
+        <p class="cnote">Composition of the sourcer inventory feed, by brand share of listings.</p>
+        <div class="comp" id="compBar" role="img" aria-label="Inventory composition by brand"></div>
+        <div class="complegend" id="compLegend"></div>
+      </section>
+    </div>
+  </div>
+
+  <section class="card full" style="margin-top:16px">
+    <div class="chead"><h2>Inventory &amp; Pricing — what sourcers are stocking</h2><span class="src-tag">Mirror · Discover</span></div>
+    <p class="cnote">Priced listings from the public inventory feed. Cross-reference against your cost to read margin.</p>
+    <div class="twrap"><table><thead><tr><th>Brand</th><th>Piece</th><th>Category</th><th style="text-align:right">Approx. price</th></tr></thead><tbody id="invBody"></tbody></table></div>
+  </section>
+
+  <section class="card full" style="margin-top:16px">
+    <div class="chead"><h2>Buy Signals</h2><span class="src-tag">Synthesis</span></div>
+    <p class="cnote">Reading demand against value-retention and supply, for purchasing decisions.</p>
+    <div class="sig" id="signals"></div>
+  </section>
+
+  <section class="card full" style="margin-top:16px">
+    <div class="chead"><h2>Exports</h2><span class="src-tag">CSV · all-time</span></div>
+    <p class="cnote">Tidy time-series from day 0 onward. Open in Excel/Sheets and filter to any range.</p>
+    <div class="exports" id="exports"></div>
+  </section>
+
+  <footer>
+    <div id="sources">Sources — Mirror Concierge, myGemma, Lyst, Rebag, StockX.</div>
+    <div class="disc">
+      Retention figures blend Rebag's 6th annual Clair Report (Dec 2025, Hermès &amp; Goyard) and the 5th annual (2024, others), labeled by year. Supply-mix share is derived from the visible feed. Mirror is an independent marketplace, not affiliated with the brands shown. Point-in-time reads for buying research, not investment advice.
+    </div>
+  </footer>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const fmt = n => '$' + Number(n).toLocaleString('en-US');
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function sparkline(vals, w=54, h=16){
+  if(!vals || vals.length < 2) return '';
+  const max = Math.max(...vals), min = Math.min(...vals), rng = max - min || 1;
+  const pts = vals.map((v,i)=>`${(i/(vals.length-1)*w).toFixed(1)},${(h-2 - (v-min)/rng*(h-4)).toFixed(1)}`).join(' ');
+  const lx = w, ly = (h-2 - (vals[vals.length-1]-min)/rng*(h-4)).toFixed(1);
+  return `<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" fill="none">
+    <polyline points="${pts}" stroke="var(--gold-dim)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${lx}" cy="${ly}" r="2" fill="var(--gold)"/></svg>`;
+}
+
+function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/86400000); }
+function prettyDate(d){ return new Date(d+'T00:00:00Z').toLocaleDateString('en-US',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'}); }
+
+async function load(){
+  let latest, history, exports;
+  try{
+    [latest, history] = await Promise.all([
+      fetch('./data/latest.json').then(r=>r.json()),
+      fetch('./data/history.json').then(r=>r.json())
+    ]);
+    exports = await fetch('./data/exports/index.json').then(r=>r.json()).catch(()=>null);
+  }catch(e){
+    $('#err').style.display='block';
+    $('#err').innerHTML = 'Could not load snapshot data. Run <code>npm run all &amp;&amp; npm run serve</code>, or open the deployed GitHub Pages URL (data is fetched at runtime, so opening the file directly will not work).';
+    return;
+  }
+  render(latest, history, exports);
+}
+
+function render(latest, history, exports){
+  const m = latest.sources.mirror || {};
+  const idx = latest.sources.indices || {};
+  const hunt = (m.hunt || []).slice().sort((a,b)=>b.requesters-a.requesters);
+
+  // ---- Stamp ----
+  const day = daysBetween(history.firstDate, latest.date) + 1;
+  $('#stamp').innerHTML =
+    `<div><span class="live">LIVE</span></div>`+
+    `<div>Snapshot <b>${prettyDate(latest.date)}</b></div>`+
+    `<div>Day ${day} · ${history.count} captured</div>`+
+    `<div>since ${prettyDate(history.firstDate)}</div>`;
+
+  // ---- KPIs ----
+  const brandTot = {}; let totalReq = 0;
+  hunt.forEach(h=>{ brandTot[h.brand]=(brandTot[h.brand]||0)+h.requesters; totalReq+=h.requesters; });
+  const topBrand = Object.entries(brandTot).sort((a,b)=>b[1]-a[1])[0] || ['—',0];
+  const topBag = (idx.mygemma?.handbags||[])[0] || '—';
+  const ret = (idx.rebag?.retention||[]).slice().sort((a,b)=>b.pct-a.pct);
+  const bestRet = ret[0] || {brand:'—',pct:0};
+  const goyardRank = (idx.mygemma?.brands||[]).indexOf('Goyard');
+  $('#kpis').innerHTML = [
+    ['Top requested brand', esc(topBrand[0]), `${topBrand[1]} of ${totalReq} live requesters`, 'Mirror · The Hunt'],
+    ['#1 most-searched bag', esc(topBag), 'Leads the search index', idx.mygemma?.source||'myGemma'],
+    ['Best value retention', `${esc(bestRet.brand)} ${bestRet.pct}%`, 'Appreciates above retail', idx.rebag?.source||'Rebag'],
+    ['Rising / underexposed', 'Goyard', goyardRank>=0?`#${goyardRank+1} searched · thin supply`:'thin supply · liquid resale', 'myGemma · StockX']
+  ].map(k=>`<div class="kpi"><div class="lab">${k[0]}</div><div class="val">${k[1]}</div><div class="sub">${k[2]}</div><div class="src">${esc(k[3])}</div></div>`).join('');
+
+  // ---- Demand bars ----
+  const maxN = Math.max(...hunt.map(h=>h.requesters), 1);
+  $('#demandBars').innerHTML = hunt.map(h=>{
+    const series = (history.huntSeries[`${h.brand} — ${h.item}`]||[]).map(p=>p.requesters);
+    let delta='<span class="delta flat">new</span>';
+    if(series.length>=2){ const d=series[series.length-1]-series[series.length-2];
+      delta = d>0?`<span class="delta up">▲${d}</span>`:d<0?`<span class="delta down">▼${Math.abs(d)}</span>`:'<span class="delta flat">–</span>'; }
+    return `<div class="bar">
+      <div class="name"><span class="brand">${esc(h.brand)}</span><span class="desc">${esc(h.item)}</span></div>
+      ${sparkline(series)||'<span></span>'}
+      <span><span class="fig">${h.requesters}</span> ${delta}</span>
+      <div class="track"><div class="fill" data-w="${(h.requesters/maxN*100).toFixed(1)}"></div></div>
+    </div>`;
+  }).join('');
+
+  // ---- Search rank (myGemma) ----
+  if(idx.mygemma){
+    $('#mgTag').textContent = `${idx.mygemma.source} · ${idx.mygemma.asOf||''}`;
+    $('#mgNote').textContent = `Authenticated luxury search & transaction data${idx.mygemma.period?` · ${idx.mygemma.period}`:''}.`;
+    $('#mgBrands').innerHTML = (idx.mygemma.brands||[]).map(b=>`<li><span class="b">${esc(b)}</span></li>`).join('');
+    $('#mgBags').innerHTML = (idx.mygemma.handbags||[]).map(b=>`<li><span class="b">${esc(b)}</span></li>`).join('');
+  }
+
+  // ---- Lyst ----
+  if(idx.lyst){
+    $('#lystTag').textContent = `${idx.lyst.source} · ${idx.lyst.period||''}`;
+    $('#lystList').innerHTML = (idx.lyst.brands||[]).slice(0,10).map(b=>{
+      const cls = /^\+|new|re-entry/i.test(b.move)?'up':/^-/.test(b.move)?'down':'';
+      return `<li><span class="b">${esc(b.name)}</span><span class="m ${cls}">${esc(b.move||'')}</span></li>`;
+    }).join('');
+  }
+
+  // ---- Retention ----
+  const scale=150;
+  $('#retChart').innerHTML = (idx.rebag?.retention||[]).map(r=>`
+    <div class="retrow">
+      <div class="rn">${esc(r.brand)}<span class="yr">'${String(r.reportYear).slice(2)}</span></div>
+      <div class="retrack"><div class="retfill ${r.appreciates?'app':'dep'}" data-w="${(r.pct/scale*100).toFixed(1)}"></div>
+        <div style="position:absolute;left:66.66%;top:0;bottom:0;border-left:1px dashed var(--ink-3)"></div></div>
+      <div class="rv" style="color:${r.appreciates?'var(--gold)':'var(--ink-2)'}">${r.pct}%</div>
+    </div>`).join('');
+
+  // ---- StockX ----
+  $('#stockxBody').innerHTML = (latest.sources.stockx_goyard?.items||[]).map(it=>{
+    const lo=it.low??it.price, hi=it.high??it.price;
+    const p = lo===hi?fmt(lo):`${fmt(lo)}–${Number(hi).toLocaleString('en-US')}`;
+    return `<tr><td><span class="b">${esc(it.item)}</span></td><td class="price">${p}</td></tr>`;
+  }).join('') || '<tr><td colspan="2" style="color:var(--ink-3)">No StockX capture in this snapshot.</td></tr>';
+
+  // ---- Supply mix ----
+  let counts = m.inventoryCounts;
+  if(!counts || !counts.length){
+    const c={}; (m.inventoryPriced||m.inventory||[]).forEach(x=>c[x.brand]=(c[x.brand]||0)+1);
+    counts = Object.entries(c).map(([brand,count])=>({brand,count})).sort((a,b)=>b.count-a.count);
+  }
+  const totalC = counts.reduce((s,x)=>s+x.count,0)||1;
+  const palette=['var(--gold-strong)','var(--gold)','var(--gold-dim)','var(--cool)','var(--surface-2)'];
+  const top = counts.slice(0,4); const otherC = totalC - top.reduce((s,x)=>s+x.count,0);
+  const segs = top.map((c,i)=>({label:c.brand,count:c.count,color:palette[i]}));
+  if(otherC>0) segs.push({label:'Other',count:otherC,color:palette[4]});
+  $('#compBar').innerHTML = segs.map((s,i)=>{
+    const pct=Math.round(s.count/totalC*100);
+    const dark = i>=3;
+    return `<span style="flex:${s.count};background:${s.color};color:${dark?'var(--ink-2)':'#14110e'}">${pct>=12?esc(s.label)+' '+pct+'%':''}</span>`;
+  }).join('');
+  $('#compLegend').innerHTML = segs.map((s,i)=>`<span><i style="background:${s.color}"></i>${esc(s.label)} · ${s.count}</span>`).join('');
+
+  // ---- Inventory pricing ----
+  const inv = (m.inventoryPriced||m.inventory||[]).slice().sort((a,b)=>(b.price||0)-(a.price||0));
+  $('#invBody').innerHTML = inv.map(p=>`<tr>
+    <td><span class="b">${esc(p.brand)}</span></td><td>${esc(p.item)}</td>
+    <td><span class="chip">${esc(p.category||'—')}</span></td>
+    <td class="price">${p.price?fmt(p.price):'—'}</td></tr>`).join('');
+
+  // ---- Signals (curated, with live figures injected) ----
+  const chanelReq = brandTot['Chanel']||0;
+  const hermesRet = (ret.find(r=>r.brand==='Hermès')||{}).pct;
+  $('#signals').innerHTML = [
+    ['buy','Buy · lowest risk','Hermès Birkin &amp; Kelly',`Top of both demand feeds and the only pieces that appreciate above retail${hermesRet?` (${hermesRet}%)`:''}. Mirror's own inventory is Hermès-stacked — that's where the market's margin sits.`],
+    ['hold','Turnover · not appreciation','Chanel seasonal',`Chanel drives the most live requests (${chanelReq} of ${totalReq}) and tops the Lyst Index, but resale holds ~92%. Buy for velocity, not as an asset.`],
+    ['watch','Rising · underexposed','Goyard','#5 most-searched despite near-zero boutique distribution, retention climbing to ~132%. Liquid ~$1.2k–6k resale band. Thin Mirror supply = a sourcing gap.'],
+    ['watch','New investment-grade','The Row','Margaux actively requested, a Lyst top-15 name, now ranked by Rebag alongside Hermès and Goyard. Early enough to build inventory first.']
+  ].map(s=>`<div class="sigcard"><div class="tag ${s[0]}">${s[1]}</div><h4>${s[2]}</h4><p>${s[3]}</p></div>`).join('');
+
+  // ---- Exports ----
+  if(exports && exports.sheets){
+    $('#exports').innerHTML = exports.sheets.map(s=>`
+      <a class="exp" href="./data/exports/${s.file}" download>
+        <span class="fn">${esc(s.file)}</span>
+        <span class="meta">${s.rows.toLocaleString('en-US')} rows · ${(s.bytes/1024).toFixed(1)} KB</span>
+        <span class="arrow">download ↓</span>
+      </a>`).join('') +
+      `<a class="exp" href="./data/exports/daily/${latest.date}/hunt.csv" download><span class="fn">daily/${latest.date}/</span><span class="meta">today's per-day sheets</span><span class="arrow">download ↓</span></a>`;
+  } else {
+    $('#exports').innerHTML = '<div style="color:var(--ink-3);font-size:13px">Run <code>npm run export</code> to generate CSVs.</div>';
+  }
+
+  // animate fills
+  requestAnimationFrame(()=>document.querySelectorAll('.fill,.retfill').forEach(f=>f.style.width=f.getAttribute('data-w')+'%'));
+}
+
+load();
+</script>
+</body>
+</html>

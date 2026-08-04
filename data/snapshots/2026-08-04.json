@@ -1,0 +1,95 @@
+{
+  "date": "2026-08-04",
+  "capturedAt": "2026-08-04T12:00:00.000Z",
+  "capture": { "method": "seed", "note": "Day 0. Seeded from the first manual capture of the public Mirror feeds, StockX, and the index reports. Automated captures take over from the next scheduled run." },
+  "sources": {
+    "mirror": {
+      "status": "ok",
+      "site": "https://mirrorconcierge.com",
+      "hunt": [
+        { "brand": "Chanel", "item": "Drawstring Bucket Bag – Black Shearling", "requesters": 11 },
+        { "brand": "Hermès", "item": "Togo Birkin 25", "requesters": 10 },
+        { "brand": "The Row", "item": "Margaux 10 – Dark Brown Suede", "requesters": 6 },
+        { "brand": "Chanel", "item": "Drawstring Bucket Bag – Blue Denim", "requesters": 6 },
+        { "brand": "Hermès", "item": "Kelly Cut Clutch – Vert Comics Swift", "requesters": 6 },
+        { "brand": "Chanel", "item": "Ballet Flats – Orange Leopard Pony Hair", "requesters": 5 },
+        { "brand": "Fendi", "item": "Baguette – Floral Patchwork Embroidery", "requesters": 3 },
+        { "brand": "Aquazzura", "item": "Coral Reef Sandals – Light Blue", "requesters": 3 }
+      ],
+      "inventory": [
+        { "brand": "Hermès", "item": "Birkin 30", "category": "Bag", "price": 28630 },
+        { "brand": "Hermès", "item": "Mini Kelly 20", "category": "Bag", "price": 27115 },
+        { "brand": "Hermès", "item": "Constance 14 · Vert Foncé", "category": "Bag", "price": 23580 },
+        { "brand": "Hermès", "item": "Birkin 40 · Bleu de Prusse", "category": "Bag", "price": 21055 },
+        { "brand": "Hermès", "item": "Kelly 28", "category": "Bag", "price": 19530 },
+        { "brand": "Hermès", "item": "HAC 32 · Bleu Sapphire", "category": "Bag", "price": 16980 },
+        { "brand": "Chanel", "item": "Mini Rectangle Flap · Black Crocodile", "category": "Bag", "price": 18000 },
+        { "brand": "Dior", "item": "Newspaper Saddle Bag", "category": "Bag", "price": 15110 },
+        { "brand": "Chanel", "item": "Métiers d'Art Leopard Jacquard Flap", "category": "Bag", "price": 13818 },
+        { "brand": "Chanel", "item": "Suede Bag 32cm", "category": "Bag", "price": 9330 },
+        { "brand": "Fendi", "item": "AW26 Zebra Ponyhair Limited Edition Baguette", "category": "Bag", "price": 4515 },
+        { "brand": "Chanel", "item": "Coco Beach 2026 Chain Mesh Mules", "category": "Shoe", "price": 3670 },
+        { "brand": "Amina Muaddi", "item": "Vittoria Slipper 105 · Silver", "category": "Shoe", "price": 2082 },
+        { "brand": "Chanel", "item": "Coco Beach Cambon Ballet Flats", "category": "Shoe", "price": 1893 },
+        { "brand": "Chanel", "item": "26B Quilted Denim Ballet Flats Light Blue", "category": "Shoe", "price": 1677 }
+      ],
+      "inventoryNote": "Priced subset of the visible Discover feed. The full feed is heavily Hermès-weighted (many Birkin 25/30, Kelly, Kelly Pochette & Kelly Cut listings shown as Price Upon Request)."
+    },
+    "stockx_goyard": {
+      "status": "ok",
+      "query": "goyard",
+      "items": [
+        { "item": "Cisalpin Backpack", "low": 4898, "high": 5972 },
+        { "item": "Belvedere PM", "low": 2467, "high": 3722 },
+        { "item": "Saint Louis Tote PM", "low": 2221, "high": 2386 },
+        { "item": "Coursier Messenger Bag", "low": 2713, "high": 2713 },
+        { "item": "Victoire Wallet", "low": 1320, "high": 1320 },
+        { "item": "Saint Pierre Card Holder", "low": 1168, "high": 1168 }
+      ]
+    },
+    "indices": {
+      "status": "reference",
+      "mygemma": {
+        "source": "myGemma Luxury Resale Index",
+        "asOf": "2026-07-31",
+        "period": "2026-01-01..2026-07-31",
+        "url": "https://mygemma.com/blogs/news/luxury-resale-index-2026",
+        "brands": ["Tiffany & Co.", "Chanel", "Cartier", "Hermès", "Goyard", "Van Cleef & Arpels", "David Yurman", "Louis Vuitton", "Buccellati", "Gucci"],
+        "handbags": ["Hermès Kelly", "Hermès Birkin", "Louis Vuitton Speedy", "Hermès Lindy", "Chanel 25", "Louis Vuitton Neverfull", "Louis Vuitton Alma BB", "Chanel 22", "Chanel Deauville", "Hermès Birkin 25"]
+      },
+      "lyst": {
+        "source": "The Lyst Index",
+        "asOf": "2026-03-31",
+        "period": "Q1 2026",
+        "url": "https://www.lyst.com/the-lyst-index/q1-26/",
+        "brands": [
+          {"rank": 1, "name": "Chanel", "move": "new #1"},
+          {"rank": 2, "name": "Saint Laurent", "move": "-1"},
+          {"rank": 3, "name": "Dior", "move": "new"},
+          {"rank": 4, "name": "Miu Miu", "move": "-2"},
+          {"rank": 5, "name": "Gucci", "move": "+4"},
+          {"rank": 6, "name": "Ralph Lauren", "move": "-2"},
+          {"rank": 7, "name": "Prada", "move": "-2"},
+          {"rank": 8, "name": "Coach", "move": "-2"},
+          {"rank": 9, "name": "Burberry", "move": "-1"},
+          {"rank": 10, "name": "COS", "move": "-7"},
+          {"rank": 11, "name": "The Row", "move": "-4"},
+          {"rank": 19, "name": "Fendi", "move": "re-entry"},
+          {"rank": 20, "name": "Céline", "move": "new"}
+        ]
+      },
+      "rebag": {
+        "source": "Rebag Clair Report",
+        "url": "https://www.prnewswire.com/news-releases/rebag-releases-its-sixth-annual-clair-report-a-comprehensive-luxury-appraisal-index-for-resale-302637452.html",
+        "note": "Hermès & Goyard from the 6th annual report (Dec 2025); Chanel, Louis Vuitton & Celine from the 5th annual (2024) for a consistent brand set.",
+        "retention": [
+          {"brand": "Hermès", "pct": 138, "reportYear": 2025, "appreciates": true},
+          {"brand": "Goyard", "pct": 132, "reportYear": 2025, "appreciates": true},
+          {"brand": "Chanel", "pct": 92, "reportYear": 2024, "appreciates": false},
+          {"brand": "Louis Vuitton", "pct": 88, "reportYear": 2024, "appreciates": false},
+          {"brand": "Celine", "pct": 64, "reportYear": 2024, "appreciates": false}
+        ]
+      }
+    }
+  }
+}
