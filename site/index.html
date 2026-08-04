@@ -129,6 +129,13 @@
   .sigcard h4{font-family:var(--serif);font-weight:500;font-size:17px;margin:8px 0 6px}
   .sigcard p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.5}
 
+  .bigrow{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+  .bigbtn{flex:1 1 240px;display:flex;flex-direction:column;gap:4px;border:1px solid var(--gold-dim);border-radius:12px;
+    padding:16px 17px;background:linear-gradient(180deg,var(--surface-2),var(--surface));text-decoration:none;color:var(--ink);transition:border-color .15s}
+  .bigbtn:hover{border-color:var(--gold)}
+  .bigbtn .t{font-family:var(--serif);font-size:17px}
+  .bigbtn .d{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .bigbtn .g{font-family:var(--mono);font-size:11px;color:var(--gold);margin-top:2px}
   .exports{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   .exp{display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:10px;padding:13px 14px;
     background:var(--surface-2);text-decoration:none;color:var(--ink);transition:border-color .15s}
@@ -230,9 +237,9 @@
   </section>
 
   <section class="card full" style="margin-top:16px">
-    <div class="chead"><h2>Exports</h2><span class="src-tag">CSV · all-time</span></div>
-    <p class="cnote">Tidy time-series from day 0 onward. Open in Excel/Sheets and filter to any range.</p>
-    <div class="exports" id="exports"></div>
+    <div class="chead"><h2>Exports — all raw data</h2><span class="src-tag">CSV · JSON · ZIP</span></div>
+    <p class="cnote">Everything captured for the dashboard, from day 0 onward. Grab the full bundle, or a single sheet. Every row carries a <b>date</b>, so in Excel/Sheets you can pivot by day, week, or month to build reports.</p>
+    <div id="exports"></div>
   </section>
 
   <footer>
@@ -391,15 +398,25 @@ function render(latest, history, exports){
 
   // ---- Exports ----
   if(exports && exports.sheets){
-    $('#exports').innerHTML = exports.sheets.map(s=>`
+    const big = [];
+    if(exports.bundle) big.push(`<a class="bigbtn" href="./data/exports/${exports.bundle.file}" download>
+        <span class="t">⬇ Download everything</span>
+        <span class="d">ZIP · all snapshots + every CSV</span>
+        <span class="g">${(exports.bundle.bytes/1024).toFixed(1)} KB</span></a>`);
+    if(exports.raw) big.push(`<a class="bigbtn" href="./data/exports/${exports.raw.file}" download>
+        <span class="t">⬇ Complete raw archive</span>
+        <span class="d">JSON · ${exports.raw.snapshots} daily snapshot${exports.raw.snapshots>1?'s':''}, one file</span>
+        <span class="g">${(exports.raw.bytes/1024).toFixed(1)} KB</span></a>`);
+    const grid = exports.sheets.map(s=>`
       <a class="exp" href="./data/exports/${s.file}" download>
         <span class="fn">${esc(s.file)}</span>
         <span class="meta">${s.rows.toLocaleString('en-US')} rows · ${(s.bytes/1024).toFixed(1)} KB</span>
         <span class="arrow">download ↓</span>
       </a>`).join('') +
       `<a class="exp" href="./data/exports/daily/${latest.date}/hunt.csv" download><span class="fn">daily/${latest.date}/</span><span class="meta">today's per-day sheets</span><span class="arrow">download ↓</span></a>`;
+    $('#exports').innerHTML = (big.length?`<div class="bigrow">${big.join('')}</div>`:'') + `<div class="exports">${grid}</div>`;
   } else {
-    $('#exports').innerHTML = '<div style="color:var(--ink-3);font-size:13px">Run <code>npm run export</code> to generate CSVs.</div>';
+    $('#exports').innerHTML = '<div style="color:var(--ink-3);font-size:13px">Run <code>npm run all</code> to generate the exports.</div>';
   }
 
   // animate fills

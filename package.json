@@ -8,7 +8,8 @@
     "scrape": "node scripts/scrape.mjs",
     "export": "node scripts/export-csv.mjs",
     "build": "node scripts/build-site.mjs",
-    "all": "npm run scrape && npm run export && npm run build",
+    "bundle": "node scripts/bundle.mjs",
+    "all": "npm run scrape && npm run export && npm run build && npm run bundle",
     "serve": "node scripts/serve.mjs"
   },
   "dependencies": {

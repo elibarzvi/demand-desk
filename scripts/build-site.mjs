@@ -32,8 +32,20 @@ function build() {
   writeFile(path.join(SITE_DATA_DIR, 'index.json'), JSON.stringify({ dates: listSnapshotDates() }) + '\n');
 
   // Copy CSV exports for download links.
+  const expDir = path.join(SITE_DATA_DIR, 'exports');
   if (fs.existsSync(EXPORT_DIR)) {
-    fs.cpSync(EXPORT_DIR, path.join(SITE_DATA_DIR, 'exports'), { recursive: true });
+    fs.cpSync(EXPORT_DIR, expDir, { recursive: true });
+  }
+
+  // Complete raw archive: every snapshot in one file (build artifact, not committed).
+  ensureDir(expDir);
+  const allJson = JSON.stringify(snaps, null, 2) + '\n';
+  writeFile(path.join(expDir, 'all-snapshots.json'), allJson);
+  const manPath = path.join(expDir, 'index.json');
+  if (fs.existsSync(manPath)) {
+    const man = JSON.parse(fs.readFileSync(manPath, 'utf8'));
+    man.raw = { file: 'all-snapshots.json', snapshots: snaps.length, bytes: Buffer.byteLength(allJson) };
+    writeFile(manPath, JSON.stringify(man, null, 2) + '\n');
   }
 
   console.log(`[build] site/data ready — ${snaps.length} snapshots, latest ${latest.date}`);
