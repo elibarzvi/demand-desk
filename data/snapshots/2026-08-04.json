@@ -1,9 +1,14 @@
 {
   "date": "2026-08-04",
-  "capturedAt": "2026-08-04T17:37:32.353Z",
+  "capturedAt": "2026-08-04T17:40:21.830Z",
   "capture": {
     "method": "scrape",
-    "errors": []
+    "errors": [
+      {
+        "source": "therealreal",
+        "error": "no marketplace data parsed (bot-block or layout change)"
+      }
+    ]
   },
   "sources": {
     "mirror": {
@@ -191,6 +196,57 @@
         {
           "item": "Cisalpin Backpack Black",
           "price": 4898
+        }
+      ]
+    },
+    "therealreal": {
+      "status": "error",
+      "name": "The RealReal",
+      "focus": []
+    },
+    "fashionphile": {
+      "status": "ok",
+      "name": "Fashionphile",
+      "focus": [
+        {
+          "brand": "Hermès",
+          "low": 765,
+          "count": null
+        },
+        {
+          "brand": "Chanel",
+          "low": 765,
+          "count": null
+        },
+        {
+          "brand": "Louis Vuitton",
+          "low": 765,
+          "count": null
+        },
+        {
+          "brand": "Goyard",
+          "low": 765,
+          "count": null
+        },
+        {
+          "brand": "Dior",
+          "low": 765,
+          "count": null
+        },
+        {
+          "brand": "Fendi",
+          "low": 765,
+          "count": null
+        },
+        {
+          "brand": "The Row",
+          "low": 765,
+          "count": null
+        },
+        {
+          "brand": "Cartier",
+          "low": 765,
+          "count": null
         }
       ]
     },
