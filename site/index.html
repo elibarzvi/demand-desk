@@ -65,6 +65,10 @@
 
   .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-top:16px}
   .col{display:flex;flex-direction:column;gap:16px}
+  .band{display:flex;align-items:center;gap:14px;margin:30px 2px 4px}
+  .band .lbl{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:600;white-space:nowrap}
+  .band .rule{flex:1;height:1px;background:var(--line)}
+  .band .sub{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);white-space:nowrap}
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px 16px}
   .card.full{grid-column:1 / -1}
   .chead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:2px}
@@ -177,6 +181,9 @@
 
   <section class="kpis" id="kpis"></section>
 
+  <!-- ============ LIVE BAND — updates daily ============ -->
+  <div class="band"><span class="lbl">Live signals</span><span class="rule"></span><span class="sub">updates every day</span></div>
+
   <div class="grid">
     <div class="col">
       <section class="card">
@@ -186,31 +193,15 @@
       </section>
 
       <section class="card">
-        <div class="chead"><h2>Search Demand — most-searched luxury</h2><span class="src-tag" id="mgTag">myGemma Index</span></div>
-        <p class="cnote" id="mgNote">Authenticated luxury search &amp; transaction data.</p>
-        <div class="rank">
-          <div><h3>Brands</h3><ol class="rl" id="mgBrands"></ol></div>
-          <div><h3>Handbags</h3><ol class="rl" id="mgBags"></ol></div>
-        </div>
-      </section>
-
-      <section class="card">
-        <div class="chead"><h2>Brand Heat — fashion-wide</h2><span class="src-tag" id="lystTag">Lyst Index</span></div>
-        <p class="cnote">Desire + Demand + Discovery across 200M+ shoppers. Quarterly movement shown.</p>
-        <ol class="rl" id="lystList" style="columns:2;column-gap:22px"></ol>
+        <div class="chead"><h2>Fashionphile — lowest price &amp; live listings</h2><span class="src-tag">Fashionphile · live</span></div>
+        <p class="cnote">Lowest buyable price &amp; live listing count per brand, via their Algolia search. Captured daily.</p>
+        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Lowest</th><th style="text-align:right">Listings</th></tr></thead><tbody id="fpBody"></tbody></table></div>
       </section>
     </div>
 
     <div class="col">
       <section class="card">
-        <div class="chead"><h2>Value Retention</h2><span class="src-tag">Rebag Clair</span></div>
-        <p class="cnote">Resale value as % of original retail. Beyond the marker = holds or gains value.</p>
-        <div class="ret" id="retChart"></div>
-        <div class="refnote">▏ marker = 100% (holds value) · year labeled per row</div>
-      </section>
-
-      <section class="card">
-        <div class="chead"><h2>Goyard — resale floors</h2><span class="src-tag">StockX</span></div>
+        <div class="chead"><h2>Goyard — resale floors</h2><span class="src-tag">StockX · live</span></div>
         <p class="cnote">Lowest ask on the secondary market. The rising brand's liquid price band.</p>
         <div class="twrap"><table><thead><tr><th>Item</th><th style="text-align:right">Lowest ask</th></tr></thead><tbody id="stockxBody"></tbody></table></div>
       </section>
@@ -226,25 +217,47 @@
 
   <section class="card full" style="margin-top:16px">
     <div class="chead"><h2>Inventory &amp; Pricing — what sourcers are stocking</h2><span class="src-tag">Mirror · Discover</span></div>
-    <p class="cnote">Priced listings from the public inventory feed. Cross-reference against your cost to read margin.</p>
+    <p class="cnote">Priced listings from the public inventory feed, captured daily. Cross-reference against your cost to read margin.</p>
     <div class="twrap"><table><thead><tr><th>Brand</th><th>Piece</th><th>Category</th><th style="text-align:right">Approx. price</th></tr></thead><tbody id="invBody"></tbody></table></div>
   </section>
 
-  <section class="card full" style="margin-top:16px">
-    <div class="chead"><h2>Pre-owned marketplaces</h2><span class="src-tag">Fashionphile live · The RealReal report</span></div>
-    <p class="cnote">Fashionphile lowest buyable price &amp; live listing count per brand (via their Algolia search), captured daily. The RealReal shown from its latest published Resale Report.</p>
-    <div class="rank">
-      <div>
-        <h3>Fashionphile — lowest price &amp; live listings</h3>
-        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Lowest</th><th style="text-align:right">Listings</th></tr></thead><tbody id="fpBody"></tbody></table></div>
-      </div>
-      <div>
-        <h3 id="trrHead">The RealReal — most-searched</h3>
+  <!-- ============ REFERENCE BAND — from published reports ============ -->
+  <div class="band"><span class="lbl">Reference</span><span class="rule"></span><span class="sub">from published reports · refreshed a few times a year</span></div>
+
+  <div class="grid">
+    <div class="col">
+      <section class="card">
+        <div class="chead"><h2>Search Demand — most-searched luxury</h2><span class="src-tag" id="mgTag">myGemma Index</span></div>
+        <p class="cnote" id="mgNote">Authenticated luxury search &amp; transaction data.</p>
+        <div class="rank">
+          <div><h3>Brands</h3><ol class="rl" id="mgBrands"></ol></div>
+          <div><h3>Handbags</h3><ol class="rl" id="mgBags"></ol></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="chead"><h2>Value Retention</h2><span class="src-tag">Rebag Clair</span></div>
+        <p class="cnote">Resale value as % of original retail. Beyond the marker = holds or gains value.</p>
+        <div class="ret" id="retChart"></div>
+        <div class="refnote">▏ marker = 100% (holds value) · year labeled per row</div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="card">
+        <div class="chead"><h2>Brand Heat — fashion-wide</h2><span class="src-tag" id="lystTag">Lyst Index</span></div>
+        <p class="cnote">Desire + Demand + Discovery across 200M+ shoppers. Quarterly movement shown.</p>
+        <ol class="rl" id="lystList" style="columns:2;column-gap:22px"></ol>
+      </section>
+
+      <section class="card">
+        <div class="chead"><h2 id="trrHead">The RealReal — most-searched</h2><span class="src-tag">The RealReal · report</span></div>
+        <p class="cnote">Most-searched brands &amp; resale value climbers, from The RealReal's latest published Resale Report.</p>
         <ol class="rl" id="trrSearch"></ol>
         <p class="cnote" id="trrClimb" style="margin:12px 0 0"></p>
-      </div>
+      </section>
     </div>
-  </section>
+  </div>
 
   <section class="card full" style="margin-top:16px">
     <div class="chead"><h2>Vestiaire Collective — resale report</h2><span class="src-tag" id="vcTag">Vestiaire · report</span></div>
