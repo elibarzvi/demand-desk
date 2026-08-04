@@ -247,6 +247,22 @@
   </section>
 
   <section class="card full" style="margin-top:16px">
+    <div class="chead"><h2>Vestiaire Collective — resale report</h2><span class="src-tag" id="vcTag">Vestiaire · report</span></div>
+    <p class="cnote">Published resale data. Cloudflare blocks live server capture, so this is report-based (like The RealReal).</p>
+    <div class="rank">
+      <div>
+        <h3>Value ranking — top brands</h3>
+        <ol class="rl" id="vcRank"></ol>
+        <p class="cnote" id="vcGrow" style="margin:12px 0 0"></p>
+      </div>
+      <div>
+        <h3>Fastest-selling items</h3>
+        <ol class="rl" id="vcSelling"></ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="card full" style="margin-top:16px">
     <div class="chead"><h2>Buy Signals</h2><span class="src-tag">Synthesis</span></div>
     <p class="cnote">Reading demand against value-retention and supply, for purchasing decisions.</p>
     <div class="sig" id="signals"></div>
@@ -259,7 +275,7 @@
   </section>
 
   <footer>
-    <div id="sources">Sources — Mirror Concierge, StockX, The RealReal, Fashionphile, myGemma, Lyst, Rebag.</div>
+    <div id="sources">Sources — Mirror Concierge, StockX, Fashionphile, The RealReal, Vestiaire Collective, myGemma, Lyst, Rebag.</div>
     <div class="disc">
       Retention figures blend Rebag's 6th annual Clair Report (Dec 2025, Hermès &amp; Goyard) and the 5th annual (2024, others), labeled by year. Supply-mix share is derived from the visible feed. Mirror is an independent marketplace, not affiliated with the brands shown. Point-in-time reads for buying research, not investment advice.
     </div>
@@ -415,6 +431,14 @@ function render(latest, history, exports){
   $('#trrClimb').innerHTML = (trr.valueClimbers||[]).length
     ? `<b style="color:var(--ink-2)">Value climbers YoY:</b> ` + trr.valueClimbers.map(c=>`${esc(c.item)} <span style="color:var(--good)">+${c.yoyPct}%</span>`).join(' · ')
     : '';
+
+  // ---- Vestiaire (report) ----
+  const vc = latest.sources.vestiaire || {};
+  if(vc.asOf) $('#vcTag').textContent = `Vestiaire · ${vc.asOf}`;
+  $('#vcRank').innerHTML = (vc.valueRanking||[]).map(r=>`<li><span class="b">${esc(r.brand)}</span><span class="m">${r.points.toLocaleString('en-US')} pts</span></li>`).join('');
+  const fmtT = s => `${Math.floor(s/60)}m ${String(s%60).padStart(2,'0')}s`;
+  $('#vcSelling').innerHTML = (vc.fastestSelling||[]).map(x=>`<li><span class="b">${esc(x.item)}</span><span class="m">${fmtT(x.seconds)}</span></li>`).join('');
+  $('#vcGrow').innerHTML = (vc.fastestGrowing||[]).length ? `<b style="color:var(--ink-2)">Fastest-growing:</b> ${vc.fastestGrowing.map(esc).join(' · ')}` : '';
 
   // ---- Signals (curated, with live figures injected) ----
   const chanelReq = brandTot['Chanel']||0;

@@ -19,7 +19,7 @@ function build() {
   if (!snaps.length) { console.log('[export] no snapshots yet'); return; }
 
   const hunt = [], invPriced = [], supply = [], stockx = [], searchRank = [], retention = [];
-  const fp = [], trrClimb = [];
+  const fp = [], trrClimb = [], vcRank = [], vcSelling = [];
 
   for (const s of snaps) {
     const d = s.date;
@@ -33,6 +33,10 @@ function build() {
     const trr = s.sources?.therealreal || {};
     (trr.mostSearchedBrands || []).forEach((b, i) => searchRank.push({ date: d, source: 'The RealReal', type: 'brand', rank: i + 1, entity: b }));
     (trr.valueClimbers || []).forEach(c => trrClimb.push({ date: d, item: c.item, yoy_change_pct: c.yoyPct }));
+
+    const vc = s.sources?.vestiaire || {};
+    (vc.valueRanking || []).forEach((r, i) => vcRank.push({ date: d, rank: i + 1, brand: r.brand, points: r.points }));
+    (vc.fastestSelling || []).forEach(x => vcSelling.push({ date: d, item: x.item, seconds: x.seconds }));
 
     const idx = s.sources?.indices || {};
     (idx.mygemma?.brands || []).forEach((name, i) => searchRank.push({ date: d, source: 'myGemma', type: 'brand', rank: i + 1, entity: name }));
@@ -48,6 +52,8 @@ function build() {
     ['stockx-goyard.csv', ['date', 'item', 'low', 'high'], stockx],
     ['fashionphile.csv', ['date', 'brand', 'low_price', 'listings'], fp],
     ['therealreal-value-climbers.csv', ['date', 'item', 'yoy_change_pct'], trrClimb],
+    ['vestiaire-value-ranking.csv', ['date', 'rank', 'brand', 'points'], vcRank],
+    ['vestiaire-fastest-selling.csv', ['date', 'item', 'seconds'], vcSelling],
     ['indices-search-rank.csv', ['date', 'source', 'type', 'rank', 'entity'], searchRank],
     ['rebag-retention.csv', ['date', 'brand', 'retention_pct', 'report_year', 'appreciates'], retention]
   ];

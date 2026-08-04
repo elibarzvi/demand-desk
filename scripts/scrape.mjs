@@ -181,9 +181,9 @@ async function main() {
     fashionphile = { status: 'error', name: 'Fashionphile', focus: [] };
   }
 
-  // The RealReal is edge-blocked (403/captcha) to servers, so it's a report-based
-  // reference source, carried from src/data/indices.json rather than scraped.
-  const { therealreal: trrReport, ...periodicIndices } = indices;
+  // The RealReal and Vestiaire are edge-blocked (Cloudflare/captcha) to servers, so
+  // they're report-based reference sources, carried from src/data/indices.json.
+  const { therealreal: trrReport, vestiaire: vcReport, ...periodicIndices } = indices;
 
   const snapshot = {
     date,
@@ -194,6 +194,7 @@ async function main() {
       stockx_goyard: stockx,
       fashionphile,
       therealreal: { status: 'reference', ...trrReport },
+      vestiaire: { status: 'reference', ...vcReport },
       indices: { status: 'reference', ...periodicIndices }
     }
   };
