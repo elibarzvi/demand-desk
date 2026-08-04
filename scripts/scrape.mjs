@@ -124,6 +124,10 @@ async function scrapeMarketplace(browser, mp) {
       }
     }
     if (!focus.some(f => f.low != null)) throw new Error('no marketplace data parsed (bot-block or layout change)');
+    // Guard: distinct brands returning an identical low price means we grabbed a
+    // page-wide element (financing banner, default listing), not per-brand results.
+    const lows = focus.map(f => f.low).filter(v => v != null);
+    if (lows.length >= 3 && new Set(lows).size === 1) throw new Error(`identical low ($${lows[0]}) across brands — page-wide element, not per-brand results`);
     return { status: 'ok', name: mp.name, focus };
   } finally {
     await ctx.close();
