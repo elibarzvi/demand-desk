@@ -1,12 +1,16 @@
 {
   "date": "2026-08-04",
-  "capturedAt": "2026-08-04T17:40:21.830Z",
+  "capturedAt": "2026-08-04T17:44:14.079Z",
   "capture": {
     "method": "scrape",
     "errors": [
       {
         "source": "therealreal",
         "error": "no marketplace data parsed (bot-block or layout change)"
+      },
+      {
+        "source": "fashionphile",
+        "error": "identical low ($765) across brands — page-wide element, not per-brand results"
       }
     ]
   },
@@ -200,12 +204,12 @@
       ]
     },
     "therealreal": {
-      "status": "error",
+      "status": "carried",
       "name": "The RealReal",
       "focus": []
     },
     "fashionphile": {
-      "status": "ok",
+      "status": "carried",
       "name": "Fashionphile",
       "focus": [
         {
