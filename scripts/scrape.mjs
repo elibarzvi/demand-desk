@@ -96,42 +96,33 @@ async function scrapeMirror(browser) {
   }
 }
 
-// Pre-owned marketplaces: for a focus set of brands, capture the lowest live
-// listing price + result count from each site's price-ascending search.
-const FOCUS_BRANDS = ['Hermès', 'Chanel', 'Louis Vuitton', 'Goyard', 'Dior', 'Fendi', 'The Row', 'Cartier'];
-const MARKETPLACES = [
-  { key: 'therealreal', name: 'The RealReal', url: b => `https://www.therealreal.com/shop?keywords=${encodeURIComponent(b)}&sort=price_low_to_high` },
-  { key: 'fashionphile', name: 'Fashionphile', url: b => `https://www.fashionphile.com/shop?q=${encodeURIComponent(b)}&sort=price-low-to-high` }
-];
-const deaccent = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+// Fashionphile is a Shopify store fronted by Algolia. We query its public search
+// index directly — the same search-only key the site ships to every browser — for
+// the lowest available price + live listing count per brand. Far more robust than
+// scraping rendered HTML. The key is a public, search-only credential; safe to commit.
+const FP = { appId: 'NSJAZ0QG7K', key: 'e545a3cf82cf7dbc5ff39f49c214863e', index: 'shopify_products_price_asc' };
+const FP_VENDOR = {
+  'Hermès': 'Hermes', 'Chanel': 'Chanel', 'Louis Vuitton': 'Louis Vuitton', 'Goyard': 'Goyard',
+  'Dior': 'Christian Dior', 'Fendi': 'Fendi', 'The Row': 'The Row', 'Cartier': 'Cartier'
+};
 
-async function scrapeMarketplace(browser, mp) {
-  const ctx = await browser.newContext({ userAgent: UA });
-  const page = await ctx.newPage();
-  try {
-    const focus = [];
-    for (const brand of FOCUS_BRANDS) {
-      try {
-        await page.goto(mp.url(deaccent(brand)), { waitUntil: 'domcontentloaded', timeout: 45000 });
-        await page.waitForTimeout(2500);
-        const body = await page.innerText('body');
-        if (/Access Denied|captcha|unusual traffic|are you a human|Pardon Our Interruption/i.test(body)) throw new Error('bot-blocked');
-        const prices = [...body.matchAll(/\$\s?([\d][\d,]{2,})/g)].map(m => Number(m[1].replace(/,/g, ''))).filter(n => n >= 50);
-        const cm = body.match(/([\d,]{1,7})\s+(?:results|items|products)/i);
-        focus.push({ brand, low: prices.length ? Math.min(...prices) : null, count: cm ? Number(cm[1].replace(/,/g, '')) : null });
-      } catch (e) {
-        focus.push({ brand, low: null, count: null, error: String(e.message || e) });
-      }
-    }
-    if (!focus.some(f => f.low != null)) throw new Error('no marketplace data parsed (bot-block or layout change)');
-    // Guard: distinct brands returning an identical low price means we grabbed a
-    // page-wide element (financing banner, default listing), not per-brand results.
-    const lows = focus.map(f => f.low).filter(v => v != null);
-    if (lows.length >= 3 && new Set(lows).size === 1) throw new Error(`identical low ($${lows[0]}) across brands — page-wide element, not per-brand results`);
-    return { status: 'ok', name: mp.name, focus };
-  } finally {
-    await ctx.close();
+async function scrapeFashionphile() {
+  const focus = [];
+  for (const [brand, vendor] of Object.entries(FP_VENDOR)) {
+    const params = `query=&hitsPerPage=1`
+      + `&facetFilters=${encodeURIComponent(JSON.stringify([[`vendor:${vendor}`]]))}`
+      + `&filters=${encodeURIComponent('inventory_available=1')}`; // buyable stock only
+    const r = await fetch(`https://${FP.appId}-dsn.algolia.net/1/indexes/${FP.index}/query`, {
+      method: 'POST',
+      headers: { 'X-Algolia-Application-Id': FP.appId, 'X-Algolia-API-Key': FP.key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ params })
+    });
+    if (!r.ok) throw new Error(`Algolia HTTP ${r.status}`);
+    const j = await r.json();
+    focus.push({ brand, low: (j.hits && j.hits[0] || {}).price ?? null, count: j.nbHits ?? null });
   }
+  if (!focus.some(f => f.low != null)) throw new Error('no Fashionphile data returned');
+  return { status: 'ok', name: 'Fashionphile', via: 'algolia', focus };
 }
 
 async function scrapeStockxGoyard(browser) {
@@ -167,8 +158,7 @@ async function main() {
   delete indices._comment;
 
   const browser = await chromium.launch({ args: ['--no-sandbox'] });
-  let mirror, stockx;
-  const marketplaces = {};
+  let mirror, stockx, fashionphile;
   try {
     try { mirror = await scrapeMirror(browser); }
     catch (e) {
@@ -180,18 +170,20 @@ async function main() {
       errors.push({ source: 'stockx_goyard', error: String(e.message || e) });
       stockx = prev?.sources?.stockx_goyard ? { ...prev.sources.stockx_goyard, status: 'carried' } : { status: 'error', items: [] };
     }
-    for (const mp of MARKETPLACES) {
-      try { marketplaces[mp.key] = await scrapeMarketplace(browser, mp); }
-      catch (e) {
-        errors.push({ source: mp.key, error: String(e.message || e) });
-        // Don't carry marketplace data forward yet: the selectors aren't proven, so
-        // a failed run stays empty rather than propagating a possibly-bad prior value.
-        marketplaces[mp.key] = { status: 'unavailable', name: mp.name, focus: [] };
-      }
-    }
   } finally {
     await browser.close();
   }
+
+  // Fashionphile via Algolia (no browser needed).
+  try { fashionphile = await scrapeFashionphile(); }
+  catch (e) {
+    errors.push({ source: 'fashionphile', error: String(e.message || e) });
+    fashionphile = { status: 'error', name: 'Fashionphile', focus: [] };
+  }
+
+  // The RealReal is edge-blocked (403/captcha) to servers, so it's a report-based
+  // reference source, carried from src/data/indices.json rather than scraped.
+  const { therealreal: trrReport, ...periodicIndices } = indices;
 
   const snapshot = {
     date,
@@ -200,15 +192,15 @@ async function main() {
     sources: {
       mirror,
       stockx_goyard: stockx,
-      therealreal: marketplaces.therealreal,
-      fashionphile: marketplaces.fashionphile,
-      indices: { status: 'reference', ...indices }
+      fashionphile,
+      therealreal: { status: 'reference', ...trrReport },
+      indices: { status: 'reference', ...periodicIndices }
     }
   };
 
   ensureDir(SNAP_DIR);
   writeFile(path.join(SNAP_DIR, `${date}.json`), JSON.stringify(snapshot, null, 2) + '\n');
-  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status} therealreal:${marketplaces.therealreal?.status} fashionphile:${marketplaces.fashionphile?.status}` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
+  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status} fashionphile:${fashionphile.status}(${fashionphile.focus?.length ?? 0})` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

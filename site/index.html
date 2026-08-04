@@ -231,9 +231,19 @@
   </section>
 
   <section class="card full" style="margin-top:16px">
-    <div class="chead"><h2>Pre-owned marketplaces — entry price by brand</h2><span class="src-tag">The RealReal · Fashionphile</span></div>
-    <p class="cnote">Lowest live listing price (and count) per brand on each resale marketplace, captured daily. Blank = no capture that day or source unavailable.</p>
-    <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">The RealReal</th><th style="text-align:right">Fashionphile</th></tr></thead><tbody id="mktBody"></tbody></table></div>
+    <div class="chead"><h2>Pre-owned marketplaces</h2><span class="src-tag">Fashionphile live · The RealReal report</span></div>
+    <p class="cnote">Fashionphile lowest buyable price &amp; live listing count per brand (via their Algolia search), captured daily. The RealReal shown from its latest published Resale Report.</p>
+    <div class="rank">
+      <div>
+        <h3>Fashionphile — lowest price &amp; live listings</h3>
+        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Lowest</th><th style="text-align:right">Listings</th></tr></thead><tbody id="fpBody"></tbody></table></div>
+      </div>
+      <div>
+        <h3 id="trrHead">The RealReal — most-searched</h3>
+        <ol class="rl" id="trrSearch"></ol>
+        <p class="cnote" id="trrClimb" style="margin:12px 0 0"></p>
+      </div>
+    </div>
   </section>
 
   <section class="card full" style="margin-top:16px">
@@ -393,18 +403,18 @@ function render(latest, history, exports){
     <td class="price">${p.price?fmt(p.price):'—'}</td></tr>`).join('');
 
   // ---- Pre-owned marketplaces ----
-  const trr = latest.sources.therealreal?.focus || [];
-  const fp = latest.sources.fashionphile?.focus || [];
-  const mktBrands = [...new Set([...trr, ...fp].map(x=>x.brand))];
-  const cell = v => (v && v.low!=null)
-    ? `${fmt(v.low)}${v.count?` <span style="color:var(--ink-3);font-size:11px">· ${v.count.toLocaleString('en-US')}</span>`:''}`
-    : '<span style="color:var(--ink-3)">—</span>';
-  $('#mktBody').innerHTML = mktBrands.length
-    ? mktBrands.map(b=>{
-        const t = trr.find(x=>x.brand===b), f = fp.find(x=>x.brand===b);
-        return `<tr><td><span class="b">${esc(b)}</span></td><td class="price">${cell(t)}</td><td class="price">${cell(f)}</td></tr>`;
-      }).join('')
-    : '<tr><td colspan="3" style="color:var(--ink-3)">Awaiting first capture from these sources — populates on the next daily run.</td></tr>';
+  const fpFocus = (latest.sources.fashionphile?.focus || []).slice().sort((a,b)=>(a.low??1e12)-(b.low??1e12));
+  $('#fpBody').innerHTML = fpFocus.length
+    ? fpFocus.map(x=>`<tr><td><span class="b">${esc(x.brand)}</span></td>
+        <td class="price">${x.low!=null?fmt(x.low):'—'}</td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.count!=null?x.count.toLocaleString('en-US'):'—'}</td></tr>`).join('')
+    : '<tr><td colspan="3" style="color:var(--ink-3)">Awaiting first Fashionphile capture — populates on the next daily run.</td></tr>';
+  const trr = latest.sources.therealreal || {};
+  if(trr.asOf) $('#trrHead').textContent = `The RealReal — most-searched · ${trr.asOf}`;
+  $('#trrSearch').innerHTML = (trr.mostSearchedBrands||[]).slice(0,8).map(b=>`<li><span class="b">${esc(b)}</span></li>`).join('');
+  $('#trrClimb').innerHTML = (trr.valueClimbers||[]).length
+    ? `<b style="color:var(--ink-2)">Value climbers YoY:</b> ` + trr.valueClimbers.map(c=>`${esc(c.item)} <span style="color:var(--good)">+${c.yoyPct}%</span>`).join(' · ')
+    : '';
 
   // ---- Signals (curated, with live figures injected) ----
   const chanelReq = brandTot['Chanel']||0;

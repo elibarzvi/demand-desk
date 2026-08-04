@@ -12,8 +12,8 @@ infrastructure with no server to run.
 |---|---|---|
 | **Mirror** (mirrorconcierge.com) | Live request feed ("The Hunt") + sourcer inventory & prices ("Discover") | Daily |
 | **StockX** | Goyard resale floors | Daily (best-effort) |
-| **The RealReal** | Lowest listing price + count per focus brand | Daily (best-effort) |
-| **Fashionphile** | Lowest listing price + count per focus brand | Daily (best-effort) |
+| **Fashionphile** | Lowest buyable price + live listing count per focus brand (Algolia search API) | Daily |
+| **The RealReal** | Most-searched brands + resale value climbers | Report-based reference |
 | **myGemma Luxury Resale Index** | Most-searched brands & handbags | Carried; refresh on new edition |
 | **The Lyst Index** | Fashion-wide brand heat | Carried; refresh quarterly |
 | **Rebag Clair Report** | Resale value retention | Carried; refresh annually |

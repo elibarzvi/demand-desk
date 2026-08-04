@@ -19,7 +19,7 @@ function build() {
   if (!snaps.length) { console.log('[export] no snapshots yet'); return; }
 
   const hunt = [], invPriced = [], supply = [], stockx = [], searchRank = [], retention = [];
-  const mkt = { therealreal: [], fashionphile: [] };
+  const fp = [], trrClimb = [];
 
   for (const s of snaps) {
     const d = s.date;
@@ -28,9 +28,11 @@ function build() {
     for (const p of m.inventoryPriced || m.inventory || []) invPriced.push({ date: d, brand: p.brand, item: p.item, price: p.price ?? '' });
     for (const c of m.inventoryCounts || []) supply.push({ date: d, brand: c.brand, listing_count: c.count });
     for (const r of stockxRows(d, s.sources?.stockx_goyard)) stockx.push(r);
-    for (const key of ['therealreal', 'fashionphile']) {
-      for (const f of s.sources?.[key]?.focus || []) mkt[key].push({ date: d, brand: f.brand, low_price: f.low ?? '', listings: f.count ?? '' });
-    }
+    for (const f of s.sources?.fashionphile?.focus || []) fp.push({ date: d, brand: f.brand, low_price: f.low ?? '', listings: f.count ?? '' });
+
+    const trr = s.sources?.therealreal || {};
+    (trr.mostSearchedBrands || []).forEach((b, i) => searchRank.push({ date: d, source: 'The RealReal', type: 'brand', rank: i + 1, entity: b }));
+    (trr.valueClimbers || []).forEach(c => trrClimb.push({ date: d, item: c.item, yoy_change_pct: c.yoyPct }));
 
     const idx = s.sources?.indices || {};
     (idx.mygemma?.brands || []).forEach((name, i) => searchRank.push({ date: d, source: 'myGemma', type: 'brand', rank: i + 1, entity: name }));
@@ -44,8 +46,8 @@ function build() {
     ['mirror-inventory-priced.csv', ['date', 'brand', 'item', 'price'], invPriced],
     ['mirror-supply-mix.csv', ['date', 'brand', 'listing_count'], supply],
     ['stockx-goyard.csv', ['date', 'item', 'low', 'high'], stockx],
-    ['therealreal.csv', ['date', 'brand', 'low_price', 'listings'], mkt.therealreal],
-    ['fashionphile.csv', ['date', 'brand', 'low_price', 'listings'], mkt.fashionphile],
+    ['fashionphile.csv', ['date', 'brand', 'low_price', 'listings'], fp],
+    ['therealreal-value-climbers.csv', ['date', 'item', 'yoy_change_pct'], trrClimb],
     ['indices-search-rank.csv', ['date', 'source', 'type', 'rank', 'entity'], searchRank],
     ['rebag-retention.csv', ['date', 'brand', 'retention_pct', 'report_year', 'appreciates'], retention]
   ];
