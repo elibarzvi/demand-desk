@@ -152,6 +152,10 @@
   #xGo{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--bg);background:var(--ink);border:none;border-radius:8px;padding:0 18px;height:38px;cursor:pointer}
   #xGo:hover{opacity:.88}
   .xhint{margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .xpresets{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .xpreset{font-family:var(--mono);font-size:11px;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
+  .xpreset:hover{border-color:var(--gold);color:var(--ink)}
+  .xpreset[aria-pressed="true"]{border-color:var(--gold);color:var(--gold);background:var(--surface-2)}
   .exports{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   .exp{display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:10px;padding:13px 14px;
     background:var(--surface-2);text-decoration:none;color:var(--ink);transition:border-color .15s}
@@ -332,6 +336,8 @@ function filterCsvByDate(text, from, to){
   const rows = lines.slice(1).filter(l=>{ const c=l.indexOf(','); const d = c<0?l:l.slice(0,c); return d>=from && d<=to; });
   return { csv: header + '\n' + rows.join('\n') + (rows.length?'\n':''), count: rows.length };
 }
+function addDays(ymd, n){ const d = new Date(ymd+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
+function clampDate(v, lo, hi){ return v < lo ? lo : (v > hi ? hi : v); }
 
 function sparkline(vals, w=54, h=16){
   if(!vals || vals.length < 2) return '';
@@ -510,7 +516,14 @@ function render(latest, history, exports){
           <div class="xfield"><label for="xTo">To</label><input type="date" id="xTo" min="${first}" max="${last}" value="${last}"></div>
           <button id="xGo" type="button">Export ↓</button>
         </div>
-        <div class="xhint" id="xHint">Data spans ${first} → ${last} · ${nDays} snapshot${nDays===1?'':'s'}. Set From = To for a single day.</div>
+        <div class="xpresets">
+          <button class="xpreset" type="button" data-preset="all">All</button>
+          <button class="xpreset" type="button" data-preset="7">Last 7 days</button>
+          <button class="xpreset" type="button" data-preset="30">Last 30 days</button>
+          <button class="xpreset" type="button" data-preset="month">This month</button>
+          <button class="xpreset" type="button" data-preset="latest">Latest day</button>
+        </div>
+        <div class="xhint" id="xHint">Data spans ${first} → ${last} · ${nDays} snapshot${nDays===1?'':'s'}. Use a preset, or set From = To for a single day.</div>
       </div>`;
     const bundle = exports.bundle
       ? `<div class="bigrow"><a class="bigbtn" href="./data/exports/${exports.bundle.file}" download>
@@ -547,6 +560,18 @@ function render(latest, history, exports){
         }
       }catch(e){ hint.textContent = 'Export failed: ' + (e.message||e); }
     });
+
+    document.querySelectorAll('.xpreset').forEach(b=>b.addEventListener('click', function(){
+      const p = b.dataset.preset; let f, t = last;
+      if(p === 'all') f = first;
+      else if(p === 'latest'){ f = last; t = last; }
+      else if(p === 'month') f = clampDate(last.slice(0,7) + '-01', first, last);
+      else f = clampDate(addDays(last, -(Number(p)-1)), first, last);
+      document.getElementById('xFrom').value = f;
+      document.getElementById('xTo').value = t;
+      document.querySelectorAll('.xpreset').forEach(x=>x.setAttribute('aria-pressed', x===b ? 'true' : 'false'));
+      document.getElementById('xHint').textContent = `Range set: ${f} → ${t}. Click Export ↓.`;
+    }));
   } else {
     $('#exports').innerHTML = '<div style="color:var(--ink-3);font-size:13px">Run <code>npm run all</code> to generate the exports.</div>';
   }
