@@ -84,11 +84,18 @@ async function scrapeStockx(browser) {
   try {
     const focus = [];
     let goyard = [];
-    for (const brand of STOCKX_BRANDS) {
+    for (let bi = 0; bi < STOCKX_BRANDS.length; bi++) {
+      const brand = STOCKX_BRANDS[bi];
       try {
+        if (bi > 0) await page.waitForTimeout(4000); // space out requests to avoid throttling
         const q = deaccent(brand);
         await page.goto('https://stockx.com/search?s=' + encodeURIComponent(q), { waitUntil: 'domcontentloaded', timeout: 45000 });
-        await page.waitForTimeout(3500);
+        // wait until results (or a block page) actually render, up to 15s
+        await page.waitForFunction(
+          () => /Lowest Ask|Browse [\d,]+ results|Pardon Our Interruption|captcha|Access Denied/i.test(document.body.innerText),
+          { timeout: 15000 }
+        ).catch(() => {});
+        await page.waitForTimeout(1200);
         const body = await page.innerText('body');
         if (/Access Denied|captcha|unusual traffic|are you a human|Pardon Our Interruption/i.test(body)) throw new Error('bot-blocked');
         const { items, results } = parseStockx(body);
