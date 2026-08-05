@@ -79,40 +79,39 @@ function parseStockx(text) {
   return { items, results: rm ? Number(rm[1].replace(/,/g, '')) : null };
 }
 async function scrapeStockx(browser) {
-  const ctx = await browser.newContext({ userAgent: UA });
-  const page = await ctx.newPage();
-  try {
-    const focus = [];
-    let goyard = [];
-    for (let bi = 0; bi < STOCKX_BRANDS.length; bi++) {
-      const brand = STOCKX_BRANDS[bi];
-      try {
-        if (bi > 0) await page.waitForTimeout(4000); // space out requests to avoid throttling
-        const q = deaccent(brand);
-        await page.goto('https://stockx.com/search?s=' + encodeURIComponent(q), { waitUntil: 'domcontentloaded', timeout: 45000 });
-        // wait until results (or a block page) actually render, up to 15s
-        await page.waitForFunction(
-          () => /Lowest Ask|Browse [\d,]+ results|Pardon Our Interruption|captcha|Access Denied/i.test(document.body.innerText),
-          { timeout: 15000 }
-        ).catch(() => {});
-        await page.waitForTimeout(1200);
-        const body = await page.innerText('body');
-        if (/Access Denied|captcha|unusual traffic|are you a human|Pardon Our Interruption/i.test(body)) throw new Error('bot-blocked');
-        const { items, results } = parseStockx(body);
-        const key = deaccent(q).split(' ')[0].toLowerCase();
-        const branded = items.filter(x => deaccent(x.item).toLowerCase().includes(key));
-        const low = branded.length ? Math.min(...branded.map(x => x.price)) : null;
-        focus.push({ brand, low, results, listed: branded.length });
-        if (brand === 'Goyard') goyard = branded.slice(0, 12);
-      } catch (e) {
-        focus.push({ brand, low: null, results: null, listed: 0, error: String(e.message || e) });
-      }
+  const focus = [];
+  let goyard = [];
+  for (let bi = 0; bi < STOCKX_BRANDS.length; bi++) {
+    const brand = STOCKX_BRANDS[bi];
+    // Fresh, isolated session per brand — StockX soft-blocks repeat searches within a
+    // session, so new cookies/storage each time gives each brand its own clean shot.
+    const ctx = await browser.newContext({ userAgent: UA });
+    const page = await ctx.newPage();
+    try {
+      if (bi > 0) await new Promise(r => setTimeout(r, 3000));
+      const q = deaccent(brand);
+      await page.goto('https://stockx.com/search?s=' + encodeURIComponent(q), { waitUntil: 'domcontentloaded', timeout: 45000 });
+      await page.waitForFunction(
+        () => /Lowest Ask|Browse [\d,]+ results|Pardon Our Interruption|captcha|Access Denied/i.test(document.body.innerText),
+        { timeout: 15000 }
+      ).catch(() => {});
+      await page.waitForTimeout(1200);
+      const body = await page.innerText('body');
+      if (/Access Denied|captcha|unusual traffic|are you a human|Pardon Our Interruption/i.test(body)) throw new Error('bot-blocked');
+      const { items, results } = parseStockx(body);
+      const key = deaccent(q).split(' ')[0].toLowerCase();
+      const branded = items.filter(x => deaccent(x.item).toLowerCase().includes(key));
+      const low = branded.length ? Math.min(...branded.map(x => x.price)) : null;
+      focus.push({ brand, low, results, listed: branded.length });
+      if (brand === 'Goyard') goyard = branded.slice(0, 12);
+    } catch (e) {
+      focus.push({ brand, low: null, results: null, listed: 0, error: String(e.message || e) });
+    } finally {
+      await ctx.close();
     }
-    if (!focus.some(f => f.low != null)) throw new Error('no StockX data parsed (bot-block or layout)');
-    return { status: 'ok', focus, goyard };
-  } finally {
-    await ctx.close();
   }
+  if (!focus.some(f => f.low != null)) throw new Error('no StockX data parsed (bot-block or layout)');
+  return { status: 'ok', focus, goyard };
 }
 
 async function main() {
