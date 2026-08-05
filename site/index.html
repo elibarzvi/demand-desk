@@ -142,6 +142,16 @@
   .bigbtn .t{font-family:var(--serif);font-size:17px}
   .bigbtn .d{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
   .bigbtn .g{font-family:var(--mono);font-size:11px;color:var(--gold);margin-top:2px}
+  .xbuild{border:1px solid var(--gold-dim);border-radius:12px;padding:14px 16px 15px;background:linear-gradient(180deg,var(--surface-2),var(--surface));margin-bottom:16px}
+  .xbuild .xlab{font-family:var(--serif);font-size:16px;margin:0 0 11px}
+  .xrow{display:flex;flex-wrap:wrap;gap:12px 14px;align-items:flex-end}
+  .xfield{display:flex;flex-direction:column;gap:5px}
+  .xfield label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .xfield select,.xfield input{font-family:var(--sans);font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;height:38px;color-scheme:light dark}
+  .xfield input[type=date]{font-family:var(--mono);min-width:150px}
+  #xGo{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--bg);background:var(--ink);border:none;border-radius:8px;padding:0 18px;height:38px;cursor:pointer}
+  #xGo:hover{opacity:.88}
+  .xhint{margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
   .exports{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   .exp{display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:10px;padding:13px 14px;
     background:var(--surface-2);text-decoration:none;color:var(--ink);transition:border-color .15s}
@@ -166,6 +176,9 @@
     .band .sub{white-space:normal;flex-basis:100%;order:3}
     .chead{flex-direction:column;align-items:flex-start;gap:6px}
     .src-tag{white-space:normal;max-width:100%}
+    .xrow .xfield{flex:1 1 100%}
+    .xfield select,.xfield input{width:100%}
+    #xGo{width:100%}
   }
 </style>
 </head>
@@ -289,7 +302,7 @@
 
   <section class="card full" style="margin-top:16px">
     <div class="chead"><h2>Exports — all raw data</h2><span class="src-tag">CSV · JSON · ZIP</span></div>
-    <p class="cnote">Everything captured for the dashboard, from day 0 onward. Grab the full bundle, or a single sheet. Every row carries a <b>date</b>, so in Excel/Sheets you can pivot by day, week, or month to build reports.</p>
+    <p class="cnote">Export a specific <b>day or date range</b> below, grab the whole thing as one bundle, or pull a single full sheet. Every row carries a <b>date</b>, so anything you export pivots by day, week, or month in Excel/Sheets.</p>
     <div id="exports"></div>
   </section>
 
@@ -305,6 +318,20 @@
 const $ = s => document.querySelector(s);
 const fmt = n => '$' + Number(n).toLocaleString('en-US');
 const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function downloadText(name, text, type){
+  const url = URL.createObjectURL(new Blob([text], {type: type||'application/octet-stream'}));
+  const a = document.createElement('a'); a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+}
+// Filter a tidy CSV (date is always the first column) to [from,to] inclusive.
+function filterCsvByDate(text, from, to){
+  const lines = text.replace(/\n+$/,'').split('\n');
+  const header = lines[0];
+  const rows = lines.slice(1).filter(l=>{ const c=l.indexOf(','); const d = c<0?l:l.slice(0,c); return d>=from && d<=to; });
+  return { csv: header + '\n' + rows.join('\n') + (rows.length?'\n':''), count: rows.length };
+}
 
 function sparkline(vals, w=54, h=16){
   if(!vals || vals.length < 2) return '';
@@ -471,23 +498,55 @@ function render(latest, history, exports){
 
   // ---- Exports ----
   if(exports && exports.sheets){
-    const big = [];
-    if(exports.bundle) big.push(`<a class="bigbtn" href="./data/exports/${exports.bundle.file}" download>
-        <span class="t">⬇ Download everything</span>
-        <span class="d">ZIP · all snapshots + every CSV</span>
-        <span class="g">${(exports.bundle.bytes/1024).toFixed(1)} KB</span></a>`);
-    if(exports.raw) big.push(`<a class="bigbtn" href="./data/exports/${exports.raw.file}" download>
-        <span class="t">⬇ Complete raw archive</span>
-        <span class="d">JSON · ${exports.raw.snapshots} daily snapshot${exports.raw.snapshots>1?'s':''}, one file</span>
-        <span class="g">${(exports.raw.bytes/1024).toFixed(1)} KB</span></a>`);
+    const first = history.firstDate, last = history.lastDate, nDays = (history.dates||[]).length;
+    const opts = '<option value="__json__">All raw data (JSON)</option>' +
+      exports.sheets.map(s=>`<option value="${esc(s.file)}">${esc(s.file)}</option>`).join('');
+    const control = `
+      <div class="xbuild">
+        <div class="xlab">Export by date</div>
+        <div class="xrow">
+          <div class="xfield"><label for="xSheet">Data</label><select id="xSheet">${opts}</select></div>
+          <div class="xfield"><label for="xFrom">From</label><input type="date" id="xFrom" min="${first}" max="${last}" value="${first}"></div>
+          <div class="xfield"><label for="xTo">To</label><input type="date" id="xTo" min="${first}" max="${last}" value="${last}"></div>
+          <button id="xGo" type="button">Export ↓</button>
+        </div>
+        <div class="xhint" id="xHint">Data spans ${first} → ${last} · ${nDays} snapshot${nDays===1?'':'s'}. Set From = To for a single day.</div>
+      </div>`;
+    const bundle = exports.bundle
+      ? `<div class="bigrow"><a class="bigbtn" href="./data/exports/${exports.bundle.file}" download>
+          <span class="t">⬇ Download everything</span>
+          <span class="d">ZIP · every CSV + every daily snapshot · all dates</span>
+          <span class="g">${(exports.bundle.bytes/1024).toFixed(1)} KB</span></a></div>`
+      : '';
     const grid = exports.sheets.map(s=>`
-      <a class="exp" href="./data/exports/${s.file}" download>
+      <a class="exp" href="./data/exports/${esc(s.file)}" download>
         <span class="fn">${esc(s.file)}</span>
         <span class="meta">${s.rows.toLocaleString('en-US')} rows · ${(s.bytes/1024).toFixed(1)} KB</span>
-        <span class="arrow">download ↓</span>
-      </a>`).join('') +
-      `<a class="exp" href="./data/exports/daily/${latest.date}/hunt.csv" download><span class="fn">daily/${latest.date}/</span><span class="meta">today's per-day sheets</span><span class="arrow">download ↓</span></a>`;
-    $('#exports').innerHTML = (big.length?`<div class="bigrow">${big.join('')}</div>`:'') + `<div class="exports">${grid}</div>`;
+        <span class="arrow">full sheet ↓</span>
+      </a>`).join('');
+    $('#exports').innerHTML = control + bundle + `<div class="exports">${grid}</div>`;
+
+    document.getElementById('xGo').addEventListener('click', async function(){
+      const sel = document.getElementById('xSheet').value;
+      let from = document.getElementById('xFrom').value, to = document.getElementById('xTo').value;
+      const hint = document.getElementById('xHint');
+      if(!from || !to){ hint.textContent = 'Pick a From and To date.'; return; }
+      if(from > to){ const t=from; from=to; to=t; }
+      hint.textContent = 'Preparing…';
+      try{
+        if(sel === '__json__'){
+          const all = await fetch('./data/exports/all-snapshots.json').then(r=>r.json());
+          const slice = all.filter(s=>s.date>=from && s.date<=to);
+          downloadText(`demand-desk_${from}_to_${to}.json`, JSON.stringify(slice,null,2), 'application/json');
+          hint.textContent = `✓ Exported ${slice.length} snapshot${slice.length===1?'':'s'} (${from} → ${to}) as JSON.`;
+        } else {
+          const text = await fetch('./data/exports/'+sel).then(r=>r.text());
+          const { csv, count } = filterCsvByDate(text, from, to);
+          downloadText(`${sel.replace(/\.csv$/,'')}_${from}_to_${to}.csv`, csv, 'text/csv');
+          hint.textContent = `✓ Exported ${count} row${count===1?'':'s'} from ${sel} (${from} → ${to}).`;
+        }
+      }catch(e){ hint.textContent = 'Export failed: ' + (e.message||e); }
+    });
   } else {
     $('#exports').innerHTML = '<div style="color:var(--ink-3);font-size:13px">Run <code>npm run all</code> to generate the exports.</div>';
   }
