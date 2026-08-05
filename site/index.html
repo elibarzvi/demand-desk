@@ -36,10 +36,10 @@
     --cool:#5a7d94; --heat:#b06a2e; --good:#4f7d3c; --warn:#a76a24;
   }
   *{box-sizing:border-box}
-  html{color-scheme:light dark}
+  html{color-scheme:light dark;overflow-x:hidden}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
-    line-height:1.5;-webkit-font-smoothing:antialiased;font-size:15px}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 22px 60px}
+    line-height:1.5;-webkit-font-smoothing:antialiased;font-size:15px;overflow-x:hidden;max-width:100%}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:28px 22px 60px;width:100%}
 
   .mast{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
     gap:18px;border-bottom:1px solid var(--line);padding-bottom:22px}
@@ -64,7 +64,9 @@
   .kpi .src{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--gold-dim);text-transform:uppercase;margin-top:9px}
 
   .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-top:16px}
-  .col{display:flex;flex-direction:column;gap:16px}
+  .col{display:flex;flex-direction:column;gap:16px;min-width:0}
+  .card{min-width:0}
+  .rank>div{min-width:0}
   .band{display:flex;align-items:center;gap:14px;margin:30px 2px 4px}
   .band .lbl{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:600;white-space:nowrap}
   .band .rule{flex:1;height:1px;background:var(--line)}
@@ -160,6 +162,8 @@
     .grid{grid-template-columns:1fr}
     .rank,.sig,.exports{grid-template-columns:1fr}
     .stamp{text-align:left}
+    .band{flex-wrap:wrap}
+    .band .sub{white-space:normal;flex-basis:100%;order:3}
   }
 </style>
 </head>
