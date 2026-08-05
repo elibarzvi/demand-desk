@@ -10,8 +10,8 @@ infrastructure with no server to run.
 
 | Source | Signal | Cadence |
 |---|---|---|
-| **Mirror** (mirrorconcierge.com) | Live request feed ("The Hunt") + sourcer inventory & prices ("Discover") | Daily |
-| **StockX** | Goyard resale floors | Daily (best-effort) |
+| **Mirror** (mirrorconcierge.com) | Live request feed ("The Hunt") + sourcer inventory, via its public JSON API | Daily |
+| **StockX** | Lowest ask + result count per brand (multi-brand) + Goyard detail | Daily (best-effort) |
 | **Fashionphile** | Lowest buyable price + live listing count per focus brand (Algolia search API) | Daily |
 | **The RealReal** | Most-searched brands + resale value climbers | Report-based reference |
 | **Vestiaire Collective** | Value ranking + fastest-growing/selling (Cloudflare-blocked to servers) | Report-based reference |

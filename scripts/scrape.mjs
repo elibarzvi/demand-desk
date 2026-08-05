@@ -1,117 +1,55 @@
-// Daily capture. Renders the public Mirror feeds + StockX, folds in the periodic
-// index reports, and writes one append-only snapshot per day to data/snapshots/.
+// Daily capture. Pulls the live sources (Mirror API, Fashionphile Algolia, StockX),
+// folds in the periodic index reports, and writes one append-only snapshot per day.
 //
 // Design goals:
-//  - Never crash the daily log. If a source fails (layout change, bot-block,
-//    network), carry the previous day's values forward, marked "carried", and
-//    record the error in capture.errors — the daily record stays complete.
-//  - Public pages only, once per day. Note: Mirror's Terms discourage automated
+//  - Never crash the daily log. If a source fails, record it in capture.errors and
+//    fall back (carry-forward or empty) so the daily record stays complete.
+//  - Public endpoints only, once per day. Mirror's Terms discourage automated
 //    extraction; this is a low-volume personal market tracker of public data.
-//    Review that yourself before running on a schedule.
 import fs from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
 import { ROOT, SNAP_DIR, today, ensureDir, writeFile, previousSnapshot } from '../src/lib/util.mjs';
 
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
-const KNOWN_BRANDS = new Set(JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'data', 'brands.json'), 'utf8')));
+const deaccent = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+const cleanLines = t => t.split('\n').map(l => l.trim()).filter(Boolean);
 
-function cleanLines(text) {
-  return text.split('\n').map(l => l.trim()).filter(Boolean);
-}
-
-// "Requested by Madison +10 others" -> requesters = 11 (named + others).
-function parseHunt(text) {
-  const lines = cleanLines(text);
-  const out = [];
-  const re = /^Requested by .+?\s\+(\d+)\s+others?$/i;
-  for (let i = 2; i < lines.length; i++) {
-    const m = lines[i].match(re);
-    if (!m) continue;
-    const brand = lines[i - 2], item = lines[i - 1];
-    if (!KNOWN_BRANDS.has(brand)) continue;
-    out.push({ brand, item, requesters: Number(m[1]) + 1 });
-  }
-  return dedupe(out, x => x.brand + '|' + x.item);
-}
-
-// Inventory: priced items ("Approx. $1,677") + brand-level listing counts (supply mix).
-function parseInventory(text) {
-  const lines = cleanLines(text);
-  const priced = [];
+// ---- Mirror: public JSON API (Google Cloud Run) ----
+// The site's own backend. /api/hunt = live requests (with exact requestCount),
+// /api/products = sourcer inventory. Cleaner + more accurate than scraping the SPA.
+const MIRROR_API = 'https://mirror-api-109630828579.us-central1.run.app';
+async function scrapeMirror() {
+  const [hunt, products] = await Promise.all([
+    fetch(MIRROR_API + '/api/hunt').then(r => { if (!r.ok) throw new Error('hunt HTTP ' + r.status); return r.json(); }),
+    fetch(MIRROR_API + '/api/products').then(r => { if (!r.ok) throw new Error('products HTTP ' + r.status); return r.json(); })
+  ]);
+  const huntOut = (hunt || []).map(h => ({
+    brand: h.brand, item: h.title, requesters: h.requestCount ?? 0,
+    color: h.color || null, category: (h.categoryTags || [])[0] || null
+  })).sort((a, b) => b.requesters - a.requesters);
+  const inventoryPriced = (products || []).filter(p => p.price != null).map(p => ({
+    brand: p.brand, item: p.title, price: p.price, category: (p.categoryTags || [])[0] || null
+  }));
   const counts = {};
-  const priceRe = /^Approx\.\s*\$([\d,]+)/i;
-  const purRe = /^Price Upon Request$/i;
-  for (let i = 2; i < lines.length; i++) {
-    const priceM = lines[i].match(priceRe);
-    const isPur = purRe.test(lines[i]);
-    if (!priceM && !isPur) continue;
-    const brand = lines[i - 2], item = lines[i - 1];
-    if (!KNOWN_BRANDS.has(brand)) continue;
-    counts[brand] = (counts[brand] || 0) + 1;
-    if (priceM) priced.push({ brand, item, price: Number(priceM[1].replace(/,/g, '')) });
-  }
-  return {
-    priced: dedupe(priced, x => x.brand + '|' + x.item + '|' + x.price),
-    counts: Object.entries(counts).map(([brand, count]) => ({ brand, count })).sort((a, b) => b.count - a.count)
-  };
+  (products || []).forEach(p => { counts[p.brand] = (counts[p.brand] || 0) + 1; });
+  const inventoryCounts = Object.entries(counts).map(([brand, count]) => ({ brand, count })).sort((a, b) => b.count - a.count);
+  if (huntOut.length === 0 && inventoryPriced.length === 0) throw new Error('Mirror API returned no data');
+  return { status: 'ok', via: 'api', site: 'https://mirrorconcierge.com', hunt: huntOut, inventoryPriced, inventoryCounts };
 }
 
-function dedupe(arr, keyFn) {
-  const seen = new Set();
-  return arr.filter(x => { const k = keyFn(x); if (seen.has(k)) return false; seen.add(k); return true; });
-}
-
-async function autoScroll(page) {
-  await page.evaluate(async () => {
-    await new Promise(resolve => {
-      let last = 0, stable = 0;
-      const t = setInterval(() => {
-        window.scrollBy(0, document.body.scrollHeight);
-        const h = document.body.scrollHeight;
-        if (h === last) { if (++stable > 4) { clearInterval(t); resolve(); } }
-        else { stable = 0; last = h; }
-      }, 400);
-    });
-  });
-}
-
-async function scrapeMirror(browser) {
-  const ctx = await browser.newContext({ userAgent: UA });
-  const page = await ctx.newPage();
-  try {
-    await page.goto('https://mirrorconcierge.com/', { waitUntil: 'networkidle', timeout: 60000 });
-    await page.waitForTimeout(2500);
-    const hunt = parseHunt(await page.innerText('body'));
-
-    await page.goto('https://mirrorconcierge.com/discover', { waitUntil: 'networkidle', timeout: 60000 });
-    await page.waitForTimeout(2000);
-    await autoScroll(page);
-    const inv = parseInventory(await page.innerText('body'));
-
-    if (hunt.length === 0 && inv.priced.length === 0) throw new Error('no items parsed (layout may have changed)');
-    return { status: 'ok', site: 'https://mirrorconcierge.com', hunt, inventoryPriced: inv.priced, inventoryCounts: inv.counts };
-  } finally {
-    await ctx.close();
-  }
-}
-
-// Fashionphile is a Shopify store fronted by Algolia. We query its public search
-// index directly — the same search-only key the site ships to every browser — for
-// the lowest available price + live listing count per brand. Far more robust than
-// scraping rendered HTML. The key is a public, search-only credential; safe to commit.
+// ---- Fashionphile: public Algolia search index (search-only key, safe to commit) ----
 const FP = { appId: 'NSJAZ0QG7K', key: 'e545a3cf82cf7dbc5ff39f49c214863e', index: 'shopify_products_price_asc' };
 const FP_VENDOR = {
   'Hermès': 'Hermes', 'Chanel': 'Chanel', 'Louis Vuitton': 'Louis Vuitton', 'Goyard': 'Goyard',
   'Dior': 'Christian Dior', 'Fendi': 'Fendi', 'The Row': 'The Row', 'Cartier': 'Cartier'
 };
-
 async function scrapeFashionphile() {
   const focus = [];
   for (const [brand, vendor] of Object.entries(FP_VENDOR)) {
     const params = `query=&hitsPerPage=1`
       + `&facetFilters=${encodeURIComponent(JSON.stringify([[`vendor:${vendor}`]]))}`
-      + `&filters=${encodeURIComponent('inventory_available=1')}`; // buyable stock only
+      + `&filters=${encodeURIComponent('inventory_available=1')}`;
     const r = await fetch(`https://${FP.appId}-dsn.algolia.net/1/indexes/${FP.index}/query`, {
       method: 'POST',
       headers: { 'X-Algolia-Application-Id': FP.appId, 'X-Algolia-API-Key': FP.key, 'Content-Type': 'application/json' },
@@ -125,26 +63,46 @@ async function scrapeFashionphile() {
   return { status: 'ok', name: 'Fashionphile', via: 'algolia', focus };
 }
 
-async function scrapeStockxGoyard(browser) {
+// ---- StockX: rendered search results (bot-protected GraphQL behind the scenes, so
+// this stays best-effort). Results render as name -> "Lowest Ask" -> $price; sponsored
+// ads lack "Lowest Ask" so they filter out naturally. Also grabs the "Browse N results".
+const STOCKX_BRANDS = ['Goyard', 'Hermès', 'Chanel', 'Louis Vuitton', 'Dior', 'Rolex', 'Cartier', 'Fendi'];
+function parseStockx(text) {
+  const lines = cleanLines(text);
+  const items = [];
+  for (let i = 1; i < lines.length - 1; i++) {
+    if (/^Lowest Ask$/i.test(lines[i]) && /^\$[\d,]+/.test(lines[i + 1])) {
+      items.push({ item: lines[i - 1], price: Number(lines[i + 1].replace(/[^\d]/g, '')) });
+    }
+  }
+  const rm = text.match(/Browse\s+([\d,]+)\s+results/i);
+  return { items, results: rm ? Number(rm[1].replace(/,/g, '')) : null };
+}
+async function scrapeStockx(browser) {
   const ctx = await browser.newContext({ userAgent: UA });
   const page = await ctx.newPage();
   try {
-    await page.goto('https://stockx.com/search?s=goyard', { waitUntil: 'domcontentloaded', timeout: 45000 });
-    await page.waitForTimeout(3500);
-    const body = await page.innerText('body');
-    if (/Access Denied|captcha|unusual traffic|are you a human/i.test(body)) throw new Error('bot-blocked');
-    // Cards render as: name line, then "Lowest Ask $X". Pair them up.
-    const lines = cleanLines(body);
-    const items = [];
-    const re = /^\$([\d,]+)/;
-    for (let i = 1; i < lines.length; i++) {
-      const m = lines[i].match(re);
-      if (m && /Goyard/i.test(lines[i - 1])) {
-        items.push({ item: lines[i - 1].replace(/Goyard/i, '').trim(), price: Number(m[1].replace(/,/g, '')) });
+    const focus = [];
+    let goyard = [];
+    for (const brand of STOCKX_BRANDS) {
+      try {
+        const q = deaccent(brand);
+        await page.goto('https://stockx.com/search?s=' + encodeURIComponent(q), { waitUntil: 'domcontentloaded', timeout: 45000 });
+        await page.waitForTimeout(3500);
+        const body = await page.innerText('body');
+        if (/Access Denied|captcha|unusual traffic|are you a human|Pardon Our Interruption/i.test(body)) throw new Error('bot-blocked');
+        const { items, results } = parseStockx(body);
+        const key = deaccent(q).split(' ')[0].toLowerCase();
+        const branded = items.filter(x => deaccent(x.item).toLowerCase().includes(key));
+        const low = branded.length ? Math.min(...branded.map(x => x.price)) : null;
+        focus.push({ brand, low, results, listed: branded.length });
+        if (brand === 'Goyard') goyard = branded.slice(0, 12);
+      } catch (e) {
+        focus.push({ brand, low: null, results: null, listed: 0, error: String(e.message || e) });
       }
     }
-    if (!items.length) throw new Error('no StockX items parsed');
-    return { status: 'ok', query: 'goyard', items };
+    if (!focus.some(f => f.low != null)) throw new Error('no StockX data parsed (bot-block or layout)');
+    return { status: 'ok', focus, goyard };
   } finally {
     await ctx.close();
   }
@@ -152,37 +110,31 @@ async function scrapeStockxGoyard(browser) {
 
 async function main() {
   const date = today();
-  const prev = previousSnapshot(date + '~'); // '~' > any date char, so this includes an existing same-day file
+  const prev = previousSnapshot(date + '~');
   const errors = [];
   const indices = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'data', 'indices.json'), 'utf8'));
   delete indices._comment;
 
+  // StockX needs a browser; Mirror + Fashionphile are plain fetch.
+  let stockx;
   const browser = await chromium.launch({ args: ['--no-sandbox'] });
-  let mirror, stockx, fashionphile;
-  try {
-    try { mirror = await scrapeMirror(browser); }
-    catch (e) {
-      errors.push({ source: 'mirror', error: String(e.message || e) });
-      mirror = prev?.sources?.mirror ? { ...prev.sources.mirror, status: 'carried' } : { status: 'error', hunt: [], inventoryPriced: [], inventoryCounts: [] };
-    }
-    try { stockx = await scrapeStockxGoyard(browser); }
-    catch (e) {
-      errors.push({ source: 'stockx_goyard', error: String(e.message || e) });
-      stockx = prev?.sources?.stockx_goyard ? { ...prev.sources.stockx_goyard, status: 'carried' } : { status: 'error', items: [] };
-    }
-  } finally {
-    await browser.close();
-  }
+  try { stockx = await scrapeStockx(browser); }
+  catch (e) { errors.push({ source: 'stockx', error: String(e.message || e) }); stockx = { status: 'error', focus: [], goyard: [] }; }
+  finally { await browser.close(); }
 
-  // Fashionphile via Algolia (no browser needed).
-  try { fashionphile = await scrapeFashionphile(); }
+  let mirror;
+  try { mirror = await scrapeMirror(); }
   catch (e) {
-    errors.push({ source: 'fashionphile', error: String(e.message || e) });
-    fashionphile = { status: 'error', name: 'Fashionphile', focus: [] };
+    errors.push({ source: 'mirror', error: String(e.message || e) });
+    mirror = prev?.sources?.mirror ? { ...prev.sources.mirror, status: 'carried' } : { status: 'error', hunt: [], inventoryPriced: [], inventoryCounts: [] };
   }
 
-  // The RealReal and Vestiaire are edge-blocked (Cloudflare/captcha) to servers, so
-  // they're report-based reference sources, carried from src/data/indices.json.
+  let fashionphile;
+  try { fashionphile = await scrapeFashionphile(); }
+  catch (e) { errors.push({ source: 'fashionphile', error: String(e.message || e) }); fashionphile = { status: 'error', name: 'Fashionphile', focus: [] }; }
+
+  // The RealReal and Vestiaire are edge-blocked to servers, so they're report-based
+  // reference sources carried from src/data/indices.json.
   const { therealreal: trrReport, vestiaire: vcReport, ...periodicIndices } = indices;
 
   const snapshot = {
@@ -191,7 +143,8 @@ async function main() {
     capture: { method: 'scrape', errors },
     sources: {
       mirror,
-      stockx_goyard: stockx,
+      stockx_goyard: { status: stockx.status, items: stockx.goyard || [] },
+      stockx_brands: { status: stockx.status, focus: stockx.focus || [] },
       fashionphile,
       therealreal: { status: 'reference', ...trrReport },
       vestiaire: { status: 'reference', ...vcReport },
@@ -201,7 +154,7 @@ async function main() {
 
   ensureDir(SNAP_DIR);
   writeFile(path.join(SNAP_DIR, `${date}.json`), JSON.stringify(snapshot, null, 2) + '\n');
-  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status} fashionphile:${fashionphile.status}(${fashionphile.focus?.length ?? 0})` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
+  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status} brands:${(stockx.focus || []).filter(f => f.low != null).length}/${STOCKX_BRANDS.length} fashionphile:${fashionphile.status}(${fashionphile.focus?.length ?? 0})` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

@@ -224,6 +224,12 @@
 
     <div class="col">
       <section class="card">
+        <div class="chead"><h2>StockX — lowest ask by brand</h2><span class="src-tag">StockX · live</span></div>
+        <p class="cnote">Cheapest live listing and total results per brand on StockX. Best-effort (StockX rate-limits bots).</p>
+        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Lowest ask</th><th style="text-align:right">Results</th></tr></thead><tbody id="stockxBrandsBody"></tbody></table></div>
+      </section>
+
+      <section class="card">
         <div class="chead"><h2>Goyard — resale floors</h2><span class="src-tag">StockX · live</span></div>
         <p class="cnote">Lowest ask on the secondary market. The rising brand's liquid price band.</p>
         <div class="twrap"><table><thead><tr><th>Item</th><th style="text-align:right">Lowest ask</th></tr></thead><tbody id="stockxBody"></tbody></table></div>
@@ -444,6 +450,13 @@ function render(latest, history, exports){
     const p = lo===hi?fmt(lo):`${fmt(lo)}–${Number(hi).toLocaleString('en-US')}`;
     return `<tr><td><span class="b">${esc(it.item)}</span></td><td class="price">${p}</td></tr>`;
   }).join('') || '<tr><td colspan="2" style="color:var(--ink-3)">No StockX capture in this snapshot.</td></tr>';
+
+  const sxb = (latest.sources.stockx_brands?.focus || []).slice().sort((a,b)=>(a.low??1e12)-(b.low??1e12));
+  $('#stockxBrandsBody').innerHTML = sxb.length
+    ? sxb.map(x=>`<tr><td><span class="b">${esc(x.brand)}</span></td>
+        <td class="price">${x.low!=null?fmt(x.low):'—'}</td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.results!=null?x.results.toLocaleString('en-US'):'—'}</td></tr>`).join('')
+    : '<tr><td colspan="3" style="color:var(--ink-3)">No StockX capture in this snapshot.</td></tr>';
 
   // ---- Supply mix ----
   let counts = m.inventoryCounts;
