@@ -2,7 +2,12 @@ name: Daily capture
 
 on:
   schedule:
-    - cron: '17 8 * * *'   # 08:17 UTC every day
+    # GitHub cron is best-effort (often delayed hours, sometimes skipped), so run a
+    # few times a day for redundancy. The job is idempotent — one snapshot per day,
+    # overwritten — so extra runs just make sure the day gets captured.
+    - cron: '17 8 * * *'    # 08:17 UTC
+    - cron: '17 14 * * *'   # 14:17 UTC (backup)
+    - cron: '17 21 * * *'   # 21:17 UTC (backup)
   workflow_dispatch: {}      # lets you run it on demand from the Actions tab
 
 permissions:
