@@ -63,6 +63,47 @@ async function scrapeFashionphile() {
   return { status: 'ok', name: 'Fashionphile', via: 'algolia', focus };
 }
 
+// ---- eBay: official Browse API via client-credentials OAuth. Keys come from env
+// (GitHub Actions secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET), so it stays disabled
+// on local runs unless those are exported. Active fixed-price listing count + floor
+// price per brand — a large, legitimate demand/supply signal. ----
+const EBAY_BRANDS = ['Hermès', 'Chanel', 'Louis Vuitton', 'Goyard', 'Dior', 'Fendi', 'Cartier', 'Rolex', 'The Row'];
+async function ebayToken() {
+  const id = process.env.EBAY_CLIENT_ID, secret = process.env.EBAY_CLIENT_SECRET;
+  if (!id || !secret) throw new Error('eBay credentials not set');
+  const basic = Buffer.from(`${id}:${secret}`).toString('base64');
+  const r = await fetch('https://api.ebay.com/identity/v1/oauth2/token', {
+    method: 'POST',
+    headers: { 'Authorization': `Basic ${basic}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'grant_type=client_credentials&scope=' + encodeURIComponent('https://api.ebay.com/oauth/api_scope')
+  });
+  if (!r.ok) throw new Error(`eBay OAuth HTTP ${r.status}`);
+  const j = await r.json();
+  if (!j.access_token) throw new Error('eBay OAuth returned no token');
+  return j.access_token;
+}
+async function scrapeEbay() {
+  const token = await ebayToken();
+  const focus = [];
+  for (const brand of EBAY_BRANDS) {
+    try {
+      const url = 'https://api.ebay.com/buy/browse/v1/item_summary/search'
+        + '?q=' + encodeURIComponent(brand)
+        + '&limit=1&sort=price'
+        + '&filter=' + encodeURIComponent('buyingOptions:{FIXED_PRICE}');
+      const r = await fetch(url, { headers: { 'Authorization': `Bearer ${token}`, 'X-EBAY-C-MARKETPLACE-ID': 'EBAY_US' } });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json();
+      const pv = j.itemSummaries?.[0]?.price?.value;
+      focus.push({ brand, total: j.total ?? null, low: pv != null ? Math.round(Number(pv)) : null });
+    } catch (e) {
+      focus.push({ brand, total: null, low: null, error: String(e.message || e) });
+    }
+  }
+  if (!focus.some(f => f.total != null)) throw new Error('no eBay data returned');
+  return { status: 'ok', via: 'browse-api', focus };
+}
+
 // ---- StockX: rendered search results (bot-protected GraphQL behind the scenes, so
 // this stays best-effort). Results render as name -> "Lowest Ask" -> $price; sponsored
 // ads lack "Lowest Ask" so they filter out naturally. Also grabs the "Browse N results".
@@ -139,6 +180,13 @@ async function main() {
   try { fashionphile = await scrapeFashionphile(); }
   catch (e) { errors.push({ source: 'fashionphile', error: String(e.message || e) }); fashionphile = { status: 'error', name: 'Fashionphile', focus: [] }; }
 
+  let ebay;
+  try { ebay = await scrapeEbay(); }
+  catch (e) {
+    if (process.env.EBAY_CLIENT_ID) errors.push({ source: 'ebay', error: String(e.message || e) });
+    ebay = { status: process.env.EBAY_CLIENT_ID ? 'error' : 'unconfigured', focus: [] };
+  }
+
   // The RealReal and Vestiaire are edge-blocked to servers, so they're report-based
   // reference sources carried from src/data/indices.json.
   const { therealreal: trrReport, vestiaire: vcReport, ...periodicIndices } = indices;
@@ -152,6 +200,7 @@ async function main() {
       stockx_goyard: { status: stockx.status, items: stockx.goyard || [] },
       stockx_brands: { status: stockx.status, focus: stockx.focus || [] },
       fashionphile,
+      ebay,
       therealreal: { status: 'reference', ...trrReport },
       vestiaire: { status: 'reference', ...vcReport },
       indices: { status: 'reference', ...periodicIndices }
@@ -160,7 +209,7 @@ async function main() {
 
   ensureDir(SNAP_DIR);
   writeFile(path.join(SNAP_DIR, `${date}.json`), JSON.stringify(snapshot, null, 2) + '\n');
-  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status} brands:${(stockx.focus || []).filter(f => f.low != null).length}/${STOCKX_BRANDS.length} fashionphile:${fashionphile.status}(${fashionphile.focus?.length ?? 0})` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
+  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status} brands:${(stockx.focus || []).filter(f => f.low != null).length}/${STOCKX_BRANDS.length} fashionphile:${fashionphile.status}(${fashionphile.focus?.length ?? 0}) ebay:${ebay.status}(${(ebay.focus || []).filter(f => f.total != null).length})` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

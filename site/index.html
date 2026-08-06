@@ -220,6 +220,12 @@
         <p class="cnote">Lowest buyable price &amp; live listing count per brand, via their Algolia search. Captured daily.</p>
         <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Lowest</th><th style="text-align:right">Listings</th></tr></thead><tbody id="fpBody"></tbody></table></div>
       </section>
+
+      <section class="card">
+        <div class="chead"><h2>eBay — active listings by brand</h2><span class="src-tag">eBay · Browse API</span></div>
+        <p class="cnote">Fixed-price active listings and floor price per brand on eBay US, via the official Browse API.</p>
+        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Lowest</th><th style="text-align:right">Listings</th></tr></thead><tbody id="ebayBody"></tbody></table></div>
+      </section>
     </div>
 
     <div class="col">
@@ -317,7 +323,7 @@
   </section>
 
   <footer>
-    <div id="sources">Sources — Mirror Concierge, StockX, Fashionphile, The RealReal, Vestiaire Collective, myGemma, Lyst, Rebag.</div>
+    <div id="sources">Sources — Mirror Concierge, StockX, Fashionphile, eBay, The RealReal, Vestiaire Collective, myGemma, Lyst, Rebag.</div>
     <div class="disc">
       Retention figures blend Rebag's 6th annual Clair Report (Dec 2025, Hermès &amp; Goyard) and the 5th annual (2024, others), labeled by year. Supply-mix share is derived from the visible feed. Mirror is an independent marketplace, not affiliated with the brands shown. Point-in-time reads for buying research, not investment advice.
     </div>
@@ -490,6 +496,13 @@ function render(latest, history, exports){
         <td class="price">${x.low!=null?fmt(x.low):'—'}</td>
         <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.count!=null?x.count.toLocaleString('en-US'):'—'}</td></tr>`).join('')
     : '<tr><td colspan="3" style="color:var(--ink-3)">Awaiting first Fashionphile capture — populates on the next daily run.</td></tr>';
+
+  const eb = (latest.sources.ebay?.focus || []).slice().sort((a,b)=>(a.low??1e12)-(b.low??1e12));
+  $('#ebayBody').innerHTML = eb.length
+    ? eb.map(x=>`<tr><td><span class="b">${esc(x.brand)}</span></td>
+        <td class="price">${x.low!=null?fmt(x.low):'—'}</td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.total!=null?x.total.toLocaleString('en-US'):'—'}</td></tr>`).join('')
+    : '<tr><td colspan="3" style="color:var(--ink-3)">Awaiting first eBay capture — populates on the next daily run.</td></tr>';
   const trr = latest.sources.therealreal || {};
   if(trr.asOf) $('#trrHead').textContent = `The RealReal — most-searched · ${trr.asOf}`;
   $('#trrSearch').innerHTML = (trr.mostSearchedBrands||[]).slice(0,8).map(b=>`<li><span class="b">${esc(b)}</span></li>`).join('');

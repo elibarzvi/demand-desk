@@ -37,6 +37,9 @@ jobs:
 
       - name: Capture today's snapshot
         run: npm run scrape
+        env:
+          EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
+          EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
 
       - name: Regenerate CSV exports
         run: npm run export
