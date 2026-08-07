@@ -104,6 +104,40 @@ async function scrapeEbay() {
   return { status: 'ok', via: 'browse-api', focus };
 }
 
+// ---- Search volume: Google monthly searches per brand keyword, via DataForSEO
+// (paid keyword API). Credentials from env (DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD).
+// One cheap request/day for all keywords — the real search-demand number that layers
+// onto every brand row (eBay included). ----
+const SEARCH_KEYWORDS = [
+  { brand: 'Hermès', keyword: 'hermes bag' },
+  { brand: 'Chanel', keyword: 'chanel bag' },
+  { brand: 'Louis Vuitton', keyword: 'louis vuitton bag' },
+  { brand: 'Goyard', keyword: 'goyard bag' },
+  { brand: 'Dior', keyword: 'dior bag' },
+  { brand: 'Fendi', keyword: 'fendi bag' },
+  { brand: 'Cartier', keyword: 'cartier' },
+  { brand: 'Rolex', keyword: 'rolex' },
+  { brand: 'The Row', keyword: 'the row bag' }
+];
+async function scrapeSearchVolume() {
+  const login = process.env.DATAFORSEO_LOGIN, pass = process.env.DATAFORSEO_PASSWORD;
+  if (!login || !pass) throw new Error('DataForSEO credentials not set');
+  const basic = Buffer.from(`${login}:${pass}`).toString('base64');
+  const r = await fetch('https://api.dataforseo.com/v3/keywords_data/google_ads/search_volume/live', {
+    method: 'POST',
+    headers: { 'Authorization': `Basic ${basic}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify([{ keywords: SEARCH_KEYWORDS.map(k => k.keyword), location_code: 2840, language_code: 'en' }]) // 2840 = United States
+  });
+  if (!r.ok) throw new Error(`DataForSEO HTTP ${r.status}`);
+  const j = await r.json();
+  const results = j.tasks?.[0]?.result || [];
+  const byKw = {};
+  results.forEach(x => { byKw[(x.keyword || '').toLowerCase()] = x.search_volume; });
+  const focus = SEARCH_KEYWORDS.map(k => ({ brand: k.brand, keyword: k.keyword, volume: byKw[k.keyword.toLowerCase()] ?? null }));
+  if (!focus.some(f => f.volume != null)) throw new Error('no search volume returned');
+  return { status: 'ok', via: 'dataforseo', focus };
+}
+
 // ---- StockX: rendered search results (bot-protected GraphQL behind the scenes, so
 // this stays best-effort). Results render as name -> "Lowest Ask" -> $price; sponsored
 // ads lack "Lowest Ask" so they filter out naturally. Also grabs the "Browse N results".
@@ -187,6 +221,13 @@ async function main() {
     ebay = { status: process.env.EBAY_CLIENT_ID ? 'error' : 'unconfigured', focus: [] };
   }
 
+  let searchVolume;
+  try { searchVolume = await scrapeSearchVolume(); }
+  catch (e) {
+    if (process.env.DATAFORSEO_LOGIN) errors.push({ source: 'search_volume', error: String(e.message || e) });
+    searchVolume = { status: process.env.DATAFORSEO_LOGIN ? 'error' : 'unconfigured', focus: [] };
+  }
+
   // The RealReal and Vestiaire are edge-blocked to servers, so they're report-based
   // reference sources carried from src/data/indices.json.
   const { therealreal: trrReport, vestiaire: vcReport, ...periodicIndices } = indices;
@@ -201,6 +242,7 @@ async function main() {
       stockx_brands: { status: stockx.status, focus: stockx.focus || [] },
       fashionphile,
       ebay,
+      search_volume: searchVolume,
       therealreal: { status: 'reference', ...trrReport },
       vestiaire: { status: 'reference', ...vcReport },
       indices: { status: 'reference', ...periodicIndices }
@@ -209,7 +251,7 @@ async function main() {
 
   ensureDir(SNAP_DIR);
   writeFile(path.join(SNAP_DIR, `${date}.json`), JSON.stringify(snapshot, null, 2) + '\n');
-  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status} brands:${(stockx.focus || []).filter(f => f.low != null).length}/${STOCKX_BRANDS.length} fashionphile:${fashionphile.status}(${fashionphile.focus?.length ?? 0}) ebay:${ebay.status}(${(ebay.focus || []).filter(f => f.total != null).length})` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
+  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status} brands:${(stockx.focus || []).filter(f => f.low != null).length}/${STOCKX_BRANDS.length} fashionphile:${fashionphile.status}(${fashionphile.focus?.length ?? 0}) ebay:${ebay.status}(${(ebay.focus || []).filter(f => f.total != null).length}) searchvol:${searchVolume.status}(${(searchVolume.focus || []).filter(f => f.volume != null).length})` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

@@ -19,7 +19,7 @@ function build() {
   if (!snaps.length) { console.log('[export] no snapshots yet'); return; }
 
   const hunt = [], invPriced = [], supply = [], stockx = [], searchRank = [], retention = [];
-  const fp = [], trrClimb = [], vcRank = [], vcSelling = [], stockxBrands = [], ebay = [];
+  const fp = [], trrClimb = [], vcRank = [], vcSelling = [], stockxBrands = [], ebay = [], searchVol = [];
 
   for (const s of snaps) {
     const d = s.date;
@@ -30,6 +30,7 @@ function build() {
     for (const r of stockxRows(d, s.sources?.stockx_goyard)) stockx.push(r);
     for (const f of s.sources?.stockx_brands?.focus || []) stockxBrands.push({ date: d, brand: f.brand, lowest_ask: f.low ?? '', results: f.results ?? '', listed: f.listed ?? '' });
     for (const f of s.sources?.ebay?.focus || []) ebay.push({ date: d, brand: f.brand, low_price: f.low ?? '', listings: f.total ?? '' });
+    for (const f of s.sources?.search_volume?.focus || []) searchVol.push({ date: d, brand: f.brand, keyword: f.keyword, monthly_searches: f.volume ?? '' });
     for (const f of s.sources?.fashionphile?.focus || []) fp.push({ date: d, brand: f.brand, low_price: f.low ?? '', listings: f.count ?? '' });
 
     const trr = s.sources?.therealreal || {};
@@ -54,6 +55,7 @@ function build() {
     ['stockx-goyard.csv', ['date', 'item', 'low', 'high'], stockx],
     ['stockx-brands.csv', ['date', 'brand', 'lowest_ask', 'results', 'listed'], stockxBrands],
     ['ebay.csv', ['date', 'brand', 'low_price', 'listings'], ebay],
+    ['search-volume.csv', ['date', 'brand', 'keyword', 'monthly_searches'], searchVol],
     ['fashionphile.csv', ['date', 'brand', 'low_price', 'listings'], fp],
     ['therealreal-value-climbers.csv', ['date', 'item', 'yoy_change_pct'], trrClimb],
     ['vestiaire-value-ranking.csv', ['date', 'rank', 'brand', 'points'], vcRank],

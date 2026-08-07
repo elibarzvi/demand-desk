@@ -14,6 +14,7 @@ infrastructure with no server to run.
 | **StockX** | Lowest ask + result count per brand (multi-brand) + Goyard detail | Daily (best-effort) |
 | **Fashionphile** | Lowest buyable price + live listing count per focus brand (Algolia search API) | Daily |
 | **eBay** | Active fixed-price listing count + floor price per brand (official Browse API) | Daily |
+| **DataForSEO** | Google monthly search volume per brand keyword (the search-demand metric) | Daily |
 | **The RealReal** | Most-searched brands + resale value climbers | Report-based reference |
 | **Vestiaire Collective** | Value ranking + fastest-growing/selling (Cloudflare-blocked to servers) | Report-based reference |
 | **myGemma Luxury Resale Index** | Most-searched brands & handbags | Carried; refresh on new edition |

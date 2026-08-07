@@ -79,6 +79,12 @@
     border:1px solid var(--line);border-radius:999px;padding:3px 9px;white-space:nowrap}
   .cnote{color:var(--ink-2);font-size:12.5px;margin:2px 0 15px}
 
+  .svrow{display:grid;grid-template-columns:1fr auto;gap:3px 10px;align-items:center;margin-bottom:11px}
+  .svname{font-family:var(--serif);font-size:14px}
+  .svfig{font-family:var(--mono);font-size:13px;color:var(--gold);font-variant-numeric:tabular-nums}
+  .svtrack{grid-column:1/-1;height:8px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+  .svfill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:5px;width:0;transition:width 1s cubic-bezier(.22,.61,.36,1)}
+  @media (prefers-reduced-motion: reduce){.svfill{transition:none}}
   .bars{display:flex;flex-direction:column;gap:11px}
   .bar{display:grid;grid-template-columns:1fr auto auto;gap:4px 10px;align-items:center}
   .bar .name{font-size:13px;color:var(--ink)}
@@ -216,6 +222,12 @@
       </section>
 
       <section class="card">
+        <div class="chead"><h2>Search Volume — Google demand by brand</h2><span class="src-tag">DataForSEO · monthly</span></div>
+        <p class="cnote">Average monthly Google searches per brand keyword — the real search-demand behind every listing. Updated daily.</p>
+        <div id="searchVolBars"></div>
+      </section>
+
+      <section class="card">
         <div class="chead"><h2>Fashionphile — lowest price &amp; live listings</h2><span class="src-tag">Fashionphile · live</span></div>
         <p class="cnote">Lowest buyable price &amp; live listing count per brand, via their Algolia search. Captured daily.</p>
         <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Lowest</th><th style="text-align:right">Listings</th></tr></thead><tbody id="fpBody"></tbody></table></div>
@@ -223,8 +235,8 @@
 
       <section class="card">
         <div class="chead"><h2>eBay — active listings by brand</h2><span class="src-tag">eBay · Browse API</span></div>
-        <p class="cnote">Fixed-price active listings and floor price per brand on eBay US, via the official Browse API.</p>
-        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Lowest</th><th style="text-align:right">Listings</th></tr></thead><tbody id="ebayBody"></tbody></table></div>
+        <p class="cnote">Google search volume + fixed-price active listings and floor price per brand on eBay US (Browse API).</p>
+        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Searches/mo</th><th style="text-align:right">Lowest</th><th style="text-align:right">Listings</th></tr></thead><tbody id="ebayBody"></tbody></table></div>
       </section>
     </div>
 
@@ -323,7 +335,7 @@
   </section>
 
   <footer>
-    <div id="sources">Sources — Mirror Concierge, StockX, Fashionphile, eBay, The RealReal, Vestiaire Collective, myGemma, Lyst, Rebag.</div>
+    <div id="sources">Sources — Mirror Concierge, StockX, Fashionphile, eBay, DataForSEO (Google search volume), The RealReal, Vestiaire Collective, myGemma, Lyst, Rebag.</div>
     <div class="disc">
       Retention figures blend Rebag's 6th annual Clair Report (Dec 2025, Hermès &amp; Goyard) and the 5th annual (2024, others), labeled by year. Supply-mix share is derived from the visible feed. Mirror is an independent marketplace, not affiliated with the brands shown. Point-in-time reads for buying research, not investment advice.
     </div>
@@ -497,12 +509,27 @@ function render(latest, history, exports){
         <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.count!=null?x.count.toLocaleString('en-US'):'—'}</td></tr>`).join('')
     : '<tr><td colspan="3" style="color:var(--ink-3)">Awaiting first Fashionphile capture — populates on the next daily run.</td></tr>';
 
+  // ---- Search volume (Google monthly, via DataForSEO) ----
+  const svFocus = latest.sources.search_volume?.focus || [];
+  const svMap = {}; svFocus.forEach(f=>{ svMap[f.brand] = f.volume; });
+  const svSorted = svFocus.slice().sort((a,b)=>(b.volume??-1)-(a.volume??-1));
+  const svMax = Math.max(...svSorted.map(x=>x.volume||0), 1);
+  $('#searchVolBars').innerHTML = svSorted.length
+    ? svSorted.map(x=>`<div class="svrow">
+        <span class="svname">${esc(x.brand)}</span>
+        <span class="svfig">${x.volume!=null?x.volume.toLocaleString('en-US'):'—'}</span>
+        <div class="svtrack"><div class="svfill" data-w="${x.volume?(x.volume/svMax*100).toFixed(1):0}"></div></div>
+      </div>`).join('')
+    : '<div style="color:var(--ink-3);font-size:13px">Awaiting first search-volume capture — populates on the next daily run.</div>';
+  const svCell = b => { const v = svMap[b]; return v!=null ? v.toLocaleString('en-US') : '—'; };
+
   const eb = (latest.sources.ebay?.focus || []).slice().sort((a,b)=>(a.low??1e12)-(b.low??1e12));
   $('#ebayBody').innerHTML = eb.length
     ? eb.map(x=>`<tr><td><span class="b">${esc(x.brand)}</span></td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--gold);font-variant-numeric:tabular-nums">${svCell(x.brand)}</td>
         <td class="price">${x.low!=null?fmt(x.low):'—'}</td>
         <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.total!=null?x.total.toLocaleString('en-US'):'—'}</td></tr>`).join('')
-    : '<tr><td colspan="3" style="color:var(--ink-3)">Awaiting first eBay capture — populates on the next daily run.</td></tr>';
+    : '<tr><td colspan="4" style="color:var(--ink-3)">Awaiting first eBay capture — populates on the next daily run.</td></tr>';
   const trr = latest.sources.therealreal || {};
   if(trr.asOf) $('#trrHead').textContent = `The RealReal — most-searched · ${trr.asOf}`;
   $('#trrSearch').innerHTML = (trr.mostSearchedBrands||[]).slice(0,8).map(b=>`<li><span class="b">${esc(b)}</span></li>`).join('');
@@ -603,7 +630,7 @@ function render(latest, history, exports){
   }
 
   // animate fills
-  requestAnimationFrame(()=>document.querySelectorAll('.fill,.retfill').forEach(f=>f.style.width=f.getAttribute('data-w')+'%'));
+  requestAnimationFrame(()=>document.querySelectorAll('.fill,.retfill,.svfill').forEach(f=>f.style.width=f.getAttribute('data-w')+'%'));
 }
 
 load();
