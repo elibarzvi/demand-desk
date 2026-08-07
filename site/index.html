@@ -234,9 +234,9 @@
       </section>
 
       <section class="card">
-        <div class="chead"><h2>eBay — active listings by brand</h2><span class="src-tag">eBay · Browse API</span></div>
-        <p class="cnote">Google search volume + fixed-price active listings and floor price per brand on eBay US (Browse API).</p>
-        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Searches/mo</th><th style="text-align:right">Lowest</th><th style="text-align:right">Listings</th></tr></thead><tbody id="ebayBody"></tbody></table></div>
+        <div class="chead"><h2>eBay — search demand vs active listings</h2><span class="src-tag">eBay · Browse API</span></div>
+        <p class="cnote">Google monthly searches vs eBay US active fixed-price listings ($100+) per brand — demand against supply.</p>
+        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Searches/mo</th><th style="text-align:right">Listings</th></tr></thead><tbody id="ebayBody"></tbody></table></div>
       </section>
     </div>
 
@@ -523,13 +523,12 @@ function render(latest, history, exports){
     : '<div style="color:var(--ink-3);font-size:13px">Awaiting first search-volume capture — populates on the next daily run.</div>';
   const svCell = b => { const v = svMap[b]; return v!=null ? v.toLocaleString('en-US') : '—'; };
 
-  const eb = (latest.sources.ebay?.focus || []).slice().sort((a,b)=>(a.low??1e12)-(b.low??1e12));
+  const eb = (latest.sources.ebay?.focus || []).slice().sort((a,b)=>(b.total??-1)-(a.total??-1));
   $('#ebayBody').innerHTML = eb.length
     ? eb.map(x=>`<tr><td><span class="b">${esc(x.brand)}</span></td>
         <td style="text-align:right;font-family:var(--mono);color:var(--gold);font-variant-numeric:tabular-nums">${svCell(x.brand)}</td>
-        <td class="price">${x.low!=null?fmt(x.low):'—'}</td>
         <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.total!=null?x.total.toLocaleString('en-US'):'—'}</td></tr>`).join('')
-    : '<tr><td colspan="4" style="color:var(--ink-3)">Awaiting first eBay capture — populates on the next daily run.</td></tr>';
+    : '<tr><td colspan="3" style="color:var(--ink-3)">Awaiting first eBay capture — populates on the next daily run.</td></tr>';
   const trr = latest.sources.therealreal || {};
   if(trr.asOf) $('#trrHead').textContent = `The RealReal — most-searched · ${trr.asOf}`;
   $('#trrSearch').innerHTML = (trr.mostSearchedBrands||[]).slice(0,8).map(b=>`<li><span class="b">${esc(b)}</span></li>`).join('');
