@@ -20,6 +20,11 @@ function build() {
     }
   }
 
+  // Previous-day search volume per brand (for the day-over-day comp on the card).
+  const prevSnap = snaps.length >= 2 ? snaps[snaps.length - 2] : null;
+  const searchVolPrev = {};
+  (prevSnap?.sources?.search_volume?.focus || []).forEach(f => { if (f.volume != null) searchVolPrev[f.brand] = f.volume; });
+
   ensureDir(SITE_DATA_DIR);
   writeFile(path.join(SITE_DATA_DIR, 'latest.json'), JSON.stringify(latest) + '\n');
   writeFile(path.join(SITE_DATA_DIR, 'history.json'), JSON.stringify({
@@ -27,7 +32,9 @@ function build() {
     lastDate: latest.date,
     count: snaps.length,
     dates: listSnapshotDates(),
-    huntSeries
+    huntSeries,
+    searchVolPrev,
+    searchVolPrevDate: prevSnap?.date || null
   }) + '\n');
   writeFile(path.join(SITE_DATA_DIR, 'index.json'), JSON.stringify({ dates: listSnapshotDates() }) + '\n');
 
