@@ -230,7 +230,7 @@
       <section class="card">
         <div class="chead"><h2>Fashionphile — lowest price &amp; live listings</h2><span class="src-tag">Fashionphile · live</span></div>
         <p class="cnote">Lowest buyable price &amp; live listing count per brand, via their Algolia search. Captured daily.</p>
-        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Lowest</th><th style="text-align:right">Listings</th></tr></thead><tbody id="fpBody"></tbody></table></div>
+        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Searches/mo</th><th style="text-align:right">Lowest</th><th style="text-align:right">Listings</th></tr></thead><tbody id="fpBody"></tbody></table></div>
       </section>
 
       <section class="card">
@@ -244,7 +244,7 @@
       <section class="card">
         <div class="chead"><h2>StockX — lowest ask by brand</h2><span class="src-tag">StockX · live</span></div>
         <p class="cnote">Cheapest live listing and total results per brand on StockX. Best-effort (StockX rate-limits bots).</p>
-        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Lowest ask</th><th style="text-align:right">Results</th></tr></thead><tbody id="stockxBrandsBody"></tbody></table></div>
+        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Searches/mo</th><th style="text-align:right">Lowest ask</th><th style="text-align:right">Results</th></tr></thead><tbody id="stockxBrandsBody"></tbody></table></div>
       </section>
 
       <section class="card">
@@ -397,6 +397,20 @@ function render(latest, history, exports){
   const idx = latest.sources.indices || {};
   const hunt = (m.hunt || []).slice().sort((a,b)=>b.requesters-a.requesters);
 
+  // ---- Search volume (Google monthly, via DataForSEO) — defined early so every card can use svCell ----
+  const svFocus = latest.sources.search_volume?.focus || [];
+  const svMap = {}; svFocus.forEach(f=>{ svMap[f.brand] = f.volume; });
+  const svSorted = svFocus.slice().sort((a,b)=>(b.volume??-1)-(a.volume??-1));
+  const svMax = Math.max(...svSorted.map(x=>x.volume||0), 1);
+  $('#searchVolBars').innerHTML = svSorted.length
+    ? svSorted.map(x=>`<div class="svrow">
+        <span class="svname">${esc(x.brand)}</span>
+        <span class="svfig">${x.volume!=null?x.volume.toLocaleString('en-US'):'—'}</span>
+        <div class="svtrack"><div class="svfill" data-w="${x.volume?(x.volume/svMax*100).toFixed(1):0}"></div></div>
+      </div>`).join('')
+    : '<div style="color:var(--ink-3);font-size:13px">Awaiting first search-volume capture — populates on the next daily run.</div>';
+  const svCell = b => { const v = svMap[b]; return v!=null ? v.toLocaleString('en-US') : '—'; };
+
   // ---- Stamp ----
   const day = daysBetween(history.firstDate, latest.date) + 1;
   $('#stamp').innerHTML =
@@ -472,9 +486,10 @@ function render(latest, history, exports){
   const sxb = (latest.sources.stockx_brands?.focus || []).slice().sort((a,b)=>(a.low??1e12)-(b.low??1e12));
   $('#stockxBrandsBody').innerHTML = sxb.length
     ? sxb.map(x=>`<tr><td><span class="b">${esc(x.brand)}</span></td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--gold);font-variant-numeric:tabular-nums">${svCell(x.brand)}</td>
         <td class="price">${x.low!=null?fmt(x.low):'—'}</td>
         <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.results!=null?x.results.toLocaleString('en-US'):'—'}</td></tr>`).join('')
-    : '<tr><td colspan="3" style="color:var(--ink-3)">No StockX capture in this snapshot.</td></tr>';
+    : '<tr><td colspan="4" style="color:var(--ink-3)">No StockX capture in this snapshot.</td></tr>';
 
   // ---- Supply mix ----
   let counts = m.inventoryCounts;
@@ -505,23 +520,10 @@ function render(latest, history, exports){
   const fpFocus = (latest.sources.fashionphile?.focus || []).slice().sort((a,b)=>(a.low??1e12)-(b.low??1e12));
   $('#fpBody').innerHTML = fpFocus.length
     ? fpFocus.map(x=>`<tr><td><span class="b">${esc(x.brand)}</span></td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--gold);font-variant-numeric:tabular-nums">${svCell(x.brand)}</td>
         <td class="price">${x.low!=null?fmt(x.low):'—'}</td>
         <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.count!=null?x.count.toLocaleString('en-US'):'—'}</td></tr>`).join('')
-    : '<tr><td colspan="3" style="color:var(--ink-3)">Awaiting first Fashionphile capture — populates on the next daily run.</td></tr>';
-
-  // ---- Search volume (Google monthly, via DataForSEO) ----
-  const svFocus = latest.sources.search_volume?.focus || [];
-  const svMap = {}; svFocus.forEach(f=>{ svMap[f.brand] = f.volume; });
-  const svSorted = svFocus.slice().sort((a,b)=>(b.volume??-1)-(a.volume??-1));
-  const svMax = Math.max(...svSorted.map(x=>x.volume||0), 1);
-  $('#searchVolBars').innerHTML = svSorted.length
-    ? svSorted.map(x=>`<div class="svrow">
-        <span class="svname">${esc(x.brand)}</span>
-        <span class="svfig">${x.volume!=null?x.volume.toLocaleString('en-US'):'—'}</span>
-        <div class="svtrack"><div class="svfill" data-w="${x.volume?(x.volume/svMax*100).toFixed(1):0}"></div></div>
-      </div>`).join('')
-    : '<div style="color:var(--ink-3);font-size:13px">Awaiting first search-volume capture — populates on the next daily run.</div>';
-  const svCell = b => { const v = svMap[b]; return v!=null ? v.toLocaleString('en-US') : '—'; };
+    : '<tr><td colspan="4" style="color:var(--ink-3)">Awaiting first Fashionphile capture — populates on the next daily run.</td></tr>';
 
   const eb = (latest.sources.ebay?.focus || []).slice().sort((a,b)=>(b.total??-1)-(a.total??-1));
   $('#ebayBody').innerHTML = eb.length
