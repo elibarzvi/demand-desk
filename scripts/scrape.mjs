@@ -90,7 +90,7 @@ async function scrapeEbay() {
       const url = 'https://api.ebay.com/buy/browse/v1/item_summary/search'
         + '?q=' + encodeURIComponent(brand)
         + '&limit=1&sort=price'
-        + '&filter=' + encodeURIComponent('buyingOptions:{FIXED_PRICE}');
+        + '&filter=' + encodeURIComponent('buyingOptions:{FIXED_PRICE},price:[100..],priceCurrency:USD'); // $100 floor cuts junk (stickers, cases)
       const r = await fetch(url, { headers: { 'Authorization': `Bearer ${token}`, 'X-EBAY-C-MARKETPLACE-ID': 'EBAY_US' } });
       if (!r.ok) throw new Error('HTTP ' + r.status);
       const j = await r.json();
