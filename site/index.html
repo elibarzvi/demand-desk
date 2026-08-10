@@ -485,16 +485,19 @@ function render(latest, history, exports){
   // ---- Demand Momentum (Google Trends, daily interest) ----
   const gt = (latest.sources.google_trends?.focus || []).map(f=>{
     const vals=(f.series||[]).map(p=>p.value);
-    let mo=null;
+    let mo=null, lowSignal=false;
     if(vals.length>=4){ const h=Math.floor(vals.length/2);
       const prior=vals.slice(0,h), recent=vals.slice(-h);
       const pa=prior.reduce((a,b)=>a+b,0)/prior.length, ra=recent.reduce((a,b)=>a+b,0)/recent.length;
-      mo = pa>0 ? (ra-pa)/pa*100 : null; }
-    return {brand:f.brand, vals, mo};
+      // Only compute a % when there's enough interest to be meaningful — tiny 0-3 values
+      // make the percentage pure noise (e.g. The Row).
+      if(ra>=6 && pa>0) mo=(ra-pa)/pa*100; else lowSignal=true;
+    }
+    return {brand:f.brand, vals, mo, lowSignal};
   }).filter(x=>x.vals.length).sort((a,b)=>(b.mo??-999)-(a.mo??-999));
   $('#demandMomentum').innerHTML = gt.length
     ? gt.map(x=>{
-        const moTxt = x.mo==null?'—':(x.mo>=0?'▲':'▼')+Math.abs(x.mo).toFixed(0)+'%';
+        const moTxt = x.mo!=null ? ((x.mo>=0?'▲':'▼')+Math.abs(x.mo).toFixed(0)+'%') : (x.lowSignal?'low':'—');
         const col = x.mo==null?'var(--ink-3)':(x.mo>1?'var(--good)':x.mo<-1?'var(--heat)':'var(--ink-3)');
         return `<div class="mrow"><span class="mname">${esc(x.brand)}</span>${sparkline(x.vals,64,18)||'<span></span>'}<span class="mmo" style="color:${col}">${moTxt}</span></div>`;
       }).join('')
