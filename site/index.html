@@ -83,6 +83,9 @@
   .svname{font-family:var(--serif);font-size:14px}
   .svcol{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2}
   .svprev{font-family:var(--mono);font-size:10px;color:var(--ink-3);white-space:nowrap}
+  .mrow{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;margin-bottom:11px}
+  .mname{font-family:var(--serif);font-size:14px}
+  .mmo{font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums;min-width:50px;text-align:right}
   .svfig{font-family:var(--mono);font-size:13px;color:var(--gold);font-variant-numeric:tabular-nums}
   .svtrack{grid-column:1/-1;height:8px;background:var(--surface-2);border-radius:5px;overflow:hidden}
   .svfill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:5px;width:0;transition:width 1s cubic-bezier(.22,.61,.36,1)}
@@ -233,8 +236,14 @@
       </section>
 
       <section class="card">
-        <div class="chead"><h2>Search Volume — Google demand by brand</h2><span class="src-tag">DataForSEO · monthly</span></div>
-        <p class="cnote">Average monthly Google searches per brand keyword — the real search-demand behind every listing. Updated daily.</p>
+        <div class="chead"><h2>Demand Momentum — daily direction</h2><span class="src-tag">Google Trends · 30d</span></div>
+        <p class="cnote">Daily Google search interest per brand (last 30 days), sorted by momentum — <b>what the market is gravitating toward right now</b>. ▲ heating up, ▼ cooling.</p>
+        <div id="demandMomentum"></div>
+      </section>
+
+      <section class="card">
+        <div class="chead"><h2>Search Volume — demand size (monthly)</h2><span class="src-tag">DataForSEO · monthly</span></div>
+        <p class="cnote">Average monthly Google searches per brand — the <b>size</b> of demand (day-over-day comp above each figure).</p>
         <div id="searchVolBars"></div>
       </section>
 
@@ -362,7 +371,7 @@
   </section>
 
   <footer>
-    <div id="sources">Sources — Mirror Concierge, StockX, Fashionphile, eBay, DataForSEO (Google search volume), The RealReal, Vestiaire Collective, myGemma, Lyst, Rebag.</div>
+    <div id="sources">Sources — Mirror Concierge, StockX, Fashionphile, eBay, DataForSEO (Google search volume + daily Trends), The RealReal, Vestiaire Collective, myGemma, Lyst, Rebag.</div>
     <div class="disc">
       Retention figures blend Rebag's 6th annual Clair Report (Dec 2025, Hermès &amp; Goyard) and the 5th annual (2024, others), labeled by year. Supply-mix share is derived from the visible feed. Mirror is an independent marketplace, not affiliated with the brands shown. Point-in-time reads for buying research, not investment advice.
     </div>
@@ -472,6 +481,24 @@ function render(latest, history, exports){
       }).join('')
     : '<div style="color:var(--ink-3);font-size:13px">Awaiting first search-volume capture — populates on the next daily run.</div>';
   const svCell = b => { const v = svMap[b]; return v!=null ? v.toLocaleString('en-US') : '—'; };
+
+  // ---- Demand Momentum (Google Trends, daily interest) ----
+  const gt = (latest.sources.google_trends?.focus || []).map(f=>{
+    const vals=(f.series||[]).map(p=>p.value);
+    let mo=null;
+    if(vals.length>=4){ const h=Math.floor(vals.length/2);
+      const prior=vals.slice(0,h), recent=vals.slice(-h);
+      const pa=prior.reduce((a,b)=>a+b,0)/prior.length, ra=recent.reduce((a,b)=>a+b,0)/recent.length;
+      mo = pa>0 ? (ra-pa)/pa*100 : null; }
+    return {brand:f.brand, vals, mo};
+  }).filter(x=>x.vals.length).sort((a,b)=>(b.mo??-999)-(a.mo??-999));
+  $('#demandMomentum').innerHTML = gt.length
+    ? gt.map(x=>{
+        const moTxt = x.mo==null?'—':(x.mo>=0?'▲':'▼')+Math.abs(x.mo).toFixed(0)+'%';
+        const col = x.mo==null?'var(--ink-3)':(x.mo>1?'var(--good)':x.mo<-1?'var(--heat)':'var(--ink-3)');
+        return `<div class="mrow"><span class="mname">${esc(x.brand)}</span>${sparkline(x.vals,64,18)||'<span></span>'}<span class="mmo" style="color:${col}">${moTxt}</span></div>`;
+      }).join('')
+    : '<div style="color:var(--ink-3);font-size:13px">Awaiting first Google Trends capture — populates on the next daily run.</div>';
 
   // ---- Stamp ----
   const day = daysBetween(history.firstDate, latest.date) + 1;

@@ -138,6 +138,40 @@ async function scrapeSearchVolume() {
   return { status: 'ok', via: 'dataforseo', focus };
 }
 
+// ---- Google Trends (DataForSEO): DAILY search interest (0-100 index) per brand over
+// the last 30 days — the demand *direction/momentum* signal (vs monthly volume = size).
+// Max 5 keywords/request, so 9 brands = 2 batched calls. Same DataForSEO creds. ----
+const TREND_BRANDS = [
+  // batch by rough size so within-batch normalization doesn't crush the small ones
+  { brand: 'Louis Vuitton', keyword: 'louis vuitton' }, { brand: 'Rolex', keyword: 'rolex' },
+  { brand: 'Cartier', keyword: 'cartier' }, { brand: 'Chanel', keyword: 'chanel' }, { brand: 'Goyard', keyword: 'goyard' },
+  { brand: 'Dior', keyword: 'dior' }, { brand: 'Hermès', keyword: 'hermes' }, { brand: 'Fendi', keyword: 'fendi' }, { brand: 'The Row', keyword: 'the row bag' }
+];
+async function scrapeGoogleTrends() {
+  const login = process.env.DATAFORSEO_LOGIN, pass = process.env.DATAFORSEO_PASSWORD;
+  if (!login || !pass) throw new Error('DataForSEO credentials not set');
+  const basic = Buffer.from(`${login}:${pass}`).toString('base64');
+  const batches = [TREND_BRANDS.slice(0, 5), TREND_BRANDS.slice(5)];
+  const focus = [];
+  for (const batch of batches) {
+    const body = [{ keywords: batch.map(b => b.keyword), location_code: 2840, time_range: 'past_30_days', type: 'web' }];
+    const r = await fetch('https://api.dataforseo.com/v3/keywords_data/google_trends/explore/live', {
+      method: 'POST', headers: { 'Authorization': `Basic ${basic}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+    });
+    if (!r.ok) throw new Error(`Google Trends HTTP ${r.status}`);
+    const j = await r.json();
+    const result = j.tasks?.[0]?.result?.[0];
+    const graph = (result?.items || []).find(it => it.type === 'google_trends_graph') || (result?.items || [])[0];
+    const data = graph?.data || [];
+    batch.forEach((b, k) => {
+      const series = data.map(d => ({ date: d.date_from, value: Array.isArray(d.values) ? d.values[k] : null })).filter(p => p.value != null);
+      focus.push({ brand: b.brand, keyword: b.keyword, series });
+    });
+  }
+  if (!focus.some(f => f.series.length)) throw new Error('no Google Trends data returned');
+  return { status: 'ok', via: 'dataforseo-google-trends', focus };
+}
+
 // ---- StockX: rendered search results (bot-protected GraphQL behind the scenes, so
 // this stays best-effort). Results render as name -> "Lowest Ask" -> $price; sponsored
 // ads lack "Lowest Ask" so they filter out naturally. Also grabs the "Browse N results".
@@ -228,6 +262,13 @@ async function main() {
     searchVolume = { status: process.env.DATAFORSEO_LOGIN ? 'error' : 'unconfigured', focus: [] };
   }
 
+  let googleTrends;
+  try { googleTrends = await scrapeGoogleTrends(); }
+  catch (e) {
+    if (process.env.DATAFORSEO_LOGIN) errors.push({ source: 'google_trends', error: String(e.message || e) });
+    googleTrends = { status: process.env.DATAFORSEO_LOGIN ? 'error' : 'unconfigured', focus: [] };
+  }
+
   // The RealReal and Vestiaire are edge-blocked to servers, so they're report-based
   // reference sources carried from src/data/indices.json.
   const { therealreal: trrReport, vestiaire: vcReport, ...periodicIndices } = indices;
@@ -243,6 +284,7 @@ async function main() {
       fashionphile,
       ebay,
       search_volume: searchVolume,
+      google_trends: googleTrends,
       therealreal: { status: 'reference', ...trrReport },
       vestiaire: { status: 'reference', ...vcReport },
       indices: { status: 'reference', ...periodicIndices }
@@ -251,7 +293,7 @@ async function main() {
 
   ensureDir(SNAP_DIR);
   writeFile(path.join(SNAP_DIR, `${date}.json`), JSON.stringify(snapshot, null, 2) + '\n');
-  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status} brands:${(stockx.focus || []).filter(f => f.low != null).length}/${STOCKX_BRANDS.length} fashionphile:${fashionphile.status}(${fashionphile.focus?.length ?? 0}) ebay:${ebay.status}(${(ebay.focus || []).filter(f => f.total != null).length}) searchvol:${searchVolume.status}(${(searchVolume.focus || []).filter(f => f.volume != null).length})` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
+  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status} brands:${(stockx.focus || []).filter(f => f.low != null).length}/${STOCKX_BRANDS.length} fashionphile:${fashionphile.status}(${fashionphile.focus?.length ?? 0}) ebay:${ebay.status}(${(ebay.focus || []).filter(f => f.total != null).length}) searchvol:${searchVolume.status}(${(searchVolume.focus || []).filter(f => f.volume != null).length}) trends:${googleTrends.status}(${(googleTrends.focus || []).filter(f => f.series?.length).length})` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
 }
 
 main().catch(e => { console.error(e); process.exit(1); });
