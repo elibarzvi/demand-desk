@@ -25,6 +25,20 @@ function build() {
   const searchVolPrev = {};
   (prevSnap?.sources?.search_volume?.focus || []).forEach(f => { if (f.volume != null) searchVolPrev[f.brand] = f.volume; });
 
+  // 7-day trend series — Fashionphile is the cleanest daily-varying supply signal.
+  const fpBrands = [...new Set(snaps.flatMap(s => (s.sources?.fashionphile?.focus || []).map(f => f.brand)))];
+  const fpDates = [], fpTotal = [], fpByBrand = {};
+  fpBrands.forEach(b => { fpByBrand[b] = []; });
+  for (const s of snaps) {
+    const foc = s.sources?.fashionphile?.focus || [];
+    if (!foc.length) continue;
+    fpDates.push(s.date);
+    fpTotal.push(foc.reduce((a, f) => a + (f.count || 0), 0));
+    const map = {}; foc.forEach(f => { map[f.brand] = f.count; });
+    fpBrands.forEach(b => fpByBrand[b].push(map[b] ?? null));
+  }
+  const trends = { fp: { dates: fpDates, total: fpTotal, byBrand: fpByBrand } };
+
   ensureDir(SITE_DATA_DIR);
   writeFile(path.join(SITE_DATA_DIR, 'latest.json'), JSON.stringify(latest) + '\n');
   writeFile(path.join(SITE_DATA_DIR, 'history.json'), JSON.stringify({
@@ -34,7 +48,8 @@ function build() {
     dates: listSnapshotDates(),
     huntSeries,
     searchVolPrev,
-    searchVolPrevDate: prevSnap?.date || null
+    searchVolPrevDate: prevSnap?.date || null,
+    trends
   }) + '\n');
   writeFile(path.join(SITE_DATA_DIR, 'index.json'), JSON.stringify({ dates: listSnapshotDates() }) + '\n');
 

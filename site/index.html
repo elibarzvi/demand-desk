@@ -87,6 +87,15 @@
   .svtrack{grid-column:1/-1;height:8px;background:var(--surface-2);border-radius:5px;overflow:hidden}
   .svfill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:5px;width:0;transition:width 1s cubic-bezier(.22,.61,.36,1)}
   @media (prefers-reduced-motion: reduce){.svfill{transition:none}}
+  .chartwrap{width:100%;overflow-x:auto;margin-top:4px}
+  .chartwrap svg{display:block;width:100%;height:auto}
+  .chartwrap .axis{fill:var(--ink-3);font-family:var(--mono);font-size:10px}
+  .chartwrap .gridline{stroke:var(--line);stroke-width:1}
+  .mvrow{display:grid;grid-template-columns:118px 1fr 62px;align-items:center;gap:10px;margin-bottom:9px}
+  .mvname{font-family:var(--serif);font-size:14px}
+  .mvbarwrap{position:relative;height:16px;background:var(--surface-2);border-radius:4px}
+  .mvfill{position:absolute;top:0;height:100%;border-radius:4px}
+  .mvval{font-family:var(--mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
   .bars{display:flex;flex-direction:column;gap:11px}
   .bar{display:grid;grid-template-columns:1fr auto auto;gap:4px 10px;align-items:center}
   .bar .name{font-size:13px;color:var(--ink)}
@@ -270,6 +279,22 @@
     <div class="twrap"><table><thead><tr><th>Brand</th><th>Piece</th><th>Category</th><th style="text-align:right">Approx. price</th></tr></thead><tbody id="invBody"></tbody></table></div>
   </section>
 
+  <!-- ============ 7-DAY TRENDS ============ -->
+  <div class="band"><span class="lbl">7-Day Trends</span><span class="rule"></span><span class="sub">patterns from the first week of capture</span></div>
+
+  <section class="card full">
+    <div class="chead"><h2>Fashionphile inventory — the weekly supply cycle</h2><span class="src-tag">Fashionphile · 7d</span></div>
+    <p class="cnote" id="trendInsight">Total live listings across all tracked brands, by day.</p>
+    <div class="chartwrap" id="chartFpTotal"></div>
+  </section>
+
+  <section class="card full" style="margin-top:16px">
+    <div class="chead"><h2>7-day net movers</h2><span class="src-tag">Fashionphile · Δ listings</span></div>
+    <p class="cnote">Change in live listing count over the week, per brand. <span style="color:var(--gold)">Gold</span> = built inventory, <span style="color:var(--cool)">blue</span> = drew down.</p>
+    <div id="fpMovers"></div>
+    <p class="cnote" style="margin:14px 0 0;color:var(--ink-3)">Other sources this week: Mirror requests held steady, Google search volume was flat (it's a monthly average), and eBay's huge listing base was within daily noise — so no trend chart for those yet. More signal will emerge as weeks accumulate.</p>
+  </section>
+
   <!-- ============ REFERENCE BAND — from published reports ============ -->
   <div class="band"><span class="lbl">Reference</span><span class="rule"></span><span class="sub">from published reports · refreshed a few times a year</span></div>
 
@@ -364,6 +389,30 @@ function filterCsvByDate(text, from, to){
 }
 function addDays(ymd, n){ const d = new Date(ymd+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
 function clampDate(v, lo, hi){ return v < lo ? lo : (v > hi ? hi : v); }
+
+// Single-series line chart -> inline SVG string (theme-aware via CSS vars, responsive).
+function lineChart(dates, values){
+  const W=680,H=210,pl=52,pr=58,pt=14,pb=26, iw=W-pl-pr, ih=H-pt-pb;
+  const vals=values.filter(v=>v!=null); if(vals.length<2) return '';
+  let mn=Math.min(...vals), mx=Math.max(...vals); const pad=(mx-mn)*0.18||1; mn=mn-pad; mx=mx+pad;
+  const n=values.length;
+  const X=i=> pl + (n<=1?iw/2:(i/(n-1))*iw);
+  const Y=v=> pt + ih - ((v-mn)/(mx-mn||1))*ih;
+  const pts=values.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean);
+  const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area=line+` L ${pts[pts.length-1][0].toFixed(1)} ${pt+ih} L ${pts[0][0].toFixed(1)} ${pt+ih} Z`;
+  const peakV=Math.max(...vals), peakI=values.indexOf(peakV);
+  let grid='';
+  for(let g=0;g<=2;g++){ const gv=mn+(mx-mn)*g/2, gy=Y(gv);
+    grid+=`<line class="gridline" x1="${pl}" y1="${gy.toFixed(1)}" x2="${pl+iw}" y2="${gy.toFixed(1)}"/><text class="axis" x="${pl-7}" y="${(gy+3).toFixed(1)}" text-anchor="end">${Math.round(gv).toLocaleString('en-US')}</text>`; }
+  const xl=values.map((v,i)=>`<text class="axis" x="${X(i).toFixed(1)}" y="${H-8}" text-anchor="middle">${dates[i].slice(5)}</text>`).join('');
+  const circ=values.map((v,i)=>v==null?'':`<circle cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="${i===peakI?4:3}" fill="${i===peakI?'var(--gold-strong)':'var(--gold)'}"><title>${dates[i]}: ${v.toLocaleString('en-US')}</title></circle>`).join('');
+  const last=values[n-1], end=`<text x="${pl+iw+7}" y="${(Y(last)+4).toFixed(1)}" text-anchor="start" style="fill:var(--gold);font-family:var(--mono);font-size:11px">${last.toLocaleString('en-US')}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Line chart">
+    ${grid}<path d="${area}" fill="var(--gold)" opacity="0.10"/>
+    <path d="${line}" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${circ}${end}${xl}</svg>`;
+}
 
 function sparkline(vals, w=54, h=16){
   if(!vals || vals.length < 2) return '';
@@ -568,6 +617,25 @@ function render(latest, history, exports){
     ['watch','Rising · underexposed','Goyard','#5 most-searched despite near-zero boutique distribution, retention climbing to ~132%. Liquid ~$1.2k–6k resale band. Thin Mirror supply = a sourcing gap.'],
     ['watch','New investment-grade','The Row','Margaux actively requested, a Lyst top-15 name, now ranked by Rebag alongside Hermès and Goyard. Early enough to build inventory first.']
   ].map(s=>`<div class="sigcard"><div class="tag ${s[0]}">${s[1]}</div><h4>${s[2]}</h4><p>${s[3]}</p></div>`).join('');
+
+  // ---- 7-Day Trends ----
+  const T = history.trends?.fp;
+  if(T && (T.total||[]).length>=2){
+    $('#chartFpTotal').innerHTML = lineChart(T.dates, T.total);
+    const tot=T.total, ds=T.dates;
+    const peakV=Math.max(...tot), peakI=tot.indexOf(peakV), peakD=ds[peakI];
+    const last=tot[tot.length-1];
+    const dow=d=>['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(d+'T00:00:00Z').getUTCDay()];
+    const swing=peakV?((peakV-last)/peakV*100):0;
+    $('#trendInsight').innerHTML = `Total live listings across all ${Object.keys(T.byBrand).length} tracked brands, by day. This week it built to a peak of <b style="color:var(--ink-2)">${peakV.toLocaleString('en-US')}</b> on <b style="color:var(--ink-2)">${prettyDate(peakD)}, ${dow(peakD)}</b>, then eased to ${last.toLocaleString('en-US')} — a ${swing.toFixed(1)}% drawdown into week's end, with every brand moving together.`;
+    const movers=Object.entries(T.byBrand).map(([b,arr])=>{const v=arr.filter(x=>x!=null);return {brand:b, delta:(v[v.length-1]??0)-(v[0]??0)};}).sort((a,b)=>b.delta-a.delta);
+    const maxAbs=Math.max(...movers.map(m=>Math.abs(m.delta)),1);
+    $('#fpMovers').innerHTML = movers.map(m=>{
+      const w=(Math.abs(m.delta)/maxAbs*50).toFixed(1), pos=m.delta>=0;
+      const fill=`<div class="mvfill" style="${pos?'left:50%;':`left:${(50-w).toFixed(1)}%;`}width:${w}%;background:${pos?'var(--gold)':'var(--cool)'}"></div>`;
+      return `<div class="mvrow"><span class="mvname">${esc(m.brand)}</span><div class="mvbarwrap"><div style="position:absolute;left:50%;top:-2px;bottom:-2px;border-left:1px solid var(--line)"></div>${fill}</div><span class="mvval" style="color:${pos?'var(--good)':'var(--heat)'}">${pos?'+':''}${m.delta.toLocaleString('en-US')}</span></div>`;
+    }).join('');
+  }
 
   // ---- Exports ----
   if(exports && exports.sheets){
