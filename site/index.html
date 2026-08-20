@@ -86,6 +86,10 @@
   .mrow{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;margin-bottom:11px}
   .mname{font-family:var(--serif);font-size:14px}
   .mmo{font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums;min-width:50px;text-align:right}
+  #readCard{border-left:3px solid var(--gold);background:linear-gradient(120deg,var(--surface-2),var(--surface))}
+  .read-list{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px}
+  .read-list li{position:relative;padding-left:20px;font-size:14px;color:var(--ink);line-height:1.5}
+  .read-list li::before{content:"";position:absolute;left:2px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--gold)}
   .svfig{font-family:var(--mono);font-size:13px;color:var(--gold);font-variant-numeric:tabular-nums}
   .svtrack{grid-column:1/-1;height:8px;background:var(--surface-2);border-radius:5px;overflow:hidden}
   .svfill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:5px;width:0;transition:width 1s cubic-bezier(.22,.61,.36,1)}
@@ -224,6 +228,12 @@
 
   <section class="kpis" id="kpis"></section>
 
+  <section class="card full" id="readCard" style="margin-top:16px">
+    <div class="chead"><h2>This Week's Read</h2><span class="src-tag" id="readTag">auto-derived</span></div>
+    <p class="cnote">Conclusions the desk draws from the data — demand pressure, momentum, and supply flow. A full weekly AI analyst brief is coming.</p>
+    <ul class="read-list" id="readList"></ul>
+  </section>
+
   <!-- ============ LIVE BAND — updates daily ============ -->
   <div class="band"><span class="lbl">Live signals</span><span class="rule"></span><span class="sub">updates every day</span></div>
 
@@ -239,6 +249,12 @@
         <div class="chead"><h2>Demand Momentum — daily direction</h2><span class="src-tag">Google Trends · 30d</span></div>
         <p class="cnote">Daily Google search interest per brand (last 30 days), sorted by momentum — <b>what the market is gravitating toward right now</b>. ▲ heating up, ▼ cooling.</p>
         <div id="demandMomentum"></div>
+      </section>
+
+      <section class="card">
+        <div class="chead"><h2>Demand Pressure — how contested</h2><span class="src-tag">Search ÷ eBay listings</span></div>
+        <p class="cnote">Monthly searches per active eBay listing. Higher = more demand chasing less supply — <b>scarce and worth sourcing</b>.</p>
+        <div id="demandPressure"></div>
       </section>
 
       <section class="card">
@@ -502,6 +518,29 @@ function render(latest, history, exports){
         return `<div class="mrow"><span class="mname">${esc(x.brand)}</span>${sparkline(x.vals,64,18)||'<span></span>'}<span class="mmo" style="color:${col}">${moTxt}</span></div>`;
       }).join('')
     : '<div style="color:var(--ink-3);font-size:13px">Awaiting first Google Trends capture — populates on the next daily run.</div>';
+
+  // ---- Derived decision signals: Demand Pressure + This Week's Read ----
+  const ebTotal={}; (latest.sources.ebay?.focus||[]).forEach(f=>{ ebTotal[f.brand]=f.total; });
+  const pressure = Object.keys(svMap).map(b=>{ const sv=svMap[b], c=ebTotal[b]; return {brand:b, ratio:(sv!=null&&c)?sv/c:null, sv, c}; })
+    .filter(x=>x.ratio!=null).sort((a,b)=>b.ratio-a.ratio);
+  const maxR=Math.max(...pressure.map(p=>p.ratio),1);
+  $('#demandPressure').innerHTML = pressure.length
+    ? pressure.map(p=>`<div class="svrow"><span class="svname">${esc(p.brand)}</span><span class="svfig">${p.ratio>=10?Math.round(p.ratio).toLocaleString('en-US'):p.ratio.toFixed(1)}</span><div class="svtrack"><div class="svfill" data-w="${(p.ratio/maxR*100).toFixed(1)}"></div></div></div>`).join('')
+    : '<div style="color:var(--ink-3);font-size:13px">Awaiting demand + listing data.</div>';
+  const fpDelta={}; const Tfp2=history.trends?.fp;
+  if(Tfp2){ Object.entries(Tfp2.byBrand).forEach(([b,arr])=>{ const v=arr.filter(x=>x!=null); fpDelta[b]=(v[v.length-1]??0)-(v[0]??0); }); }
+  const moMap={}; gt.forEach(x=>{ moMap[x.brand]=x.mo; });
+  const sig=[];
+  if(pressure.length){ const p=pressure[0]; sig.push(`<b>Most contested:</b> ${esc(p.brand)} — <b style="color:var(--gold)">${Math.round(p.ratio).toLocaleString('en-US')}</b> searches per active eBay listing (${Math.round(p.sv/1000)}K searches vs ${p.c.toLocaleString('en-US')} listings). Scarce relative to demand.`); }
+  const heat=gt.filter(x=>x.mo!=null).sort((a,b)=>b.mo-a.mo)[0];
+  if(heat && heat.mo>1) sig.push(`<b>Heating up:</b> ${esc(heat.brand)} search interest <b style="color:var(--good)">+${heat.mo.toFixed(0)}%</b> (recent vs prior).`);
+  const cool=gt.filter(x=>x.mo!=null).sort((a,b)=>a.mo-b.mo)[0];
+  if(cool && cool.mo<-1) sig.push(`<b>Cooling:</b> ${esc(cool.brand)} search interest <b style="color:var(--heat)">${cool.mo.toFixed(0)}%</b> — easing off.`);
+  const built=Object.entries(fpDelta).sort((a,b)=>b[1]-a[1])[0];
+  if(built && built[1]>0) sig.push(`<b>Supply building fastest:</b> ${esc(built[0])} (+${built[1].toLocaleString('en-US')} Fashionphile listings this week) — more competition landing.`);
+  const opp=pressure.find(p=>moMap[p.brand]!=null && moMap[p.brand]>1);
+  if(opp) sig.push(`<b>Opportunity to watch:</b> ${esc(opp.brand)} pairs high demand pressure with rising interest — demand outpacing supply.`);
+  $('#readList').innerHTML = sig.length ? sig.map(s=>`<li>${s}</li>`).join('') : '<li style="color:var(--ink-3)">Gathering signal — a few more days of data needed.</li>';
 
   // ---- Stamp ----
   const day = daysBetween(history.firstDate, latest.date) + 1;
