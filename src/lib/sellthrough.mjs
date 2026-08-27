@@ -64,7 +64,7 @@ function daysBetween(a, b) {
 // published_at. We prefer `listed` for days-to-sell because it predates our own
 // history, and fall back to firstSeen when it is missing. Departures for SKUs we
 // have never seen before cannot happen, so the first run only establishes state.
-export function diffLive(prev, captures, date) {
+export function diffLive(prev, captures, date, modelBySku = new Map()) {
   const brands = {};
   const nextState = { date, brands: {} };
 
@@ -80,7 +80,10 @@ export function diffLive(prev, captures, date) {
         stateBrand[sku] = before;                                  // carry original dates
       } else {
         arrivals++;
-        stateBrand[sku] = { f: date, l: s.listed || date, p: s.price ?? null };
+        // The model tag is stored with the SKU so a departure can still be
+        // attributed after the item has left the live index.
+        const model = modelBySku.get(sku);
+        stateBrand[sku] = { f: date, l: s.listed || date, p: s.price ?? null, ...(model ? { m: model } : {}) };
       }
     }
 
@@ -91,6 +94,7 @@ export function diffLive(prev, captures, date) {
         const listed = rec.l || rec.f;
         departures.push({
           sku,
+          model: rec.m ?? null,
           price: rec.p ?? null,
           listed,
           firstSeen: rec.f,
@@ -116,7 +120,25 @@ export function diffLive(prev, captures, date) {
     };
   }
 
-  return { brands, nextState, baseline: !prev };
+  // Roll departures up by model so the weekly digest can say what actually sold,
+  // not merely what is listed.
+  const byModel = {};
+  for (const [brand, v] of Object.entries(brands)) {
+    for (const e of v.events) {
+      if (!e.model) continue;
+      const m = (byModel[e.model] ||= { brand, sold: 0, days: [], prices: [] });
+      m.sold++;
+      if (e.days != null) m.days.push(e.days);
+      if (e.price != null) m.prices.push(e.price);
+    }
+  }
+  for (const m of Object.values(byModel)) {
+    m.medianDaysToSell = median(m.days);
+    m.medianPrice = median(m.prices);
+    delete m.days; delete m.prices;
+  }
+
+  return { brands, byModel, nextState, baseline: !prev };
 }
 
 export function median(arr) {

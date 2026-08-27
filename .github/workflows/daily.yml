@@ -14,6 +14,10 @@ on:
         description: 'Send a Slack delivery test instead of only real alerts'
         type: boolean
         default: false
+      digest_test:
+        description: 'Force-send the weekly digest now, ignoring the Monday gate'
+        type: boolean
+        default: false
   # A push that changes the site, scripts or libraries redeploys immediately.
   # Without this, a UI fix sat invisible until the next scheduled capture, up to
   # eight hours later, because only the cron rebuilt Pages. Push runs skip the
@@ -77,6 +81,14 @@ jobs:
         run: npm run notify ${{ inputs.notify_test && '-- --test' || '' }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      # Runs unconditionally; the script itself gates to Mondays, so the schedule
+      # stays in one place instead of being split between cron and code.
+      - name: Weekly market digest
+        if: github.event_name != 'push'
+        run: npm run digest ${{ inputs.digest_test && '-- --force' || '' }}
+        env:
+          SLACK_DIGEST_WEBHOOK_URL: ${{ secrets.SLACK_DIGEST_WEBHOOK_URL }}
 
       - name: Commit snapshot + exports (permanent log)
         if: github.event_name != 'push'

@@ -11,7 +11,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { chromium } from 'playwright';
 import { ROOT, SNAP_DIR, today, ensureDir, writeFile, previousSnapshot } from '../src/lib/util.mjs';
-import { SEGMENTS, captureSegment } from '../src/lib/fashionphile.mjs';
+import { SEGMENTS, captureSegment, MODELS, captureModel } from '../src/lib/fashionphile.mjs';
 import { readLiveState, writeLiveState, diffLive } from '../src/lib/sellthrough.mjs';
 
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
@@ -57,11 +57,20 @@ async function scrapeFashionphile() {
     }
   }
   if (!focus.length) throw new Error('no Fashionphile data returned');
+
+  // Per-model capture. Brand aggregates cannot answer "is the Birkin 25 moving",
+  // which is the level an actual buying decision works at.
+  const models = [];
+  for (const m of MODELS) {
+    try { models.push(await captureModel(m)); }
+    catch (e) { errors.push(`${m.brand} ${m.model}: ${e.message || e}`); }
+  }
+
   return {
     status: errors.length ? 'partial' : 'ok',
     name: 'Fashionphile', via: 'algolia',
     ...(errors.length ? { segmentErrors: errors } : {}),
-    focus
+    focus, models
   };
 }
 
@@ -324,10 +333,16 @@ async function main() {
     // The SKU lists themselves are huge, so they go to the rolling state file and
     // only the departure events (the actual signal) land in the snapshot.
     const prevState = readLiveState(date);
-    const { brands, nextState, baseline } = diffLive(prevState, fashionphile.focus, date);
+    const modelBySku = new Map();
+    for (const m of fashionphile.models || []) {
+      for (const sku of m.skus || []) modelBySku.set(sku, m.model);
+    }
+    const { brands, byModel, nextState, baseline } = diffLive(prevState, fashionphile.focus, date, modelBySku);
     writeLiveState(nextState);
-    sellThrough = { status: baseline ? 'baseline' : 'ok', via: 'sku-diff', brands };
+    sellThrough = { status: baseline ? 'baseline' : 'ok', via: 'sku-diff', brands, byModel };
+    // SKU lists are far too large to append daily; they live in the state file.
     fashionphile.focus = fashionphile.focus.map(({ skus, ...rest }) => rest);
+    fashionphile.models = (fashionphile.models || []).map(({ skus, ...rest }) => rest);
   } catch (e) {
     errors.push({ source: 'fashionphile', error: String(e.message || e) });
     fashionphile = { status: 'error', name: 'Fashionphile', focus: [] };

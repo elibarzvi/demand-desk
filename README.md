@@ -34,7 +34,8 @@ scripts/scrape.mjs     →  data/snapshots/YYYY-MM-DD.json  (append-only daily l
                        →  data/state/fp-live.json.gz      (live SKU set, rewritten daily, powers sell-through)
 scripts/export-csv.mjs →  data/exports/*.csv              (tidy time-series, any date range pivots in Excel)
 scripts/derive.mjs     →  data/derived/{metrics,alerts}.json  (baselines, z-scores, streaks, alerts, signals)
-scripts/notify.mjs     →  Slack, but only when something is actually notable
+scripts/notify.mjs     →  Slack alerts channel, only when something is notable
+scripts/digest.mjs     →  Slack digest channel, weekly market summary
 scripts/build-site.mjs →  site/data/*                     (latest + history + derived + exports)
 site/index.html        →  the hosted dashboard
 ```
@@ -121,6 +122,23 @@ impossible (departures above the live count) or implausible (turnover above 10
 percent in a day). Without the secret it no-ops, so local runs and forks never
 post, and it is deliberately excluded from `npm run all` for the same reason. A
 failure to notify never fails the capture.
+
+**Two Slack channels, on purpose.** Alerts (`notify.mjs`) interrupt you and stay
+rare; the digest (`digest.mjs`) is routine reading you open when you want it. They
+post to different channels through different webhooks, `SLACK_WEBHOOK_URL` and
+`SLACK_DIGEST_WEBHOOK_URL`. Routine traffic in the alert channel would train you to
+skim it, and the one message that mattered would get skimmed with everything else.
+
+**Model-level tracking.** Brand aggregates cannot say whether the Birkin 25 is
+moving, so 20 named models are tracked individually for live count, price
+percentiles and units sold. Matching is stricter than it looks: a plain search for
+"Chanel 19" returns 4780 items including sunglasses, because Algolia matches
+description text. Models are matched as an exact quoted phrase, restricted to the
+title, inside bag categories only, with small leather goods sharing a model name
+filtered out in code so a card holder does not drag down a Birkin median. The
+digest reports what actually sold, not what was inquired about: Mirror's request
+feed is the only "inquiries" source and it is editorial, so unit sales, days to
+sell and price movement are used instead.
 
 **Mirror is an editorial feed.** Its request list changed twice in the first 24
 days and its API is healthy, so the feed itself is curated rather than live. The

@@ -153,3 +153,76 @@ export async function captureSegment(seg) {
     skus
   };
 }
+
+// ---- Model-level tracking -------------------------------------------------
+// Brand aggregates answer "is Chanel moving"; they cannot answer "is the Birkin
+// 25 moving", which is the question an actual buying decision turns on.
+//
+// Matching is fussier than it looks. A plain search for "Chanel 19" returns 4780
+// items including sunglasses, because Algolia matches description text and splits
+// the token. Three guards fix it: an exact quoted phrase, restricted to the title
+// attribute, inside the bag categories only. Algolia's negative syntax (-wallet)
+// silently returns zero hits when combined with a quoted phrase, so the last cut,
+// dropping small leather goods that share a model name, is done here in code.
+const BAG_SEGMENTS = [
+  'meta.custom.filters_bags:Handbags', 'meta.custom.filters_bags:Shoulder Bags',
+  'meta.custom.filters_bags:Crossbody', 'meta.custom.filters_bags:Totes',
+  'meta.custom.filters_bags:Clutch & Evening'
+];
+
+// Items whose title says they are an accessory in the model's line rather than
+// the bag itself. Including them drags a Birkin median toward a card-holder price.
+const ACCESSORY = /\b(wallet|pouch|card holder|coin purse|strap|charm|phone|key ?ring|bracelet|earring|necklace|sunglass|scarf|belt|mirror case|cosmetic)\b/i;
+
+export const MODELS = [
+  { brand: 'Hermès', vendor: 'Hermes', model: 'Birkin 25' },
+  { brand: 'Hermès', vendor: 'Hermes', model: 'Birkin 30' },
+  { brand: 'Hermès', vendor: 'Hermes', model: 'Kelly' },
+  { brand: 'Hermès', vendor: 'Hermes', model: 'Constance' },
+  { brand: 'Hermès', vendor: 'Hermes', model: 'Lindy' },
+  { brand: 'Chanel', vendor: 'Chanel', model: 'Double Flap' },
+  { brand: 'Chanel', vendor: 'Chanel', model: 'Chanel 19' },
+  { brand: 'Chanel', vendor: 'Chanel', model: 'Boy' },
+  { brand: 'Chanel', vendor: 'Chanel', model: 'Wallet On Chain', keepAccessories: true },
+  { brand: 'Louis Vuitton', vendor: 'Louis Vuitton', model: 'Neverfull' },
+  { brand: 'Louis Vuitton', vendor: 'Louis Vuitton', model: 'Speedy' },
+  { brand: 'Louis Vuitton', vendor: 'Louis Vuitton', model: 'Alma' },
+  { brand: 'Louis Vuitton', vendor: 'Louis Vuitton', model: 'Pochette Metis' },
+  { brand: 'Dior', vendor: 'Christian Dior', model: 'Lady Dior' },
+  { brand: 'Dior', vendor: 'Christian Dior', model: 'Saddle' },
+  { brand: 'Goyard', vendor: 'Goyard', model: 'Saint Louis' },
+  { brand: 'Goyard', vendor: 'Goyard', model: 'Belvedere' },
+  { brand: 'The Row', vendor: 'The Row', model: 'Margaux' },
+  { brand: 'Fendi', vendor: 'Fendi', model: 'Baguette' },
+  { brand: 'Cartier', vendor: 'Cartier', model: 'LOVE', segments: ['meta.custom.filters_jewelry:Bracelets'], keepAccessories: true }
+];
+
+export async function captureModel(m) {
+  const segments = m.segments || BAG_SEGMENTS;
+  const ff = encodeURIComponent(JSON.stringify([[`vendor:${m.vendor}`], segments]));
+  const attrs = encodeURIComponent(JSON.stringify(['sku', 'price', 'title']));
+  const hits = [];
+  for (let page = 0; ; page++) {
+    const j = await algolia(
+      `query=${encodeURIComponent('"' + m.model + '"')}&advancedSyntax=true`
+      + `&restrictSearchableAttributes=${encodeURIComponent(JSON.stringify(['title']))}`
+      + `&hitsPerPage=${PAGE}&page=${page}&attributesToRetrieve=${attrs}`
+      + `&facetFilters=${ff}&filters=${encodeURIComponent('inventory_available=1')}`
+    );
+    hits.push(...(j.hits || []));
+    if (page + 1 >= (j.nbPages || 0)) break;
+  }
+
+  const kept = hits.filter(h => h.sku != null && h.price != null
+    && (m.keepAccessories || !ACCESSORY.test(h.title || '')));
+  const pairs = [...kept.map(h => h.price)].sort((a, b) => a - b).map(p => [p, 1]);
+  const stats = pairs.length ? percentiles(pairs, pairs.length) : { p10: null, p25: null, median: null, p75: null, p90: null };
+
+  return {
+    brand: m.brand, model: m.model,
+    live: kept.length,
+    matchedBeforeFilter: hits.length,
+    price: { ...stats, min: pairs.length ? pairs[0][0] : null, max: pairs.length ? pairs[pairs.length - 1][0] : null },
+    skus: kept.map(h => String(h.sku))
+  };
+}

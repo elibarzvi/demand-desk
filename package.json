@@ -9,6 +9,7 @@
     "export": "node scripts/export-csv.mjs",
     "derive": "node scripts/derive.mjs",
     "notify": "node scripts/notify.mjs",
+    "digest": "node scripts/digest.mjs",
     "build": "node scripts/build-site.mjs",
     "bundle": "node scripts/bundle.mjs",
     "all": "npm run scrape && npm run export && npm run derive && npm run build && npm run bundle",
