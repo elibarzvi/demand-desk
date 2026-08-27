@@ -80,9 +80,25 @@ function build() {
     if (!prevErrs.has(e.source)) lines.push(`New capture error from ${e.source}: ${e.error}`);
   }
 
-  // 4. Sell-through sanity. These are impossible or implausible readings that
-  //    indicate broken state rather than a busy sales day.
   const st = latest.sources?.fp_sell_through;
+
+  // 4. First real sell-through. Not an anomaly but a milestone: the day the SKU
+  //    diff first has a prior day to compare against is the day this dataset
+  //    starts existing, and it is worth saying once, from the app rather than
+  //    from a person's own account.
+  if (st?.status === 'ok' && prevSnap?.sources?.fp_sell_through?.status === 'baseline') {
+    const brands = Object.entries(st.brands || {}).filter(([, v]) => (v.departures ?? 0) > 0);
+    const totalSold = brands.reduce((a, [, v]) => a + v.departures, 0);
+    const top = brands.sort((a, b) => (b[1].turnoverPct ?? 0) - (a[1].turnoverPct ?? 0)).slice(0, 3)
+      .map(([b, v]) => `${b} ${v.departures} sold (${v.turnoverPct}%${v.medianDaysToSell != null ? `, median ${v.medianDaysToSell}d` : ''})`);
+    lines.push(`FIRST SELL-THROUGH DATA: ${totalSold} items cleared across ${brands.length} brands. ${top.join('; ')}.`);
+
+    const models = Object.entries(st.byModel || {}).sort((a, b) => b[1].sold - a[1].sold).slice(0, 4);
+    if (models.length) lines.push(`Top models: ${models.map(([m, v]) => `${m} ${v.sold}${v.medianDaysToSell != null ? ` (${v.medianDaysToSell}d)` : ''}`).join(', ')}.`);
+  }
+
+  // 5. Sell-through sanity. These are impossible or implausible readings that
+  //    indicate broken state rather than a busy sales day.
   if (st?.status === 'ok') {
     const brands = Object.entries(st.brands || {});
     if (brands.length && brands.every(([, v]) => (v.departures ?? 0) === 0)) {
