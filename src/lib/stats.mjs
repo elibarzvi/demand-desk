@@ -78,6 +78,11 @@ export function describe(points, window = 28) {
     lastDate,
     n: values.length,
     prev: at(1),
+    // How far today sits from its own baseline, in percent. A z-score alone says
+    // a move is statistically unusual but not whether it is big enough to care
+    // about: on a very stable series a 2% wobble clears two standard deviations.
+    // Alerting gates on this as well as on z.
+    baselinePct: bMean != null ? pct(bMean, last) : null,
     dodPct: pct(at(1), last),
     wowPct: pct(at(7), last),
     changePct: pct(values[0], last),

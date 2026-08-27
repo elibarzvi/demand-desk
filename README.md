@@ -34,6 +34,7 @@ scripts/scrape.mjs     →  data/snapshots/YYYY-MM-DD.json  (append-only daily l
                        →  data/state/fp-live.json.gz      (live SKU set, rewritten daily, powers sell-through)
 scripts/export-csv.mjs →  data/exports/*.csv              (tidy time-series, any date range pivots in Excel)
 scripts/derive.mjs     →  data/derived/{metrics,alerts}.json  (baselines, z-scores, streaks, alerts, signals)
+scripts/notify.mjs     →  Slack, but only when something is actually notable
 scripts/build-site.mjs →  site/data/*                     (latest + history + derived + exports)
 site/index.html        →  the hosted dashboard
 ```
@@ -98,6 +99,28 @@ per-batch scale and are excluded from the baselines of the brands it affected.
 1000, so a `1000` means "at least 1000" and is stored as `results_capped`. StockX
 lowest ask and monthly search volume are charted but excluded from alerting: the
 first is a junk floor, the second only moves when a monthly bucket rolls over.
+
+**Alerts require size as well as significance.** A breakout needs both a z-score
+of 2 or more against the series' own baseline AND a move of at least 4 percent.
+The z-score alone was not enough: eBay listing counts are stable to within about
+1 percent, so a 2.3 percent drift in Cartier cleared two standard deviations and
+was reported as a breakout despite meaning nothing. Bounded 0-100 index series
+carry a level floor too, because Goyard's Trends interest sits near 21, where one
+integer point is 4.8 percent and a routine 4-point wobble looked like a 19 percent
+collapse.
+
+**Slack notifications come from the pipeline, not from a person.** `scripts/notify.mjs`
+posts to a Slack app called Demand Desk via an incoming webhook, using the
+`SLACK_WEBHOOK_URL` secret. It runs after `derive` and before the commit, so it can
+diff today's alerts against the version still at HEAD and report only what is new
+rather than re-announcing an ongoing situation every morning. It stays silent on a
+normal day, ignores the chronic `mirror` and `search_volume` staleness while still
+reporting either one recovering, and additionally flags pipeline failures: a
+Fashionphile error, a new capture error, or a sell-through reading that is
+impossible (departures above the live count) or implausible (turnover above 10
+percent in a day). Without the secret it no-ops, so local runs and forks never
+post, and it is deliberately excluded from `npm run all` for the same reason. A
+failure to notify never fails the capture.
 
 **Mirror is an editorial feed.** Its request list changed twice in the first 24
 days and its API is healthy, so the feed itself is curated rather than live. The

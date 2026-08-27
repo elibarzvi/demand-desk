@@ -116,6 +116,16 @@ const MIN_N_FOR_Z = 8;
 const STREAK_MIN = 4;
 const WOW_MIN = 15;     // percent
 const STALE_DAYS = 3;
+// A z-score says a move is statistically unusual; it does not say the move is
+// worth reading. eBay listing counts are so stable (a standard deviation near 1%
+// of the mean) that a 2.3% drift cleared z=2 and was reported as a breakout.
+// Requiring real magnitude as well as significance is what separates a signal
+// from an arithmetic curiosity.
+const MIN_MOVE_PCT = 4;
+// Bounded 0-100 index series need a floor too. Goyard's Trends interest sits near
+// 21, so one integer point is 4.8% and a routine 4-point wobble looked like a
+// -19% collapse. Below this level, percentage moves are granularity, not demand.
+const MIN_LEVEL = { 'trends.interest': 25 };
 
 function buildAlerts(series, latest, snaps) {
   const alerts = [];
@@ -127,12 +137,18 @@ function buildAlerts(series, latest, snaps) {
       const d = describe(points);
       if (!d || d.lastDate !== latest.date) continue;
 
-      if (d.z != null && Math.abs(d.z) >= Z_BREAKOUT && d.n >= MIN_N_FOR_Z) {
+      // Series whose level is too low for percentages to mean anything are skipped
+      // entirely rather than alerted on with a caveat.
+      const floor = MIN_LEVEL[key] ?? 0;
+      if (d.baselineMean != null && d.baselineMean < floor) continue;
+
+      const moved = d.baselinePct != null && Math.abs(d.baselinePct) >= MIN_MOVE_PCT;
+      if (d.z != null && Math.abs(d.z) >= Z_BREAKOUT && d.n >= MIN_N_FOR_Z && moved) {
         push({ type: 'breakout', severity: Math.abs(d.z) >= 3 ? 'high' : 'medium', series: key, metric: def.label, brand,
-          value: d.last, z: d.z, baseline: d.baselineMean,
-          message: `${brand} ${def.label} at ${d.last} is ${d.z > 0 ? 'above' : 'below'} its ${d.n}-day normal (z=${d.z}, baseline ${d.baselineMean}).` });
+          value: d.last, z: d.z, baseline: d.baselineMean, changePct: d.baselinePct,
+          message: `${brand} ${def.label} at ${d.last} is ${d.baselinePct > 0 ? '+' : ''}${d.baselinePct}% vs its ${d.n}-day normal of ${d.baselineMean} (z=${d.z}).` });
       }
-      if (Math.abs(d.streak) >= STREAK_MIN) {
+      if (Math.abs(d.streak) >= STREAK_MIN && moved) {
         push({ type: 'streak', severity: 'low', series: key, metric: def.label, brand,
           value: d.last, streak: d.streak,
           message: `${brand} ${def.label} has ${d.streak > 0 ? 'risen' : 'fallen'} ${Math.abs(d.streak)} days straight to ${d.last}.` });

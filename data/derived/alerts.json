@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-27T16:23:23.616Z",
+  "generatedAt": "2026-08-27T18:38:06.363Z",
   "date": "2026-08-27",
-  "count": 6,
+  "count": 3,
   "alerts": [
     {
       "date": "2026-08-27",
@@ -29,45 +29,12 @@
       "severity": "medium",
       "series": "ebay.listings",
       "metric": "eBay active listings",
-      "brand": "Cartier",
-      "value": 81433,
-      "z": 2.16,
-      "baseline": 79595.65,
-      "message": "Cartier eBay active listings at 81433 is above its 21-day normal (z=2.16, baseline 79595.65)."
-    },
-    {
-      "date": "2026-08-27",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "ebay.listings",
-      "metric": "eBay active listings",
       "brand": "Hermès",
       "value": 277347,
       "z": 2.12,
       "baseline": 264348.1,
-      "message": "Hermès eBay active listings at 277347 is above its 21-day normal (z=2.12, baseline 264348.1)."
-    },
-    {
-      "date": "2026-08-27",
-      "type": "streak",
-      "severity": "low",
-      "series": "ebay.listings",
-      "metric": "eBay active listings",
-      "brand": "Chanel",
-      "value": 205008,
-      "streak": 4,
-      "message": "Chanel eBay active listings has risen 4 days straight to 205008."
-    },
-    {
-      "date": "2026-08-27",
-      "type": "weekly-move",
-      "severity": "low",
-      "series": "trends.interest",
-      "metric": "Google Trends interest",
-      "brand": "Goyard",
-      "value": 17,
-      "wowPct": -19.05,
-      "message": "Goyard Google Trends interest moved -19.05% in 7 days to 17."
+      "changePct": 4.92,
+      "message": "Hermès eBay active listings at 277347 is +4.92% vs its 21-day normal of 264348.1 (z=2.12)."
     }
   ]
 }

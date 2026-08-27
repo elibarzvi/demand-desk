@@ -63,6 +63,16 @@ jobs:
       - name: Derive metrics, signals and alerts
         run: npm run derive
 
+      # Runs before the commit so it can diff today's alerts against the version
+      # still at HEAD, which is how it tells a new condition from an ongoing one.
+      # Skipped on push runs: those rebuild the site from existing data, so there
+      # is nothing new to announce.
+      - name: Notify Slack of anything notable
+        if: github.event_name != 'push'
+        run: npm run notify
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
       - name: Commit snapshot + exports (permanent log)
         if: github.event_name != 'push'
         run: |
