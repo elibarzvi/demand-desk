@@ -1,9 +1,66 @@
 {
   "date": "2026-08-27",
-  "capturedAt": "2026-08-27T00:50:06.146Z",
+  "capturedAt": "2026-08-27T16:23:23.297Z",
   "capture": {
     "method": "scrape",
-    "errors": []
+    "errors": [],
+    "freshness": {
+      "mirror": {
+        "fingerprint": "351573a6a3f5",
+        "unchangedDays": 0,
+        "lastChanged": "2026-08-27"
+      },
+      "stockx_goyard": {
+        "fingerprint": "357d6acc6738",
+        "unchangedDays": 0,
+        "lastChanged": "2026-08-27"
+      },
+      "stockx_brands": {
+        "fingerprint": "5b4189f1b932",
+        "unchangedDays": 0,
+        "lastChanged": "2026-08-27"
+      },
+      "fashionphile": {
+        "fingerprint": "7a1168288769",
+        "unchangedDays": 0,
+        "lastChanged": "2026-08-27"
+      },
+      "fp_sell_through": {
+        "fingerprint": "4982d56dc5ef",
+        "unchangedDays": 0,
+        "lastChanged": "2026-08-27"
+      },
+      "ebay": {
+        "fingerprint": "85cf0ea4c64d",
+        "unchangedDays": 0,
+        "lastChanged": "2026-08-27"
+      },
+      "search_volume": {
+        "fingerprint": "a1858216007a",
+        "unchangedDays": 0,
+        "lastChanged": "2026-08-27"
+      },
+      "google_trends": {
+        "fingerprint": "47bd0203c98d",
+        "unchangedDays": 0,
+        "lastChanged": "2026-08-27"
+      },
+      "therealreal": {
+        "fingerprint": "d87135ad8e77",
+        "unchangedDays": 0,
+        "lastChanged": "2026-08-27"
+      },
+      "vestiaire": {
+        "fingerprint": "21e324cc750f",
+        "unchangedDays": 0,
+        "lastChanged": "2026-08-27"
+      },
+      "indices": {
+        "fingerprint": "0785a2504b79",
+        "unchangedDays": 0,
+        "lastChanged": "2026-08-27"
+      }
+    }
   },
   "sources": {
     "mirror": {
@@ -245,12 +302,12 @@
       "status": "ok",
       "items": [
         {
-          "item": "Goyard Cisalpin Backpack Black",
-          "price": 5984
+          "item": "Goyard Saint Sulpice Green",
+          "price": 557
         },
         {
-          "item": "Goyard Saint Sulpice Green",
-          "price": 559
+          "item": "Goyard Cisalpin Backpack Black",
+          "price": 5984
         },
         {
           "item": "Goyard Jouvence Toiletry Bag PM Green",
@@ -258,11 +315,11 @@
         },
         {
           "item": "Goyard Cisalpin Backpack Navy Blue",
-          "price": 5554
+          "price": 5555
         },
         {
           "item": "Goyard Saint Sulpice Black",
-          "price": 524
+          "price": 520
         },
         {
           "item": "Goyard Saint Sulpice Sky Blue",
@@ -299,50 +356,58 @@
       "focus": [
         {
           "brand": "Goyard",
-          "low": 524,
-          "results": 1000,
+          "low": 499,
+          "results": null,
+          "resultsCapped": true,
           "listed": 40
         },
         {
           "brand": "Hermès",
           "low": 500,
-          "results": 1000,
+          "results": null,
+          "resultsCapped": true,
           "listed": 40
         },
         {
           "brand": "Chanel",
-          "low": 35,
-          "results": 1000,
+          "low": 34,
+          "results": null,
+          "resultsCapped": true,
           "listed": 40
         },
         {
           "brand": "Louis Vuitton",
-          "low": 277,
-          "results": 1000,
+          "low": 435,
+          "results": null,
+          "resultsCapped": true,
           "listed": 39
         },
         {
           "brand": "Dior",
-          "low": 286,
-          "results": 1000,
+          "low": 265,
+          "results": null,
+          "resultsCapped": true,
           "listed": 37
         },
         {
           "brand": "Rolex",
-          "low": 4503,
-          "results": 14,
-          "listed": 3
+          "low": null,
+          "results": 87,
+          "resultsCapped": false,
+          "listed": 0
         },
         {
           "brand": "Cartier",
           "low": 324,
-          "results": 1000,
+          "results": null,
+          "resultsCapped": true,
           "listed": 15
         },
         {
           "brand": "Fendi",
           "low": 196,
-          "results": 1000,
+          "results": null,
+          "resultsCapped": true,
           "listed": 39
         }
       ]
@@ -354,45 +419,271 @@
       "focus": [
         {
           "brand": "Hermès",
-          "low": 85,
-          "count": 2699
+          "segment": "Handbags",
+          "live": 1276,
+          "liveAll": 2750,
+          "exactHistogram": true,
+          "price": {
+            "p10": 2445,
+            "p25": 3205,
+            "median": 5980,
+            "p75": 14245,
+            "p90": 23995,
+            "min": 295,
+            "max": 243795,
+            "mean": 10249
+          },
+          "condition": {
+            "Excellent": 719,
+            "Shows Wear": 501,
+            "Giftable": 49,
+            "New": 4,
+            "Worn": 3
+          }
         },
         {
           "brand": "Chanel",
-          "low": 95,
-          "count": 7220
+          "segment": "Handbags",
+          "live": 4522,
+          "liveAll": 7301,
+          "exactHistogram": true,
+          "price": {
+            "p10": 2075,
+            "p25": 2750,
+            "median": 3925,
+            "p75": 5595,
+            "p90": 7895,
+            "min": 295,
+            "max": 72075,
+            "mean": 4524
+          },
+          "condition": {
+            "Excellent": 2458,
+            "Shows Wear": 1765,
+            "Giftable": 197,
+            "New": 83,
+            "Worn": 18
+          }
         },
         {
           "brand": "Louis Vuitton",
-          "low": 90,
-          "count": 8051
+          "segment": "Handbags",
+          "live": 5694,
+          "liveAll": 8146,
+          "exactHistogram": true,
+          "price": {
+            "p10": 760,
+            "p25": 995,
+            "median": 1485,
+            "p75": 2115,
+            "p90": 2895,
+            "min": 295,
+            "max": 20350,
+            "mean": 1746
+          },
+          "condition": {
+            "Shows Wear": 3809,
+            "Excellent": 1823,
+            "Worn": 42,
+            "Giftable": 9,
+            "New": 4
+          }
         },
         {
           "brand": "Goyard",
-          "low": 295,
-          "count": 351
+          "segment": "Handbags",
+          "live": 302,
+          "liveAll": 356,
+          "exactHistogram": true,
+          "price": {
+            "p10": 1800,
+            "p25": 2205,
+            "median": 2650,
+            "p75": 3145,
+            "p90": 4035,
+            "min": 850,
+            "max": 5790,
+            "mean": 2775
+          },
+          "condition": {
+            "Excellent": 183,
+            "Shows Wear": 98,
+            "New": 19,
+            "Giftable": 1
+          }
         },
         {
           "brand": "Dior",
-          "low": 150,
-          "count": 1231
+          "segment": "Handbags",
+          "live": 839,
+          "liveAll": 1250,
+          "exactHistogram": true,
+          "price": {
+            "p10": 1085,
+            "p25": 1515,
+            "median": 2235,
+            "p75": 2995,
+            "p90": 3795,
+            "min": 330,
+            "max": 19995,
+            "mean": 2415
+          },
+          "condition": {
+            "Excellent": 438,
+            "Shows Wear": 389,
+            "Worn": 9,
+            "New": 3
+          }
         },
         {
           "brand": "Fendi",
-          "low": 50,
-          "count": 757
+          "segment": "Handbags",
+          "live": 560,
+          "liveAll": 769,
+          "exactHistogram": true,
+          "price": {
+            "p10": 650,
+            "p25": 950,
+            "median": 1350,
+            "p75": 1990,
+            "p90": 2655,
+            "min": 340,
+            "max": 5795,
+            "mean": 1566
+          },
+          "condition": {
+            "Shows Wear": 291,
+            "Excellent": 257,
+            "Worn": 6,
+            "New": 3,
+            "Giftable": 1
+          }
         },
         {
           "brand": "The Row",
-          "low": 625,
-          "count": 153
+          "segment": "Handbags",
+          "live": 155,
+          "liveAll": 158,
+          "exactHistogram": true,
+          "price": {
+            "p10": 1015,
+            "p25": 1485,
+            "median": 2515,
+            "p75": 4745,
+            "p90": 5980,
+            "min": 625,
+            "max": 6995,
+            "mean": 3099
+          },
+          "condition": {
+            "Excellent": 104,
+            "Shows Wear": 49,
+            "New": 2
+          }
         },
         {
           "brand": "Cartier",
-          "low": 420,
-          "count": 450
+          "segment": "Fine jewelry",
+          "live": 369,
+          "liveAll": 456,
+          "exactHistogram": true,
+          "price": {
+            "p10": 1050,
+            "p25": 1295,
+            "median": 2230,
+            "p75": 5295,
+            "p90": 7250,
+            "min": 550,
+            "max": 46995,
+            "mean": 3607
+          },
+          "condition": {
+            "Excellent": 194,
+            "Shows Wear": 167,
+            "Giftable": 4,
+            "New": 3,
+            "Worn": 1
+          }
         }
       ]
+    },
+    "fp_sell_through": {
+      "status": "baseline",
+      "via": "sku-diff",
+      "brands": {
+        "Hermès": {
+          "live": 1276,
+          "arrivals": 1276,
+          "departures": 0,
+          "turnoverPct": null,
+          "medianDaysToSell": null,
+          "medianDeparturePrice": null,
+          "events": []
+        },
+        "Chanel": {
+          "live": 4522,
+          "arrivals": 4522,
+          "departures": 0,
+          "turnoverPct": null,
+          "medianDaysToSell": null,
+          "medianDeparturePrice": null,
+          "events": []
+        },
+        "Louis Vuitton": {
+          "live": 5694,
+          "arrivals": 5694,
+          "departures": 0,
+          "turnoverPct": null,
+          "medianDaysToSell": null,
+          "medianDeparturePrice": null,
+          "events": []
+        },
+        "Goyard": {
+          "live": 302,
+          "arrivals": 302,
+          "departures": 0,
+          "turnoverPct": null,
+          "medianDaysToSell": null,
+          "medianDeparturePrice": null,
+          "events": []
+        },
+        "Dior": {
+          "live": 839,
+          "arrivals": 839,
+          "departures": 0,
+          "turnoverPct": null,
+          "medianDaysToSell": null,
+          "medianDeparturePrice": null,
+          "events": []
+        },
+        "Fendi": {
+          "live": 560,
+          "arrivals": 560,
+          "departures": 0,
+          "turnoverPct": null,
+          "medianDaysToSell": null,
+          "medianDeparturePrice": null,
+          "events": []
+        },
+        "The Row": {
+          "live": 155,
+          "arrivals": 155,
+          "departures": 0,
+          "turnoverPct": null,
+          "medianDaysToSell": null,
+          "medianDeparturePrice": null,
+          "events": []
+        },
+        "Cartier": {
+          "live": 369,
+          "arrivals": 369,
+          "departures": 0,
+          "turnoverPct": null,
+          "medianDaysToSell": null,
+          "medianDeparturePrice": null,
+          "events": []
+        }
+      }
     },
     "ebay": {
       "status": "ok",
@@ -400,53 +691,53 @@
       "focus": [
         {
           "brand": "Hermès",
-          "total": 277269,
+          "total": 277347,
           "low": 100
         },
         {
           "brand": "Chanel",
-          "total": 203964,
+          "total": 205008,
           "low": 100
         },
         {
           "brand": "Louis Vuitton",
-          "total": 640355,
+          "total": 639420,
           "low": 100
         },
         {
           "brand": "Goyard",
-          "total": 6937,
+          "total": 6916,
           "low": 100
         },
         {
           "brand": "Dior",
-          "total": 112155,
+          "total": 111920,
           "low": 100
         },
         {
           "brand": "Fendi",
-          "total": 88403,
+          "total": 87319,
           "low": 100
         },
         {
           "brand": "Cartier",
-          "total": 80782,
+          "total": 81433,
           "low": 100
         },
         {
           "brand": "Rolex",
-          "total": 142035,
+          "total": 142338,
           "low": 100
         },
         {
           "brand": "The Row",
-          "total": 5414,
+          "total": 5405,
           "low": 100
         }
       ]
     },
     "search_volume": {
-      "status": "ok",
+      "status": "carried",
       "via": "dataforseo",
       "focus": [
         {
@@ -494,939 +785,273 @@
           "keyword": "the row bag",
           "volume": 33100
         }
-      ]
+      ],
+      "carriedFrom": "2026-08-27"
     },
     "google_trends": {
       "status": "ok",
       "via": "dataforseo-google-trends",
+      "anchor": "chanel",
       "focus": [
-        {
-          "brand": "Louis Vuitton",
-          "keyword": "louis vuitton",
-          "series": [
-            {
-              "date": "2026-07-27",
-              "value": 66
-            },
-            {
-              "date": "2026-07-28",
-              "value": 65
-            },
-            {
-              "date": "2026-07-29",
-              "value": 62
-            },
-            {
-              "date": "2026-07-30",
-              "value": 64
-            },
-            {
-              "date": "2026-07-31",
-              "value": 62
-            },
-            {
-              "date": "2026-08-01",
-              "value": 70
-            },
-            {
-              "date": "2026-08-02",
-              "value": 76
-            },
-            {
-              "date": "2026-08-03",
-              "value": 63
-            },
-            {
-              "date": "2026-08-04",
-              "value": 69
-            },
-            {
-              "date": "2026-08-05",
-              "value": 58
-            },
-            {
-              "date": "2026-08-06",
-              "value": 61
-            },
-            {
-              "date": "2026-08-07",
-              "value": 66
-            },
-            {
-              "date": "2026-08-08",
-              "value": 74
-            },
-            {
-              "date": "2026-08-09",
-              "value": 78
-            },
-            {
-              "date": "2026-08-10",
-              "value": 62
-            },
-            {
-              "date": "2026-08-11",
-              "value": 62
-            },
-            {
-              "date": "2026-08-12",
-              "value": 63
-            },
-            {
-              "date": "2026-08-13",
-              "value": 62
-            },
-            {
-              "date": "2026-08-14",
-              "value": 62
-            },
-            {
-              "date": "2026-08-15",
-              "value": 75
-            },
-            {
-              "date": "2026-08-16",
-              "value": 75
-            },
-            {
-              "date": "2026-08-17",
-              "value": 64
-            },
-            {
-              "date": "2026-08-18",
-              "value": 58
-            },
-            {
-              "date": "2026-08-19",
-              "value": 60
-            },
-            {
-              "date": "2026-08-20",
-              "value": 62
-            },
-            {
-              "date": "2026-08-21",
-              "value": 59
-            },
-            {
-              "date": "2026-08-22",
-              "value": 73
-            },
-            {
-              "date": "2026-08-23",
-              "value": 73
-            },
-            {
-              "date": "2026-08-24",
-              "value": 61
-            },
-            {
-              "date": "2026-08-25",
-              "value": 60
-            },
-            {
-              "date": "2026-08-26",
-              "value": 53
-            },
-            {
-              "date": "2026-08-27",
-              "value": 60
-            }
-          ]
-        },
-        {
-          "brand": "Rolex",
-          "keyword": "rolex",
-          "series": [
-            {
-              "date": "2026-07-27",
-              "value": 61
-            },
-            {
-              "date": "2026-07-28",
-              "value": 60
-            },
-            {
-              "date": "2026-07-29",
-              "value": 58
-            },
-            {
-              "date": "2026-07-30",
-              "value": 58
-            },
-            {
-              "date": "2026-07-31",
-              "value": 63
-            },
-            {
-              "date": "2026-08-01",
-              "value": 70
-            },
-            {
-              "date": "2026-08-02",
-              "value": 71
-            },
-            {
-              "date": "2026-08-03",
-              "value": 63
-            },
-            {
-              "date": "2026-08-04",
-              "value": 68
-            },
-            {
-              "date": "2026-08-05",
-              "value": 65
-            },
-            {
-              "date": "2026-08-06",
-              "value": 61
-            },
-            {
-              "date": "2026-08-07",
-              "value": 60
-            },
-            {
-              "date": "2026-08-08",
-              "value": 71
-            },
-            {
-              "date": "2026-08-09",
-              "value": 76
-            },
-            {
-              "date": "2026-08-10",
-              "value": 64
-            },
-            {
-              "date": "2026-08-11",
-              "value": 68
-            },
-            {
-              "date": "2026-08-12",
-              "value": 64
-            },
-            {
-              "date": "2026-08-13",
-              "value": 64
-            },
-            {
-              "date": "2026-08-14",
-              "value": 68
-            },
-            {
-              "date": "2026-08-15",
-              "value": 83
-            },
-            {
-              "date": "2026-08-16",
-              "value": 80
-            },
-            {
-              "date": "2026-08-17",
-              "value": 65
-            },
-            {
-              "date": "2026-08-18",
-              "value": 62
-            },
-            {
-              "date": "2026-08-19",
-              "value": 66
-            },
-            {
-              "date": "2026-08-20",
-              "value": 68
-            },
-            {
-              "date": "2026-08-21",
-              "value": 68
-            },
-            {
-              "date": "2026-08-22",
-              "value": 73
-            },
-            {
-              "date": "2026-08-23",
-              "value": 73
-            },
-            {
-              "date": "2026-08-24",
-              "value": 63
-            },
-            {
-              "date": "2026-08-25",
-              "value": 63
-            },
-            {
-              "date": "2026-08-26",
-              "value": 60
-            },
-            {
-              "date": "2026-08-27",
-              "value": 69
-            }
-          ]
-        },
-        {
-          "brand": "Cartier",
-          "keyword": "cartier",
-          "series": [
-            {
-              "date": "2026-07-27",
-              "value": 36
-            },
-            {
-              "date": "2026-07-28",
-              "value": 36
-            },
-            {
-              "date": "2026-07-29",
-              "value": 36
-            },
-            {
-              "date": "2026-07-30",
-              "value": 35
-            },
-            {
-              "date": "2026-07-31",
-              "value": 37
-            },
-            {
-              "date": "2026-08-01",
-              "value": 42
-            },
-            {
-              "date": "2026-08-02",
-              "value": 45
-            },
-            {
-              "date": "2026-08-03",
-              "value": 39
-            },
-            {
-              "date": "2026-08-04",
-              "value": 35
-            },
-            {
-              "date": "2026-08-05",
-              "value": 34
-            },
-            {
-              "date": "2026-08-06",
-              "value": 35
-            },
-            {
-              "date": "2026-08-07",
-              "value": 36
-            },
-            {
-              "date": "2026-08-08",
-              "value": 44
-            },
-            {
-              "date": "2026-08-09",
-              "value": 46
-            },
-            {
-              "date": "2026-08-10",
-              "value": 37
-            },
-            {
-              "date": "2026-08-11",
-              "value": 35
-            },
-            {
-              "date": "2026-08-12",
-              "value": 34
-            },
-            {
-              "date": "2026-08-13",
-              "value": 35
-            },
-            {
-              "date": "2026-08-14",
-              "value": 36
-            },
-            {
-              "date": "2026-08-15",
-              "value": 43
-            },
-            {
-              "date": "2026-08-16",
-              "value": 45
-            },
-            {
-              "date": "2026-08-17",
-              "value": 36
-            },
-            {
-              "date": "2026-08-18",
-              "value": 35
-            },
-            {
-              "date": "2026-08-19",
-              "value": 34
-            },
-            {
-              "date": "2026-08-20",
-              "value": 37
-            },
-            {
-              "date": "2026-08-21",
-              "value": 39
-            },
-            {
-              "date": "2026-08-22",
-              "value": 48
-            },
-            {
-              "date": "2026-08-23",
-              "value": 46
-            },
-            {
-              "date": "2026-08-24",
-              "value": 36
-            },
-            {
-              "date": "2026-08-25",
-              "value": 33
-            },
-            {
-              "date": "2026-08-26",
-              "value": 32
-            },
-            {
-              "date": "2026-08-27",
-              "value": 35
-            }
-          ]
-        },
         {
           "brand": "Chanel",
           "keyword": "chanel",
+          "scale": 1,
           "series": [
             {
               "date": "2026-07-27",
-              "value": 76
-            },
-            {
-              "date": "2026-07-28",
-              "value": 77
-            },
-            {
-              "date": "2026-07-29",
-              "value": 73
-            },
-            {
-              "date": "2026-07-30",
-              "value": 77
-            },
-            {
-              "date": "2026-07-31",
-              "value": 74
-            },
-            {
-              "date": "2026-08-01",
-              "value": 85
-            },
-            {
-              "date": "2026-08-02",
-              "value": 86
-            },
-            {
-              "date": "2026-08-03",
-              "value": 71
-            },
-            {
-              "date": "2026-08-04",
-              "value": 73
-            },
-            {
-              "date": "2026-08-05",
-              "value": 73
-            },
-            {
-              "date": "2026-08-06",
-              "value": 72
-            },
-            {
-              "date": "2026-08-07",
-              "value": 78
-            },
-            {
-              "date": "2026-08-08",
-              "value": 83
-            },
-            {
-              "date": "2026-08-09",
-              "value": 88
-            },
-            {
-              "date": "2026-08-10",
-              "value": 68
-            },
-            {
-              "date": "2026-08-11",
-              "value": 70
-            },
-            {
-              "date": "2026-08-12",
-              "value": 67
-            },
-            {
-              "date": "2026-08-13",
-              "value": 74
-            },
-            {
-              "date": "2026-08-14",
-              "value": 76
-            },
-            {
-              "date": "2026-08-15",
-              "value": 89
-            },
-            {
-              "date": "2026-08-16",
-              "value": 90
-            },
-            {
-              "date": "2026-08-17",
-              "value": 74
-            },
-            {
-              "date": "2026-08-18",
-              "value": 76
-            },
-            {
-              "date": "2026-08-19",
-              "value": 75
-            },
-            {
-              "date": "2026-08-20",
-              "value": 79
-            },
-            {
-              "date": "2026-08-21",
-              "value": 91
-            },
-            {
-              "date": "2026-08-22",
-              "value": 100
-            },
-            {
-              "date": "2026-08-23",
-              "value": 95
-            },
-            {
-              "date": "2026-08-24",
-              "value": 77
-            },
-            {
-              "date": "2026-08-25",
-              "value": 75
-            },
-            {
-              "date": "2026-08-26",
-              "value": 68
-            },
-            {
-              "date": "2026-08-27",
-              "value": 80
-            }
-          ]
-        },
-        {
-          "brand": "Goyard",
-          "keyword": "goyard",
-          "series": [
-            {
-              "date": "2026-07-27",
-              "value": 22
-            },
-            {
-              "date": "2026-07-28",
-              "value": 23
-            },
-            {
-              "date": "2026-07-29",
-              "value": 21
-            },
-            {
-              "date": "2026-07-30",
-              "value": 22
-            },
-            {
-              "date": "2026-07-31",
-              "value": 23
-            },
-            {
-              "date": "2026-08-01",
-              "value": 24
-            },
-            {
-              "date": "2026-08-02",
-              "value": 25
-            },
-            {
-              "date": "2026-08-03",
-              "value": 20
-            },
-            {
-              "date": "2026-08-04",
-              "value": 20
-            },
-            {
-              "date": "2026-08-05",
-              "value": 18
-            },
-            {
-              "date": "2026-08-06",
-              "value": 19
-            },
-            {
-              "date": "2026-08-07",
-              "value": 22
-            },
-            {
-              "date": "2026-08-08",
-              "value": 24
-            },
-            {
-              "date": "2026-08-09",
-              "value": 23
-            },
-            {
-              "date": "2026-08-10",
-              "value": 20
-            },
-            {
-              "date": "2026-08-11",
-              "value": 25
-            },
-            {
-              "date": "2026-08-12",
-              "value": 27
-            },
-            {
-              "date": "2026-08-13",
-              "value": 27
-            },
-            {
-              "date": "2026-08-14",
-              "value": 23
-            },
-            {
-              "date": "2026-08-15",
-              "value": 24
-            },
-            {
-              "date": "2026-08-16",
-              "value": 23
-            },
-            {
-              "date": "2026-08-17",
-              "value": 20
-            },
-            {
-              "date": "2026-08-18",
-              "value": 21
-            },
-            {
-              "date": "2026-08-19",
-              "value": 20
-            },
-            {
-              "date": "2026-08-20",
-              "value": 20
-            },
-            {
-              "date": "2026-08-21",
-              "value": 19
-            },
-            {
-              "date": "2026-08-22",
-              "value": 21
-            },
-            {
-              "date": "2026-08-23",
-              "value": 21
-            },
-            {
-              "date": "2026-08-24",
-              "value": 19
-            },
-            {
-              "date": "2026-08-25",
-              "value": 18
-            },
-            {
-              "date": "2026-08-26",
-              "value": 17
-            },
-            {
-              "date": "2026-08-27",
-              "value": 18
-            }
-          ]
-        },
-        {
-          "brand": "Dior",
-          "keyword": "dior",
-          "series": [
-            {
-              "date": "2026-07-27",
-              "value": 81
-            },
-            {
-              "date": "2026-07-28",
-              "value": 79
-            },
-            {
-              "date": "2026-07-29",
-              "value": 79
-            },
-            {
-              "date": "2026-07-30",
-              "value": 81
-            },
-            {
-              "date": "2026-07-31",
-              "value": 86
-            },
-            {
-              "date": "2026-08-01",
-              "value": 95
-            },
-            {
-              "date": "2026-08-02",
-              "value": 100
-            },
-            {
-              "date": "2026-08-03",
-              "value": 80
-            },
-            {
-              "date": "2026-08-04",
-              "value": 82
-            },
-            {
-              "date": "2026-08-05",
-              "value": 80
-            },
-            {
-              "date": "2026-08-06",
-              "value": 83
-            },
-            {
-              "date": "2026-08-07",
-              "value": 87
-            },
-            {
-              "date": "2026-08-08",
-              "value": 97
-            },
-            {
-              "date": "2026-08-09",
-              "value": 96
-            },
-            {
-              "date": "2026-08-10",
-              "value": 90
-            },
-            {
-              "date": "2026-08-11",
-              "value": 78
-            },
-            {
-              "date": "2026-08-12",
-              "value": 81
-            },
-            {
-              "date": "2026-08-13",
-              "value": 83
-            },
-            {
-              "date": "2026-08-14",
-              "value": 83
-            },
-            {
-              "date": "2026-08-15",
-              "value": 95
-            },
-            {
-              "date": "2026-08-16",
-              "value": 91
-            },
-            {
-              "date": "2026-08-17",
-              "value": 81
-            },
-            {
-              "date": "2026-08-18",
-              "value": 85
-            },
-            {
-              "date": "2026-08-19",
-              "value": 81
-            },
-            {
-              "date": "2026-08-20",
               "value": 84
             },
             {
-              "date": "2026-08-21",
-              "value": 85
-            },
-            {
-              "date": "2026-08-22",
-              "value": 90
-            },
-            {
-              "date": "2026-08-23",
-              "value": 94
-            },
-            {
-              "date": "2026-08-24",
-              "value": 76
-            },
-            {
-              "date": "2026-08-25",
+              "date": "2026-07-28",
               "value": 77
             },
             {
-              "date": "2026-08-26",
+              "date": "2026-07-29",
+              "value": 77
+            },
+            {
+              "date": "2026-07-30",
               "value": 74
             },
             {
-              "date": "2026-08-27",
+              "date": "2026-07-31",
+              "value": 73
+            },
+            {
+              "date": "2026-08-01",
+              "value": 88
+            },
+            {
+              "date": "2026-08-02",
+              "value": 88
+            },
+            {
+              "date": "2026-08-03",
+              "value": 76
+            },
+            {
+              "date": "2026-08-04",
+              "value": 77
+            },
+            {
+              "date": "2026-08-05",
+              "value": 76
+            },
+            {
+              "date": "2026-08-06",
+              "value": 74
+            },
+            {
+              "date": "2026-08-07",
               "value": 82
+            },
+            {
+              "date": "2026-08-08",
+              "value": 84
+            },
+            {
+              "date": "2026-08-09",
+              "value": 97
+            },
+            {
+              "date": "2026-08-10",
+              "value": 72
+            },
+            {
+              "date": "2026-08-11",
+              "value": 70
+            },
+            {
+              "date": "2026-08-12",
+              "value": 74
+            },
+            {
+              "date": "2026-08-13",
+              "value": 74
+            },
+            {
+              "date": "2026-08-14",
+              "value": 79
+            },
+            {
+              "date": "2026-08-15",
+              "value": 90
+            },
+            {
+              "date": "2026-08-16",
+              "value": 88
+            },
+            {
+              "date": "2026-08-17",
+              "value": 75
+            },
+            {
+              "date": "2026-08-18",
+              "value": 76
+            },
+            {
+              "date": "2026-08-19",
+              "value": 80
+            },
+            {
+              "date": "2026-08-20",
+              "value": 85
+            },
+            {
+              "date": "2026-08-21",
+              "value": 91
+            },
+            {
+              "date": "2026-08-22",
+              "value": 99
+            },
+            {
+              "date": "2026-08-23",
+              "value": 100
+            },
+            {
+              "date": "2026-08-24",
+              "value": 80
+            },
+            {
+              "date": "2026-08-25",
+              "value": 74
+            },
+            {
+              "date": "2026-08-26",
+              "value": 72
+            },
+            {
+              "date": "2026-08-27",
+              "value": 77
             }
           ]
         },
         {
-          "brand": "Hermès",
-          "keyword": "hermes",
+          "brand": "Louis Vuitton",
+          "keyword": "louis vuitton",
+          "scale": 1,
           "series": [
             {
               "date": "2026-07-27",
-              "value": 67
-            },
-            {
-              "date": "2026-07-28",
-              "value": 68
-            },
-            {
-              "date": "2026-07-29",
-              "value": 64
-            },
-            {
-              "date": "2026-07-30",
-              "value": 67
-            },
-            {
-              "date": "2026-07-31",
-              "value": 66
-            },
-            {
-              "date": "2026-08-01",
-              "value": 71
-            },
-            {
-              "date": "2026-08-02",
-              "value": 73
-            },
-            {
-              "date": "2026-08-03",
-              "value": 66
-            },
-            {
-              "date": "2026-08-04",
-              "value": 63
-            },
-            {
-              "date": "2026-08-05",
-              "value": 62
-            },
-            {
-              "date": "2026-08-06",
               "value": 65
             },
             {
-              "date": "2026-08-07",
-              "value": 62
+              "date": "2026-07-28",
+              "value": 74
             },
             {
-              "date": "2026-08-08",
-              "value": 98
-            },
-            {
-              "date": "2026-08-09",
-              "value": 83
-            },
-            {
-              "date": "2026-08-10",
-              "value": 67
-            },
-            {
-              "date": "2026-08-11",
-              "value": 61
-            },
-            {
-              "date": "2026-08-12",
-              "value": 62
-            },
-            {
-              "date": "2026-08-13",
-              "value": 62
-            },
-            {
-              "date": "2026-08-14",
+              "date": "2026-07-29",
               "value": 63
             },
             {
-              "date": "2026-08-15",
-              "value": 70
+              "date": "2026-07-30",
+              "value": 71
             },
             {
-              "date": "2026-08-16",
+              "date": "2026-07-31",
+              "value": 76
+            },
+            {
+              "date": "2026-08-01",
               "value": 72
             },
             {
-              "date": "2026-08-17",
+              "date": "2026-08-02",
+              "value": 83
+            },
+            {
+              "date": "2026-08-03",
+              "value": 64
+            },
+            {
+              "date": "2026-08-04",
+              "value": 64
+            },
+            {
+              "date": "2026-08-05",
               "value": 60
             },
             {
-              "date": "2026-08-18",
-              "value": 61
+              "date": "2026-08-06",
+              "value": 64
             },
             {
-              "date": "2026-08-19",
-              "value": 60
+              "date": "2026-08-07",
+              "value": 67
             },
             {
-              "date": "2026-08-20",
+              "date": "2026-08-08",
+              "value": 75
+            },
+            {
+              "date": "2026-08-09",
+              "value": 79
+            },
+            {
+              "date": "2026-08-10",
+              "value": 65
+            },
+            {
+              "date": "2026-08-11",
+              "value": 64
+            },
+            {
+              "date": "2026-08-12",
               "value": 63
             },
             {
-              "date": "2026-08-21",
+              "date": "2026-08-13",
+              "value": 67
+            },
+            {
+              "date": "2026-08-14",
+              "value": 65
+            },
+            {
+              "date": "2026-08-15",
+              "value": 79
+            },
+            {
+              "date": "2026-08-16",
+              "value": 76
+            },
+            {
+              "date": "2026-08-17",
+              "value": 64
+            },
+            {
+              "date": "2026-08-18",
+              "value": 63
+            },
+            {
+              "date": "2026-08-19",
               "value": 62
             },
             {
+              "date": "2026-08-20",
+              "value": 64
+            },
+            {
+              "date": "2026-08-21",
+              "value": 61
+            },
+            {
               "date": "2026-08-22",
-              "value": 70
+              "value": 74
             },
             {
               "date": "2026-08-23",
-              "value": 69
+              "value": 77
             },
             {
               "date": "2026-08-24",
-              "value": 64
+              "value": 63
             },
             {
               "date": "2026-08-25",
-              "value": 64
+              "value": 60
             },
             {
               "date": "2026-08-26",
@@ -1434,151 +1059,828 @@
             },
             {
               "date": "2026-08-27",
+              "value": 61
+            }
+          ]
+        },
+        {
+          "brand": "Rolex",
+          "keyword": "rolex",
+          "scale": 1,
+          "series": [
+            {
+              "date": "2026-07-27",
+              "value": 66
+            },
+            {
+              "date": "2026-07-28",
+              "value": 64
+            },
+            {
+              "date": "2026-07-29",
+              "value": 60
+            },
+            {
+              "date": "2026-07-30",
+              "value": 60
+            },
+            {
+              "date": "2026-07-31",
+              "value": 69
+            },
+            {
+              "date": "2026-08-01",
+              "value": 70
+            },
+            {
+              "date": "2026-08-02",
+              "value": 79
+            },
+            {
+              "date": "2026-08-03",
+              "value": 70
+            },
+            {
+              "date": "2026-08-04",
+              "value": 68
+            },
+            {
+              "date": "2026-08-05",
+              "value": 62
+            },
+            {
+              "date": "2026-08-06",
+              "value": 63
+            },
+            {
+              "date": "2026-08-07",
+              "value": 62
+            },
+            {
+              "date": "2026-08-08",
+              "value": 73
+            },
+            {
+              "date": "2026-08-09",
+              "value": 81
+            },
+            {
+              "date": "2026-08-10",
+              "value": 65
+            },
+            {
+              "date": "2026-08-11",
+              "value": 63
+            },
+            {
+              "date": "2026-08-12",
+              "value": 66
+            },
+            {
+              "date": "2026-08-13",
+              "value": 63
+            },
+            {
+              "date": "2026-08-14",
+              "value": 69
+            },
+            {
+              "date": "2026-08-15",
+              "value": 90
+            },
+            {
+              "date": "2026-08-16",
+              "value": 80
+            },
+            {
+              "date": "2026-08-17",
+              "value": 66
+            },
+            {
+              "date": "2026-08-18",
+              "value": 64
+            },
+            {
+              "date": "2026-08-19",
+              "value": 64
+            },
+            {
+              "date": "2026-08-20",
+              "value": 74
+            },
+            {
+              "date": "2026-08-21",
+              "value": 69
+            },
+            {
+              "date": "2026-08-22",
+              "value": 76
+            },
+            {
+              "date": "2026-08-23",
+              "value": 77
+            },
+            {
+              "date": "2026-08-24",
+              "value": 62
+            },
+            {
+              "date": "2026-08-25",
+              "value": 67
+            },
+            {
+              "date": "2026-08-26",
+              "value": 61
+            },
+            {
+              "date": "2026-08-27",
+              "value": 62
+            }
+          ]
+        },
+        {
+          "brand": "Cartier",
+          "keyword": "cartier",
+          "scale": 1,
+          "series": [
+            {
+              "date": "2026-07-27",
+              "value": 38
+            },
+            {
+              "date": "2026-07-28",
+              "value": 37
+            },
+            {
+              "date": "2026-07-29",
+              "value": 38
+            },
+            {
+              "date": "2026-07-30",
+              "value": 37
+            },
+            {
+              "date": "2026-07-31",
+              "value": 38
+            },
+            {
+              "date": "2026-08-01",
+              "value": 44
+            },
+            {
+              "date": "2026-08-02",
+              "value": 47
+            },
+            {
+              "date": "2026-08-03",
+              "value": 41
+            },
+            {
+              "date": "2026-08-04",
+              "value": 37
+            },
+            {
+              "date": "2026-08-05",
+              "value": 35
+            },
+            {
+              "date": "2026-08-06",
+              "value": 37
+            },
+            {
+              "date": "2026-08-07",
+              "value": 38
+            },
+            {
+              "date": "2026-08-08",
+              "value": 45
+            },
+            {
+              "date": "2026-08-09",
+              "value": 47
+            },
+            {
+              "date": "2026-08-10",
+              "value": 38
+            },
+            {
+              "date": "2026-08-11",
+              "value": 36
+            },
+            {
+              "date": "2026-08-12",
+              "value": 35
+            },
+            {
+              "date": "2026-08-13",
+              "value": 37
+            },
+            {
+              "date": "2026-08-14",
+              "value": 39
+            },
+            {
+              "date": "2026-08-15",
+              "value": 45
+            },
+            {
+              "date": "2026-08-16",
+              "value": 46
+            },
+            {
+              "date": "2026-08-17",
+              "value": 37
+            },
+            {
+              "date": "2026-08-18",
+              "value": 37
+            },
+            {
+              "date": "2026-08-19",
+              "value": 34
+            },
+            {
+              "date": "2026-08-20",
+              "value": 39
+            },
+            {
+              "date": "2026-08-21",
+              "value": 41
+            },
+            {
+              "date": "2026-08-22",
+              "value": 50
+            },
+            {
+              "date": "2026-08-23",
+              "value": 47
+            },
+            {
+              "date": "2026-08-24",
+              "value": 36
+            },
+            {
+              "date": "2026-08-25",
+              "value": 34
+            },
+            {
+              "date": "2026-08-26",
+              "value": 33
+            },
+            {
+              "date": "2026-08-27",
+              "value": 36
+            }
+          ]
+        },
+        {
+          "brand": "Goyard",
+          "keyword": "goyard",
+          "scale": 1,
+          "series": [
+            {
+              "date": "2026-07-27",
+              "value": 23
+            },
+            {
+              "date": "2026-07-28",
+              "value": 24
+            },
+            {
+              "date": "2026-07-29",
+              "value": 22
+            },
+            {
+              "date": "2026-07-30",
+              "value": 23
+            },
+            {
+              "date": "2026-07-31",
+              "value": 24
+            },
+            {
+              "date": "2026-08-01",
+              "value": 25
+            },
+            {
+              "date": "2026-08-02",
+              "value": 26
+            },
+            {
+              "date": "2026-08-03",
+              "value": 21
+            },
+            {
+              "date": "2026-08-04",
+              "value": 20
+            },
+            {
+              "date": "2026-08-05",
+              "value": 19
+            },
+            {
+              "date": "2026-08-06",
+              "value": 20
+            },
+            {
+              "date": "2026-08-07",
+              "value": 22
+            },
+            {
+              "date": "2026-08-08",
+              "value": 25
+            },
+            {
+              "date": "2026-08-09",
+              "value": 24
+            },
+            {
+              "date": "2026-08-10",
+              "value": 20
+            },
+            {
+              "date": "2026-08-11",
+              "value": 26
+            },
+            {
+              "date": "2026-08-12",
+              "value": 27
+            },
+            {
+              "date": "2026-08-13",
+              "value": 29
+            },
+            {
+              "date": "2026-08-14",
+              "value": 24
+            },
+            {
+              "date": "2026-08-15",
+              "value": 24
+            },
+            {
+              "date": "2026-08-16",
+              "value": 25
+            },
+            {
+              "date": "2026-08-17",
+              "value": 21
+            },
+            {
+              "date": "2026-08-18",
+              "value": 22
+            },
+            {
+              "date": "2026-08-19",
+              "value": 21
+            },
+            {
+              "date": "2026-08-20",
+              "value": 21
+            },
+            {
+              "date": "2026-08-21",
+              "value": 21
+            },
+            {
+              "date": "2026-08-22",
+              "value": 23
+            },
+            {
+              "date": "2026-08-23",
+              "value": 21
+            },
+            {
+              "date": "2026-08-24",
+              "value": 20
+            },
+            {
+              "date": "2026-08-25",
+              "value": 18
+            },
+            {
+              "date": "2026-08-26",
+              "value": 16
+            },
+            {
+              "date": "2026-08-27",
+              "value": 17
+            }
+          ]
+        },
+        {
+          "brand": "Dior",
+          "keyword": "dior",
+          "scale": 1,
+          "series": [
+            {
+              "date": "2026-07-27",
+              "value": 57
+            },
+            {
+              "date": "2026-07-28",
+              "value": 56
+            },
+            {
+              "date": "2026-07-29",
+              "value": 56
+            },
+            {
+              "date": "2026-07-30",
+              "value": 57
+            },
+            {
+              "date": "2026-07-31",
+              "value": 61
+            },
+            {
+              "date": "2026-08-01",
+              "value": 75
+            },
+            {
+              "date": "2026-08-02",
+              "value": 70
+            },
+            {
+              "date": "2026-08-03",
+              "value": 57
+            },
+            {
+              "date": "2026-08-04",
+              "value": 58
+            },
+            {
+              "date": "2026-08-05",
+              "value": 57
+            },
+            {
+              "date": "2026-08-06",
+              "value": 58
+            },
+            {
+              "date": "2026-08-07",
+              "value": 61
+            },
+            {
+              "date": "2026-08-08",
+              "value": 68
+            },
+            {
+              "date": "2026-08-09",
+              "value": 68
+            },
+            {
+              "date": "2026-08-10",
+              "value": 59
+            },
+            {
+              "date": "2026-08-11",
+              "value": 55
+            },
+            {
+              "date": "2026-08-12",
+              "value": 58
+            },
+            {
+              "date": "2026-08-13",
+              "value": 55
+            },
+            {
+              "date": "2026-08-14",
+              "value": 58
+            },
+            {
+              "date": "2026-08-15",
+              "value": 69
+            },
+            {
+              "date": "2026-08-16",
+              "value": 66
+            },
+            {
+              "date": "2026-08-17",
+              "value": 57
+            },
+            {
+              "date": "2026-08-18",
+              "value": 60
+            },
+            {
+              "date": "2026-08-19",
+              "value": 58
+            },
+            {
+              "date": "2026-08-20",
+              "value": 60
+            },
+            {
+              "date": "2026-08-21",
+              "value": 61
+            },
+            {
+              "date": "2026-08-22",
+              "value": 65
+            },
+            {
+              "date": "2026-08-23",
+              "value": 66
+            },
+            {
+              "date": "2026-08-24",
               "value": 54
+            },
+            {
+              "date": "2026-08-25",
+              "value": 54
+            },
+            {
+              "date": "2026-08-26",
+              "value": 52
+            },
+            {
+              "date": "2026-08-27",
+              "value": 59
+            }
+          ]
+        },
+        {
+          "brand": "Hermès",
+          "keyword": "hermes",
+          "scale": 1,
+          "series": [
+            {
+              "date": "2026-07-27",
+              "value": 47
+            },
+            {
+              "date": "2026-07-28",
+              "value": 48
+            },
+            {
+              "date": "2026-07-29",
+              "value": 45
+            },
+            {
+              "date": "2026-07-30",
+              "value": 47
+            },
+            {
+              "date": "2026-07-31",
+              "value": 46
+            },
+            {
+              "date": "2026-08-01",
+              "value": 50
+            },
+            {
+              "date": "2026-08-02",
+              "value": 52
+            },
+            {
+              "date": "2026-08-03",
+              "value": 47
+            },
+            {
+              "date": "2026-08-04",
+              "value": 45
+            },
+            {
+              "date": "2026-08-05",
+              "value": 44
+            },
+            {
+              "date": "2026-08-06",
+              "value": 46
+            },
+            {
+              "date": "2026-08-07",
+              "value": 44
+            },
+            {
+              "date": "2026-08-08",
+              "value": 68
+            },
+            {
+              "date": "2026-08-09",
+              "value": 59
+            },
+            {
+              "date": "2026-08-10",
+              "value": 46
+            },
+            {
+              "date": "2026-08-11",
+              "value": 43
+            },
+            {
+              "date": "2026-08-12",
+              "value": 44
+            },
+            {
+              "date": "2026-08-13",
+              "value": 46
+            },
+            {
+              "date": "2026-08-14",
+              "value": 46
+            },
+            {
+              "date": "2026-08-15",
+              "value": 48
+            },
+            {
+              "date": "2026-08-16",
+              "value": 48
+            },
+            {
+              "date": "2026-08-17",
+              "value": 42
+            },
+            {
+              "date": "2026-08-18",
+              "value": 45
+            },
+            {
+              "date": "2026-08-19",
+              "value": 43
+            },
+            {
+              "date": "2026-08-20",
+              "value": 44
+            },
+            {
+              "date": "2026-08-21",
+              "value": 46
+            },
+            {
+              "date": "2026-08-22",
+              "value": 49
+            },
+            {
+              "date": "2026-08-23",
+              "value": 47
+            },
+            {
+              "date": "2026-08-24",
+              "value": 47
+            },
+            {
+              "date": "2026-08-25",
+              "value": 43
+            },
+            {
+              "date": "2026-08-26",
+              "value": 39
+            },
+            {
+              "date": "2026-08-27",
+              "value": 42
             }
           ]
         },
         {
           "brand": "Fendi",
           "keyword": "fendi",
+          "scale": 1,
           "series": [
             {
               "date": "2026-07-27",
-              "value": 12
+              "value": 8
             },
             {
               "date": "2026-07-28",
-              "value": 12
+              "value": 8
             },
             {
               "date": "2026-07-29",
-              "value": 11
+              "value": 8
             },
             {
               "date": "2026-07-30",
-              "value": 11
+              "value": 8
             },
             {
               "date": "2026-07-31",
-              "value": 10
+              "value": 7
             },
             {
               "date": "2026-08-01",
-              "value": 14
+              "value": 10
             },
             {
               "date": "2026-08-02",
-              "value": 14
+              "value": 10
             },
             {
               "date": "2026-08-03",
-              "value": 11
+              "value": 8
             },
             {
               "date": "2026-08-04",
-              "value": 12
+              "value": 8
             },
             {
               "date": "2026-08-05",
-              "value": 12
-            },
-            {
-              "date": "2026-08-06",
-              "value": 11
-            },
-            {
-              "date": "2026-08-07",
-              "value": 12
-            },
-            {
-              "date": "2026-08-08",
-              "value": 14
-            },
-            {
-              "date": "2026-08-09",
-              "value": 14
-            },
-            {
-              "date": "2026-08-10",
-              "value": 13
-            },
-            {
-              "date": "2026-08-11",
-              "value": 14
-            },
-            {
-              "date": "2026-08-12",
-              "value": 13
-            },
-            {
-              "date": "2026-08-13",
-              "value": 12
-            },
-            {
-              "date": "2026-08-14",
-              "value": 12
-            },
-            {
-              "date": "2026-08-15",
-              "value": 13
-            },
-            {
-              "date": "2026-08-16",
-              "value": 14
-            },
-            {
-              "date": "2026-08-17",
-              "value": 11
-            },
-            {
-              "date": "2026-08-18",
-              "value": 12
-            },
-            {
-              "date": "2026-08-19",
-              "value": 10
-            },
-            {
-              "date": "2026-08-20",
-              "value": 11
-            },
-            {
-              "date": "2026-08-21",
-              "value": 10
-            },
-            {
-              "date": "2026-08-22",
-              "value": 13
-            },
-            {
-              "date": "2026-08-23",
-              "value": 14
-            },
-            {
-              "date": "2026-08-24",
-              "value": 11
-            },
-            {
-              "date": "2026-08-25",
               "value": 9
             },
             {
-              "date": "2026-08-26",
+              "date": "2026-08-06",
+              "value": 8
+            },
+            {
+              "date": "2026-08-07",
+              "value": 9
+            },
+            {
+              "date": "2026-08-08",
               "value": 10
             },
             {
-              "date": "2026-08-27",
+              "date": "2026-08-09",
               "value": 10
+            },
+            {
+              "date": "2026-08-10",
+              "value": 9
+            },
+            {
+              "date": "2026-08-11",
+              "value": 10
+            },
+            {
+              "date": "2026-08-12",
+              "value": 9
+            },
+            {
+              "date": "2026-08-13",
+              "value": 8
+            },
+            {
+              "date": "2026-08-14",
+              "value": 9
+            },
+            {
+              "date": "2026-08-15",
+              "value": 10
+            },
+            {
+              "date": "2026-08-16",
+              "value": 10
+            },
+            {
+              "date": "2026-08-17",
+              "value": 8
+            },
+            {
+              "date": "2026-08-18",
+              "value": 8
+            },
+            {
+              "date": "2026-08-19",
+              "value": 7
+            },
+            {
+              "date": "2026-08-20",
+              "value": 7
+            },
+            {
+              "date": "2026-08-21",
+              "value": 8
+            },
+            {
+              "date": "2026-08-22",
+              "value": 9
+            },
+            {
+              "date": "2026-08-23",
+              "value": 10
+            },
+            {
+              "date": "2026-08-24",
+              "value": 7
+            },
+            {
+              "date": "2026-08-25",
+              "value": 7
+            },
+            {
+              "date": "2026-08-26",
+              "value": 7
+            },
+            {
+              "date": "2026-08-27",
+              "value": 7
             }
           ]
         },
         {
           "brand": "The Row",
           "keyword": "the row bag",
+          "scale": 1,
           "series": [
             {
               "date": "2026-07-27",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-07-28",
@@ -1586,19 +1888,19 @@
             },
             {
               "date": "2026-07-29",
-              "value": 3
+              "value": 2
             },
             {
               "date": "2026-07-30",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-07-31",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-01",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-02",
@@ -1606,11 +1908,11 @@
             },
             {
               "date": "2026-08-03",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-04",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-05",
@@ -1618,67 +1920,67 @@
             },
             {
               "date": "2026-08-06",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-07",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-08",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-09",
-              "value": 3
+              "value": 2
             },
             {
               "date": "2026-08-10",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-11",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-12",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-13",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-14",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-15",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-16",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-17",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-18",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-19",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-20",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-21",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-22",
@@ -1686,23 +1988,23 @@
             },
             {
               "date": "2026-08-23",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-24",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-25",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-26",
-              "value": 2
+              "value": 1
             },
             {
               "date": "2026-08-27",
-              "value": 2
+              "value": 1
             }
           ]
         }
