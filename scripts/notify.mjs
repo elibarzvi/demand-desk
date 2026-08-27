@@ -99,7 +99,13 @@ function build() {
 
 async function main() {
   const hook = process.env.SLACK_WEBHOOK_URL;
-  const payload = build();
+  // `--test` proves the Slack wiring end to end. Without it there is no way to
+  // tell a correctly silent day from a broken webhook, since both look identical
+  // from the outside: no message arrives either way.
+  const isTest = process.argv.includes('--test');
+  const payload = isTest
+    ? { date: new Date().toISOString().slice(0, 10), lines: ['Delivery test. If you can read this, alerts are wired correctly and you will only hear from this app when something is actually unusual.'] }
+    : build();
 
   if (!payload) { console.log('[notify] nothing notable today, staying silent'); return; }
   if (!hook) { console.log(`[notify] SLACK_WEBHOOK_URL not set, would have sent:\n  ${payload.lines.join('\n  ')}`); return; }

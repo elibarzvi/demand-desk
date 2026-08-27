@@ -8,7 +8,12 @@ on:
     - cron: '17 8 * * *'    # 08:17 UTC
     - cron: '17 14 * * *'   # 14:17 UTC (backup)
     - cron: '17 21 * * *'   # 21:17 UTC (backup)
-  workflow_dispatch: {}      # lets you run it on demand from the Actions tab
+  workflow_dispatch:         # lets you run it on demand from the Actions tab
+    inputs:
+      notify_test:
+        description: 'Send a Slack delivery test instead of only real alerts'
+        type: boolean
+        default: false
   # A push that changes the site, scripts or libraries redeploys immediately.
   # Without this, a UI fix sat invisible until the next scheduled capture, up to
   # eight hours later, because only the cron rebuilt Pages. Push runs skip the
@@ -69,7 +74,7 @@ jobs:
       # is nothing new to announce.
       - name: Notify Slack of anything notable
         if: github.event_name != 'push'
-        run: npm run notify
+        run: npm run notify ${{ inputs.notify_test && '-- --test' || '' }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
