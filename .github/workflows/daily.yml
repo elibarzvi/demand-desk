@@ -97,7 +97,25 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
           git commit -m "snapshot $(date -u +%F)" || echo "no changes to commit"
-          git push
+          # The capture commits data on a schedule while code is pushed to the same
+          # branch by hand, so a push landing mid-run is routine rather than
+          # exceptional. A bare push turns that race into a failed job that drops
+          # the day's snapshot and skips the deploy, which is exactly what happened
+          # on 2026-08-27. Rebase onto whatever arrived and retry instead.
+          #
+          # -X theirs keeps THIS run's copy of conflicting files. During a rebase
+          # "theirs" is the commit being replayed, so that means the freshly
+          # captured data. Exports and derived files are deterministic outputs of
+          # this run, so preferring them is always correct, and daily snapshots are
+          # one file per date and do not overlap in the first place.
+          for attempt in 1 2 3; do
+            if git push; then exit 0; fi
+            echo "push rejected (attempt $attempt), rebasing onto origin/main"
+            git fetch origin main
+            git rebase -X theirs origin/main || { git rebase --abort || true; exit 1; }
+          done
+          echo "could not push after 3 attempts" >&2
+          exit 1
 
       - name: Build site payload
         run: npm run build
