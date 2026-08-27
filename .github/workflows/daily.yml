@@ -9,6 +9,18 @@ on:
     - cron: '17 14 * * *'   # 14:17 UTC (backup)
     - cron: '17 21 * * *'   # 21:17 UTC (backup)
   workflow_dispatch: {}      # lets you run it on demand from the Actions tab
+  # A push that changes the site, scripts or libraries redeploys immediately.
+  # Without this, a UI fix sat invisible until the next scheduled capture, up to
+  # eight hours later, because only the cron rebuilt Pages. Push runs skip the
+  # scrape and the commit: they rebuild the site from data already in the repo,
+  # so pushing code never mutates the daily log or spends an API call.
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'scripts/**'
+      - 'src/**'
+      - '.github/workflows/daily.yml'
 
 permissions:
   contents: write            # commit the daily snapshot back to the repo
@@ -34,8 +46,10 @@ jobs:
 
       - run: npm install --no-audit --no-fund
       - run: npx playwright install --with-deps chromium
+        if: github.event_name != 'push'
 
       - name: Capture today's snapshot
+        if: github.event_name != 'push'
         run: npm run scrape
         env:
           EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
@@ -50,6 +64,7 @@ jobs:
         run: npm run derive
 
       - name: Commit snapshot + exports (permanent log)
+        if: github.event_name != 'push'
         run: |
           git config user.name "demand-desk-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
