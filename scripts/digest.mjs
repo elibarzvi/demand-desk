@@ -16,6 +16,16 @@ const WINDOW = 7;
 
 const pct = (from, to) => (from == null || to == null || from === 0) ? null : ((to - from) / Math.abs(from)) * 100;
 const money = n => '$' + Number(n).toLocaleString('en-US');
+
+// A bare model name is often ambiguous: "Boy", "Kelly", "LOVE" and "Margaux" mean
+// nothing without the house. Prepend the brand, unless the model name already
+// carries it, which would otherwise read as "Chanel Chanel 19" or "Dior Lady Dior".
+const label = r => {
+  const brand = (r.brand || '').trim();
+  if (!brand) return r.model;
+  const norm = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  return norm(r.model).includes(norm(brand)) ? r.model : `${brand} ${r.model}`;
+};
 const signed = n => (n > 0 ? '+' : '') + n.toFixed(1) + '%';
 
 function build(snaps) {
@@ -67,7 +77,7 @@ function compose(d) {
     if (top.length) {
       L.push('\n*Selling fastest*');
       for (const r of top) {
-        L.push(`• ${r.model}: ${r.sold} sold${r.daysToSell != null ? `, median ${r.daysToSell}d on site` : ''}, now ${money(r.median)}`);
+        L.push(`• ${label(r)}: ${r.sold} sold${r.daysToSell != null ? `, median ${r.daysToSell}d on site` : ''}, now ${money(r.median)}`);
       }
     }
   } else {
@@ -78,14 +88,14 @@ function compose(d) {
     .sort((a, b) => Math.abs(b.medianPct) - Math.abs(a.medianPct)).slice(0, 5);
   if (priced.length) {
     L.push('\n*Biggest price moves*');
-    for (const r of priced) L.push(`• ${r.model}: ${money(r.median)}, ${signed(r.medianPct)}`);
+    for (const r of priced) L.push(`• ${label(r)}: ${money(r.median)}, ${signed(r.medianPct)}`);
   }
 
   const supply = d.rows.filter(r => r.liveDelta != null && r.liveDelta !== 0)
     .sort((a, b) => Math.abs(b.liveDelta) - Math.abs(a.liveDelta)).slice(0, 5);
   if (supply.length) {
     L.push('\n*Supply shifts* (listings on hand)');
-    for (const r of supply) L.push(`• ${r.model}: ${r.live} live, ${r.liveDelta > 0 ? '+' : ''}${r.liveDelta}`);
+    for (const r of supply) L.push(`• ${label(r)}: ${r.live} live, ${r.liveDelta > 0 ? '+' : ''}${r.liveDelta}`);
   }
 
   // Early weeks have no prior model data to diff against, so a digest built only
@@ -95,7 +105,7 @@ function compose(d) {
     const now = d.rows.filter(r => r.median != null).sort((a, b) => b.median - a.median);
     if (now.length) {
       L.push('\n*Current levels* (comparisons begin once a prior week is recorded)');
-      for (const r of now.slice(0, 10)) L.push(`• ${r.model}: ${money(r.median)} median, ${r.live} live`);
+      for (const r of now.slice(0, 10)) L.push(`• ${label(r)}: ${money(r.median)} median, ${r.live} live`);
     }
   }
 
