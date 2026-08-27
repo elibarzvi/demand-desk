@@ -8,8 +8,11 @@
 //    extraction; this is a low-volume personal market tracker of public data.
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { chromium } from 'playwright';
 import { ROOT, SNAP_DIR, today, ensureDir, writeFile, previousSnapshot } from '../src/lib/util.mjs';
+import { SEGMENTS, captureSegment } from '../src/lib/fashionphile.mjs';
+import { readLiveState, writeLiveState, diffLive } from '../src/lib/sellthrough.mjs';
 
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
 const deaccent = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
@@ -39,28 +42,27 @@ async function scrapeMirror() {
 }
 
 // ---- Fashionphile: public Algolia search index (search-only key, safe to commit) ----
-const FP = { appId: 'NSJAZ0QG7K', key: 'e545a3cf82cf7dbc5ff39f49c214863e', index: 'shopify_products_price_asc' };
-const FP_VENDOR = {
-  'Hermès': 'Hermes', 'Chanel': 'Chanel', 'Louis Vuitton': 'Louis Vuitton', 'Goyard': 'Goyard',
-  'Dior': 'Christian Dior', 'Fendi': 'Fendi', 'The Row': 'The Row', 'Cartier': 'Cartier'
-};
+// Each brand is captured as one comparable segment (handbags, or fine jewelry for
+// Cartier) with exact price percentiles over the whole live inventory, plus every
+// live SKU so departures can be diffed into real sell-through. See
+// src/lib/fashionphile.mjs for why the old "lowest price" read was meaningless.
 async function scrapeFashionphile() {
   const focus = [];
-  for (const [brand, vendor] of Object.entries(FP_VENDOR)) {
-    const params = `query=&hitsPerPage=1`
-      + `&facetFilters=${encodeURIComponent(JSON.stringify([[`vendor:${vendor}`]]))}`
-      + `&filters=${encodeURIComponent('inventory_available=1')}`;
-    const r = await fetch(`https://${FP.appId}-dsn.algolia.net/1/indexes/${FP.index}/query`, {
-      method: 'POST',
-      headers: { 'X-Algolia-Application-Id': FP.appId, 'X-Algolia-API-Key': FP.key, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ params })
-    });
-    if (!r.ok) throw new Error(`Algolia HTTP ${r.status}`);
-    const j = await r.json();
-    focus.push({ brand, low: (j.hits && j.hits[0] || {}).price ?? null, count: j.nbHits ?? null });
+  const errors = [];
+  for (const seg of SEGMENTS) {
+    try {
+      focus.push(await captureSegment(seg));
+    } catch (e) {
+      errors.push(`${seg.brand}: ${e.message || e}`);
+    }
   }
-  if (!focus.some(f => f.low != null)) throw new Error('no Fashionphile data returned');
-  return { status: 'ok', name: 'Fashionphile', via: 'algolia', focus };
+  if (!focus.length) throw new Error('no Fashionphile data returned');
+  return {
+    status: errors.length ? 'partial' : 'ok',
+    name: 'Fashionphile', via: 'algolia',
+    ...(errors.length ? { segmentErrors: errors } : {}),
+    focus
+  };
 }
 
 // ---- eBay: official Browse API via client-credentials OAuth. Keys come from env
@@ -141,20 +143,32 @@ async function scrapeSearchVolume() {
 // ---- Google Trends (DataForSEO): DAILY search interest (0-100 index) per brand over
 // the last 30 days — the demand *direction/momentum* signal (vs monthly volume = size).
 // Max 5 keywords/request, so 9 brands = 2 batched calls. Same DataForSEO creds. ----
-const TREND_BRANDS = [
-  // batch by rough size so within-batch normalization doesn't crush the small ones
-  { brand: 'Louis Vuitton', keyword: 'louis vuitton' }, { brand: 'Rolex', keyword: 'rolex' },
-  { brand: 'Cartier', keyword: 'cartier' }, { brand: 'Chanel', keyword: 'chanel' }, { brand: 'Goyard', keyword: 'goyard' },
-  { brand: 'Dior', keyword: 'dior' }, { brand: 'Hermès', keyword: 'hermes' }, { brand: 'Fendi', keyword: 'fendi' }, { brand: 'The Row', keyword: 'the row bag' }
+// Google Trends normalizes its 0-100 index WITHIN a single request, so two
+// independent batches are two different scales and cannot be compared. The old
+// code did exactly that: batch 1 peaked on Chanel=100 and batch 2 on Dior=100,
+// which rendered Dior as Chanel's equal despite a third of its search volume.
+//
+// The fix is the standard one: carry a shared anchor keyword in every batch and
+// rescale each batch so the anchor lines up. Chanel is the anchor because it is
+// large and stable, and it is a tracked brand anyway so it costs no extra slot.
+const TREND_ANCHOR = { brand: 'Chanel', keyword: 'chanel' };
+const TREND_BATCHES = [
+  [{ brand: 'Louis Vuitton', keyword: 'louis vuitton' }, { brand: 'Rolex', keyword: 'rolex' },
+   { brand: 'Cartier', keyword: 'cartier' }, { brand: 'Goyard', keyword: 'goyard' }],
+  [{ brand: 'Dior', keyword: 'dior' }, { brand: 'Hermès', keyword: 'hermes' },
+   { brand: 'Fendi', keyword: 'fendi' }, { brand: 'The Row', keyword: 'the row bag' }]
 ];
+const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : null;
+
 async function scrapeGoogleTrends() {
   const login = process.env.DATAFORSEO_LOGIN, pass = process.env.DATAFORSEO_PASSWORD;
   if (!login || !pass) throw new Error('DataForSEO credentials not set');
   const basic = Buffer.from(`${login}:${pass}`).toString('base64');
-  const batches = [TREND_BRANDS.slice(0, 5), TREND_BRANDS.slice(5)];
-  const focus = [];
-  for (const batch of batches) {
-    const body = [{ keywords: batch.map(b => b.keyword), location_code: 2840, time_range: 'past_30_days', type: 'web' }];
+
+  const raw = [];
+  for (const batch of TREND_BATCHES) {
+    const keywords = [TREND_ANCHOR, ...batch];          // anchor always occupies slot 0
+    const body = [{ keywords: keywords.map(b => b.keyword), location_code: 2840, time_range: 'past_30_days', type: 'web' }];
     const r = await fetch('https://api.dataforseo.com/v3/keywords_data/google_trends/explore/live', {
       method: 'POST', headers: { 'Authorization': `Basic ${basic}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body)
     });
@@ -163,13 +177,31 @@ async function scrapeGoogleTrends() {
     const result = j.tasks?.[0]?.result?.[0];
     const graph = (result?.items || []).find(it => it.type === 'google_trends_graph') || (result?.items || [])[0];
     const data = graph?.data || [];
-    batch.forEach((b, k) => {
-      const series = data.map(d => ({ date: d.date_from, value: Array.isArray(d.values) ? d.values[k] : null })).filter(p => p.value != null);
-      focus.push({ brand: b.brand, keyword: b.keyword, series });
-    });
+    const series = keywords.map((b, k) => ({
+      brand: b.brand, keyword: b.keyword,
+      series: data.map(d => ({ date: d.date_from, value: Array.isArray(d.values) ? d.values[k] : null })).filter(p => p.value != null)
+    }));
+    raw.push(series);
   }
+
+  // Rescale every batch onto the first batch's anchor level.
+  const anchorLevel = batchIndex => mean((raw[batchIndex][0].series || []).map(p => p.value).filter(v => v != null));
+  const base = anchorLevel(0);
+  const focus = [];
+  raw.forEach((series, bi) => {
+    const level = anchorLevel(bi);
+    const scale = (base && level) ? base / level : 1;
+    series.forEach((s, si) => {
+      if (si === 0 && bi > 0) return;                   // anchor is only emitted once
+      focus.push({
+        brand: s.brand, keyword: s.keyword, scale: +scale.toFixed(4),
+        series: s.series.map(p => ({ date: p.date, value: +(p.value * scale).toFixed(1) }))
+      });
+    });
+  });
+
   if (!focus.some(f => f.series.length)) throw new Error('no Google Trends data returned');
-  return { status: 'ok', via: 'dataforseo-google-trends', focus };
+  return { status: 'ok', via: 'dataforseo-google-trends', anchor: TREND_ANCHOR.keyword, focus };
 }
 
 // ---- StockX: rendered search results (bot-protected GraphQL behind the scenes, so
@@ -211,7 +243,11 @@ async function scrapeStockx(browser) {
       const key = deaccent(q).split(' ')[0].toLowerCase();
       const branded = items.filter(x => deaccent(x.item).toLowerCase().includes(key));
       const low = branded.length ? Math.min(...branded.map(x => x.price)) : null;
-      focus.push({ brand, low, results, listed: branded.length });
+      // StockX stops counting at 1000, so "1000" means "1000 or more" and is not a
+      // supply measure. Seven of eight brands returned exactly 1000 every day for
+      // 24 days. Record the cap explicitly instead of publishing it as a count.
+      const capped = results != null && results >= 1000;
+      focus.push({ brand, low, results: capped ? null : results, resultsCapped: capped, listed: branded.length });
       if (brand === 'Goyard') goyard = branded.slice(0, 12);
     } catch (e) {
       focus.push({ brand, low: null, results: null, listed: 0, error: String(e.message || e) });
@@ -223,19 +259,56 @@ async function scrapeStockx(browser) {
   return { status: 'ok', focus, goyard };
 }
 
+// ---- Freshness ----
+// Mirror's request feed sat byte-identical for 22 straight days while the
+// dashboard presented it as live demand. Nothing in the pipeline noticed, because
+// nothing was looking. Fingerprint each source's payload every run and carry a
+// consecutive-unchanged counter, so a frozen source announces itself on day 2
+// instead of being discovered by hand a month later.
+function fingerprint(source) {
+  if (!source) return null;
+  const { status, capturedAt, fetchedOn, carriedFrom, error, errors, segmentErrors, scale, ...rest } = source;
+  return crypto.createHash('sha1').update(JSON.stringify(rest)).digest('hex').slice(0, 12);
+}
+
+function freshness(sources, prev, date) {
+  const prevF = prev?.capture?.freshness || {};
+  const out = {};
+  for (const [name, src] of Object.entries(sources)) {
+    const fp = fingerprint(src);
+    const before = prevF[name];
+    const same = before && before.fingerprint === fp;
+    out[name] = {
+      fingerprint: fp,
+      unchangedDays: same ? (before.unchangedDays ?? 0) + 1 : 0,
+      lastChanged: same ? (before.lastChanged || null) : date
+    };
+  }
+  return out;
+}
+
 async function main() {
   const date = today();
-  const prev = previousSnapshot(date + '~');
+  const prev = previousSnapshot(date + '~');        // includes today, so a re-run can carry from its own earlier pass
+  const prevDay = previousSnapshot(date);            // strictly earlier day, for day-over-day comparisons
   const errors = [];
   const indices = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'data', 'indices.json'), 'utf8'));
   delete indices._comment;
 
-  // StockX needs a browser; Mirror + Fashionphile are plain fetch.
-  let stockx;
-  const browser = await chromium.launch({ args: ['--no-sandbox'] });
-  try { stockx = await scrapeStockx(browser); }
-  catch (e) { errors.push({ source: 'stockx', error: String(e.message || e) }); stockx = { status: 'error', focus: [], goyard: [] }; }
-  finally { await browser.close(); }
+  // StockX needs a browser; Mirror + Fashionphile are plain fetch. The launch sits
+  // inside the try because a browser that fails to start (missing binary, sandbox
+  // refusal, disk pressure in CI) would otherwise throw past every handler and
+  // lose the entire day's capture, including the sources that were perfectly fine.
+  let stockx, browser = null;
+  try {
+    browser = await chromium.launch({ args: ['--no-sandbox'] });
+    stockx = await scrapeStockx(browser);
+  } catch (e) {
+    errors.push({ source: 'stockx', error: String(e.message || e) });
+    stockx = { status: 'error', focus: [], goyard: [] };
+  } finally {
+    if (browser) await browser.close().catch(() => {});
+  }
 
   let mirror;
   try { mirror = await scrapeMirror(); }
@@ -244,9 +317,21 @@ async function main() {
     mirror = prev?.sources?.mirror ? { ...prev.sources.mirror, status: 'carried' } : { status: 'error', hunt: [], inventoryPriced: [], inventoryCounts: [] };
   }
 
-  let fashionphile;
-  try { fashionphile = await scrapeFashionphile(); }
-  catch (e) { errors.push({ source: 'fashionphile', error: String(e.message || e) }); fashionphile = { status: 'error', name: 'Fashionphile', focus: [] }; }
+  let fashionphile, sellThrough = { status: 'unavailable', brands: {} };
+  try {
+    fashionphile = await scrapeFashionphile();
+    // Diff today's live SKUs against yesterday's state to derive sell-through.
+    // The SKU lists themselves are huge, so they go to the rolling state file and
+    // only the departure events (the actual signal) land in the snapshot.
+    const prevState = readLiveState(date);
+    const { brands, nextState, baseline } = diffLive(prevState, fashionphile.focus, date);
+    writeLiveState(nextState);
+    sellThrough = { status: baseline ? 'baseline' : 'ok', via: 'sku-diff', brands };
+    fashionphile.focus = fashionphile.focus.map(({ skus, ...rest }) => rest);
+  } catch (e) {
+    errors.push({ source: 'fashionphile', error: String(e.message || e) });
+    fashionphile = { status: 'error', name: 'Fashionphile', focus: [] };
+  }
 
   let ebay;
   try { ebay = await scrapeEbay(); }
@@ -255,12 +340,26 @@ async function main() {
     ebay = { status: process.env.EBAY_CLIENT_ID ? 'error' : 'unconfigured', focus: [] };
   }
 
+  // Google Ads search volume is a MONTHLY average. Across the first 24 days of
+  // this log it returned a single unchanging value for 8 of 9 brands, so fetching
+  // it daily bought nothing and cost a paid call each time. Refresh it weekly (or
+  // whenever the carried value is missing) and carry it forward in between.
   let searchVolume;
-  try { searchVolume = await scrapeSearchVolume(); }
-  catch (e) {
-    if (process.env.DATAFORSEO_LOGIN) errors.push({ source: 'search_volume', error: String(e.message || e) });
-    searchVolume = { status: process.env.DATAFORSEO_LOGIN ? 'error' : 'unconfigured', focus: [] };
+  const prevVol = prev?.sources?.search_volume;
+  const volIsFresh = prevVol && (prevVol.focus || []).some(f => f.volume != null);
+  const isRefreshDay = new Date(date + 'T00:00:00Z').getUTCDay() === 1;   // Monday
+  if (!volIsFresh || isRefreshDay) {
+    try { searchVolume = await scrapeSearchVolume(); }
+    catch (e) {
+      if (process.env.DATAFORSEO_LOGIN) errors.push({ source: 'search_volume', error: String(e.message || e) });
+      searchVolume = volIsFresh
+        ? { ...prevVol, status: 'carried', carriedFrom: prevVol.fetchedOn || prev.date }
+        : { status: process.env.DATAFORSEO_LOGIN ? 'error' : 'unconfigured', focus: [] };
+    }
+  } else {
+    searchVolume = { ...prevVol, status: 'carried', carriedFrom: prevVol.fetchedOn || prev.date };
   }
+  if (searchVolume.status === 'ok') searchVolume.fetchedOn = date;
 
   let googleTrends;
   try { googleTrends = await scrapeGoogleTrends(); }
@@ -273,22 +372,25 @@ async function main() {
   // reference sources carried from src/data/indices.json.
   const { therealreal: trrReport, vestiaire: vcReport, ...periodicIndices } = indices;
 
-  const snapshot = {
-    date,
-    capturedAt: new Date().toISOString(),
-    capture: { method: 'scrape', errors },
-    sources: {
+  const sources = {
       mirror,
       stockx_goyard: { status: stockx.status, items: stockx.goyard || [] },
       stockx_brands: { status: stockx.status, focus: stockx.focus || [] },
       fashionphile,
+      fp_sell_through: sellThrough,
       ebay,
       search_volume: searchVolume,
       google_trends: googleTrends,
       therealreal: { status: 'reference', ...trrReport },
       vestiaire: { status: 'reference', ...vcReport },
       indices: { status: 'reference', ...periodicIndices }
-    }
+  };
+
+  const snapshot = {
+    date,
+    capturedAt: new Date().toISOString(),
+    capture: { method: 'scrape', errors, freshness: freshness(sources, prevDay, date) },
+    sources
   };
 
   ensureDir(SNAP_DIR);

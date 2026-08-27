@@ -4,7 +4,7 @@
 // permanent source of truth.
 import fs from 'node:fs';
 import path from 'node:path';
-import { EXPORT_DIR, SITE_DATA_DIR, readAllSnapshots, listSnapshotDates, writeFile, ensureDir } from '../src/lib/util.mjs';
+import { EXPORT_DIR, SITE_DATA_DIR, ROOT, readAllSnapshots, listSnapshotDates, writeFile, ensureDir } from '../src/lib/util.mjs';
 
 function build() {
   const snaps = readAllSnapshots();
@@ -33,13 +33,25 @@ function build() {
     const foc = s.sources?.fashionphile?.focus || [];
     if (!foc.length) continue;
     fpDates.push(s.date);
-    fpTotal.push(foc.reduce((a, f) => a + (f.count || 0), 0));
-    const map = {}; foc.forEach(f => { map[f.brand] = f.count; });
+    const n = f => f.liveAll ?? f.count ?? 0;   // new shape uses liveAll; old used count
+    fpTotal.push(foc.reduce((a, f) => a + n(f), 0));
+    const map = {}; foc.forEach(f => { map[f.brand] = n(f); });
     fpBrands.forEach(b => fpByBrand[b].push(map[b] ?? null));
   }
   const trends = { fp: { dates: fpDates, total: fpTotal, byBrand: fpByBrand } };
 
   ensureDir(SITE_DATA_DIR);
+
+  // The derived layer (baselines, z-scores, alerts, scarcity ranking) is produced
+  // by scripts/derive.mjs. Copy it in if present so the dashboard can show what is
+  // unusual today rather than only what today's raw numbers are.
+  const derivedDir = path.join(ROOT, 'data', 'derived');
+  for (const name of ['metrics.json', 'alerts.json']) {
+    const src = path.join(derivedDir, name);
+    if (fs.existsSync(src)) fs.cpSync(src, path.join(SITE_DATA_DIR, name));
+    else writeFile(path.join(SITE_DATA_DIR, name), JSON.stringify(name === 'alerts.json' ? { alerts: [] } : { metrics: {}, signals: [] }) + '\n');
+  }
+
   writeFile(path.join(SITE_DATA_DIR, 'latest.json'), JSON.stringify(latest) + '\n');
   writeFile(path.join(SITE_DATA_DIR, 'history.json'), JSON.stringify({
     firstDate: snaps[0].date,

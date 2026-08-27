@@ -94,6 +94,17 @@
   .svtrack{grid-column:1/-1;height:8px;background:var(--surface-2);border-radius:5px;overflow:hidden}
   .svfill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:5px;width:0;transition:width 1s cubic-bezier(.22,.61,.36,1)}
   @media (prefers-reduced-motion: reduce){.svfill{transition:none}}
+  .alert{display:flex;gap:11px;align-items:baseline;padding:10px 12px;border-radius:6px;background:var(--surface-2);margin-bottom:8px;border-left:3px solid var(--ink-3)}
+  .alert.high{border-left-color:var(--heat)}
+  .alert.medium{border-left-color:var(--gold)}
+  .alert.low{border-left-color:var(--ink-3)}
+  .alert .atype{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);white-space:nowrap;min-width:88px}
+  .alert .amsg{font-size:13.5px;color:var(--ink);line-height:1.5}
+  .divtrack{position:relative;background:var(--surface-2)}
+  .divtrack::before{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--line)}
+  .divfill{position:absolute;top:0;height:100%;border-radius:3px}
+  .stale{display:inline-block;margin-left:8px;padding:2px 7px;border-radius:4px;background:var(--heat);color:#fff;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.07em;vertical-align:middle}
+  .stalenote{font-size:12px;color:var(--heat);margin:6px 0 0}
   .chartwrap{width:100%;overflow-x:auto;margin-top:4px}
   .chartwrap svg{display:block;width:100%;height:auto}
   .chartwrap .axis{fill:var(--ink-3);font-family:var(--mono);font-size:10px}
@@ -228,6 +239,12 @@
 
   <section class="kpis" id="kpis"></section>
 
+  <section class="card full" id="alertCard" style="margin-top:16px">
+    <div class="chead"><h2>What changed today</h2><span class="src-tag" id="alertTag">vs each series' own baseline</span></div>
+    <p class="cnote">Only series that broke out of their own normal range, moved several days in one direction, or stopped updating. Quiet here means nothing unusual, which is itself the answer.</p>
+    <div id="alertList"></div>
+  </section>
+
   <section class="card full" id="readCard" style="margin-top:16px">
     <div class="chead"><h2>This Week's Read</h2><span class="src-tag" id="readTag">auto-derived</span></div>
     <p class="cnote">Conclusions the desk draws from the data — demand pressure, momentum, and supply flow. A full weekly AI analyst brief is coming.</p>
@@ -252,8 +269,8 @@
       </section>
 
       <section class="card">
-        <div class="chead"><h2>Demand Pressure — how contested</h2><span class="src-tag">Search ÷ eBay listings</span></div>
-        <p class="cnote">Monthly searches per active eBay listing. Higher = more demand chasing less supply — <b>scarce and worth sourcing</b>.</p>
+        <div class="chead"><h2>Scarcity: demand vs supply momentum</h2><span class="src-tag">z-scored, both sides</span></div>
+        <p class="cnote">Each brand's search momentum minus its supply momentum, both scored against their own history. Positive means demand is <b>pulling ahead of the inventory arriving to meet it</b>. This moves daily, unlike a ratio of two near-constant figures.</p>
         <div id="demandPressure"></div>
       </section>
 
@@ -264,15 +281,21 @@
       </section>
 
       <section class="card">
-        <div class="chead"><h2>Fashionphile — lowest price &amp; live listings</h2><span class="src-tag">Fashionphile · live</span></div>
-        <p class="cnote">Lowest buyable price &amp; live listing count per brand, via their Algolia search. Captured daily.</p>
-        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Searches/mo</th><th style="text-align:right">Lowest</th><th style="text-align:right">Listings</th></tr></thead><tbody id="fpBody"></tbody></table></div>
+        <div class="chead"><h2>Resale price index</h2><span class="src-tag">Fashionphile · live</span></div>
+        <p class="cnote">Price distribution across every live piece in the tracked segment, computed over the full inventory rather than a sample. The <b>median</b> is the market price; p10 and p90 are the entry and top of the band.</p>
+        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">p10</th><th style="text-align:right">Median</th><th style="text-align:right">p90</th><th style="text-align:right">Listings</th></tr></thead><tbody id="fpBody"></tbody></table></div>
       </section>
 
       <section class="card">
         <div class="chead"><h2>eBay — search demand vs active listings</h2><span class="src-tag">eBay · Browse API</span></div>
         <p class="cnote">Google monthly searches vs eBay US active fixed-price listings ($100+) per brand — demand against supply.</p>
         <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Searches/mo</th><th style="text-align:right">Listings</th></tr></thead><tbody id="ebayBody"></tbody></table></div>
+      </section>
+
+      <section class="card">
+        <div class="chead"><h2>Sell-through: what actually cleared</h2><span class="src-tag">Fashionphile · SKU diff</span></div>
+        <p class="cnote">Every listing is one physical piece, so a SKU that leaves the live index has sold. <b>Turnover</b> is the share of standing inventory that cleared in a day; <b>days to sell</b> is measured from each piece's own listing date.</p>
+        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Sold</th><th style="text-align:right">New in</th><th style="text-align:right">Turnover</th><th style="text-align:right">Days to sell</th></tr></thead><tbody id="stBody"></tbody></table></div>
       </section>
     </div>
 
@@ -453,11 +476,13 @@ function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/86400000)
 function prettyDate(d){ return new Date(d+'T00:00:00Z').toLocaleDateString('en-US',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'}); }
 
 async function load(){
-  let latest, history, exports;
+  let latest, history, exports, metrics, alerts;
   try{
-    [latest, history] = await Promise.all([
+    [latest, history, metrics, alerts] = await Promise.all([
       fetch('./data/latest.json').then(r=>r.json()),
-      fetch('./data/history.json').then(r=>r.json())
+      fetch('./data/history.json').then(r=>r.json()),
+      fetch('./data/metrics.json').then(r=>r.json()).catch(()=>({metrics:{},signals:[]})),
+      fetch('./data/alerts.json').then(r=>r.json()).catch(()=>({alerts:[]}))
     ]);
     exports = await fetch('./data/exports/index.json').then(r=>r.json()).catch(()=>null);
   }catch(e){
@@ -465,10 +490,13 @@ async function load(){
     $('#err').innerHTML = 'Could not load snapshot data. Run <code>npm run all &amp;&amp; npm run serve</code>, or open the deployed GitHub Pages URL (data is fetched at runtime, so opening the file directly will not work).';
     return;
   }
-  render(latest, history, exports);
+  render(latest, history, exports, metrics, alerts);
 }
 
-function render(latest, history, exports){
+function render(latest, history, exports, metrics, alerts){
+  metrics = metrics || {metrics:{},signals:[]};
+  alerts = alerts || {alerts:[]};
+  const M = (key, brand) => metrics.metrics?.[key]?.brands?.[brand] || null;
   const m = latest.sources.mirror || {};
   const idx = latest.sources.indices || {};
   const hunt = (m.hunt || []).slice().sort((a,b)=>b.requesters-a.requesters);
@@ -519,27 +547,49 @@ function render(latest, history, exports){
       }).join('')
     : '<div style="color:var(--ink-3);font-size:13px">Awaiting first Google Trends capture — populates on the next daily run.</div>';
 
-  // ---- Derived decision signals: Demand Pressure + This Week's Read ----
+  // ---- Alerts: the only card that says "look here today" ----
+  const AL = alerts.alerts || [];
+  $('#alertList').innerHTML = AL.length
+    ? AL.map(a=>`<div class="alert ${esc(a.severity||'low')}"><span class="atype">${esc(a.type)}</span><span class="amsg">${esc(a.message)}</span></div>`).join('')
+    : '<div style="color:var(--ink-3);font-size:13px">No series left its normal range today. Everything tracked is behaving as usual.</div>';
+  $('#alertTag').textContent = AL.length ? `${AL.length} flagged` : 'all quiet';
+
+  // ---- Scarcity: demand momentum minus supply momentum, both z-scored ----
   const ebTotal={}; (latest.sources.ebay?.focus||[]).forEach(f=>{ ebTotal[f.brand]=f.total; });
-  const pressure = Object.keys(svMap).map(b=>{ const sv=svMap[b], c=ebTotal[b]; return {brand:b, ratio:(sv!=null&&c)?sv/c:null, sv, c}; })
-    .filter(x=>x.ratio!=null).sort((a,b)=>b.ratio-a.ratio);
-  const maxR=Math.max(...pressure.map(p=>p.ratio),1);
-  $('#demandPressure').innerHTML = pressure.length
-    ? pressure.map(p=>`<div class="svrow"><span class="svname">${esc(p.brand)}</span><span class="svfig">${p.ratio>=10?Math.round(p.ratio).toLocaleString('en-US'):p.ratio.toFixed(1)}</span><div class="svtrack"><div class="svfill" data-w="${(p.ratio/maxR*100).toFixed(1)}"></div></div></div>`).join('')
-    : '<div style="color:var(--ink-3);font-size:13px">Awaiting demand + listing data.</div>';
+  const signals = (metrics.signals||[]).filter(x=>x.scarcity!=null);
+  const maxAbs = Math.max(...signals.map(x=>Math.abs(x.scarcity)), 1);
+  $('#demandPressure').innerHTML = signals.length
+    ? signals.map(x=>{
+        const pos = x.scarcity >= 0;
+        // Diverging bar: positive grows right of centre, negative left.
+        const w = (Math.abs(x.scarcity)/maxAbs*50).toFixed(1);
+        return `<div class="svrow"><span class="svname">${esc(x.brand)}</span>
+          <span class="svfig" style="color:${pos?'var(--good)':'var(--heat)'}">${pos?'+':''}${x.scarcity.toFixed(2)}</span>
+          <div class="svtrack divtrack"><div class="divfill" style="${pos?`left:50%;width:${w}%;background:var(--good)`:`right:50%;width:${w}%;background:var(--heat)`}"></div></div>
+        </div>`;
+      }).join('')
+    : '<div style="color:var(--ink-3);font-size:13px">Needs 8+ days of both demand and supply history per brand.</div>';
   const fpDelta={}; const Tfp2=history.trends?.fp;
   if(Tfp2){ Object.entries(Tfp2.byBrand).forEach(([b,arr])=>{ const v=arr.filter(x=>x!=null); fpDelta[b]=(v[v.length-1]??0)-(v[0]??0); }); }
   const moMap={}; gt.forEach(x=>{ moMap[x.brand]=x.mo; });
   const sig=[];
-  if(pressure.length){ const p=pressure[0]; sig.push(`<b>Most contested:</b> ${esc(p.brand)} — <b style="color:var(--gold)">${Math.round(p.ratio).toLocaleString('en-US')}</b> searches per active eBay listing (${Math.round(p.sv/1000)}K searches vs ${p.c.toLocaleString('en-US')} listings). Scarce relative to demand.`); }
+  if(signals.length){ const p=signals[0];
+    const lead = p.scarcity>0
+      ? 'Demand is running ahead of the inventory arriving.'
+      : 'Even the leader is not supply-constrained today: supply is growing at least as fast as demand across every brand tracked.';
+    sig.push(`<b>Most contested:</b> ${esc(p.brand)}, scarcity <b style="color:var(--gold)">${p.scarcity>=0?'+':''}${p.scarcity.toFixed(2)}</b>, with demand momentum ${p.demandZ>=0?'+':''}${p.demandZ} against supply ${p.supplyZ>=0?'+':''}${p.supplyZ}. ${lead}`); }
   const heat=gt.filter(x=>x.mo!=null).sort((a,b)=>b.mo-a.mo)[0];
   if(heat && heat.mo>1) sig.push(`<b>Heating up:</b> ${esc(heat.brand)} search interest <b style="color:var(--good)">+${heat.mo.toFixed(0)}%</b> (recent vs prior).`);
   const cool=gt.filter(x=>x.mo!=null).sort((a,b)=>a.mo-b.mo)[0];
   if(cool && cool.mo<-1) sig.push(`<b>Cooling:</b> ${esc(cool.brand)} search interest <b style="color:var(--heat)">${cool.mo.toFixed(0)}%</b> — easing off.`);
   const built=Object.entries(fpDelta).sort((a,b)=>b[1]-a[1])[0];
   if(built && built[1]>0) sig.push(`<b>Supply building fastest:</b> ${esc(built[0])} (+${built[1].toLocaleString('en-US')} Fashionphile listings this week) — more competition landing.`);
-  const opp=pressure.find(p=>moMap[p.brand]!=null && moMap[p.brand]>1);
-  if(opp) sig.push(`<b>Opportunity to watch:</b> ${esc(opp.brand)} pairs high demand pressure with rising interest — demand outpacing supply.`);
+  const opp=signals.find(p=>p.scarcity>0 && moMap[p.brand]!=null && moMap[p.brand]>1);
+  if(opp) sig.push(`<b>Opportunity to watch:</b> ${esc(opp.brand)} pairs positive scarcity with rising search interest.`);
+  const clear=Object.entries(latest.sources.fp_sell_through?.brands||{}).filter(([,v])=>v.turnoverPct!=null).sort((a,b)=>b[1].turnoverPct-a[1].turnoverPct)[0];
+  if(clear) sig.push(`<b>Clearing fastest:</b> ${esc(clear[0])} turned over <b style="color:var(--gold)">${clear[1].turnoverPct.toFixed(2)}%</b> of its live inventory today${clear[1].medianDaysToSell!=null?`, at a median ${clear[1].medianDaysToSell} days on site`:''}.`);
+  const stale=(metrics.freshness||[]).filter(f=>f.unchangedDays>=3);
+  if(stale.length) sig.push(`<b>Not moving:</b> ${stale.map(f=>`${esc(f.source)} (${f.unchangedDays}d)`).join(', ')} returned identical data. Treat those cards as reference, not live signal.`);
   $('#readList').innerHTML = sig.length ? sig.map(s=>`<li>${s}</li>`).join('') : '<li style="color:var(--ink-3)">Gathering signal — a few more days of data needed.</li>';
 
   // ---- Stamp ----
@@ -551,19 +601,49 @@ function render(latest, history, exports){
     `<div>since ${prettyDate(history.firstDate)}</div>`;
 
   // ---- KPIs ----
-  const brandTot = {}; let totalReq = 0;
-  hunt.forEach(h=>{ brandTot[h.brand]=(brandTot[h.brand]||0)+h.requesters; totalReq+=h.requesters; });
-  const topBrand = Object.entries(brandTot).sort((a,b)=>b[1]-a[1])[0] || ['—',0];
-  const topBag = (idx.mygemma?.handbags||[])[0] || '—';
+  // Every headline figure is drawn from a series that actually moves. The previous
+  // four read from Mirror's frozen feed and three static annual reports, so the
+  // top of the dashboard never changed no matter what the market did.
   const ret = (idx.rebag?.retention||[]).slice().sort((a,b)=>b.pct-a.pct);
   const bestRet = ret[0] || {brand:'—',pct:0};
-  const goyardRank = (idx.mygemma?.brands||[]).indexOf('Goyard');
+  const topScarce = signals[0];
+  const stEntries = Object.entries(latest.sources.fp_sell_through?.brands || {});
+  const fastest = stEntries.filter(([,v])=>v.turnoverPct!=null).sort((a,b)=>b[1].turnoverPct-a[1].turnoverPct)[0];
+  // Read from the source directly: fpFocus is declared further down, and touching
+  // it here would hit the temporal dead zone.
+  const priciest = (latest.sources.fashionphile?.focus || [])
+    .filter(x=>x.price?.median!=null).sort((a,b)=>b.price.median-a.price.median)[0];
+  const highAlerts = AL.filter(a=>a.severity==='high').length;
+
   $('#kpis').innerHTML = [
-    ['Top requested brand', esc(topBrand[0]), `${topBrand[1]} of ${totalReq} live requesters`, 'Mirror · The Hunt'],
-    ['#1 most-searched bag', esc(topBag), 'Leads the search index', idx.mygemma?.source||'myGemma'],
-    ['Best value retention', `${esc(bestRet.brand)} ${bestRet.pct}%`, 'Appreciates above retail', idx.rebag?.source||'Rebag'],
-    ['Rising / underexposed', 'Goyard', goyardRank>=0?`#${goyardRank+1} searched · thin supply`:'thin supply · liquid resale', 'myGemma · StockX']
+    topScarce
+      ? ['Scarcity leader', esc(topScarce.brand), `demand ${topScarce.demandZ>=0?'+':''}${topScarce.demandZ} vs supply ${topScarce.supplyZ>=0?'+':''}${topScarce.supplyZ}`, 'Derived · z-scored']
+      : ['Scarcity leader', '—', 'needs 8+ days per brand', 'Derived'],
+    fastest
+      ? ['Fastest clearing', esc(fastest[0]), `${fastest[1].turnoverPct.toFixed(2)}% of stock sold today`, 'Fashionphile · SKU diff']
+      : ['Fastest clearing', '—', 'starts after two captures', 'Fashionphile · SKU diff'],
+    priciest
+      ? ['Highest market price', `${esc(priciest.brand)} ${fmt(priciest.price.median)}`, `median across ${(priciest.live||0).toLocaleString('en-US')} live pieces`, 'Fashionphile · live']
+      : ['Best value retention', `${esc(bestRet.brand)} ${bestRet.pct}%`, 'Appreciates above retail', idx.rebag?.source||'Rebag'],
+    [AL.length?'Flagged today':'All quiet', AL.length?String(AL.length):'0', highAlerts?`${highAlerts} high severity`:'nothing outside normal range', 'Derived · alerts']
   ].map(k=>`<div class="kpi"><div class="lab">${k[0]}</div><div class="val">${k[1]}</div><div class="sub">${k[2]}</div><div class="src">${esc(k[3])}</div></div>`).join('');
+
+  // ---- Mirror freshness ----
+  // Mirror is an editorial request feed, not a live market. It sat unchanged for
+  // 22 of the first 24 days while this card was labelled "Live Demand", so the
+  // card now states how long the feed has been static instead of implying flow.
+  const mirrorFresh = (metrics.freshness||[]).find(f=>f.source==='mirror');
+  if(mirrorFresh && mirrorFresh.unchangedDays >= 3){
+    const h = document.querySelector('#demandBars')?.closest('.card')?.querySelector('h2');
+    if(h && !h.querySelector('.stale')){
+      h.textContent = 'Buyer requests';
+      h.insertAdjacentHTML('beforeend', `<span class="stale">static ${mirrorFresh.unchangedDays}d</span>`);
+      h.closest('.chead').insertAdjacentHTML('afterend',
+        `<p class="stalenote">Unchanged since ${esc(mirrorFresh.lastChanged||'before this log began')}. Mirror publishes this feed editorially, so treat it as a standing wishlist rather than daily demand.</p>`);
+    }
+    const h2 = document.querySelector('#compBar')?.closest('.card')?.querySelector('h2');
+    if(h2 && !h2.querySelector('.stale')) h2.insertAdjacentHTML('beforeend', `<span class="stale">static ${mirrorFresh.unchangedDays}d</span>`);
+  }
 
   // ---- Demand bars ----
   const maxN = Math.max(...hunt.map(h=>h.requesters), 1);
@@ -648,13 +728,39 @@ function render(latest, history, exports){
     <td class="price">${p.price?fmt(p.price):'—'}</td></tr>`).join('');
 
   // ---- Pre-owned marketplaces ----
-  const fpFocus = (latest.sources.fashionphile?.focus || []).slice().sort((a,b)=>(a.low??1e12)-(b.low??1e12));
-  $('#fpBody').innerHTML = fpFocus.length
-    ? fpFocus.map(x=>`<tr><td><span class="b">${esc(x.brand)}</span></td>
-        <td style="text-align:right;font-family:var(--mono);color:var(--gold);font-variant-numeric:tabular-nums">${svCell(x.brand)}</td>
-        <td class="price">${x.low!=null?fmt(x.low):'—'}</td>
-        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.count!=null?x.count.toLocaleString('en-US'):'—'}</td></tr>`).join('')
-    : '<tr><td colspan="4" style="color:var(--ink-3)">Awaiting first Fashionphile capture — populates on the next daily run.</td></tr>';
+  // Sorted by median: the actual price ladder of the market, expensive first.
+  const fpFocus = (latest.sources.fashionphile?.focus || []).slice()
+    .sort((a,b)=>(b.price?.median??-1)-(a.price?.median??-1));
+  const num = v => v!=null ? v.toLocaleString('en-US') : '—';
+  const hasDist = fpFocus.some(x=>x.price?.median!=null);
+  $('#fpBody').innerHTML = !fpFocus.length
+    ? '<tr><td colspan="5" style="color:var(--ink-3)">Awaiting first Fashionphile capture. Populates on the next daily run.</td></tr>'
+    : !hasDist
+      ? '<tr><td colspan="5" style="color:var(--ink-3)">Price distribution starts with the next daily capture. Earlier days recorded only a floor price, which was not a market price.</td></tr>'
+      : fpFocus.map(x=>{
+          const md = M('fp.medianPrice', x.brand);
+          const dd = md && md.dodPct!=null && md.dodPct!==0
+            ? `<span class="delta ${md.dodPct>0?'up':'down'}" style="margin-left:6px">${md.dodPct>0?'+':''}${md.dodPct.toFixed(1)}%</span>` : '';
+          return `<tr><td><span class="b">${esc(x.brand)}</span><div style="font-size:11px;color:var(--ink-3)">${esc(x.segment||'')}</div></td>
+            <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.price?.p10!=null?fmt(x.price.p10):'—'}</td>
+            <td class="price">${x.price?.median!=null?fmt(x.price.median):'—'}${dd}</td>
+            <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.price?.p90!=null?fmt(x.price.p90):'—'}</td>
+            <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${num(x.live ?? x.liveAll ?? x.count)}</td></tr>`;
+        }).join('');
+
+  // ---- Sell-through ----
+  const st = Object.entries(latest.sources.fp_sell_through?.brands || {})
+    .sort((a,b)=>(b[1].turnoverPct??-1)-(a[1].turnoverPct??-1));
+  const stStatus = latest.sources.fp_sell_through?.status;
+  $('#stBody').innerHTML = !st.length
+    ? `<tr><td colspan="5" style="color:var(--ink-3)">${stStatus==='baseline'
+        ? 'Baseline captured today. Sell-through needs two consecutive days and appears on the next run.'
+        : 'Awaiting the first SKU capture. Populates on the next daily run.'}</td></tr>`
+    : st.map(([brand,v])=>`<tr><td><span class="b">${esc(brand)}</span></td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--gold);font-variant-numeric:tabular-nums">${num(v.departures)}</td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${num(v.arrivals)}</td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${v.turnoverPct!=null?v.turnoverPct.toFixed(2)+'%':'—'}</td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${v.medianDaysToSell!=null?v.medianDaysToSell+'d':'—'}</td></tr>`).join('');
 
   const eb = (latest.sources.ebay?.focus || []).slice().sort((a,b)=>(b.total??-1)-(a.total??-1));
   $('#ebayBody').innerHTML = eb.length
@@ -677,15 +783,44 @@ function render(latest, history, exports){
   $('#vcSelling').innerHTML = (vc.fastestSelling||[]).map(x=>`<li><span class="b">${esc(x.item)}</span><span class="m">${fmtT(x.seconds)}</span></li>`).join('');
   $('#vcGrow').innerHTML = (vc.fastestGrowing||[]).length ? `<b style="color:var(--ink-2)">Fastest-growing:</b> ${vc.fastestGrowing.map(esc).join(' · ')}` : '';
 
-  // ---- Signals (curated, with live figures injected) ----
-  const chanelReq = brandTot['Chanel']||0;
-  const hermesRet = (ret.find(r=>r.brand==='Hermès')||{}).pct;
-  $('#signals').innerHTML = [
-    ['buy','Buy · lowest risk','Hermès Birkin &amp; Kelly',`Top of both demand feeds and the only pieces that appreciate above retail${hermesRet?` (${hermesRet}%)`:''}. Mirror's own inventory is Hermès-stacked — that's where the market's margin sits.`],
-    ['hold','Turnover · not appreciation','Chanel seasonal',`Chanel drives the most live requests (${chanelReq} of ${totalReq}) and tops the Lyst Index, but resale holds ~92%. Buy for velocity, not as an asset.`],
-    ['watch','Rising · underexposed','Goyard','#5 most-searched despite near-zero boutique distribution, retention climbing to ~132%. Liquid ~$1.2k–6k resale band. Thin Mirror supply = a sourcing gap.'],
-    ['watch','New investment-grade','The Row','Margaux actively requested, a Lyst top-15 name, now ranked by Rebag alongside Hermès and Goyard. Early enough to build inventory first.']
-  ].map(s=>`<div class="sigcard"><div class="tag ${s[0]}">${s[1]}</div><h4>${s[2]}</h4><p>${s[3]}</p></div>`).join('');
+  // ---- Signals, derived rather than written ----
+  // These cards used to be fixed editorial copy with two numbers injected from
+  // Mirror's frozen feed, so they said the same thing every day regardless of the
+  // market. Each card below is now generated from a measured series, and a brand
+  // only appears when its own data puts it there.
+  const retOf = b => (ret.find(r=>r.brand===b)||{}).pct;
+  const stOf = b => latest.sources.fp_sell_through?.brands?.[b] || null;
+  const cards = [];
+
+  signals.slice(0, 6).forEach(sig=>{
+    const md = M('fp.medianPrice', sig.brand);
+    const sup = M('fp.listingsAll', sig.brand);
+    const t = stOf(sig.brand);
+    const rp = retOf(sig.brand);
+    const bits = [];
+    if(md?.last!=null) bits.push(`median ${fmt(md.last)}${md.wowPct!=null&&Math.abs(md.wowPct)>=1?` (${md.wowPct>0?'+':''}${md.wowPct.toFixed(1)}% in 7d)`:''}`);
+    if(sup?.last!=null) bits.push(`${sup.last.toLocaleString('en-US')} listings${sup.streak?`, ${sup.streak>0?'up':'down'} ${Math.abs(sup.streak)}d straight`:''}`);
+    if(t?.turnoverPct!=null) bits.push(`${t.turnoverPct.toFixed(2)}% cleared today`);
+    if(rp) bits.push(`retains ${rp}% of retail`);
+    const detail = bits.length ? bits.join(' · ') : 'Not enough history yet to characterise';
+
+    if(sig.scarcity >= 0.5)
+      cards.push(['buy','Source now · demand outrunning supply', sig.brand,
+        `Scarcity +${sig.scarcity.toFixed(2)}: search momentum ${sig.demandZ>=0?'+':''}${sig.demandZ} against supply ${sig.supplyZ>=0?'+':''}${sig.supplyZ}. ${detail}.`]);
+    else if(sig.scarcity <= -0.9)
+      cards.push(['watch','Wait · supply building', sig.brand,
+        `Scarcity ${sig.scarcity.toFixed(2)}: inventory is arriving faster than interest is growing. ${detail}.`]);
+  });
+
+  // Fastest-clearing brand is a velocity call, distinct from the scarcity call.
+  const fastCard = Object.entries(latest.sources.fp_sell_through?.brands||{})
+    .filter(([,v])=>v.turnoverPct!=null).sort((a,b)=>b[1].turnoverPct-a[1].turnoverPct)[0];
+  if(fastCard) cards.push(['hold','Velocity · turns fastest', fastCard[0],
+    `${fastCard[1].turnoverPct.toFixed(2)}% of live stock sold today${fastCard[1].medianDaysToSell!=null?` at a median ${fastCard[1].medianDaysToSell} days on site`:''}. ${retOf(fastCard[0])?`Retains ${retOf(fastCard[0])}% of retail, so this is turnover rather than appreciation.`:'Buy for velocity.'}`]);
+
+  $('#signals').innerHTML = cards.length
+    ? cards.slice(0,4).map(s=>`<div class="sigcard"><div class="tag ${s[0]}">${s[1]}</div><h4>${esc(s[2])}</h4><p>${s[3]}</p></div>`).join('')
+    : `<div class="sigcard"><div class="tag watch">Building baseline</div><h4>No call yet</h4><p>Signals appear once each brand has at least 8 days of demand and supply history and one sell-through comparison. Nothing here is asserted before the data supports it.</p></div>`;
 
   // ---- 7-Day Trends ----
   const T = history.trends?.fp;

@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-08-27T15:39:50.741Z",
+  "date": "2026-08-27",
+  "count": 3,
+  "alerts": [
+    {
+      "date": "2026-08-27",
+      "type": "stale-source",
+      "severity": "high",
+      "series": "mirror",
+      "brand": null,
+      "unchangedDays": 22,
+      "lastChanged": "2026-08-05",
+      "message": "Source \"mirror\" has returned identical data for 22 consecutive days (last change 2026-08-05)."
+    },
+    {
+      "date": "2026-08-27",
+      "type": "stale-source",
+      "severity": "high",
+      "series": "search_volume",
+      "brand": null,
+      "unchangedDays": 13,
+      "lastChanged": "2026-08-14",
+      "message": "Source \"search_volume\" has returned identical data for 13 consecutive days (last change 2026-08-14)."
+    },
+    {
+      "date": "2026-08-27",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "ebay.listings",
+      "metric": "eBay active listings",
+      "brand": "Hermès",
+      "value": 277269,
+      "z": 2.11,
+      "baseline": 264348.1,
+      "message": "Hermès eBay active listings at 277269 is above its 21-day normal (z=2.11, baseline 264348.1)."
+    }
+  ]
+}

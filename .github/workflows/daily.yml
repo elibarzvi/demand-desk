@@ -46,6 +46,9 @@ jobs:
       - name: Regenerate CSV exports
         run: npm run export
 
+      - name: Derive metrics, signals and alerts
+        run: npm run derive
+
       - name: Commit snapshot + exports (permanent log)
         run: |
           git config user.name "demand-desk-bot"
