@@ -88,6 +88,17 @@ function compose(d) {
     for (const r of supply) L.push(`• ${r.model}: ${r.live} live, ${r.liveDelta > 0 ? '+' : ''}${r.liveDelta}`);
   }
 
+  // Early weeks have no prior model data to diff against, so a digest built only
+  // from changes would be almost empty. Fall back to where things currently stand
+  // rather than sending a page of blanks.
+  if (!priced.length && !supply.length) {
+    const now = d.rows.filter(r => r.median != null).sort((a, b) => b.median - a.median);
+    if (now.length) {
+      L.push('\n*Current levels* (comparisons begin once a prior week is recorded)');
+      for (const r of now.slice(0, 10)) L.push(`• ${r.model}: ${money(r.median)} median, ${r.live} live`);
+    }
+  }
+
   L.push(`\n<${SITE}|Open the dashboard>`);
   return L.join('\n');
 }
