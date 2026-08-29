@@ -1,73 +1,51 @@
 {
-  "generatedAt": "2026-08-28T23:35:38.076Z",
-  "date": "2026-08-28",
-  "count": 6,
+  "generatedAt": "2026-08-29T03:12:37.820Z",
+  "date": "2026-08-29",
+  "count": 4,
   "alerts": [
     {
-      "date": "2026-08-28",
+      "date": "2026-08-29",
       "type": "stale-source",
       "severity": "high",
       "series": "mirror",
       "brand": null,
-      "unchangedDays": 23,
+      "unchangedDays": 24,
       "lastChanged": "2026-08-05",
-      "message": "Source \"mirror\" has returned identical data for 23 consecutive days (last change 2026-08-05)."
+      "message": "Source \"mirror\" has returned identical data for 24 consecutive days (last change 2026-08-05)."
     },
     {
-      "date": "2026-08-28",
+      "date": "2026-08-29",
       "type": "stale-source",
       "severity": "high",
       "series": "search_volume",
       "brand": null,
-      "unchangedDays": 14,
+      "unchangedDays": 15,
       "lastChanged": "2026-08-14",
-      "message": "Source \"search_volume\" has returned identical data for 14 consecutive days (last change 2026-08-14)."
+      "message": "Source \"search_volume\" has returned identical data for 15 consecutive days (last change 2026-08-14)."
     },
     {
-      "date": "2026-08-28",
+      "date": "2026-08-29",
       "type": "breakout",
       "severity": "medium",
-      "series": "ebay.listings",
-      "metric": "eBay active listings",
-      "brand": "Hermès",
-      "value": 279341,
-      "z": 2.23,
-      "baseline": 264896.05,
-      "changePct": 5.45,
-      "message": "Hermès eBay active listings at 279341 is +5.45% vs its 22-day normal of 264896.05 (z=2.23)."
+      "series": "trends.interest",
+      "metric": "Google Trends interest",
+      "brand": "Rolex",
+      "value": 80,
+      "z": 2.01,
+      "baseline": 65.33,
+      "changePct": 22.45,
+      "message": "Rolex Google Trends interest at 80 is +22.45% vs its 19-day normal of 65.33 (z=2.01)."
     },
     {
-      "date": "2026-08-28",
-      "type": "weekly-move",
-      "severity": "low",
-      "series": "fp.listingsAll",
-      "metric": "Fashionphile listings (all categories)",
-      "brand": "The Row",
-      "value": 160,
-      "wowPct": 15.11,
-      "message": "The Row Fashionphile listings (all categories) moved +15.11% in 7 days to 160."
-    },
-    {
-      "date": "2026-08-28",
+      "date": "2026-08-29",
       "type": "weekly-move",
       "severity": "low",
       "series": "trends.interest",
       "metric": "Google Trends interest",
-      "brand": "Cartier",
-      "value": 34,
-      "wowPct": -19.05,
-      "message": "Cartier Google Trends interest moved -19.05% in 7 days to 34."
-    },
-    {
-      "date": "2026-08-28",
-      "type": "weekly-move",
-      "severity": "low",
-      "series": "trends.interest",
-      "metric": "Google Trends interest",
-      "brand": "Chanel",
-      "value": 72,
-      "wowPct": -25.77,
-      "message": "Chanel Google Trends interest moved -25.77% in 7 days to 72."
+      "brand": "Rolex",
+      "value": 80,
+      "wowPct": 19.4,
+      "message": "Rolex Google Trends interest moved +19.4% in 7 days to 80."
     }
   ]
 }
