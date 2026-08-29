@@ -1,8 +1,21 @@
 {
-  "generatedAt": "2026-08-29T17:47:14.872Z",
+  "generatedAt": "2026-08-29T23:22:21.533Z",
   "date": "2026-08-29",
-  "count": 5,
+  "count": 8,
   "alerts": [
+    {
+      "date": "2026-08-29",
+      "type": "breakout",
+      "severity": "high",
+      "series": "ebay.listings",
+      "metric": "eBay active listings",
+      "brand": "Cartier",
+      "value": 83045,
+      "z": 3.1,
+      "baseline": 79796.95,
+      "changePct": 4.07,
+      "message": "Cartier eBay active listings at 83045 is +4.07% vs its 23-day normal of 79796.95 (z=3.1)."
+    },
     {
       "date": "2026-08-29",
       "type": "stale-source",
@@ -27,14 +40,27 @@
       "date": "2026-08-29",
       "type": "breakout",
       "severity": "medium",
+      "series": "trends.interest",
+      "metric": "Google Trends interest",
+      "brand": "Louis Vuitton",
+      "value": 78,
+      "z": 2.08,
+      "baseline": 63.72,
+      "changePct": 22.41,
+      "message": "Louis Vuitton Google Trends interest at 78 is +22.41% vs its 19-day normal of 63.72 (z=2.08)."
+    },
+    {
+      "date": "2026-08-29",
+      "type": "breakout",
+      "severity": "medium",
       "series": "ebay.listings",
       "metric": "eBay active listings",
       "brand": "Hermès",
-      "value": 280269,
-      "z": 2.09,
+      "value": 280005,
+      "z": 2.05,
       "baseline": 265552.64,
-      "changePct": 5.54,
-      "message": "Hermès eBay active listings at 280269 is +5.54% vs its 23-day normal of 265552.64 (z=2.09)."
+      "changePct": 5.44,
+      "message": "Hermès eBay active listings at 280005 is +5.44% vs its 23-day normal of 265552.64 (z=2.05)."
     },
     {
       "date": "2026-08-29",
@@ -43,9 +69,20 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Cartier",
-      "value": 513,
+      "value": 507,
       "streak": 4,
-      "message": "Cartier Fashionphile listings (all categories) has risen 4 days straight to 513."
+      "message": "Cartier Fashionphile listings (all categories) has risen 4 days straight to 507."
+    },
+    {
+      "date": "2026-08-29",
+      "type": "streak",
+      "severity": "low",
+      "series": "ebay.listings",
+      "metric": "eBay active listings",
+      "brand": "Cartier",
+      "value": 83045,
+      "streak": 4,
+      "message": "Cartier eBay active listings has risen 4 days straight to 83045."
     },
     {
       "date": "2026-08-29",
