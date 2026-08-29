@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-08-29T03:12:37.820Z",
+  "generatedAt": "2026-08-29T13:52:02.708Z",
   "date": "2026-08-29",
-  "count": 4,
+  "count": 6,
   "alerts": [
     {
       "date": "2026-08-29",
@@ -30,11 +30,35 @@
       "series": "trends.interest",
       "metric": "Google Trends interest",
       "brand": "Rolex",
-      "value": 80,
-      "z": 2.01,
+      "value": 81,
+      "z": 2.15,
       "baseline": 65.33,
-      "changePct": 22.45,
-      "message": "Rolex Google Trends interest at 80 is +22.45% vs its 19-day normal of 65.33 (z=2.01)."
+      "changePct": 23.98,
+      "message": "Rolex Google Trends interest at 81 is +23.98% vs its 19-day normal of 65.33 (z=2.15)."
+    },
+    {
+      "date": "2026-08-29",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "ebay.listings",
+      "metric": "eBay active listings",
+      "brand": "Hermès",
+      "value": 280236,
+      "z": 2.09,
+      "baseline": 265552.64,
+      "changePct": 5.53,
+      "message": "Hermès eBay active listings at 280236 is +5.53% vs its 23-day normal of 265552.64 (z=2.09)."
+    },
+    {
+      "date": "2026-08-29",
+      "type": "streak",
+      "severity": "low",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Cartier",
+      "value": 504,
+      "streak": 4,
+      "message": "Cartier Fashionphile listings (all categories) has risen 4 days straight to 504."
     },
     {
       "date": "2026-08-29",
@@ -43,9 +67,9 @@
       "series": "trends.interest",
       "metric": "Google Trends interest",
       "brand": "Rolex",
-      "value": 80,
-      "wowPct": 19.4,
-      "message": "Rolex Google Trends interest moved +19.4% in 7 days to 80."
+      "value": 81,
+      "wowPct": 20.9,
+      "message": "Rolex Google Trends interest moved +20.9% in 7 days to 81."
     }
   ]
 }
