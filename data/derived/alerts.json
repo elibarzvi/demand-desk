@@ -1,99 +1,165 @@
 {
-  "generatedAt": "2026-08-29T23:22:21.533Z",
-  "date": "2026-08-29",
-  "count": 8,
+  "generatedAt": "2026-08-30T13:49:40.498Z",
+  "date": "2026-08-30",
+  "count": 14,
   "alerts": [
     {
-      "date": "2026-08-29",
+      "date": "2026-08-30",
       "type": "breakout",
       "severity": "high",
-      "series": "ebay.listings",
-      "metric": "eBay active listings",
-      "brand": "Cartier",
-      "value": 83045,
-      "z": 3.1,
-      "baseline": 79796.95,
-      "changePct": 4.07,
-      "message": "Cartier eBay active listings at 83045 is +4.07% vs its 23-day normal of 79796.95 (z=3.1)."
+      "series": "trends.interest",
+      "metric": "Google Trends interest",
+      "brand": "Louis Vuitton",
+      "value": 88,
+      "z": 3.16,
+      "baseline": 64.47,
+      "changePct": 36.49,
+      "message": "Louis Vuitton Google Trends interest at 88 is +36.49% vs its 20-day normal of 64.47 (z=3.16)."
     },
     {
-      "date": "2026-08-29",
+      "date": "2026-08-30",
       "type": "stale-source",
       "severity": "high",
       "series": "mirror",
       "brand": null,
-      "unchangedDays": 24,
+      "unchangedDays": 25,
       "lastChanged": "2026-08-05",
-      "message": "Source \"mirror\" has returned identical data for 24 consecutive days (last change 2026-08-05)."
+      "message": "Source \"mirror\" has returned identical data for 25 consecutive days (last change 2026-08-05)."
     },
     {
-      "date": "2026-08-29",
+      "date": "2026-08-30",
       "type": "stale-source",
       "severity": "high",
       "series": "search_volume",
       "brand": null,
-      "unchangedDays": 15,
+      "unchangedDays": 16,
       "lastChanged": "2026-08-14",
-      "message": "Source \"search_volume\" has returned identical data for 15 consecutive days (last change 2026-08-14)."
+      "message": "Source \"search_volume\" has returned identical data for 16 consecutive days (last change 2026-08-14)."
     },
     {
-      "date": "2026-08-29",
+      "date": "2026-08-30",
       "type": "breakout",
       "severity": "medium",
       "series": "trends.interest",
       "metric": "Google Trends interest",
-      "brand": "Louis Vuitton",
-      "value": 78,
-      "z": 2.08,
-      "baseline": 63.72,
-      "changePct": 22.41,
-      "message": "Louis Vuitton Google Trends interest at 78 is +22.41% vs its 19-day normal of 63.72 (z=2.08)."
+      "brand": "Rolex",
+      "value": 89,
+      "z": 2.96,
+      "baseline": 66.05,
+      "changePct": 34.74,
+      "message": "Rolex Google Trends interest at 89 is +34.74% vs its 20-day normal of 66.05 (z=2.96)."
     },
     {
-      "date": "2026-08-29",
+      "date": "2026-08-30",
       "type": "breakout",
       "severity": "medium",
-      "series": "ebay.listings",
-      "metric": "eBay active listings",
-      "brand": "Hermès",
-      "value": 280005,
-      "z": 2.05,
-      "baseline": 265552.64,
-      "changePct": 5.44,
-      "message": "Hermès eBay active listings at 280005 is +5.44% vs its 23-day normal of 265552.64 (z=2.05)."
+      "series": "trends.interest",
+      "metric": "Google Trends interest",
+      "brand": "Cartier",
+      "value": 52,
+      "z": 2.69,
+      "baseline": 37.58,
+      "changePct": 38.38,
+      "message": "Cartier Google Trends interest at 52 is +38.38% vs its 20-day normal of 37.58 (z=2.69)."
     },
     {
-      "date": "2026-08-29",
+      "date": "2026-08-30",
+      "type": "streak",
+      "severity": "low",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Dior",
+      "value": 1273,
+      "streak": 4,
+      "message": "Dior Fashionphile listings (all categories) has risen 4 days straight to 1273."
+    },
+    {
+      "date": "2026-08-30",
       "type": "streak",
       "severity": "low",
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Cartier",
-      "value": 507,
-      "streak": 4,
-      "message": "Cartier Fashionphile listings (all categories) has risen 4 days straight to 507."
+      "value": 510,
+      "streak": 5,
+      "message": "Cartier Fashionphile listings (all categories) has risen 5 days straight to 510."
     },
     {
-      "date": "2026-08-29",
+      "date": "2026-08-30",
+      "type": "weekly-move",
+      "severity": "low",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Cartier",
+      "value": 510,
+      "wowPct": 15.12,
+      "message": "Cartier Fashionphile listings (all categories) moved +15.12% in 7 days to 510."
+    },
+    {
+      "date": "2026-08-30",
       "type": "streak",
       "severity": "low",
-      "series": "ebay.listings",
-      "metric": "eBay active listings",
-      "brand": "Cartier",
-      "value": 83045,
+      "series": "trends.interest",
+      "metric": "Google Trends interest",
+      "brand": "Louis Vuitton",
+      "value": 88,
       "streak": 4,
-      "message": "Cartier eBay active listings has risen 4 days straight to 83045."
+      "message": "Louis Vuitton Google Trends interest has risen 4 days straight to 88."
     },
     {
-      "date": "2026-08-29",
+      "date": "2026-08-30",
+      "type": "weekly-move",
+      "severity": "low",
+      "series": "trends.interest",
+      "metric": "Google Trends interest",
+      "brand": "Louis Vuitton",
+      "value": 88,
+      "wowPct": 20.55,
+      "message": "Louis Vuitton Google Trends interest moved +20.55% in 7 days to 88."
+    },
+    {
+      "date": "2026-08-30",
+      "type": "streak",
+      "severity": "low",
+      "series": "trends.interest",
+      "metric": "Google Trends interest",
+      "brand": "Rolex",
+      "value": 89,
+      "streak": 4,
+      "message": "Rolex Google Trends interest has risen 4 days straight to 89."
+    },
+    {
+      "date": "2026-08-30",
       "type": "weekly-move",
       "severity": "low",
       "series": "trends.interest",
       "metric": "Google Trends interest",
       "brand": "Rolex",
-      "value": 79,
-      "wowPct": 17.91,
-      "message": "Rolex Google Trends interest moved +17.91% in 7 days to 79."
+      "value": 89,
+      "wowPct": 21.92,
+      "message": "Rolex Google Trends interest moved +21.92% in 7 days to 89."
+    },
+    {
+      "date": "2026-08-30",
+      "type": "streak",
+      "severity": "low",
+      "series": "trends.interest",
+      "metric": "Google Trends interest",
+      "brand": "Cartier",
+      "value": 52,
+      "streak": 4,
+      "message": "Cartier Google Trends interest has risen 4 days straight to 52."
+    },
+    {
+      "date": "2026-08-30",
+      "type": "weekly-move",
+      "severity": "low",
+      "series": "trends.interest",
+      "metric": "Google Trends interest",
+      "brand": "Cartier",
+      "value": 52,
+      "wowPct": 18.18,
+      "message": "Cartier Google Trends interest moved +18.18% in 7 days to 52."
     }
   ]
 }
