@@ -100,6 +100,13 @@
   .alert.low{border-left-color:var(--ink-3)}
   .alert .atype{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);white-space:nowrap;min-width:88px}
   .alert .amsg{font-size:13.5px;color:var(--ink);line-height:1.5}
+  .health{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}
+  .health .hlab{width:100%;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:3px}
+  .hpill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:99px;background:var(--surface-2);font-size:11.5px;color:var(--ink-2)}
+  .hpill .dot{width:6px;height:6px;border-radius:50%;background:var(--good);flex:none}
+  .hpill.hstale .dot{background:var(--heat)}
+  .hpill.hstale{color:var(--ink);border:1px solid var(--heat)}
+  .hpill .hd{font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
   .divtrack{position:relative;background:var(--surface-2)}
   .divtrack::before{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--line)}
   .divfill{position:absolute;top:0;height:100%;border-radius:3px}
@@ -243,6 +250,7 @@
     <div class="chead"><h2>What changed today</h2><span class="src-tag" id="alertTag">vs each series' own baseline</span></div>
     <p class="cnote">Only series that broke out of their own normal range, moved several days in one direction, or stopped updating. Quiet here means nothing unusual, which is itself the answer.</p>
     <div id="alertList"></div>
+    <div class="health" id="healthStrip"></div>
   </section>
 
   <section class="card full" id="readCard" style="margin-top:16px">
@@ -548,11 +556,31 @@ function render(latest, history, exports, metrics, alerts){
     : '<div style="color:var(--ink-3);font-size:13px">Awaiting first Google Trends capture — populates on the next daily run.</div>';
 
   // ---- Alerts: the only card that says "look here today" ----
+  // Source staleness is a standing condition, not a change. Mirror had been
+  // static for 26 days while sitting in a card titled "What changed today",
+  // crowding out the one line that had actually moved. Health belongs in its own
+  // strip; this card is reserved for things that genuinely changed.
   const AL = alerts.alerts || [];
-  $('#alertList').innerHTML = AL.length
-    ? AL.map(a=>`<div class="alert ${esc(a.severity||'low')}"><span class="atype">${esc(a.type)}</span><span class="amsg">${esc(a.message)}</span></div>`).join('')
+  const changes = AL.filter(a => a.type !== 'stale-source');
+  $('#alertList').innerHTML = changes.length
+    ? changes.map(a=>`<div class="alert ${esc(a.severity||'low')}"><span class="atype">${esc(a.type)}</span><span class="amsg">${esc(a.message)}</span></div>`).join('')
     : '<div style="color:var(--ink-3);font-size:13px">No series left its normal range today. Everything tracked is behaving as usual.</div>';
-  $('#alertTag').textContent = AL.length ? `${AL.length} flagged` : 'all quiet';
+  $('#alertTag').textContent = changes.length ? `${changes.length} flagged` : 'all quiet';
+
+  // Every tracked source, not only the failing ones, so a healthy pipeline is
+  // visible rather than merely implied by an absence of warnings.
+  const REFERENCE = new Set(['indices','therealreal','vestiaire']);
+  const fresh = (metrics.freshness||[]).filter(f=>!REFERENCE.has(f.source));
+  $('#healthStrip').innerHTML = fresh.length
+    ? '<div class="hlab">Source health</div>' + fresh
+        .slice().sort((a,b)=>b.unchangedDays-a.unchangedDays)
+        .map(f=>{
+          const stale = f.unchangedDays >= 3;
+          const note = f.unchangedDays === 0 ? 'updated today' : `static ${f.unchangedDays}d`;
+          const since = stale && f.lastChanged ? ` <span class="hd">since ${esc(f.lastChanged)}</span>` : '';
+          return `<span class="hpill ${stale?'hstale':''}" title="${esc(f.source)}: ${note}"><span class="dot"></span>${esc(f.source)} <span class="hd">${note}</span>${since}</span>`;
+        }).join('')
+    : '';
 
   // ---- Scarcity: demand momentum minus supply momentum, both z-scored ----
   const ebTotal={}; (latest.sources.ebay?.focus||[]).forEach(f=>{ ebTotal[f.brand]=f.total; });
@@ -613,7 +641,7 @@ function render(latest, history, exports, metrics, alerts){
   // it here would hit the temporal dead zone.
   const priciest = (latest.sources.fashionphile?.focus || [])
     .filter(x=>x.price?.median!=null).sort((a,b)=>b.price.median-a.price.median)[0];
-  const highAlerts = AL.filter(a=>a.severity==='high').length;
+  const highAlerts = changes.filter(a=>a.severity==='high').length;
 
   $('#kpis').innerHTML = [
     topScarce
@@ -625,7 +653,8 @@ function render(latest, history, exports, metrics, alerts){
     priciest
       ? ['Highest market price', `${esc(priciest.brand)} ${fmt(priciest.price.median)}`, `median across ${(priciest.live||0).toLocaleString('en-US')} live pieces`, 'Fashionphile · live']
       : ['Best value retention', `${esc(bestRet.brand)} ${bestRet.pct}%`, 'Appreciates above retail', idx.rebag?.source||'Rebag'],
-    [AL.length?'Flagged today':'All quiet', AL.length?String(AL.length):'0', highAlerts?`${highAlerts} high severity`:'nothing outside normal range', 'Derived · alerts']
+    [changes.length?'Flagged today':'All quiet', changes.length?String(changes.length):'0',
+      changes.length ? (highAlerts?`${highAlerts} high severity`:'see What changed today') : 'nothing outside normal range', 'Derived · alerts']
   ].map(k=>`<div class="kpi"><div class="lab">${k[0]}</div><div class="val">${k[1]}</div><div class="sub">${k[2]}</div><div class="src">${esc(k[3])}</div></div>`).join('');
 
   // ---- Mirror freshness ----
