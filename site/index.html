@@ -100,6 +100,18 @@
   .alert.low{border-left-color:var(--ink-3)}
   .alert .atype{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);white-space:nowrap;min-width:88px}
   .alert .amsg{font-size:13.5px;color:var(--ink);line-height:1.5}
+  table.board th,table.board td{padding:7px 9px;font-size:12.5px;white-space:nowrap}
+  table.board td.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+  table.board td.num.gold{color:var(--gold)}
+  table.board td.num.small{font-size:11px;color:var(--ink-2)}
+  table.board .sub2{font-size:10.5px;color:var(--ink-3);margin-top:1px}
+  table.board .dim{color:var(--ink-3)}
+  details.fold{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+  details.fold>summary{cursor:pointer;padding:13px 18px;font-family:var(--serif);font-size:15px;color:var(--ink);list-style:none}
+  details.fold>summary::-webkit-details-marker{display:none}
+  details.fold>summary::before{content:"▸";margin-right:9px;color:var(--gold);font-size:11px}
+  details.fold[open]>summary::before{content:"▾"}
+  details.fold .foldbody{padding:0 18px 18px}
   .health{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}
   .health .hlab{width:100%;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:3px}
   .hpill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:99px;background:var(--surface-2);font-size:11.5px;color:var(--ink-2)}
@@ -262,78 +274,48 @@
   <!-- ============ LIVE BAND — updates daily ============ -->
   <div class="band"><span class="lbl">Live signals</span><span class="rule"></span><span class="sub">updates every day</span></div>
 
-  <div class="grid">
-    <div class="col">
-      <section class="card">
-        <div class="chead"><h2>Live Demand — what buyers are requesting</h2><span class="src-tag">Mirror · The Hunt</span></div>
-        <p class="cnote">Public request feed on mirrorconcierge.com, by number of buyers who requested each exact piece. Trend vs the previous snapshot.</p>
-        <div class="bars" id="demandBars"></div>
-      </section>
-
-      <section class="card">
-        <div class="chead"><h2>Demand Momentum — daily direction</h2><span class="src-tag">Google Trends · 30d</span></div>
-        <p class="cnote">Daily Google search interest per brand (last 30 days), sorted by momentum — <b>what the market is gravitating toward right now</b>. ▲ heating up, ▼ cooling.</p>
-        <div id="demandMomentum"></div>
-      </section>
-
-      <section class="card">
-        <div class="chead"><h2>Scarcity: demand vs supply momentum</h2><span class="src-tag">z-scored, both sides</span></div>
-        <p class="cnote">Each brand's search momentum minus its supply momentum, both scored against their own history. Positive means demand is <b>pulling ahead of the inventory arriving to meet it</b>. This moves daily, unlike a ratio of two near-constant figures.</p>
-        <div id="demandPressure"></div>
-      </section>
-
-      <section class="card">
-        <div class="chead"><h2>Search Volume — demand size (monthly)</h2><span class="src-tag">DataForSEO · monthly</span></div>
-        <p class="cnote">Average monthly Google searches per brand — the <b>size</b> of demand (day-over-day comp above each figure).</p>
-        <div id="searchVolBars"></div>
-      </section>
-
-      <section class="card">
-        <div class="chead"><h2>Resale price index</h2><span class="src-tag">Fashionphile · live</span></div>
-        <p class="cnote">Price distribution across every live piece in the tracked segment, computed over the full inventory rather than a sample. The <b>median</b> is the market price; p10 and p90 are the entry and top of the band.</p>
-        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">p10</th><th style="text-align:right">Median</th><th style="text-align:right">p90</th><th style="text-align:right">Listings</th></tr></thead><tbody id="fpBody"></tbody></table></div>
-      </section>
-
-      <section class="card">
-        <div class="chead"><h2>eBay — search demand vs active listings</h2><span class="src-tag">eBay · Browse API</span></div>
-        <p class="cnote">Google monthly searches vs eBay US active fixed-price listings ($100+) per brand — demand against supply.</p>
-        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Searches/mo</th><th style="text-align:right">Listings</th></tr></thead><tbody id="ebayBody"></tbody></table></div>
-      </section>
-
-      <section class="card">
-        <div class="chead"><h2>Sell-through: what actually cleared</h2><span class="src-tag">Fashionphile · SKU diff</span></div>
-        <p class="cnote">Every listing is one physical piece, so a SKU that leaves the live index has sold. <b>Turnover</b> is the share of standing inventory that cleared in a day; <b>days to sell</b> is measured from each piece's own listing date.</p>
-        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Sold</th><th style="text-align:right">New in</th><th style="text-align:right">Turnover</th><th style="text-align:right">Days to sell</th></tr></thead><tbody id="stBody"></tbody></table></div>
-      </section>
-    </div>
-
-    <div class="col">
-      <section class="card">
-        <div class="chead"><h2>StockX — lowest ask by brand</h2><span class="src-tag">StockX · live</span></div>
-        <p class="cnote">Cheapest live listing and total results per brand on StockX. Best-effort (StockX rate-limits bots).</p>
-        <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Searches/mo</th><th style="text-align:right">Lowest ask</th><th style="text-align:right">Results</th></tr></thead><tbody id="stockxBrandsBody"></tbody></table></div>
-      </section>
-
-      <section class="card">
-        <div class="chead"><h2>Goyard — resale floors</h2><span class="src-tag">StockX · live</span></div>
-        <p class="cnote">Lowest ask on the secondary market. The rising brand's liquid price band.</p>
-        <div class="twrap"><table><thead><tr><th>Item</th><th style="text-align:right">Lowest ask</th></tr></thead><tbody id="stockxBody"></tbody></table></div>
-      </section>
-
-      <section class="card">
-        <div class="chead"><h2>Supply Mix</h2><span class="src-tag">Mirror · Discover</span></div>
-        <p class="cnote">Composition of the sourcer inventory feed, by brand share of listings.</p>
-        <div class="comp" id="compBar" role="img" aria-label="Inventory composition by brand"></div>
-        <div class="complegend" id="compLegend"></div>
-      </section>
-    </div>
-  </div>
-
-  <section class="card full" style="margin-top:16px">
-    <div class="chead"><h2>Inventory &amp; Pricing — what sourcers are stocking</h2><span class="src-tag">Mirror · Discover</span></div>
-    <p class="cnote">Priced listings from the public inventory feed, captured daily. Cross-reference against your cost to read margin.</p>
-    <div class="twrap"><table><thead><tr><th>Brand</th><th>Piece</th><th>Category</th><th style="text-align:right">Approx. price</th></tr></thead><tbody id="invBody"></tbody></table></div>
+  <!-- One row per brand. These were six separate cards repeating the same brand
+       column (and search volume twice), which cost roughly a dozen screens of
+       scrolling to read one brand across. -->
+  <section class="card full">
+    <div class="chead"><h2>Brand board</h2><span class="src-tag">every live signal, one row per brand</span></div>
+    <p class="cnote">Sorted by scarcity: search momentum minus supply momentum, each z-scored against its own history. <b>Median</b> is the market price for the tracked segment; <b>sold</b> and <b>days to sell</b> come from the daily SKU diff.</p>
+    <div class="twrap"><table class="board"><thead><tr>
+      <th>Brand</th>
+      <th style="text-align:right">Scarcity</th>
+      <th style="text-align:right">Interest</th>
+      <th style="text-align:right">Searches/mo</th>
+      <th style="text-align:right">Median</th>
+      <th style="text-align:right">Band</th>
+      <th style="text-align:right">Listings</th>
+      <th style="text-align:right">eBay</th>
+      <th style="text-align:right">Sold</th>
+      <th style="text-align:right">Turnover</th>
+      <th style="text-align:right">Days</th>
+    </tr></thead><tbody id="boardBody"></tbody></table></div>
   </section>
+
+  <details class="fold" style="margin-top:16px">
+    <summary>Mirror buyer requests and inventory <span id="mirrorFoldTag"></span></summary>
+    <div class="foldbody">
+      <p class="cnote">Mirror publishes this feed editorially rather than live, so it is folded away by default. The source-health strip above shows how long it has been static.</p>
+      <div class="bars" id="demandBars"></div>
+      <div class="comp" id="compBar" role="img" aria-label="Inventory composition by brand" style="margin-top:16px"></div>
+      <div class="complegend" id="compLegend"></div>
+      <div class="twrap" style="margin-top:16px"><table><thead><tr><th>Brand</th><th>Piece</th><th>Category</th><th style="text-align:right">Approx. price</th></tr></thead><tbody id="invBody"></tbody></table></div>
+    </div>
+  </details>
+
+  <details class="fold" style="margin-top:12px">
+    <summary>StockX lowest ask and Goyard floors</summary>
+    <div class="foldbody">
+      <p class="cnote">StockX reports the cheapest listing carrying a brand name, which is often an accessory rather than a bag, so these are reference figures and are excluded from alerting.</p>
+      <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Lowest ask</th></tr></thead><tbody id="stockxBrandsBody"></tbody></table></div>
+      <div class="twrap" style="margin-top:14px"><table><thead><tr><th>Goyard item</th><th style="text-align:right">Lowest ask</th></tr></thead><tbody id="stockxBody"></tbody></table></div>
+    </div>
+  </details>
+
+
 
   <!-- ============ 7-DAY TRENDS ============ -->
   <div class="band"><span class="lbl">7-Day Trends</span><span class="rule"></span><span class="sub">patterns from the first week of capture</span></div>
@@ -352,6 +334,10 @@
   </section>
 
   <!-- ============ REFERENCE BAND — from published reports ============ -->
+  <details class="fold" style="margin-top:22px">
+    <summary>Reference indices <span class="dim" style="font-size:12px;color:var(--ink-3)">myGemma, Rebag, Lyst, The RealReal, Vestiaire</span></summary>
+    <div class="foldbody">
+      <p class="cnote">Published reports refreshed a few times a year, kept for context rather than daily reading.</p>
   <div class="band"><span class="lbl">Reference</span><span class="rule"></span><span class="sub">from published reports · refreshed a few times a year</span></div>
 
   <div class="grid">
@@ -405,17 +391,23 @@
     </div>
   </section>
 
+    </div>
+  </details>
+
   <section class="card full" style="margin-top:16px">
     <div class="chead"><h2>Buy Signals</h2><span class="src-tag">Synthesis</span></div>
     <p class="cnote">Reading demand against value-retention and supply, for purchasing decisions.</p>
     <div class="sig" id="signals"></div>
   </section>
 
-  <section class="card full" style="margin-top:16px">
-    <div class="chead"><h2>Exports — all raw data</h2><span class="src-tag">CSV · JSON · ZIP</span></div>
-    <p class="cnote">Export a specific <b>day or date range</b> below, grab the whole thing as one bundle, or pull a single full sheet. Every row carries a <b>date</b>, so anything you export pivots by day, week, or month in Excel/Sheets.</p>
+  <details class="fold" style="margin-top:16px">
+    <summary>Exports, all raw data <span style="font-size:12px;color:var(--ink-3)">CSV, JSON, ZIP</span></summary>
+    <div class="foldbody">
+      <p class="cnote">Export a specific <b>day or date range</b> below, grab the whole thing as one bundle, or pull a single full sheet. Every row carries a <b>date</b>, so anything you export pivots by day, week, or month in Excel/Sheets.</p>
     <div id="exports"></div>
-  </section>
+  
+    </div>
+  </details>
 
   <footer>
     <div id="sources">Sources — Mirror Concierge, StockX, Fashionphile, eBay, DataForSEO (Google search volume + daily Trends), The RealReal, Vestiaire Collective, myGemma, Lyst, Rebag.</div>
@@ -427,6 +419,9 @@
 
 <script>
 const $ = s => document.querySelector(s);
+// Some cards were consolidated into the brand board; their computations still
+// run because other sections depend on them, so writes to absent nodes no-op.
+const setEl = (sel, html) => { const el = document.querySelector(sel); if (el) el.innerHTML = html; };
 const fmt = n => '$' + Number(n).toLocaleString('en-US');
 const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
@@ -515,7 +510,7 @@ function render(latest, history, exports, metrics, alerts){
   const svPrev = history.searchVolPrev || {};
   const svSorted = svFocus.slice().sort((a,b)=>(b.volume??-1)-(a.volume??-1));
   const svMax = Math.max(...svSorted.map(x=>x.volume||0), 1);
-  $('#searchVolBars').innerHTML = svSorted.length
+  setEl('#searchVolBars', svSorted.length
     ? svSorted.map(x=>{
         const cur = x.volume, prev = svPrev[x.brand];
         let comp = '';
@@ -531,7 +526,7 @@ function render(latest, history, exports, metrics, alerts){
           <div class="svtrack"><div class="svfill" data-w="${cur?(cur/svMax*100).toFixed(1):0}"></div></div>
         </div>`;
       }).join('')
-    : '<div style="color:var(--ink-3);font-size:13px">Awaiting first search-volume capture — populates on the next daily run.</div>';
+    : '<div style="color:var(--ink-3);font-size:13px">Awaiting first search-volume capture — populates on the next daily run.</div>');
   const svCell = b => { const v = svMap[b]; return v!=null ? v.toLocaleString('en-US') : '—'; };
 
   // ---- Demand Momentum (Google Trends, daily interest) ----
@@ -547,13 +542,67 @@ function render(latest, history, exports, metrics, alerts){
     }
     return {brand:f.brand, vals, mo, lowSignal};
   }).filter(x=>x.vals.length).sort((a,b)=>(b.mo??-999)-(a.mo??-999));
-  $('#demandMomentum').innerHTML = gt.length
+  setEl('#demandMomentum', gt.length
     ? gt.map(x=>{
         const moTxt = x.mo!=null ? ((x.mo>=0?'▲':'▼')+Math.abs(x.mo).toFixed(0)+'%') : (x.lowSignal?'low':'—');
         const col = x.mo==null?'var(--ink-3)':(x.mo>1?'var(--good)':x.mo<-1?'var(--heat)':'var(--ink-3)');
         return `<div class="mrow"><span class="mname">${esc(x.brand)}</span>${sparkline(x.vals,64,18)||'<span></span>'}<span class="mmo" style="color:${col}">${moTxt}</span></div>`;
       }).join('')
-    : '<div style="color:var(--ink-3);font-size:13px">Awaiting first Google Trends capture — populates on the next daily run.</div>';
+    : '<div style="color:var(--ink-3);font-size:13px">Awaiting first Google Trends capture — populates on the next daily run.</div>');
+
+  // ---- Brand board: one row per brand, replacing six single-metric cards ----
+  const boardRows = (() => {
+    const fp = latest.sources.fashionphile?.focus || [];
+    const eb = {}; (latest.sources.ebay?.focus || []).forEach(f => { eb[f.brand] = f.total; });
+    const sv = {}; (latest.sources.search_volume?.focus || []).forEach(f => { sv[f.brand] = f.volume; });
+    const stb = latest.sources.fp_sell_through?.brands || {};
+    const gtRel = {}; (latest.sources.google_trends?.focus || []).forEach(f => {
+      gtRel[f.brand] = (f.rel || []).map(p => p.value);
+    });
+    const sig = {}; (metrics.signals || []).forEach(x => { sig[x.brand] = x; });
+
+    const names = new Set([...fp.map(f => f.brand), ...Object.keys(eb), ...Object.keys(sv)]);
+    return [...names].map(brand => {
+      const f = fp.find(x => x.brand === brand) || {};
+      const t = stb[brand] || {};
+      return {
+        brand, segment: f.segment || '',
+        scarcity: sig[brand]?.scarcity ?? null,
+        spark: gtRel[brand] || [],
+        searches: sv[brand] ?? null,
+        median: f.price?.median ?? null,
+        medianPct: M('fp.medianPrice', brand)?.dodPct ?? null,
+        p10: f.price?.p10 ?? null, p90: f.price?.p90 ?? null,
+        listings: f.live ?? f.liveAll ?? null,
+        ebay: eb[brand] ?? null,
+        sold: t.departures ?? null,
+        turnover: t.turnoverPct ?? null,
+        days: t.medianDaysToSell ?? null
+      };
+    }).sort((a, b) => (b.scarcity ?? -99) - (a.scarcity ?? -99));
+  })();
+
+  const n0 = v => v == null ? '<span class="dim">—</span>' : v.toLocaleString('en-US');
+  setEl('#boardBody', boardRows.map(r => {
+    const sc = r.scarcity == null ? '<span class="dim">—</span>'
+      : `<span style="color:${r.scarcity >= 0 ? 'var(--good)' : 'var(--heat)'}">${r.scarcity >= 0 ? '+' : ''}${r.scarcity.toFixed(2)}</span>`;
+    const dd = r.medianPct != null && Math.abs(r.medianPct) >= 0.1
+      ? `<span class="delta ${r.medianPct > 0 ? 'up' : 'down'}" style="margin-left:5px">${r.medianPct > 0 ? '+' : ''}${r.medianPct.toFixed(1)}%</span>` : '';
+    const band = (r.p10 != null && r.p90 != null) ? `${fmt(r.p10)}<span class="dim">–</span>${fmt(r.p90)}` : '<span class="dim">—</span>';
+    return `<tr>
+      <td><span class="b">${esc(r.brand)}</span><div class="sub2">${esc(r.segment)}</div></td>
+      <td class="num">${sc}</td>
+      <td class="num">${sparkline(r.spark, 46, 15) || '<span class="dim">—</span>'}</td>
+      <td class="num">${n0(r.searches)}</td>
+      <td class="num gold">${r.median != null ? fmt(r.median) : '<span class="dim">—</span>'}${dd}</td>
+      <td class="num small">${band}</td>
+      <td class="num">${n0(r.listings)}</td>
+      <td class="num">${n0(r.ebay)}</td>
+      <td class="num gold">${n0(r.sold)}</td>
+      <td class="num">${r.turnover != null ? r.turnover.toFixed(2) + '%' : '<span class="dim">—</span>'}</td>
+      <td class="num">${r.days != null ? r.days + 'd' : '<span class="dim">—</span>'}</td>
+    </tr>`;
+  }).join(''));
 
   // ---- Alerts: the only card that says "look here today" ----
   // Source staleness is a standing condition, not a change. Mirror had been
@@ -586,7 +635,7 @@ function render(latest, history, exports, metrics, alerts){
   const ebTotal={}; (latest.sources.ebay?.focus||[]).forEach(f=>{ ebTotal[f.brand]=f.total; });
   const signals = (metrics.signals||[]).filter(x=>x.scarcity!=null);
   const maxAbs = Math.max(...signals.map(x=>Math.abs(x.scarcity)), 1);
-  $('#demandPressure').innerHTML = signals.length
+  setEl('#demandPressure', signals.length
     ? signals.map(x=>{
         const pos = x.scarcity >= 0;
         // Diverging bar: positive grows right of centre, negative left.
@@ -596,7 +645,7 @@ function render(latest, history, exports, metrics, alerts){
           <div class="svtrack divtrack"><div class="divfill" style="${pos?`left:50%;width:${w}%;background:var(--good)`:`right:50%;width:${w}%;background:var(--heat)`}"></div></div>
         </div>`;
       }).join('')
-    : '<div style="color:var(--ink-3);font-size:13px">Needs 8+ days of both demand and supply history per brand.</div>';
+    : '<div style="color:var(--ink-3);font-size:13px">Needs 8+ days of both demand and supply history per brand.</div>');
   const fpDelta={}; const Tfp2=history.trends?.fp;
   if(Tfp2){ Object.entries(Tfp2.byBrand).forEach(([b,arr])=>{ const v=arr.filter(x=>x!=null); fpDelta[b]=(v[v.length-1]??0)-(v[0]??0); }); }
   const moMap={}; gt.forEach(x=>{ moMap[x.brand]=x.mo; });
@@ -762,7 +811,7 @@ function render(latest, history, exports, metrics, alerts){
     .sort((a,b)=>(b.price?.median??-1)-(a.price?.median??-1));
   const num = v => v!=null ? v.toLocaleString('en-US') : '—';
   const hasDist = fpFocus.some(x=>x.price?.median!=null);
-  $('#fpBody').innerHTML = !fpFocus.length
+  setEl('#fpBody', !fpFocus.length
     ? '<tr><td colspan="5" style="color:var(--ink-3)">Awaiting first Fashionphile capture. Populates on the next daily run.</td></tr>'
     : !hasDist
       ? '<tr><td colspan="5" style="color:var(--ink-3)">Price distribution starts with the next daily capture. Earlier days recorded only a floor price, which was not a market price.</td></tr>'
@@ -775,13 +824,13 @@ function render(latest, history, exports, metrics, alerts){
             <td class="price">${x.price?.median!=null?fmt(x.price.median):'—'}${dd}</td>
             <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.price?.p90!=null?fmt(x.price.p90):'—'}</td>
             <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${num(x.live ?? x.liveAll ?? x.count)}</td></tr>`;
-        }).join('');
+        }).join(''));
 
   // ---- Sell-through ----
   const st = Object.entries(latest.sources.fp_sell_through?.brands || {})
     .sort((a,b)=>(b[1].turnoverPct??-1)-(a[1].turnoverPct??-1));
   const stStatus = latest.sources.fp_sell_through?.status;
-  $('#stBody').innerHTML = !st.length
+  setEl('#stBody', !st.length
     ? `<tr><td colspan="5" style="color:var(--ink-3)">${stStatus==='baseline'
         ? 'Baseline captured today. Sell-through needs two consecutive days and appears on the next run.'
         : 'Awaiting the first SKU capture. Populates on the next daily run.'}</td></tr>`
@@ -789,14 +838,14 @@ function render(latest, history, exports, metrics, alerts){
         <td style="text-align:right;font-family:var(--mono);color:var(--gold);font-variant-numeric:tabular-nums">${num(v.departures)}</td>
         <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${num(v.arrivals)}</td>
         <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${v.turnoverPct!=null?v.turnoverPct.toFixed(2)+'%':'—'}</td>
-        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${v.medianDaysToSell!=null?v.medianDaysToSell+'d':'—'}</td></tr>`).join('');
+        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${v.medianDaysToSell!=null?v.medianDaysToSell+'d':'—'}</td></tr>`).join(''));
 
   const eb = (latest.sources.ebay?.focus || []).slice().sort((a,b)=>(b.total??-1)-(a.total??-1));
-  $('#ebayBody').innerHTML = eb.length
+  setEl('#ebayBody', eb.length
     ? eb.map(x=>`<tr><td><span class="b">${esc(x.brand)}</span></td>
         <td style="text-align:right;font-family:var(--mono);color:var(--gold);font-variant-numeric:tabular-nums">${svCell(x.brand)}</td>
         <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.total!=null?x.total.toLocaleString('en-US'):'—'}</td></tr>`).join('')
-    : '<tr><td colspan="3" style="color:var(--ink-3)">Awaiting first eBay capture — populates on the next daily run.</td></tr>';
+    : '<tr><td colspan="3" style="color:var(--ink-3)">Awaiting first eBay capture — populates on the next daily run.</td></tr>');
   const trr = latest.sources.therealreal || {};
   if(trr.asOf) $('#trrHead').textContent = `The RealReal — most-searched · ${trr.asOf}`;
   $('#trrSearch').innerHTML = (trr.mostSearchedBrands||[]).slice(0,8).map(b=>`<li><span class="b">${esc(b)}</span></li>`).join('');
