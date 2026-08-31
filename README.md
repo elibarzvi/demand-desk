@@ -91,10 +91,23 @@ inventory arriving to meet it. It replaced a ratio of monthly search volume to
 eBay listings, which produced a byte-identical ranking on all 24 days it ran,
 because both of its inputs were effectively constant.
 
-**Google Trends is anchored.** Trends normalizes 0-100 within a single request, so
-two batches are two different scales. Every batch now carries a shared anchor
-keyword and is rescaled onto it. Values captured before this fix are on the old
-per-batch scale and are excluded from the baselines of the brands it affected.
+**Google Trends is a relative index, not a raw score.** Trends normalizes 0-100
+within a single request, which breaks comparability twice over. Across brands, two
+batches are two different scales, fixed by carrying a shared anchor keyword in
+every batch. Across days, Google renormalizes the whole 30-day window to max=100
+on every request, so when the window slides and its peak changes, every brand
+rescales at once: on 2026-08-30 all five batch-one brands appeared to surge
+together, and Louis Vuitton's raw value swung 78 percent over eight days while its
+level relative to the other brands swung 25 percent. Each brand is therefore stored
+divided by the mean across all tracked brands that day, which cancels the shared
+factor. Raw values captured before this fix are not a valid time series and are
+excluded rather than spliced onto a different scale.
+
+**One condition, one alert.** A single Trends move was once reported three times
+over as a breakout, a streak and a weekly move. Only the most informative alert per
+series and brand survives. Notifications also carry a three-day cooldown, because
+the capture runs three times daily and a value sitting near a threshold would
+otherwise re-announce itself on every run.
 
 **Some numbers are recorded but not alerted on.** StockX result counts stop at
 1000, so a `1000` means "at least 1000" and is stored as `results_capped`. StockX

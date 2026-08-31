@@ -33,17 +33,19 @@ const SERIES = {
     get: s => Object.entries(s.sources?.fp_sell_through?.brands || {}).map(([b, v]) => [b, v.medianDaysToSell ?? null]) },
   'ebay.listings':    { label: 'eBay active listings', dir: 'supply',
     get: s => (s.sources?.ebay?.focus || []).map(f => [f.brand, f.total ?? null]) },
-  'trends.interest':  { label: 'Google Trends interest', dir: 'demand',
+  'trends.interest':  { label: 'Google Trends relative interest', dir: 'demand',
     get: s => {
       // Trends values captured before the shared-anchor fix were normalized within
       // their own batch. Batch-one brands were already on the anchor's scale, but
       // the rest were not, so their pre-fix points must not share a baseline with
       // post-fix ones. Drop them rather than splice two different scales.
-      const anchored = !!s.sources?.google_trends?.anchor;
+      // Only the relative index is a valid time series. Raw last-values were
+      // renormalized by Google on every request, so points captured before `rel`
+      // existed cannot share a baseline with points after it and are dropped
+      // rather than spliced onto a different scale.
       return (s.sources?.google_trends?.focus || []).map(f => {
-        const v = (f.series || []).slice(-1)[0]?.value ?? null;
-        if (!anchored && RESCALED_BRANDS.has(f.brand)) return [f.brand, null];
-        return [f.brand, v];
+        const rel = (f.rel || []).slice(-1)[0]?.value ?? null;
+        return [f.brand, rel];
       });
     } },
   // Captured and charted, but excluded from alerting. Search volume is a monthly
@@ -125,7 +127,7 @@ const MIN_MOVE_PCT = 4;
 // Bounded 0-100 index series need a floor too. Goyard's Trends interest sits near
 // 21, so one integer point is 4.8% and a routine 4-point wobble looked like a
 // -19% collapse. Below this level, percentage moves are granularity, not demand.
-const MIN_LEVEL = { 'trends.interest': 25 };
+const MIN_LEVEL = { 'trends.interest': 0.25 };   // relative index centres on 1.0
 
 function buildAlerts(series, latest, snaps) {
   const alerts = [];
@@ -174,7 +176,23 @@ function buildAlerts(series, latest, snaps) {
   }
 
   const rank = { high: 0, medium: 1, low: 2 };
-  return alerts.sort((a, b) => rank[a.severity] - rank[b.severity] || Math.abs(b.z ?? 0) - Math.abs(a.z ?? 0));
+
+  // One condition, one alert. A single move in Louis Vuitton's Trends interest was
+  // reported three times over on 2026-08-30 (breakout, streak and weekly-move),
+  // which pads the count and makes a quiet day look busy. Keep the most
+  // informative alert per series and brand: a breakout states the size of the
+  // move, a weekly move states its direction over time, a streak only its length.
+  const TYPE_RANK = { 'breakout': 0, 'weekly-move': 1, 'streak': 2 };
+  const best = new Map();
+  const passthrough = [];
+  for (const a of alerts) {
+    if (!(a.type in TYPE_RANK)) { passthrough.push(a); continue; }   // stale-source etc.
+    const k = `${a.series}|${a.brand ?? ''}`;
+    const cur = best.get(k);
+    if (!cur || TYPE_RANK[a.type] < TYPE_RANK[cur.type]) best.set(k, a);
+  }
+  const merged = [...passthrough, ...best.values()];
+  return merged.sort((a, b) => rank[a.severity] - rank[b.severity] || Math.abs(b.z ?? 0) - Math.abs(a.z ?? 0));
 }
 
 // ---- Signals ------------------------------------------------------------

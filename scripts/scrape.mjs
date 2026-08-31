@@ -210,7 +210,31 @@ async function scrapeGoogleTrends() {
   });
 
   if (!focus.some(f => f.series.length)) throw new Error('no Google Trends data returned');
-  return { status: 'ok', via: 'dataforseo-google-trends', anchor: TREND_ANCHOR.keyword, focus };
+
+  // Cross-DAY comparability, which the anchor above does not give us. Google
+  // renormalizes the whole 30-day window to max=100 on every request, so when the
+  // window slides and its peak changes, every value rescales at once. Storing the
+  // raw last point made all five batch-one brands appear to surge together on
+  // 2026-08-30; Louis Vuitton's raw value swung 78% over eight days while its
+  // level relative to the other brands swung 25%.
+  //
+  // Dividing each brand by the mean across all brands that day cancels the shared
+  // rescaling factor, because it multiplies every brand equally. The result is a
+  // relative interest index: comparable across days, and defined for the anchor
+  // too, which a ratio against the anchor would not be.
+  const dates = [...new Set(focus.flatMap(f => f.series.map(p => p.date)))].sort();
+  const meanByDate = {};
+  for (const d of dates) {
+    const vals = focus.map(f => f.series.find(p => p.date === d)?.value).filter(v => v != null);
+    if (vals.length) meanByDate[d] = vals.reduce((a, b) => a + b, 0) / vals.length;
+  }
+  for (const f of focus) {
+    f.rel = f.series
+      .filter(p => meanByDate[p.date])
+      .map(p => ({ date: p.date, value: +(p.value / meanByDate[p.date]).toFixed(4) }));
+  }
+
+  return { status: 'ok', via: 'dataforseo-google-trends', anchor: TREND_ANCHOR.keyword, relativeTo: 'mean-of-tracked-brands', focus };
 }
 
 // ---- StockX: rendered search results (bot-protected GraphQL behind the scenes, so

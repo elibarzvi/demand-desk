@@ -11,6 +11,7 @@
 // the day's capture.
 import fs from 'node:fs';
 import path from 'node:path';
+import zlib from 'node:zlib';
 import { execFileSync } from 'node:child_process';
 import { ROOT, latestSnapshot, previousSnapshot } from '../src/lib/util.mjs';
 
@@ -39,12 +40,40 @@ function previousAlerts() {
 
 const key = a => `${a.type}|${a.series}|${a.brand ?? ''}`;
 
+// The workflow captures three times a day, and values sitting near a threshold
+// cross back and forth between runs. Comparing only against the previous
+// alerts.json let the same condition re-announce itself each time, which is how
+// the alert channel got three messages for 2026-08-29 alone. A cooldown records
+// what has actually been sent and stays quiet on it for a few days.
+const COOLDOWN_DAYS = 3;
+const SENT_FILE = path.join(ROOT, 'data', 'state', 'notified.json');
+
+function readSent() {
+  try { return JSON.parse(fs.readFileSync(SENT_FILE, 'utf8')); } catch { return {}; }
+}
+function writeSent(map) {
+  try {
+    fs.mkdirSync(path.dirname(SENT_FILE), { recursive: true });
+    fs.writeFileSync(SENT_FILE, JSON.stringify(map, null, 2) + '\n');
+  } catch (e) { console.log('[notify] could not persist cooldown state:', e.message); }
+}
+const daysApart = (a, b) => Math.abs(Math.round((new Date(b) - new Date(a)) / 86400000));
+
+// A bare model name is ambiguous; prepend the brand unless it already carries it.
+const modelLabel = (model, brand) => {
+  if (!brand) return model;
+  const norm = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  return norm(model).includes(norm(brand)) ? model : `${brand} ${model}`;
+};
+
 function build() {
   const alerts = readJson(path.join(DERIVED, 'alerts.json'), { alerts: [] });
   const latest = latestSnapshot();
   if (!latest) return null;
   const prevSnap = previousSnapshot(latest.date);
   const prevKeys = new Set((previousAlerts()?.alerts || []).map(key));
+  const sent = readSent();
+  const sentNow = {};
 
   const lines = [];
 
@@ -56,7 +85,12 @@ function build() {
     if (a.type === 'stale-source' && CHRONIC.has(a.series)) continue;
     if (a.type === 'weekly-move' && a.severity === 'low') continue;
     if (prevKeys.has(key(a))) continue;
-    if (a.severity === 'high' || a.type === 'breakout' || a.type === 'stale-source') lines.push(a.message);
+    const sentOn = sent[key(a)];
+    if (sentOn && daysApart(sentOn, latest.date) < COOLDOWN_DAYS) continue;
+    if (a.severity === 'high' || a.type === 'breakout' || a.type === 'stale-source') {
+      lines.push(a.message);
+      sentNow[key(a)] = latest.date;
+    }
   }
 
   // 2. Recoveries: a source that had frozen has started changing again.
@@ -94,7 +128,7 @@ function build() {
     lines.push(`FIRST SELL-THROUGH DATA: ${totalSold} items cleared across ${brands.length} brands. ${top.join('; ')}.`);
 
     const models = Object.entries(st.byModel || {}).sort((a, b) => b[1].sold - a[1].sold).slice(0, 4);
-    if (models.length) lines.push(`Top models: ${models.map(([m, v]) => `${m} ${v.sold}${v.medianDaysToSell != null ? ` (${v.medianDaysToSell}d)` : ''}`).join(', ')}.`);
+    if (models.length) lines.push(`Top models: ${models.map(([m, v]) => `${modelLabel(m, v.brand)} ${v.sold}${v.medianDaysToSell != null ? ` (${v.medianDaysToSell}d)` : ''}`).join(', ')}.`);
   }
 
   // 5. Sell-through sanity. These are impossible or implausible readings that
@@ -110,7 +144,7 @@ function build() {
     }
   }
 
-  return lines.length ? { date: latest.date, lines } : null;
+  return lines.length ? { date: latest.date, lines, sent, sentNow } : null;
 }
 
 async function main() {
@@ -135,6 +169,14 @@ async function main() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text, unfurl_links: false })
   });
+  // Only record the cooldown once Slack has actually accepted the message, so a
+  // failed post is retried tomorrow rather than silently suppressed for days.
+  if (r.ok && payload.sentNow) {
+    const merged = { ...payload.sent, ...payload.sentNow };
+    const cutoff = new Date(payload.date); cutoff.setDate(cutoff.getDate() - 30);
+    for (const [k, d] of Object.entries(merged)) if (new Date(d) < cutoff) delete merged[k];
+    writeSent(merged);
+  }
   console.log(r.ok ? `[notify] sent ${payload.lines.length} item(s)` : `[notify] Slack rejected the post: HTTP ${r.status}`);
 }
 
