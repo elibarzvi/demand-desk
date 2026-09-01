@@ -1,38 +1,38 @@
 {
-  "generatedAt": "2026-08-31T20:10:41.644Z",
-  "date": "2026-08-31",
+  "generatedAt": "2026-09-01T00:39:24.403Z",
+  "date": "2026-09-01",
   "count": 3,
   "alerts": [
     {
-      "date": "2026-08-31",
+      "date": "2026-09-01",
       "type": "stale-source",
       "severity": "high",
       "series": "mirror",
       "brand": null,
-      "unchangedDays": 26,
+      "unchangedDays": 27,
       "lastChanged": "2026-08-05",
-      "message": "Source \"mirror\" has returned identical data for 26 consecutive days (last change 2026-08-05)."
+      "message": "Source \"mirror\" has returned identical data for 27 consecutive days (last change 2026-08-05)."
     },
     {
-      "date": "2026-08-31",
+      "date": "2026-09-01",
       "type": "stale-source",
       "severity": "high",
       "series": "search_volume",
       "brand": null,
-      "unchangedDays": 17,
+      "unchangedDays": 18,
       "lastChanged": "2026-08-14",
-      "message": "Source \"search_volume\" has returned identical data for 17 consecutive days (last change 2026-08-14)."
+      "message": "Source \"search_volume\" has returned identical data for 18 consecutive days (last change 2026-08-14)."
     },
     {
-      "date": "2026-08-31",
+      "date": "2026-09-01",
       "type": "streak",
       "severity": "low",
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Fendi",
-      "value": 740,
-      "streak": -4,
-      "message": "Fendi Fashionphile listings (all categories) has fallen 4 days straight to 740."
+      "value": 736,
+      "streak": -5,
+      "message": "Fendi Fashionphile listings (all categories) has fallen 5 days straight to 736."
     }
   ]
 }
