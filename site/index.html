@@ -286,14 +286,15 @@
        scrolling to read one brand across. -->
   <section class="card full">
     <div class="chead"><h2>Brand board</h2><span class="src-tag">every live signal, one row per brand</span></div>
-    <p class="cnote">Sorted by scarcity: search momentum minus supply momentum, each z-scored against its own history. <b>Median</b> is the market price for the tracked segment; <b>sold</b> and <b>days to sell</b> come from the daily SKU diff.</p>
+    <p class="cnote">Sorted by scarcity: search momentum minus supply momentum, each z-scored against its own history. <b>Median</b> is the market price for the tracked segment; <b>Supply</b> is how many days the current shelf lasts at the recent clearing rate; <b>clearing</b> is what sold relative to the shelf midpoint, so a positive figure means the expensive end is what moves.</p>
     <div class="twrap"><table class="board"><thead><tr>
       <th>Brand</th>
       <th style="text-align:right">Scarcity</th>
       <th style="text-align:right">Interest</th>
       <th style="text-align:right">Searches/mo</th>
       <th style="text-align:right">Median</th>
-      <th style="text-align:right">Band</th>
+      <th style="text-align:right">Supply</th>
+      <th style="text-align:right">Clearing</th>
       <th style="text-align:right">Listings</th>
       <th style="text-align:right">eBay</th>
       <th style="text-align:right">Sold</th>
@@ -570,6 +571,7 @@ function render(latest, history, exports, metrics, alerts){
       gtRel[f.brand] = (f.rel || []).map(p => p.value);
     });
     const sig = {}; (metrics.signals || []).forEach(x => { sig[x.brand] = x; });
+    const an = metrics.analytics?.brands || {};
 
     const names = new Set([...fp.map(f => f.brand), ...Object.keys(eb), ...Object.keys(sv)]);
     return [...names].map(brand => {
@@ -582,7 +584,12 @@ function render(latest, history, exports, metrics, alerts){
         searches: sv[brand] ?? null,
         median: f.price?.median ?? null,
         medianPct: M('fp.medianPrice', brand)?.dodPct ?? null,
-        p10: f.price?.p10 ?? null, p90: f.price?.p90 ?? null,
+        // Days of supply and the clearing gap replace the p10-p90 band, which was
+        // reference detail rather than something to act on. Both come from the
+        // analytics layer, pooled over its window so the medians are not read off
+        // a single day's handful of sales.
+        supply: an[brand]?.daysOfSupply ?? null,
+        clearing: an[brand]?.clearingGapPct ?? null,
         listings: f.live ?? f.liveAll ?? null,
         ebay: eb[brand] ?? null,
         sold: t.departures ?? null,
@@ -598,14 +605,17 @@ function render(latest, history, exports, metrics, alerts){
       : `<span style="color:${r.scarcity >= 0 ? 'var(--good)' : 'var(--heat)'}">${r.scarcity >= 0 ? '+' : ''}${r.scarcity.toFixed(2)}</span>`;
     const dd = r.medianPct != null && Math.abs(r.medianPct) >= 0.1
       ? `<span class="delta ${r.medianPct > 0 ? 'up' : 'down'}" style="margin-left:5px">${r.medianPct > 0 ? '+' : ''}${r.medianPct.toFixed(1)}%</span>` : '';
-    const band = (r.p10 != null && r.p90 != null) ? `${fmt(r.p10)}<span class="dim">–</span>${fmt(r.p90)}` : '<span class="dim">—</span>';
+    const supply = r.supply != null ? `${r.supply}d` : '<span class="dim">—</span>';
+    const clearing = r.clearing == null ? '<span class="dim">—</span>'
+      : `<span style="color:${r.clearing >= 0 ? 'var(--good)' : 'var(--heat)'}">${r.clearing >= 0 ? '+' : ''}${r.clearing.toFixed(1)}%</span>`;
     return `<tr>
       <td><span class="b">${esc(r.brand)}</span><div class="sub2">${esc(r.segment)}</div></td>
       <td class="num">${sc}</td>
       <td class="num">${sparkline(r.spark, 46, 15) || '<span class="dim">—</span>'}</td>
       <td class="num">${n0(r.searches)}</td>
       <td class="num gold">${r.median != null ? fmt(r.median) : '<span class="dim">—</span>'}${dd}</td>
-      <td class="num small">${band}</td>
+      <td class="num">${supply}</td>
+      <td class="num small">${clearing}</td>
       <td class="num">${n0(r.listings)}</td>
       <td class="num">${n0(r.ebay)}</td>
       <td class="num gold">${n0(r.sold)}</td>

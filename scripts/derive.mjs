@@ -11,6 +11,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { EXPORT_DIR, ROOT, readAllSnapshots, writeFile, toCsv } from '../src/lib/util.mjs';
 import { describe, median } from '../src/lib/stats.mjs';
+import { buildAnalytics } from '../src/lib/analytics.mjs';
 
 const DERIVED_DIR = path.join(ROOT, 'data', 'derived');
 
@@ -259,6 +260,7 @@ function build() {
   const series = buildSeries(snaps);
   const alerts = buildAlerts(series, latest, snaps);
   const signals = buildSignals(series);
+  const analytics = buildAnalytics(snaps);
 
   // Collapse each series to its metric bundle for the site payload.
   const metrics = {};
@@ -276,7 +278,7 @@ function build() {
   writeFile(path.join(DERIVED_DIR, 'metrics.json'), JSON.stringify({
     generatedAt: new Date().toISOString(),
     firstDate: snaps[0].date, lastDate: latest.date, days: snaps.length,
-    metrics, signals, freshness: staleness(snaps)
+    metrics, signals, analytics, freshness: staleness(snaps)
   }, null, 2) + '\n');
 
   writeFile(path.join(DERIVED_DIR, 'alerts.json'), JSON.stringify({
