@@ -12,7 +12,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
-import { execFileSync } from 'node:child_process';
 import { ROOT, latestSnapshot, previousSnapshot } from '../src/lib/util.mjs';
 
 const DERIVED = path.join(ROOT, 'data', 'derived');
@@ -27,15 +26,6 @@ const CHRONIC = new Set(['mirror', 'search_volume']);
 
 function readJson(p, fallback = null) {
   try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return fallback; }
-}
-
-// Yesterday's alerts come from git rather than a state file: derive runs before
-// the commit step, so HEAD still holds the previous day's version.
-function previousAlerts() {
-  try {
-    const out = execFileSync('git', ['show', 'HEAD:data/derived/alerts.json'], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
-    return JSON.parse(out);
-  } catch { return null; }
 }
 
 const key = a => `${a.type}|${a.series}|${a.brand ?? ''}`;
@@ -71,7 +61,6 @@ function build() {
   const latest = latestSnapshot();
   if (!latest) return null;
   const prevSnap = previousSnapshot(latest.date);
-  const prevKeys = new Set((previousAlerts()?.alerts || []).map(key));
   const sent = readSent();
   const sentNow = {};
 
@@ -79,12 +68,17 @@ function build() {
 
   // 1. Alerts worth surfacing: a breakout has already cleared both significance
   //    and magnitude gates in derive.mjs, so anything left is real. Chronic
-  //    staleness is dropped. Only conditions that are NEW today are sent, so an
-  //    ongoing situation is not re-announced every morning.
+  //    staleness is dropped, and the cooldown below keeps an ongoing situation
+  //    from being re-announced every morning.
+  //
+  //    Suppression deliberately keys off what was actually SENT, recorded only
+  //    after Slack accepts a post, rather than off whatever sits in the previous
+  //    alerts.json. Those are not the same thing: running derive by hand and
+  //    committing the result would otherwise mark alerts as announced that no
+  //    one ever received, which is exactly what happened on 2026-09-03.
   for (const a of alerts.alerts || []) {
     if (a.type === 'stale-source' && CHRONIC.has(a.series)) continue;
     if (a.type === 'weekly-move' && a.severity === 'low') continue;
-    if (prevKeys.has(key(a))) continue;
     const sentOn = sent[key(a)];
     if (sentOn && daysApart(sentOn, latest.date) < COOLDOWN_DAYS) continue;
     if (a.severity === 'high' || a.type === 'breakout' || a.type === 'stale-source') {
