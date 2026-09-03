@@ -114,6 +114,23 @@ otherwise re-announce itself on every run.
 lowest ask and monthly search volume are charted but excluded from alerting: the
 first is a junk floor, the second only moves when a monthly bucket rolls over.
 
+**Baselines are robust, and captures are sanity-checked.** On 2026-08-10 the
+Fashionphile index was mid-rebuild and returned 41 Chanel listings instead of
+7326, with every field well formed and the capture recorded as ok. That one point
+inflated the standard deviation of every affected series by three to eight times,
+and because a z-score divides by that spread, it silently suppressed real
+breakouts for weeks. Two changes follow from it. Baselines now use the median and
+MAD rather than the mean and standard deviation, which barely move under the same
+corruption (Chanel's median shifted by 3 listings out of 7300). And a capture
+whose total collapses by more than half against the previous day is rejected
+outright, which carries the previous values forward and leaves the SKU state
+untouched so sell-through is not handed a phantom set of departures.
+
+**There is no weekly cycle in supply.** Pooling daily changes by weekday appeared
+to show a large Monday drop and Tuesday rebound. That was entirely the corrupted
+2026-08-10 capture. With it excluded, normal day-to-day movement is roughly 3
+percent in either direction and no weekday stands out.
+
 **Alerts require size as well as significance.** A breakout needs both a z-score
 of 2 or more against the series' own baseline AND a move of at least 4 percent.
 The z-score alone was not enough: eBay listing counts are stable to within about

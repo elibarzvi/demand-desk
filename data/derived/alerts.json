@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T17:54:41.016Z",
+  "generatedAt": "2026-09-03T22:13:44.487Z",
   "date": "2026-09-03",
-  "count": 5,
+  "count": 4,
   "alerts": [
     {
       "date": "2026-09-03",
@@ -11,10 +11,10 @@
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Hermès",
       "value": 1369,
-      "z": 3.36,
-      "baseline": 1305.71,
-      "changePct": 4.85,
-      "message": "Hermès Fashionphile listings (tracked segment) at 1369 is +4.85% vs its 8-day normal of 1305.71 (z=3.36)."
+      "z": 4.97,
+      "baseline": 1310,
+      "changePct": 4.5,
+      "message": "Hermès Fashionphile listings (tracked segment) at 1369 is +4.5% vs its 8-day normal of 1310 (z=4.97)."
     },
     {
       "date": "2026-09-03",
@@ -24,10 +24,23 @@
       "metric": "Fashionphile 90th-pct price",
       "brand": "The Row",
       "value": 5665,
-      "z": -3.35,
-      "baseline": 5919.29,
-      "changePct": -4.3,
-      "message": "The Row Fashionphile 90th-pct price at 5665 is -4.3% vs its 8-day normal of 5919.29 (z=-3.35)."
+      "z": -4.14,
+      "baseline": 5980,
+      "changePct": -5.27,
+      "message": "The Row Fashionphile 90th-pct price at 5665 is -5.27% vs its 8-day normal of 5980 (z=-4.14)."
+    },
+    {
+      "date": "2026-09-03",
+      "type": "breakout",
+      "severity": "high",
+      "series": "fp.p90Price",
+      "metric": "Fashionphile 90th-pct price",
+      "brand": "Goyard",
+      "value": 3795,
+      "z": -3.07,
+      "baseline": 3985,
+      "changePct": -4.77,
+      "message": "Goyard Fashionphile 90th-pct price at 3795 is -4.77% vs its 8-day normal of 3985 (z=-3.07)."
     },
     {
       "date": "2026-09-03",
@@ -38,32 +51,6 @@
       "unchangedDays": 20,
       "lastChanged": "2026-08-14",
       "message": "Source \"search_volume\" has returned identical data for 20 consecutive days (last change 2026-08-14)."
-    },
-    {
-      "date": "2026-09-03",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "fp.p90Price",
-      "metric": "Fashionphile 90th-pct price",
-      "brand": "Goyard",
-      "value": 3795,
-      "z": -2.75,
-      "baseline": 3965,
-      "changePct": -4.29,
-      "message": "Goyard Fashionphile 90th-pct price at 3795 is -4.29% vs its 8-day normal of 3965 (z=-2.75)."
-    },
-    {
-      "date": "2026-09-03",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "ebay.listings",
-      "metric": "eBay active listings",
-      "brand": "Hermès",
-      "value": 286197,
-      "z": 2.2,
-      "baseline": 268009.48,
-      "changePct": 6.79,
-      "message": "Hermès eBay active listings at 286197 is +6.79% vs its 28-day normal of 268009.48 (z=2.2)."
     }
   ]
 }

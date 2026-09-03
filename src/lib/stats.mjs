@@ -67,9 +67,29 @@ export function describe(points, window = 28) {
   // Baseline excludes today, so today is scored against its own history rather
   // than against a window it is already inside.
   const prior = values.slice(-1 - window, -1);
+
+  // Robust statistics, not mean and standard deviation. On 2026-08-10 the
+  // Fashionphile index returned 41 Chanel listings instead of 7326 while
+  // reporting success, and that single point inflated the standard deviation of
+  // every affected brand by three to eight times. Because a z-score divides by
+  // that spread, the effect was to silently suppress real breakouts for weeks.
+  // The median and MAD barely move under the same corruption: Chanel's median
+  // shifted by 3 listings out of 7300.
+  //
+  // MAD is scaled by 1.4826 so it estimates the same quantity as a standard
+  // deviation for normally distributed data, keeping the usual z thresholds
+  // meaningful.
+  const bMed = prior.length >= MIN_BASELINE ? median(prior) : null;
+  const mad = bMed != null ? median(prior.map(v => Math.abs(v - bMed))) : null;
+  const robustSd = (mad != null && mad > 0) ? mad * 1.4826 : null;
+
+  // A series that is genuinely constant has a MAD of zero; fall back to the
+  // classical spread there rather than dividing by nothing.
   const bMean = prior.length >= MIN_BASELINE ? mean(prior) : null;
-  const bSd = prior.length >= MIN_BASELINE ? stdev(prior) : null;
-  const z = (bMean != null && bSd) ? +((last - bMean) / bSd).toFixed(2) : null;
+  const spread = robustSd ?? (prior.length >= MIN_BASELINE ? stdev(prior) : null);
+  const centre = bMed ?? bMean;
+  const z = (centre != null && spread) ? +((last - centre) / spread).toFixed(2) : null;
+  const bSd = spread;
 
   const at = back => values.length > back ? values[values.length - 1 - back] : null;
 
@@ -82,13 +102,13 @@ export function describe(points, window = 28) {
     // a move is statistically unusual but not whether it is big enough to care
     // about: on a very stable series a 2% wobble clears two standard deviations.
     // Alerting gates on this as well as on z.
-    baselinePct: bMean != null ? pct(bMean, last) : null,
+    baselinePct: centre != null ? pct(centre, last) : null,
     dodPct: pct(at(1), last),
     wowPct: pct(at(7), last),
     changePct: pct(values[0], last),
     min: Math.min(...values),
     max: Math.max(...values),
-    baselineMean: bMean != null ? +bMean.toFixed(2) : null,
+    baselineMean: centre != null ? +centre.toFixed(2) : null,   // robust centre (median)
     baselineSd: bSd != null ? +bSd.toFixed(2) : null,
     z,
     streak: streak(values),

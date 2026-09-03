@@ -46,7 +46,35 @@ async function scrapeMirror() {
 // Cartier) with exact price percentiles over the whole live inventory, plus every
 // live SKU so departures can be diffed into real sell-through. See
 // src/lib/fashionphile.mjs for why the old "lowest price" read was meaningless.
-async function scrapeFashionphile() {
+// A source can return structurally valid but semantically worthless data. On
+// 2026-08-10 the Algolia index was mid-rebuild and answered with 41 Chanel
+// listings instead of 7326, yet every field was well formed, so the capture was
+// recorded as ok. That single day inflated the standard deviation of every
+// affected series by three to eight times and suppressed real breakouts for
+// weeks afterwards.
+//
+// The only cheap defence is a plausibility check against yesterday. Inventory of
+// this size does not halve overnight, so a collapse of that scale is a broken
+// read, not a market event. Throwing here routes into the existing carry-forward
+// path and, importantly, leaves the SKU state untouched, so sell-through is not
+// handed a phantom set of departures.
+const IMPLAUSIBLE_DROP = 0.5;
+
+function assertPlausible(focus, prev) {
+  const prevFocus = prev?.sources?.fashionphile?.focus || [];
+  if (!prevFocus.length) return;
+  const total = focus.reduce((a, f) => a + (f.liveAll ?? 0), 0);
+  const prevTotal = prevFocus.reduce((a, f) => a + (f.liveAll ?? f.count ?? 0), 0);
+  if (!prevTotal || !total) {
+    if (prevTotal && !total) throw new Error(`implausible capture: 0 listings against ${prevTotal} yesterday`);
+    return;
+  }
+  if (total < prevTotal * IMPLAUSIBLE_DROP) {
+    throw new Error(`implausible capture: ${total} listings against ${prevTotal} yesterday, a ${Math.round((1 - total / prevTotal) * 100)}% collapse`);
+  }
+}
+
+async function scrapeFashionphile(prev) {
   const focus = [];
   const errors = [];
   for (const seg of SEGMENTS) {
@@ -57,6 +85,7 @@ async function scrapeFashionphile() {
     }
   }
   if (!focus.length) throw new Error('no Fashionphile data returned');
+  assertPlausible(focus, prev);
 
   // Per-model capture. Brand aggregates cannot answer "is the Birkin 25 moving",
   // which is the level an actual buying decision works at.
@@ -352,7 +381,7 @@ async function main() {
 
   let fashionphile, sellThrough = { status: 'unavailable', brands: {} };
   try {
-    fashionphile = await scrapeFashionphile();
+    fashionphile = await scrapeFashionphile(prevDay);
     // Diff today's live SKUs against yesterday's state to derive sell-through.
     // The SKU lists themselves are huge, so they go to the rolling state file and
     // only the departure events (the actual signal) land in the snapshot.
