@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-03T22:13:44.487Z",
+  "generatedAt": "2026-09-03T23:19:13.172Z",
   "date": "2026-09-03",
-  "count": 4,
+  "count": 5,
   "alerts": [
     {
       "date": "2026-09-03",
@@ -10,11 +10,11 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Hermès",
-      "value": 1369,
-      "z": 4.97,
+      "value": 1379,
+      "z": 5.82,
       "baseline": 1310,
-      "changePct": 4.5,
-      "message": "Hermès Fashionphile listings (tracked segment) at 1369 is +4.5% vs its 8-day normal of 1310 (z=4.97)."
+      "changePct": 5.27,
+      "message": "Hermès Fashionphile listings (tracked segment) at 1379 is +5.27% vs its 8-day normal of 1310 (z=5.82)."
     },
     {
       "date": "2026-09-03",
@@ -51,6 +51,19 @@
       "unchangedDays": 20,
       "lastChanged": "2026-08-14",
       "message": "Source \"search_volume\" has returned identical data for 20 consecutive days (last change 2026-08-14)."
+    },
+    {
+      "date": "2026-09-03",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "ebay.listings",
+      "metric": "eBay active listings",
+      "brand": "Cartier",
+      "value": 83164,
+      "z": 2.24,
+      "baseline": 79813,
+      "changePct": 4.2,
+      "message": "Cartier eBay active listings at 83164 is +4.2% vs its 28-day normal of 79813 (z=2.24)."
     }
   ]
 }
