@@ -86,7 +86,16 @@ export function describe(points, window = 28) {
   // A series that is genuinely constant has a MAD of zero; fall back to the
   // classical spread there rather than dividing by nothing.
   const bMean = prior.length >= MIN_BASELINE ? mean(prior) : null;
-  const spread = robustSd ?? (prior.length >= MIN_BASELINE ? stdev(prior) : null);
+  let spread = robustSd ?? (prior.length >= MIN_BASELINE ? stdev(prior) : null);
+
+  // Robustness cuts both ways. Prices move in discrete steps and sit still for
+  // days, so their MAD can be a rounding error: The Row's median price held a
+  // 2150-2250 band, giving a spread of 1% of level, and a genuine 13.7% move
+  // then scored z=13.49. That number is not wrong so much as meaningless, and it
+  // wrecks any severity ranking built on z. Floor the spread at a small fraction
+  // of the level so a near-constant series cannot manufacture enormous scores.
+  const MIN_SPREAD_FRAC = 0.02;
+  if (spread != null && bMed != null) spread = Math.max(spread, Math.abs(bMed) * MIN_SPREAD_FRAC);
   const centre = bMed ?? bMean;
   const z = (centre != null && spread) ? +((last - centre) / spread).toFixed(2) : null;
   const bSd = spread;

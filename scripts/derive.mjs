@@ -28,9 +28,13 @@ const SERIES = {
     get: s => (s.sources?.fashionphile?.focus || []).map(f => [f.brand, f.price?.median ?? null]) },
   'fp.p90Price':      { label: 'Fashionphile 90th-pct price', dir: 'price',
     get: s => (s.sources?.fashionphile?.focus || []).map(f => [f.brand, f.price?.p90 ?? null]) },
-  'fp.turnover':      { label: 'Daily sell-through %', dir: 'demand',
+  // Sell-through series are the youngest here and are still settling: days to
+  // sell rose for 8 of 8 brands at once in early September, which is a panel
+  // ageing artifact rather than eight simultaneous market events. Hold them to a
+  // longer baseline before they are allowed to alert.
+  'fp.turnover':      { label: 'Daily sell-through %', dir: 'demand', minN: 21,
     get: s => Object.entries(s.sources?.fp_sell_through?.brands || {}).map(([b, v]) => [b, v.turnoverPct ?? null]) },
-  'fp.daysToSell':    { label: 'Median days to sell', dir: 'demand-inverse',
+  'fp.daysToSell':    { label: 'Median days to sell', dir: 'demand-inverse', minN: 21,
     get: s => Object.entries(s.sources?.fp_sell_through?.brands || {}).map(([b, v]) => [b, v.medianDaysToSell ?? null]) },
   'ebay.listings':    { label: 'eBay active listings', dir: 'supply',
     get: s => (s.sources?.ebay?.focus || []).map(f => [f.brand, f.total ?? null]) },
@@ -75,7 +79,7 @@ function buildSeries(snaps) {
         (byBrand[brand] ||= []).push({ date: s.date, value: typeof value === 'number' ? value : null });
       }
     }
-    out[key] = { label: def.label, dir: def.dir, alert: def.alert !== false, brands: byBrand };
+    out[key] = { label: def.label, dir: def.dir, alert: def.alert !== false, minN: def.minN ?? 0, brands: byBrand };
   }
   return out;
 }
@@ -131,7 +135,7 @@ const MIN_MOVE_PCT = 4;
 const MIN_LEVEL = { 'trends.interest': 0.25 };   // relative index centres on 1.0
 
 function buildAlerts(series, latest, snaps) {
-  const alerts = [];
+  let alerts = [];
   const push = (a) => alerts.push({ date: latest.date, ...a });
 
   for (const [key, def] of Object.entries(series)) {
@@ -139,6 +143,7 @@ function buildAlerts(series, latest, snaps) {
     for (const [brand, points] of Object.entries(def.brands)) {
       const d = describe(points);
       if (!d || d.lastDate !== latest.date) continue;
+      if (d.n < (def.minN ?? 0)) continue;
 
       // Series whose level is too low for percentages to mean anything are skipped
       // entirely rather than alerted on with a caveat.
@@ -178,12 +183,39 @@ function buildAlerts(series, latest, snaps) {
 
   const rank = { high: 0, medium: 1, low: 2 };
 
+  // When most brands in one series move the same way on the same day, that is one
+  // systemic event, not many independent ones. Reporting it per brand produced a
+  // wall of correlated alerts and buried everything else. Collapse it into a
+  // single line that says so.
+  const SYSTEMIC_SHARE = 0.6;
+  const bySeries = {};
+  for (const a of alerts) {
+    if (!a.brand || a.z == null) continue;
+    (bySeries[a.series] ||= []).push(a);
+  }
+  const systemic = [];
+  const absorbed = new Set();
+  for (const [key, group] of Object.entries(bySeries)) {
+    const total = Object.keys(series[key]?.brands || {}).length;
+    if (total < 4 || group.length < Math.ceil(total * SYSTEMIC_SHARE)) continue;
+    const up = group.filter(a => a.z > 0).length, down = group.length - up;
+    const dir = up >= down ? 'rose' : 'fell';
+    if (Math.max(up, down) < Math.ceil(group.length * 0.8)) continue;   // mixed, not systemic
+    group.forEach(a => absorbed.add(a));
+    systemic.push({
+      date: latest.date, type: 'systemic', severity: 'medium', series: key, brand: null,
+      metric: group[0].metric, affected: group.length, of: total,
+      message: `${group[0].metric} ${dir} across ${group.length} of ${total} brands at once. A move that broad is usually a measurement or supply-side artifact rather than ${group.length} separate market events.`
+    });
+  }
+  alerts = alerts.filter(a => !absorbed.has(a)).concat(systemic);
+
   // One condition, one alert. A single move in Louis Vuitton's Trends interest was
   // reported three times over on 2026-08-30 (breakout, streak and weekly-move),
   // which pads the count and makes a quiet day look busy. Keep the most
   // informative alert per series and brand: a breakout states the size of the
   // move, a weekly move states its direction over time, a streak only its length.
-  const TYPE_RANK = { 'breakout': 0, 'weekly-move': 1, 'streak': 2 };
+  const TYPE_RANK = { 'systemic': 0, 'breakout': 1, 'weekly-move': 2, 'streak': 3 };
   const best = new Map();
   const passthrough = [];
   for (const a of alerts) {
