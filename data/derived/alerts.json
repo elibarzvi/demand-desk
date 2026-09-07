@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-07T18:46:41.024Z",
+  "generatedAt": "2026-09-07T23:31:53.119Z",
   "date": "2026-09-07",
-  "count": 9,
+  "count": 13,
   "alerts": [
     {
       "date": "2026-09-07",
@@ -10,11 +10,11 @@
       "series": "fp.medianPrice",
       "metric": "Fashionphile median price",
       "brand": "The Row",
-      "value": 2495,
-      "z": 6.83,
+      "value": 2515,
+      "z": 7.29,
       "baseline": 2195,
-      "changePct": 13.67,
-      "message": "The Row Fashionphile median price at 2495 is +13.67% vs its 12-day normal of 2195 (z=6.83)."
+      "changePct": 14.58,
+      "message": "The Row Fashionphile median price at 2515 is +14.58% vs its 12-day normal of 2195 (z=7.29)."
     },
     {
       "date": "2026-09-07",
@@ -23,24 +23,11 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "The Row",
-      "value": 138,
-      "z": -5.48,
+      "value": 137,
+      "z": -5.81,
       "baseline": 155,
-      "changePct": -10.97,
-      "message": "The Row Fashionphile listings (tracked segment) at 138 is -10.97% vs its 12-day normal of 155 (z=-5.48)."
-    },
-    {
-      "date": "2026-09-07",
-      "type": "breakout",
-      "severity": "high",
-      "series": "fp.listings",
-      "metric": "Fashionphile listings (tracked segment)",
-      "brand": "Fendi",
-      "value": 508,
-      "z": -3.31,
-      "baseline": 544,
-      "changePct": -6.62,
-      "message": "Fendi Fashionphile listings (tracked segment) at 508 is -6.62% vs its 12-day normal of 544 (z=-3.31)."
+      "changePct": -11.61,
+      "message": "The Row Fashionphile listings (tracked segment) at 137 is -11.61% vs its 12-day normal of 155 (z=-5.81)."
     },
     {
       "date": "2026-09-07",
@@ -49,11 +36,37 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Cartier",
-      "value": 363,
-      "z": -3.28,
+      "value": 357,
+      "z": -3.85,
       "baseline": 397,
-      "changePct": -8.56,
-      "message": "Cartier Fashionphile listings (tracked segment) at 363 is -8.56% vs its 12-day normal of 397 (z=-3.28)."
+      "changePct": -10.08,
+      "message": "Cartier Fashionphile listings (tracked segment) at 357 is -10.08% vs its 12-day normal of 397 (z=-3.85)."
+    },
+    {
+      "date": "2026-09-07",
+      "type": "breakout",
+      "severity": "high",
+      "series": "fp.listings",
+      "metric": "Fashionphile listings (tracked segment)",
+      "brand": "Fendi",
+      "value": 505,
+      "z": -3.58,
+      "baseline": 544,
+      "changePct": -7.17,
+      "message": "Fendi Fashionphile listings (tracked segment) at 505 is -7.17% vs its 12-day normal of 544 (z=-3.58)."
+    },
+    {
+      "date": "2026-09-07",
+      "type": "breakout",
+      "severity": "high",
+      "series": "fp.medianPrice",
+      "metric": "Fashionphile median price",
+      "brand": "Cartier",
+      "value": 2650,
+      "z": 3.54,
+      "baseline": 2475,
+      "changePct": 7.07,
+      "message": "Cartier Fashionphile median price at 2650 is +7.07% vs its 12-day normal of 2475 (z=3.54)."
     },
     {
       "date": "2026-09-07",
@@ -72,11 +85,35 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Chanel",
-      "value": 4288,
-      "z": -2.16,
+      "value": 4269,
+      "z": -2.38,
       "baseline": 4482,
-      "changePct": -4.33,
-      "message": "Chanel Fashionphile listings (tracked segment) at 4288 is -4.33% vs its 12-day normal of 4482 (z=-2.16)."
+      "changePct": -4.75,
+      "message": "Chanel Fashionphile listings (tracked segment) at 4269 is -4.75% vs its 12-day normal of 4482 (z=-2.38)."
+    },
+    {
+      "date": "2026-09-07",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "ebay.listings",
+      "metric": "eBay active listings",
+      "brand": "Goyard",
+      "value": 7047,
+      "z": 2.02,
+      "baseline": 6756.5,
+      "changePct": 4.3,
+      "message": "Goyard eBay active listings at 7047 is +4.3% vs its 32-day normal of 6756.5 (z=2.02)."
+    },
+    {
+      "date": "2026-09-07",
+      "type": "streak",
+      "severity": "low",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Chanel",
+      "value": 6948,
+      "streak": -4,
+      "message": "Chanel Fashionphile listings (all categories) has fallen 4 days straight to 6948."
     },
     {
       "date": "2026-09-07",
@@ -85,9 +122,9 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Fendi",
-      "value": 693,
+      "value": 689,
       "streak": -4,
-      "message": "Fendi Fashionphile listings (all categories) has fallen 4 days straight to 693."
+      "message": "Fendi Fashionphile listings (all categories) has fallen 4 days straight to 689."
     },
     {
       "date": "2026-09-07",
@@ -96,9 +133,20 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "The Row",
-      "value": 141,
+      "value": 140,
       "streak": -4,
-      "message": "The Row Fashionphile listings (all categories) has fallen 4 days straight to 141."
+      "message": "The Row Fashionphile listings (all categories) has fallen 4 days straight to 140."
+    },
+    {
+      "date": "2026-09-07",
+      "type": "streak",
+      "severity": "low",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Cartier",
+      "value": 451,
+      "streak": -4,
+      "message": "Cartier Fashionphile listings (all categories) has fallen 4 days straight to 451."
     },
     {
       "date": "2026-09-07",
@@ -107,9 +155,9 @@
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
       "brand": "Goyard",
-      "value": 0.3327,
-      "wowPct": -23.57,
-      "message": "Goyard Google Trends relative interest moved -23.57% in 7 days to 0.3327."
+      "value": 0.3517,
+      "wowPct": -19.21,
+      "message": "Goyard Google Trends relative interest moved -19.21% in 7 days to 0.3517."
     }
   ]
 }
