@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-08T12:54:17.222Z",
+  "generatedAt": "2026-09-08T17:58:58.427Z",
   "date": "2026-09-08",
-  "count": 17,
+  "count": 18,
   "alerts": [
     {
       "date": "2026-09-08",
@@ -18,6 +18,19 @@
     },
     {
       "date": "2026-09-08",
+      "type": "breakout",
+      "severity": "high",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Chanel",
+      "value": 6755,
+      "z": -3.09,
+      "baseline": 7260.5,
+      "changePct": -6.96,
+      "message": "Chanel Fashionphile listings (all categories) at 6755 is -6.96% vs its 36-day normal of 7260.5 (z=-3.09)."
+    },
+    {
+      "date": "2026-09-08",
       "type": "stale-source",
       "severity": "high",
       "series": "search_volume",
@@ -30,27 +43,27 @@
       "date": "2026-09-08",
       "type": "breakout",
       "severity": "medium",
-      "series": "fp.listingsAll",
-      "metric": "Fashionphile listings (all categories)",
-      "brand": "Chanel",
-      "value": 6865,
-      "z": -2.41,
-      "baseline": 7260.5,
-      "changePct": -5.45,
-      "message": "Chanel Fashionphile listings (all categories) at 6865 is -5.45% vs its 36-day normal of 7260.5 (z=-2.41)."
+      "series": "fp.medianPrice",
+      "metric": "Fashionphile median price",
+      "brand": "Cartier",
+      "value": 2695,
+      "z": 2.83,
+      "baseline": 2485,
+      "changePct": 8.45,
+      "message": "Cartier Fashionphile median price at 2695 is +8.45% vs its 13-day normal of 2485 (z=2.83)."
     },
     {
       "date": "2026-09-08",
       "type": "breakout",
       "severity": "medium",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Rolex",
-      "value": 1.5608,
-      "z": -2.22,
-      "baseline": 1.63,
-      "changePct": -4.45,
-      "message": "Rolex Google Trends relative interest at 1.5608 is -4.45% vs its 9-day normal of 1.63 (z=-2.22)."
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Louis Vuitton",
+      "value": 7555,
+      "z": -2.36,
+      "baseline": 8123.5,
+      "changePct": -7,
+      "message": "Louis Vuitton Fashionphile listings (all categories) at 7555 is -7% vs its 36-day normal of 8123.5 (z=-2.36)."
     },
     {
       "date": "2026-09-08",
@@ -69,20 +82,9 @@
       "series": "fp.listings",
       "brand": null,
       "metric": "Fashionphile listings (tracked segment)",
-      "affected": 6,
+      "affected": 7,
       "of": 8,
-      "message": "Fashionphile listings (tracked segment) fell across 6 of 8 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 6 separate market events."
-    },
-    {
-      "date": "2026-09-08",
-      "type": "streak",
-      "severity": "low",
-      "series": "fp.listingsAll",
-      "metric": "Fashionphile listings (all categories)",
-      "brand": "Louis Vuitton",
-      "value": 7663,
-      "streak": -5,
-      "message": "Louis Vuitton Fashionphile listings (all categories) has fallen 5 days straight to 7663."
+      "message": "Fashionphile listings (tracked segment) fell across 7 of 8 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 7 separate market events."
     },
     {
       "date": "2026-09-08",
@@ -91,9 +93,9 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Dior",
-      "value": 1167,
+      "value": 1149,
       "streak": -5,
-      "message": "Dior Fashionphile listings (all categories) has fallen 5 days straight to 1167."
+      "message": "Dior Fashionphile listings (all categories) has fallen 5 days straight to 1149."
     },
     {
       "date": "2026-09-08",
@@ -102,9 +104,9 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Fendi",
-      "value": 680,
+      "value": 670,
       "streak": -5,
-      "message": "Fendi Fashionphile listings (all categories) has fallen 5 days straight to 680."
+      "message": "Fendi Fashionphile listings (all categories) has fallen 5 days straight to 670."
     },
     {
       "date": "2026-09-08",
@@ -113,9 +115,9 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "The Row",
-      "value": 139,
+      "value": 137,
       "streak": -5,
-      "message": "The Row Fashionphile listings (all categories) has fallen 5 days straight to 139."
+      "message": "The Row Fashionphile listings (all categories) has fallen 5 days straight to 137."
     },
     {
       "date": "2026-09-08",
@@ -124,9 +126,9 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Cartier",
-      "value": 449,
+      "value": 439,
       "streak": -5,
-      "message": "Cartier Fashionphile listings (all categories) has fallen 5 days straight to 449."
+      "message": "Cartier Fashionphile listings (all categories) has fallen 5 days straight to 439."
     },
     {
       "date": "2026-09-08",
@@ -135,9 +137,9 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Chanel",
-      "value": 4220,
+      "value": 4143,
       "streak": -5,
-      "message": "Chanel Fashionphile listings (tracked segment) has fallen 5 days straight to 4220."
+      "message": "Chanel Fashionphile listings (tracked segment) has fallen 5 days straight to 4143."
     },
     {
       "date": "2026-09-08",
@@ -146,9 +148,20 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Louis Vuitton",
-      "value": 5488,
+      "value": 5405,
       "streak": -5,
-      "message": "Louis Vuitton Fashionphile listings (tracked segment) has fallen 5 days straight to 5488."
+      "message": "Louis Vuitton Fashionphile listings (tracked segment) has fallen 5 days straight to 5405."
+    },
+    {
+      "date": "2026-09-08",
+      "type": "streak",
+      "severity": "low",
+      "series": "fp.listings",
+      "metric": "Fashionphile listings (tracked segment)",
+      "brand": "Goyard",
+      "value": 298,
+      "streak": -4,
+      "message": "Goyard Fashionphile listings (tracked segment) has fallen 4 days straight to 298."
     },
     {
       "date": "2026-09-08",
@@ -157,9 +170,9 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Fendi",
-      "value": 498,
+      "value": 488,
       "streak": -5,
-      "message": "Fendi Fashionphile listings (tracked segment) has fallen 5 days straight to 498."
+      "message": "Fendi Fashionphile listings (tracked segment) has fallen 5 days straight to 488."
     },
     {
       "date": "2026-09-08",
@@ -168,9 +181,9 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "The Row",
-      "value": 136,
+      "value": 134,
       "streak": -5,
-      "message": "The Row Fashionphile listings (tracked segment) has fallen 5 days straight to 136."
+      "message": "The Row Fashionphile listings (tracked segment) has fallen 5 days straight to 134."
     },
     {
       "date": "2026-09-08",
@@ -179,9 +192,9 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Cartier",
-      "value": 356,
+      "value": 349,
       "streak": -6,
-      "message": "Cartier Fashionphile listings (tracked segment) has fallen 6 days straight to 356."
+      "message": "Cartier Fashionphile listings (tracked segment) has fallen 6 days straight to 349."
     },
     {
       "date": "2026-09-08",
@@ -190,9 +203,9 @@
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
       "brand": "Goyard",
-      "value": 0.3446,
-      "wowPct": -19.97,
-      "message": "Goyard Google Trends relative interest moved -19.97% in 7 days to 0.3446."
+      "value": 0.3658,
+      "wowPct": -15.05,
+      "message": "Goyard Google Trends relative interest moved -15.05% in 7 days to 0.3658."
     }
   ]
 }
