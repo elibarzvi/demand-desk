@@ -573,7 +573,12 @@ function render(latest, history, exports, metrics, alerts){
     const sig = {}; (metrics.signals || []).forEach(x => { sig[x.brand] = x; });
     const an = metrics.analytics?.brands || {};
 
-    const names = new Set([...fp.map(f => f.brand), ...Object.keys(eb), ...Object.keys(sv)]);
+    // A brand appears only if a live source captured it today. Search volume is
+    // refreshed weekly and carried in between, so a brand dropped from tracking
+    // lingers in that payload and would otherwise ghost on the board as an empty
+    // row: Fendi did exactly that after being removed. Rolex has no Fashionphile
+    // segment but is genuinely tracked on eBay, so eBay counts as live.
+    const names = new Set([...fp.map(f => f.brand), ...Object.keys(eb)]);
     return [...names].map(brand => {
       const f = fp.find(x => x.brand === brand) || {};
       const t = stb[brand] || {};
@@ -603,7 +608,7 @@ function render(latest, history, exports, metrics, alerts){
   setEl('#boardBody', boardRows.map(r => {
     const sc = r.scarcity == null ? '<span class="dim">—</span>'
       : `<span style="color:${r.scarcity >= 0 ? 'var(--good)' : 'var(--heat)'}">${r.scarcity >= 0 ? '+' : ''}${r.scarcity.toFixed(2)}</span>`;
-    const dd = r.medianPct != null && Math.abs(r.medianPct) >= 0.1
+    const dd = (r.median != null && r.medianPct != null && Math.abs(r.medianPct) >= 0.1)
       ? `<span class="delta ${r.medianPct > 0 ? 'up' : 'down'}" style="margin-left:5px">${r.medianPct > 0 ? '+' : ''}${r.medianPct.toFixed(1)}%</span>` : '';
     const supply = r.supply != null ? `${r.supply}d` : '<span class="dim">—</span>';
     const clearing = r.clearing == null ? '<span class="dim">—</span>'
