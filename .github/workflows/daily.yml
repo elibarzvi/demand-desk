@@ -54,8 +54,17 @@ jobs:
           node-version: 20
 
       - run: npm install --no-audit --no-fund
+      # Playwright exists solely for StockX, which is best-effort, frequently
+      # bot-blocked, and whose lowest-ask figure is excluded from alerting because
+      # it reports the cheapest object carrying a brand name rather than a bag.
+      # Letting its install abort the job meant a transient apt hiccup on Google's
+      # package repo destroyed a whole day of Fashionphile, eBay, Trends and
+      # sell-through capture, which is what happened on 2026-09-09. The scraper
+      # already treats a missing browser as a StockX-only failure, so this step is
+      # allowed to fail and the capture degrades instead of dying.
       - run: npx playwright install --with-deps chromium
         if: github.event_name != 'push'
+        continue-on-error: true
 
       - name: Capture today's snapshot
         if: github.event_name != 'push'
