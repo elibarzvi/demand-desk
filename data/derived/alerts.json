@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-09T17:01:04.720Z",
+  "generatedAt": "2026-09-09T17:45:07.631Z",
   "date": "2026-09-09",
   "count": 8,
   "alerts": [
@@ -18,6 +18,32 @@
     },
     {
       "date": "2026-09-09",
+      "type": "breakout",
+      "severity": "high",
+      "series": "fp.listings",
+      "metric": "Fashionphile listings (tracked segment)",
+      "brand": "The Row",
+      "value": 133,
+      "z": -4.72,
+      "baseline": 154,
+      "changePct": -13.64,
+      "message": "The Row Fashionphile listings (tracked segment) at 133 is -13.64% vs its 14-day normal of 154 (z=-4.72)."
+    },
+    {
+      "date": "2026-09-09",
+      "type": "breakout",
+      "severity": "high",
+      "series": "fp.listings",
+      "metric": "Fashionphile listings (tracked segment)",
+      "brand": "Chanel",
+      "value": 4148,
+      "z": -3.62,
+      "baseline": 4472,
+      "changePct": -7.25,
+      "message": "Chanel Fashionphile listings (tracked segment) at 4148 is -7.25% vs its 14-day normal of 4472 (z=-3.62)."
+    },
+    {
+      "date": "2026-09-09",
       "type": "stale-source",
       "severity": "high",
       "series": "search_volume",
@@ -33,11 +59,24 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Chanel",
-      "value": 6706,
-      "z": -2.54,
+      "value": 6760,
+      "z": -2.28,
       "baseline": 7219,
-      "changePct": -7.11,
-      "message": "Chanel Fashionphile listings (all categories) at 6706 is -7.11% vs its 37-day normal of 7219 (z=-2.54)."
+      "changePct": -6.36,
+      "message": "Chanel Fashionphile listings (all categories) at 6760 is -6.36% vs its 37-day normal of 7219 (z=-2.28)."
+    },
+    {
+      "date": "2026-09-09",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "fp.medianPrice",
+      "metric": "Fashionphile median price",
+      "brand": "Hermès",
+      "value": 6795,
+      "z": 2.02,
+      "baseline": 6495,
+      "changePct": 4.62,
+      "message": "Hermès Fashionphile median price at 6795 is +4.62% vs its 14-day normal of 6495 (z=2.02)."
     },
     {
       "date": "2026-09-09",
@@ -51,47 +90,14 @@
     },
     {
       "date": "2026-09-09",
-      "type": "systemic",
-      "severity": "medium",
-      "series": "fp.listings",
-      "brand": null,
-      "metric": "Fashionphile listings (tracked segment)",
-      "affected": 7,
-      "of": 8,
-      "message": "Fashionphile listings (tracked segment) fell across 7 of 8 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 7 separate market events."
-    },
-    {
-      "date": "2026-09-09",
-      "type": "weekly-move",
+      "type": "streak",
       "severity": "low",
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "The Row",
-      "value": 134,
-      "wowPct": -15.19,
-      "message": "The Row Fashionphile listings (all categories) moved -15.19% in 7 days to 134."
-    },
-    {
-      "date": "2026-09-09",
-      "type": "streak",
-      "severity": "low",
-      "series": "fp.listings",
-      "metric": "Fashionphile listings (tracked segment)",
-      "brand": "The Row",
-      "value": 132,
+      "value": 135,
       "streak": -6,
-      "message": "The Row Fashionphile listings (tracked segment) has fallen 6 days straight to 132."
-    },
-    {
-      "date": "2026-09-09",
-      "type": "streak",
-      "severity": "low",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Cartier",
-      "value": 0.8536,
-      "streak": -4,
-      "message": "Cartier Google Trends relative interest has fallen 4 days straight to 0.8536."
+      "message": "The Row Fashionphile listings (all categories) has fallen 6 days straight to 135."
     }
   ]
 }
