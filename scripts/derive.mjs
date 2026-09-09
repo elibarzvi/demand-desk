@@ -38,7 +38,14 @@ const SERIES = {
     get: s => Object.entries(s.sources?.fp_sell_through?.brands || {}).map(([b, v]) => [b, v.medianDaysToSell ?? null]) },
   'ebay.listings':    { label: 'eBay active listings', dir: 'supply',
     get: s => (s.sources?.ebay?.focus || []).map(f => [f.brand, f.total ?? null]) },
+  // Each Trends capture returns a full 30-day window, not a single reading, and
+  // the whole window shares one normalization. Taking one point per snapshot
+  // therefore threw away 31 of 32 points every day AND stitched together values
+  // from 30 differently-normalized requests. Reading the latest capture's window
+  // whole is both cleaner and far deeper: a brand added today arrives with a
+  // month of history instead of starting from nothing.
   'trends.interest':  { label: 'Google Trends relative interest', dir: 'demand',
+    expand: latest => (latest.sources?.google_trends?.focus || []).map(f => [f.brand, (f.rel || [])]),
     get: s => {
       // Trends values captured before the shared-anchor fix were normalized within
       // their own batch. Batch-one brands were already on the anchor's scale, but
@@ -69,8 +76,21 @@ const RESCALED_BRANDS = new Set(['Dior', 'Hermès', 'Fendi', 'The Row']);
 
 function buildSeries(snaps) {
   const out = {};
+  const latest = snaps[snaps.length - 1];
   for (const [key, def] of Object.entries(SERIES)) {
     const byBrand = {};
+
+    // A series whose source already carries its own history is read whole from
+    // the latest capture rather than sampled one point per snapshot.
+    if (def.expand) {
+      for (const [brand, points] of def.expand(latest)) {
+        if (!brand || !points.length) continue;
+        byBrand[brand] = points.map(p => ({ date: p.date, value: typeof p.value === 'number' ? p.value : null }));
+      }
+      out[key] = { label: def.label, dir: def.dir, alert: def.alert !== false, minN: def.minN ?? 0, brands: byBrand };
+      continue;
+    }
+
     for (const s of snaps) {
       let rows = [];
       try { rows = def.get(s) || []; } catch { rows = []; }
