@@ -1,108 +1,56 @@
 {
-  "generatedAt": "2026-09-08T23:26:12.509Z",
-  "date": "2026-09-08",
-  "count": 18,
+  "generatedAt": "2026-09-09T12:59:45.771Z",
+  "date": "2026-09-09",
+  "count": 7,
   "alerts": [
     {
-      "date": "2026-09-08",
+      "date": "2026-09-09",
       "type": "breakout",
       "severity": "high",
       "series": "fp.medianPrice",
       "metric": "Fashionphile median price",
       "brand": "The Row",
       "value": 2515,
-      "z": 7.19,
+      "z": 4.8,
       "baseline": 2195,
       "changePct": 14.58,
-      "message": "The Row Fashionphile median price at 2515 is +14.58% vs its 13-day normal of 2195 (z=7.19)."
+      "message": "The Row Fashionphile median price at 2515 is +14.58% vs its 14-day normal of 2195 (z=4.8)."
     },
     {
-      "date": "2026-09-08",
-      "type": "breakout",
-      "severity": "high",
-      "series": "fp.listingsAll",
-      "metric": "Fashionphile listings (all categories)",
-      "brand": "Chanel",
-      "value": 6707,
-      "z": -3.38,
-      "baseline": 7260.5,
-      "changePct": -7.62,
-      "message": "Chanel Fashionphile listings (all categories) at 6707 is -7.62% vs its 36-day normal of 7260.5 (z=-3.38)."
-    },
-    {
-      "date": "2026-09-08",
+      "date": "2026-09-09",
       "type": "stale-source",
       "severity": "high",
       "series": "search_volume",
       "brand": null,
-      "unchangedDays": 25,
+      "unchangedDays": 26,
       "lastChanged": "2026-08-14",
-      "message": "Source \"search_volume\" has returned identical data for 25 consecutive days (last change 2026-08-14)."
+      "message": "Source \"search_volume\" has returned identical data for 26 consecutive days (last change 2026-08-14)."
     },
     {
-      "date": "2026-09-08",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Louis Vuitton",
-      "value": 1.4345,
-      "z": -2.85,
-      "baseline": 1.52,
-      "changePct": -5.69,
-      "message": "Louis Vuitton Google Trends relative interest at 1.4345 is -5.69% vs its 9-day normal of 1.52 (z=-2.85)."
-    },
-    {
-      "date": "2026-09-08",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "fp.medianPrice",
-      "metric": "Fashionphile median price",
-      "brand": "Cartier",
-      "value": 2695,
-      "z": 2.83,
-      "baseline": 2485,
-      "changePct": 8.45,
-      "message": "Cartier Fashionphile median price at 2695 is +8.45% vs its 13-day normal of 2485 (z=2.83)."
-    },
-    {
-      "date": "2026-09-08",
+      "date": "2026-09-09",
       "type": "breakout",
       "severity": "medium",
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
-      "brand": "Louis Vuitton",
-      "value": 7514,
-      "z": -2.53,
-      "baseline": 8123.5,
-      "changePct": -7.5,
-      "message": "Louis Vuitton Fashionphile listings (all categories) at 7514 is -7.5% vs its 36-day normal of 8123.5 (z=-2.53)."
+      "brand": "Chanel",
+      "value": 6706,
+      "z": -2.54,
+      "baseline": 7219,
+      "changePct": -7.11,
+      "message": "Chanel Fashionphile listings (all categories) at 6706 is -7.11% vs its 37-day normal of 7219 (z=-2.54)."
     },
     {
-      "date": "2026-09-08",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "fp.listingsAll",
-      "metric": "Fashionphile listings (all categories)",
-      "brand": "Fendi",
-      "value": 661,
-      "z": -2.06,
-      "baseline": 722,
-      "changePct": -8.45,
-      "message": "Fendi Fashionphile listings (all categories) at 661 is -8.45% vs its 36-day normal of 722 (z=-2.06)."
-    },
-    {
-      "date": "2026-09-08",
+      "date": "2026-09-09",
       "type": "stale-source",
       "severity": "medium",
       "series": "mirror",
       "brand": null,
-      "unchangedDays": 3,
+      "unchangedDays": 4,
       "lastChanged": "2026-09-05",
-      "message": "Source \"mirror\" has returned identical data for 3 consecutive days (last change 2026-09-05)."
+      "message": "Source \"mirror\" has returned identical data for 4 consecutive days (last change 2026-09-05)."
     },
     {
-      "date": "2026-09-08",
+      "date": "2026-09-09",
       "type": "systemic",
       "severity": "medium",
       "series": "fp.listings",
@@ -113,103 +61,26 @@
       "message": "Fashionphile listings (tracked segment) fell across 7 of 8 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 7 separate market events."
     },
     {
-      "date": "2026-09-08",
-      "type": "streak",
-      "severity": "low",
-      "series": "fp.listingsAll",
-      "metric": "Fashionphile listings (all categories)",
-      "brand": "Dior",
-      "value": 1138,
-      "streak": -5,
-      "message": "Dior Fashionphile listings (all categories) has fallen 5 days straight to 1138."
-    },
-    {
-      "date": "2026-09-08",
+      "date": "2026-09-09",
       "type": "weekly-move",
       "severity": "low",
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "The Row",
-      "value": 136,
-      "wowPct": -15,
-      "message": "The Row Fashionphile listings (all categories) moved -15% in 7 days to 136."
+      "value": 134,
+      "wowPct": -15.19,
+      "message": "The Row Fashionphile listings (all categories) moved -15.19% in 7 days to 134."
     },
     {
-      "date": "2026-09-08",
+      "date": "2026-09-09",
       "type": "streak",
-      "severity": "low",
-      "series": "fp.listingsAll",
-      "metric": "Fashionphile listings (all categories)",
-      "brand": "Cartier",
-      "value": 437,
-      "streak": -5,
-      "message": "Cartier Fashionphile listings (all categories) has fallen 5 days straight to 437."
-    },
-    {
-      "date": "2026-09-08",
-      "type": "streak",
-      "severity": "low",
-      "series": "fp.listings",
-      "metric": "Fashionphile listings (tracked segment)",
-      "brand": "Chanel",
-      "value": 4115,
-      "streak": -5,
-      "message": "Chanel Fashionphile listings (tracked segment) has fallen 5 days straight to 4115."
-    },
-    {
-      "date": "2026-09-08",
-      "type": "streak",
-      "severity": "low",
-      "series": "fp.listings",
-      "metric": "Fashionphile listings (tracked segment)",
-      "brand": "Louis Vuitton",
-      "value": 5394,
-      "streak": -5,
-      "message": "Louis Vuitton Fashionphile listings (tracked segment) has fallen 5 days straight to 5394."
-    },
-    {
-      "date": "2026-09-08",
-      "type": "streak",
-      "severity": "low",
-      "series": "fp.listings",
-      "metric": "Fashionphile listings (tracked segment)",
-      "brand": "Goyard",
-      "value": 301,
-      "streak": -4,
-      "message": "Goyard Fashionphile listings (tracked segment) has fallen 4 days straight to 301."
-    },
-    {
-      "date": "2026-09-08",
-      "type": "streak",
-      "severity": "low",
-      "series": "fp.listings",
-      "metric": "Fashionphile listings (tracked segment)",
-      "brand": "Fendi",
-      "value": 481,
-      "streak": -5,
-      "message": "Fendi Fashionphile listings (tracked segment) has fallen 5 days straight to 481."
-    },
-    {
-      "date": "2026-09-08",
-      "type": "weekly-move",
       "severity": "low",
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "The Row",
-      "value": 133,
-      "wowPct": -15.29,
-      "message": "The Row Fashionphile listings (tracked segment) moved -15.29% in 7 days to 133."
-    },
-    {
-      "date": "2026-09-08",
-      "type": "streak",
-      "severity": "low",
-      "series": "fp.listings",
-      "metric": "Fashionphile listings (tracked segment)",
-      "brand": "Cartier",
-      "value": 350,
+      "value": 132,
       "streak": -6,
-      "message": "Cartier Fashionphile listings (tracked segment) has fallen 6 days straight to 350."
+      "message": "The Row Fashionphile listings (tracked segment) has fallen 6 days straight to 132."
     }
   ]
 }
