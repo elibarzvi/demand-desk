@@ -6,6 +6,7 @@
 // numbers a buying decision actually turns on, and they are all derivable from
 // data already captured.
 import { median, mean } from './stats.mjs';
+import { BRANDS } from './tracking.mjs';
 
 const pct = (from, to) => (from == null || to == null || from === 0) ? null : +(((to - from) / Math.abs(from)) * 100).toFixed(1);
 
@@ -92,5 +93,83 @@ export function buildAnalytics(snaps, windowDays = 14) {
     window: { from: win[0].date, to: win[win.length - 1].date, days: win.length },
     totalSold: events.length,
     brands, models
+  };
+}
+
+// ---- Core affinity ---------------------------------------------------------
+// The question behind the brand tiers is "what else are our customers buying".
+// Nothing here can answer that literally: Fashionphile's index exposes listings
+// and departures, never a buyer, so there is no basket and no way to know that
+// one person bought both a Kelly and a Cassette.
+//
+// What IS measurable is co-movement. If a candidate brand's demand rises and
+// falls in step with the core basket day after day, that is evidence the same
+// population is driving both. If it moves independently, it is a different
+// audience however well it sells. That is an inference from correlation, not an
+// observation of customers, and it should be read as such.
+function pearson(a, b) {
+  const pairs = a.map((v, i) => [v, b[i]]).filter(([x, y]) => x != null && y != null);
+  if (pairs.length < 5) return null;
+  const xs = pairs.map(p => p[0]), ys = pairs.map(p => p[1]);
+  const mx = mean(xs), my = mean(ys);
+  let num = 0, dx = 0, dy = 0;
+  for (let i = 0; i < xs.length; i++) {
+    const a1 = xs[i] - mx, b1 = ys[i] - my;
+    num += a1 * b1; dx += a1 * a1; dy += b1 * b1;
+  }
+  if (!dx || !dy) return null;
+  return { r: +(num / Math.sqrt(dx * dy)).toFixed(2), n: pairs.length };
+}
+
+// Correlation needs a lot more history than a level does. Below this, report the
+// number but mark it provisional rather than letting it drive a decision.
+const RELIABLE_N = 21;
+
+export function coreAffinity(snaps) {
+  const core = BRANDS.filter(b => b.tier === 'core').map(b => b.name);
+  const all = BRANDS.map(b => b.name);
+  if (core.length < 2) return null;
+
+  // Only turnover is usable here. The Trends relative index is each brand divided
+  // by the mean across brands, so the values are constrained to average one and
+  // any component is forced to anti-correlate with the rest: every brand scored
+  // between -0.98 and -1.00 against the basket, which is arithmetic, not demand.
+  // Compositional series cannot be correlated this way.
+  const read = (s, b) => s.sources?.fp_sell_through?.brands?.[b]?.turnoverPct ?? null;
+
+  const raw = {};
+  for (const b of all) raw[b] = snaps.map(s => read(s, b));
+
+  // Remove the platform-wide rhythm before correlating. Fashionphile has busy and
+  // quiet days that lift or depress every brand at once, and left in, that common
+  // factor makes unrelated brands look like they share an audience. What matters
+  // is whether a brand is strong on the days the core is strong, relative to how
+  // the whole site behaved that day.
+  const dayMean = snaps.map((_, i) => {
+    const vals = all.map(b => raw[b][i]).filter(v => v != null);
+    return vals.length >= 3 ? mean(vals) : null;
+  });
+  const series = {};
+  for (const b of all) {
+    series[b] = raw[b].map((v, i) => (v == null || dayMean[i] == null) ? null : v - dayMean[i]);
+  }
+
+  const basket = snaps.map((_, i) => {
+    const vals = core.map(b => series[b][i]).filter(v => v != null);
+    return vals.length === core.length ? mean(vals) : null;
+  });
+
+  const out = {};
+  for (const b of all) {
+    if (core.includes(b)) continue;
+    const c = pearson(series[b], basket);
+    if (c) out[b] = { turnover: c };
+  }
+
+  return {
+    core,
+    basis: 'co-movement of sell-through with the core basket after removing the platform-wide daily rhythm; not customer-level data',
+    brands: Object.fromEntries(Object.entries(out).map(([b, v]) =>
+      [b, { r: v.turnover.r, n: v.turnover.n, reliable: v.turnover.n >= RELIABLE_N }]))
   };
 }

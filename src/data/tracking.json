@@ -1,5 +1,6 @@
 {
   "_comment": "Single source of truth for what Demand Desk tracks. Edit this file to add, remove or retune a brand or product; every source reads from it. Set a source to false or null to stop tracking that brand there. Trends: exactly one brand must be the anchor, and each batch may hold at most 4 brands alongside it.",
+  "_cohort": "tier is either core or rotating. Core brands are the actual customer base (Hermes, Chanel, The Row) and are always tracked and always reported. Rotating brands are candidates, measured against the core basket to see whether they move with it. Changing a tier changes analysis and reporting emphasis, not whether data is captured.",
   "brands": [
     {
       "name": "Hermès",
@@ -17,7 +18,8 @@
       "trends": {
         "keyword": "hermes",
         "batch": 2
-      }
+      },
+      "tier": "core"
     },
     {
       "name": "Chanel",
@@ -35,7 +37,27 @@
       "trends": {
         "keyword": "chanel",
         "batch": "anchor"
-      }
+      },
+      "tier": "core"
+    },
+    {
+      "name": "The Row",
+      "fashionphile": {
+        "vendor": "The Row",
+        "label": "Handbags",
+        "facet": "meta.custom.filters_bags",
+        "values": [
+          "Handbags"
+        ]
+      },
+      "ebay": true,
+      "stockx": false,
+      "searchKeyword": "the row bag",
+      "trends": {
+        "keyword": "the row bag",
+        "batch": 2
+      },
+      "tier": "core"
     },
     {
       "name": "Louis Vuitton",
@@ -53,7 +75,8 @@
       "trends": {
         "keyword": "louis vuitton",
         "batch": 1
-      }
+      },
+      "tier": "rotating"
     },
     {
       "name": "Goyard",
@@ -71,7 +94,8 @@
       "trends": {
         "keyword": "goyard",
         "batch": 1
-      }
+      },
+      "tier": "rotating"
     },
     {
       "name": "Dior",
@@ -89,25 +113,8 @@
       "trends": {
         "keyword": "dior",
         "batch": 2
-      }
-    },
-    {
-      "name": "Fendi",
-      "fashionphile": {
-        "vendor": "Fendi",
-        "label": "Handbags",
-        "facet": "meta.custom.filters_bags",
-        "values": [
-          "Handbags"
-        ]
       },
-      "ebay": true,
-      "stockx": true,
-      "searchKeyword": "fendi bag",
-      "trends": {
-        "keyword": "fendi",
-        "batch": 2
-      }
+      "tier": "rotating"
     },
     {
       "name": "Cartier",
@@ -128,7 +135,8 @@
       "trends": {
         "keyword": "cartier",
         "batch": 1
-      }
+      },
+      "tier": "rotating"
     },
     {
       "name": "Rolex",
@@ -139,12 +147,14 @@
       "trends": {
         "keyword": "rolex",
         "batch": 1
-      }
+      },
+      "tier": "rotating"
     },
     {
-      "name": "The Row",
+      "name": "Prada",
+      "tier": "rotating",
       "fashionphile": {
-        "vendor": "The Row",
+        "vendor": "Prada",
         "label": "Handbags",
         "facet": "meta.custom.filters_bags",
         "values": [
@@ -153,10 +163,48 @@
       },
       "ebay": true,
       "stockx": false,
-      "searchKeyword": "the row bag",
+      "searchKeyword": "prada bag",
       "trends": {
-        "keyword": "the row bag",
+        "keyword": "prada",
         "batch": 2
+      }
+    },
+    {
+      "name": "Bottega Veneta",
+      "tier": "rotating",
+      "fashionphile": {
+        "vendor": "Bottega Veneta",
+        "label": "Handbags",
+        "facet": "meta.custom.filters_bags",
+        "values": [
+          "Handbags"
+        ]
+      },
+      "ebay": true,
+      "stockx": false,
+      "searchKeyword": "bottega veneta bag",
+      "trends": {
+        "keyword": "bottega veneta",
+        "batch": 3
+      }
+    },
+    {
+      "name": "Celine",
+      "tier": "rotating",
+      "fashionphile": {
+        "vendor": "Celine",
+        "label": "Handbags",
+        "facet": "meta.custom.filters_bags",
+        "values": [
+          "Handbags"
+        ]
+      },
+      "ebay": true,
+      "stockx": false,
+      "searchKeyword": "celine bag",
+      "trends": {
+        "keyword": "celine",
+        "batch": 3
       }
     }
   ],
@@ -253,11 +301,6 @@
       "model": "Margaux"
     },
     {
-      "brand": "Fendi",
-      "vendor": "Fendi",
-      "model": "Baguette"
-    },
-    {
       "brand": "Cartier",
       "vendor": "Cartier",
       "model": "LOVE",
@@ -265,6 +308,41 @@
         "meta.custom.filters_jewelry:Bracelets"
       ],
       "keepAccessories": true
+    },
+    {
+      "brand": "Prada",
+      "vendor": "Prada",
+      "model": "Galleria"
+    },
+    {
+      "brand": "Prada",
+      "vendor": "Prada",
+      "model": "Re-Edition"
+    },
+    {
+      "brand": "Bottega Veneta",
+      "vendor": "Bottega Veneta",
+      "model": "Cassette"
+    },
+    {
+      "brand": "Bottega Veneta",
+      "vendor": "Bottega Veneta",
+      "model": "Jodie"
+    },
+    {
+      "brand": "Bottega Veneta",
+      "vendor": "Bottega Veneta",
+      "model": "Andiamo"
+    },
+    {
+      "brand": "Celine",
+      "vendor": "Celine",
+      "model": "Triomphe"
+    },
+    {
+      "brand": "Celine",
+      "vendor": "Celine",
+      "model": "Luggage"
     }
   ]
 }
