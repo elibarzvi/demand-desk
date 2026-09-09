@@ -12,6 +12,8 @@ import crypto from 'node:crypto';
 import { chromium } from 'playwright';
 import { ROOT, SNAP_DIR, today, ensureDir, writeFile, previousSnapshot } from '../src/lib/util.mjs';
 import { SEGMENTS, captureSegment, MODELS, captureModel } from '../src/lib/fashionphile.mjs';
+// Brand and keyword lists all resolve from src/data/tracking.json.
+import { EBAY_BRANDS, STOCKX_BRANDS, SEARCH_KEYWORDS, TREND_ANCHOR, TREND_BATCHES } from '../src/lib/tracking.mjs';
 import { readLiveState, writeLiveState, diffLive } from '../src/lib/sellthrough.mjs';
 
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
@@ -107,7 +109,6 @@ async function scrapeFashionphile(prev) {
 // (GitHub Actions secrets EBAY_CLIENT_ID / EBAY_CLIENT_SECRET), so it stays disabled
 // on local runs unless those are exported. Active fixed-price listing count + floor
 // price per brand — a large, legitimate demand/supply signal. ----
-const EBAY_BRANDS = ['Hermès', 'Chanel', 'Louis Vuitton', 'Goyard', 'Dior', 'Fendi', 'Cartier', 'Rolex', 'The Row'];
 async function ebayToken() {
   const id = process.env.EBAY_CLIENT_ID, secret = process.env.EBAY_CLIENT_SECRET;
   if (!id || !secret) throw new Error('eBay credentials not set');
@@ -148,17 +149,6 @@ async function scrapeEbay() {
 // (paid keyword API). Credentials from env (DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD).
 // One cheap request/day for all keywords — the real search-demand number that layers
 // onto every brand row (eBay included). ----
-const SEARCH_KEYWORDS = [
-  { brand: 'Hermès', keyword: 'hermes bag' },
-  { brand: 'Chanel', keyword: 'chanel bag' },
-  { brand: 'Louis Vuitton', keyword: 'louis vuitton bag' },
-  { brand: 'Goyard', keyword: 'goyard bag' },
-  { brand: 'Dior', keyword: 'dior bag' },
-  { brand: 'Fendi', keyword: 'fendi bag' },
-  { brand: 'Cartier', keyword: 'cartier' },
-  { brand: 'Rolex', keyword: 'rolex' },
-  { brand: 'The Row', keyword: 'the row bag' }
-];
 async function scrapeSearchVolume() {
   const login = process.env.DATAFORSEO_LOGIN, pass = process.env.DATAFORSEO_PASSWORD;
   if (!login || !pass) throw new Error('DataForSEO credentials not set');
@@ -189,13 +179,6 @@ async function scrapeSearchVolume() {
 // The fix is the standard one: carry a shared anchor keyword in every batch and
 // rescale each batch so the anchor lines up. Chanel is the anchor because it is
 // large and stable, and it is a tracked brand anyway so it costs no extra slot.
-const TREND_ANCHOR = { brand: 'Chanel', keyword: 'chanel' };
-const TREND_BATCHES = [
-  [{ brand: 'Louis Vuitton', keyword: 'louis vuitton' }, { brand: 'Rolex', keyword: 'rolex' },
-   { brand: 'Cartier', keyword: 'cartier' }, { brand: 'Goyard', keyword: 'goyard' }],
-  [{ brand: 'Dior', keyword: 'dior' }, { brand: 'Hermès', keyword: 'hermes' },
-   { brand: 'Fendi', keyword: 'fendi' }, { brand: 'The Row', keyword: 'the row bag' }]
-];
 const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : null;
 
 async function scrapeGoogleTrends() {
@@ -269,7 +252,6 @@ async function scrapeGoogleTrends() {
 // ---- StockX: rendered search results (bot-protected GraphQL behind the scenes, so
 // this stays best-effort). Results render as name -> "Lowest Ask" -> $price; sponsored
 // ads lack "Lowest Ask" so they filter out naturally. Also grabs the "Browse N results".
-const STOCKX_BRANDS = ['Goyard', 'Hermès', 'Chanel', 'Louis Vuitton', 'Dior', 'Rolex', 'Cartier', 'Fendi'];
 function parseStockx(text) {
   const lines = cleanLines(text);
   const items = [];

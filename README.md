@@ -69,6 +69,27 @@ filter to any range (a day, a week, all-time):
 
 The same files are downloadable from the dashboard's Exports section.
 
+## Changing what is tracked
+
+Everything tracked lives in [`src/data/tracking.json`](src/data/tracking.json).
+Brands and products used to be six separate lists across two files (Fashionphile
+segments, the model watchlist, eBay brands, search keywords, Trends batches and
+StockX brands), so adding a brand meant editing all six and nothing checked that
+they agreed. They now all derive from that one file.
+
+Per brand you can set which sources track it (`fashionphile`, `ebay`, `stockx`),
+its `searchKeyword`, and its `trends` keyword and batch. Set a source to `false`
+or `null` to stop tracking that brand there. Two rules are enforced at load time
+rather than failing silently mid-run: exactly one brand must carry
+`"batch": "anchor"` for Trends, and no batch may hold more than four brands, since
+DataForSEO allows five keywords per request and the anchor occupies one slot.
+
+Models are matched as an exact quoted phrase against the title, inside the bag
+categories, with small leather goods filtered out. Add one with `brand`, `vendor`
+(Fashionphile's own spelling, so Dior is `Christian Dior`) and `model`. Pass
+`keepAccessories: true` where the line legitimately is an accessory, as with
+Chanel's Wallet On Chain or the Cartier LOVE bracelet.
+
 ## Reading the numbers
 
 A few things are worth knowing before you act on a figure.

@@ -87,13 +87,24 @@ function build() {
     }
   }
 
+  // Everything below pushes through this so it gets a cooldown key. Only alerts
+  // from alerts.json were keyed before, which meant recoveries and health lines
+  // re-sent on every run while the condition held: "mirror is publishing new data
+  // again" went out three times on 2026-09-05, at 07:51, 12:52 and 18:56.
+  const emit = (k, message) => {
+    const on = sent[k];
+    if (on && daysApart(on, latest.date) < COOLDOWN_DAYS) return;
+    lines.push(message);
+    sentNow[k] = latest.date;
+  };
+
   // 2. Recoveries: a source that had frozen has started changing again.
   const fresh = latest.capture?.freshness || {};
   const prevFresh = prevSnap?.capture?.freshness || {};
   for (const [name, f] of Object.entries(fresh)) {
     const before = prevFresh[name];
     if (before && (before.unchangedDays ?? 0) >= 3 && (f.unchangedDays ?? 0) === 0) {
-      lines.push(`RECOVERED: "${name}" is publishing new data again after ${before.unchangedDays} static days.`);
+      emit(`recovered|${name}`, `RECOVERED: "${name}" is publishing new data again after ${before.unchangedDays} static days.`);
     }
   }
 
@@ -101,11 +112,11 @@ function build() {
   //    market from the outside, which is the failure worth catching early.
   const fp = latest.sources?.fashionphile;
   if (fp && (fp.status === 'error' || fp.status === 'partial')) {
-    lines.push(`Fashionphile capture is ${fp.status}${fp.segmentErrors ? `: ${fp.segmentErrors.join('; ')}` : ''}.`);
+    emit(`health|fashionphile|${fp.status}`, `Fashionphile capture is ${fp.status}${fp.segmentErrors ? `: ${fp.segmentErrors.join('; ')}` : ''}.`);
   }
   const prevErrs = new Set((prevSnap?.capture?.errors || []).map(e => e.source));
   for (const e of latest.capture?.errors || []) {
-    if (!prevErrs.has(e.source)) lines.push(`New capture error from ${e.source}: ${e.error}`);
+    if (!prevErrs.has(e.source)) emit(`error|${e.source}`, `New capture error from ${e.source}: ${e.error}`);
   }
 
   const st = latest.sources?.fp_sell_through;
@@ -119,10 +130,10 @@ function build() {
     const totalSold = brands.reduce((a, [, v]) => a + v.departures, 0);
     const top = brands.sort((a, b) => (b[1].turnoverPct ?? 0) - (a[1].turnoverPct ?? 0)).slice(0, 3)
       .map(([b, v]) => `${b} ${v.departures} sold (${v.turnoverPct}%${v.medianDaysToSell != null ? `, median ${v.medianDaysToSell}d` : ''})`);
-    lines.push(`FIRST SELL-THROUGH DATA: ${totalSold} items cleared across ${brands.length} brands. ${top.join('; ')}.`);
+    emit('milestone|first-sell-through', `FIRST SELL-THROUGH DATA: ${totalSold} items cleared across ${brands.length} brands. ${top.join('; ')}.`);
 
     const models = Object.entries(st.byModel || {}).sort((a, b) => b[1].sold - a[1].sold).slice(0, 4);
-    if (models.length) lines.push(`Top models: ${models.map(([m, v]) => `${modelLabel(m, v.brand)} ${v.sold}${v.medianDaysToSell != null ? ` (${v.medianDaysToSell}d)` : ''}`).join(', ')}.`);
+    if (models.length) emit('milestone|first-sell-through-models', `Top models: ${models.map(([m, v]) => `${modelLabel(m, v.brand)} ${v.sold}${v.medianDaysToSell != null ? ` (${v.medianDaysToSell}d)` : ''}`).join(', ')}.`);
   }
 
   // 5. Sell-through sanity. These are impossible or implausible readings that
@@ -130,11 +141,11 @@ function build() {
   if (st?.status === 'ok') {
     const brands = Object.entries(st.brands || {});
     if (brands.length && brands.every(([, v]) => (v.departures ?? 0) === 0)) {
-      lines.push('Sell-through returned zero departures for every brand while reporting status ok. The SKU diff has probably broken.');
+      emit('sanity|zero-departures', 'Sell-through returned zero departures for every brand while reporting status ok. The SKU diff has probably broken.');
     }
     for (const [b, v] of brands) {
-      if (v.turnoverPct != null && v.turnoverPct > 10) lines.push(`${b} turnover of ${v.turnoverPct}% in one day is implausible and suggests a data problem.`);
-      if (v.departures != null && v.live != null && v.departures > v.live) lines.push(`${b} reports ${v.departures} departures against ${v.live} live listings, which is impossible.`);
+      if (v.turnoverPct != null && v.turnoverPct > 10) emit(`sanity|turnover|${b}`, `${b} turnover of ${v.turnoverPct}% in one day is implausible and suggests a data problem.`);
+      if (v.departures != null && v.live != null && v.departures > v.live) emit(`sanity|impossible|${b}`, `${b} reports ${v.departures} departures against ${v.live} live listings, which is impossible.`);
     }
   }
 

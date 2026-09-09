@@ -18,20 +18,10 @@ const INDEX = 'shopify_products_price_asc';
 const PAGE = 1000;      // Algolia max hitsPerPage
 const BAND_MAX = 4500;  // stay under the 5000-hit ceiling per query
 
-// Each brand is captured as ONE comparable segment. `vendor` is Fashionphile's
-// own spelling; `facet`/`values` isolate the category. Cartier sells no handbags,
-// so it is tracked as fine jewelry (369 of its 457 live pieces) rather than a
-// meaningless blend of rings and watches.
-export const SEGMENTS = [
-  { brand: 'Hermès',        vendor: 'Hermes',         label: 'Handbags', facet: 'meta.custom.filters_bags', values: ['Handbags'] },
-  { brand: 'Chanel',        vendor: 'Chanel',         label: 'Handbags', facet: 'meta.custom.filters_bags', values: ['Handbags'] },
-  { brand: 'Louis Vuitton', vendor: 'Louis Vuitton',  label: 'Handbags', facet: 'meta.custom.filters_bags', values: ['Handbags'] },
-  { brand: 'Goyard',        vendor: 'Goyard',         label: 'Handbags', facet: 'meta.custom.filters_bags', values: ['Handbags'] },
-  { brand: 'Dior',          vendor: 'Christian Dior', label: 'Handbags', facet: 'meta.custom.filters_bags', values: ['Handbags'] },
-  { brand: 'Fendi',         vendor: 'Fendi',          label: 'Handbags', facet: 'meta.custom.filters_bags', values: ['Handbags'] },
-  { brand: 'The Row',       vendor: 'The Row',        label: 'Handbags', facet: 'meta.custom.filters_bags', values: ['Handbags'] },
-  { brand: 'Cartier',       vendor: 'Cartier',        label: 'Fine jewelry', facet: 'meta.custom.filters_jewelry', values: ['Rings', 'Bracelets', 'Necklaces', 'Earrings'] }
-];
+// Segments and the model watchlist come from src/data/tracking.json so a brand is
+// configured in exactly one place. See src/lib/tracking.mjs.
+export { SEGMENTS } from './tracking.mjs';
+import { MODEL_LIST } from './tracking.mjs';
 
 async function algolia(params) {
   const r = await fetch(`https://${APP}-dsn.algolia.net/1/indexes/${INDEX}/query`, {
@@ -174,28 +164,7 @@ const BAG_SEGMENTS = [
 // the bag itself. Including them drags a Birkin median toward a card-holder price.
 const ACCESSORY = /\b(wallet|pouch|card holder|coin purse|strap|charm|phone|key ?ring|bracelet|earring|necklace|sunglass|scarf|belt|mirror case|cosmetic)\b/i;
 
-export const MODELS = [
-  { brand: 'Hermès', vendor: 'Hermes', model: 'Birkin 25' },
-  { brand: 'Hermès', vendor: 'Hermes', model: 'Birkin 30' },
-  { brand: 'Hermès', vendor: 'Hermes', model: 'Kelly' },
-  { brand: 'Hermès', vendor: 'Hermes', model: 'Constance' },
-  { brand: 'Hermès', vendor: 'Hermes', model: 'Lindy' },
-  { brand: 'Chanel', vendor: 'Chanel', model: 'Double Flap' },
-  { brand: 'Chanel', vendor: 'Chanel', model: 'Chanel 19' },
-  { brand: 'Chanel', vendor: 'Chanel', model: 'Boy' },
-  { brand: 'Chanel', vendor: 'Chanel', model: 'Wallet On Chain', keepAccessories: true },
-  { brand: 'Louis Vuitton', vendor: 'Louis Vuitton', model: 'Neverfull' },
-  { brand: 'Louis Vuitton', vendor: 'Louis Vuitton', model: 'Speedy' },
-  { brand: 'Louis Vuitton', vendor: 'Louis Vuitton', model: 'Alma' },
-  { brand: 'Louis Vuitton', vendor: 'Louis Vuitton', model: 'Pochette Metis' },
-  { brand: 'Dior', vendor: 'Christian Dior', model: 'Lady Dior' },
-  { brand: 'Dior', vendor: 'Christian Dior', model: 'Saddle' },
-  { brand: 'Goyard', vendor: 'Goyard', model: 'Saint Louis' },
-  { brand: 'Goyard', vendor: 'Goyard', model: 'Belvedere' },
-  { brand: 'The Row', vendor: 'The Row', model: 'Margaux' },
-  { brand: 'Fendi', vendor: 'Fendi', model: 'Baguette' },
-  { brand: 'Cartier', vendor: 'Cartier', model: 'LOVE', segments: ['meta.custom.filters_jewelry:Bracelets'], keepAccessories: true }
-];
+export const MODELS = MODEL_LIST;
 
 export async function captureModel(m) {
   const segments = m.segments || BAG_SEGMENTS;

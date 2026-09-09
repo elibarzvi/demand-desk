@@ -1,0 +1,270 @@
+{
+  "_comment": "Single source of truth for what Demand Desk tracks. Edit this file to add, remove or retune a brand or product; every source reads from it. Set a source to false or null to stop tracking that brand there. Trends: exactly one brand must be the anchor, and each batch may hold at most 4 brands alongside it.",
+  "brands": [
+    {
+      "name": "Hermès",
+      "fashionphile": {
+        "vendor": "Hermes",
+        "label": "Handbags",
+        "facet": "meta.custom.filters_bags",
+        "values": [
+          "Handbags"
+        ]
+      },
+      "ebay": true,
+      "stockx": true,
+      "searchKeyword": "hermes bag",
+      "trends": {
+        "keyword": "hermes",
+        "batch": 2
+      }
+    },
+    {
+      "name": "Chanel",
+      "fashionphile": {
+        "vendor": "Chanel",
+        "label": "Handbags",
+        "facet": "meta.custom.filters_bags",
+        "values": [
+          "Handbags"
+        ]
+      },
+      "ebay": true,
+      "stockx": true,
+      "searchKeyword": "chanel bag",
+      "trends": {
+        "keyword": "chanel",
+        "batch": "anchor"
+      }
+    },
+    {
+      "name": "Louis Vuitton",
+      "fashionphile": {
+        "vendor": "Louis Vuitton",
+        "label": "Handbags",
+        "facet": "meta.custom.filters_bags",
+        "values": [
+          "Handbags"
+        ]
+      },
+      "ebay": true,
+      "stockx": true,
+      "searchKeyword": "louis vuitton bag",
+      "trends": {
+        "keyword": "louis vuitton",
+        "batch": 1
+      }
+    },
+    {
+      "name": "Goyard",
+      "fashionphile": {
+        "vendor": "Goyard",
+        "label": "Handbags",
+        "facet": "meta.custom.filters_bags",
+        "values": [
+          "Handbags"
+        ]
+      },
+      "ebay": true,
+      "stockx": true,
+      "searchKeyword": "goyard bag",
+      "trends": {
+        "keyword": "goyard",
+        "batch": 1
+      }
+    },
+    {
+      "name": "Dior",
+      "fashionphile": {
+        "vendor": "Christian Dior",
+        "label": "Handbags",
+        "facet": "meta.custom.filters_bags",
+        "values": [
+          "Handbags"
+        ]
+      },
+      "ebay": true,
+      "stockx": true,
+      "searchKeyword": "dior bag",
+      "trends": {
+        "keyword": "dior",
+        "batch": 2
+      }
+    },
+    {
+      "name": "Fendi",
+      "fashionphile": {
+        "vendor": "Fendi",
+        "label": "Handbags",
+        "facet": "meta.custom.filters_bags",
+        "values": [
+          "Handbags"
+        ]
+      },
+      "ebay": true,
+      "stockx": true,
+      "searchKeyword": "fendi bag",
+      "trends": {
+        "keyword": "fendi",
+        "batch": 2
+      }
+    },
+    {
+      "name": "Cartier",
+      "fashionphile": {
+        "vendor": "Cartier",
+        "label": "Fine jewelry",
+        "facet": "meta.custom.filters_jewelry",
+        "values": [
+          "Rings",
+          "Bracelets",
+          "Necklaces",
+          "Earrings"
+        ]
+      },
+      "ebay": true,
+      "stockx": true,
+      "searchKeyword": "cartier",
+      "trends": {
+        "keyword": "cartier",
+        "batch": 1
+      }
+    },
+    {
+      "name": "Rolex",
+      "fashionphile": null,
+      "ebay": true,
+      "stockx": true,
+      "searchKeyword": "rolex",
+      "trends": {
+        "keyword": "rolex",
+        "batch": 1
+      }
+    },
+    {
+      "name": "The Row",
+      "fashionphile": {
+        "vendor": "The Row",
+        "label": "Handbags",
+        "facet": "meta.custom.filters_bags",
+        "values": [
+          "Handbags"
+        ]
+      },
+      "ebay": true,
+      "stockx": false,
+      "searchKeyword": "the row bag",
+      "trends": {
+        "keyword": "the row bag",
+        "batch": 2
+      }
+    }
+  ],
+  "models": [
+    {
+      "brand": "Hermès",
+      "vendor": "Hermes",
+      "model": "Birkin 25"
+    },
+    {
+      "brand": "Hermès",
+      "vendor": "Hermes",
+      "model": "Birkin 30"
+    },
+    {
+      "brand": "Hermès",
+      "vendor": "Hermes",
+      "model": "Kelly"
+    },
+    {
+      "brand": "Hermès",
+      "vendor": "Hermes",
+      "model": "Constance"
+    },
+    {
+      "brand": "Hermès",
+      "vendor": "Hermes",
+      "model": "Lindy"
+    },
+    {
+      "brand": "Chanel",
+      "vendor": "Chanel",
+      "model": "Double Flap"
+    },
+    {
+      "brand": "Chanel",
+      "vendor": "Chanel",
+      "model": "Chanel 19"
+    },
+    {
+      "brand": "Chanel",
+      "vendor": "Chanel",
+      "model": "Boy"
+    },
+    {
+      "brand": "Chanel",
+      "vendor": "Chanel",
+      "model": "Wallet On Chain",
+      "keepAccessories": true
+    },
+    {
+      "brand": "Louis Vuitton",
+      "vendor": "Louis Vuitton",
+      "model": "Neverfull"
+    },
+    {
+      "brand": "Louis Vuitton",
+      "vendor": "Louis Vuitton",
+      "model": "Speedy"
+    },
+    {
+      "brand": "Louis Vuitton",
+      "vendor": "Louis Vuitton",
+      "model": "Alma"
+    },
+    {
+      "brand": "Louis Vuitton",
+      "vendor": "Louis Vuitton",
+      "model": "Pochette Metis"
+    },
+    {
+      "brand": "Dior",
+      "vendor": "Christian Dior",
+      "model": "Lady Dior"
+    },
+    {
+      "brand": "Dior",
+      "vendor": "Christian Dior",
+      "model": "Saddle"
+    },
+    {
+      "brand": "Goyard",
+      "vendor": "Goyard",
+      "model": "Saint Louis"
+    },
+    {
+      "brand": "Goyard",
+      "vendor": "Goyard",
+      "model": "Belvedere"
+    },
+    {
+      "brand": "The Row",
+      "vendor": "The Row",
+      "model": "Margaux"
+    },
+    {
+      "brand": "Fendi",
+      "vendor": "Fendi",
+      "model": "Baguette"
+    },
+    {
+      "brand": "Cartier",
+      "vendor": "Cartier",
+      "model": "LOVE",
+      "segments": [
+        "meta.custom.filters_jewelry:Bracelets"
+      ],
+      "keepAccessories": true
+    }
+  ]
+}
