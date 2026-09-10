@@ -1,8 +1,21 @@
 {
-  "generatedAt": "2026-09-10T12:57:12.320Z",
+  "generatedAt": "2026-09-10T17:45:10.923Z",
   "date": "2026-09-10",
-  "count": 15,
+  "count": 13,
   "alerts": [
+    {
+      "date": "2026-09-10",
+      "type": "breakout",
+      "severity": "high",
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Celine",
+      "value": 0.8451,
+      "z": 4.81,
+      "baseline": 0.55,
+      "changePct": 54.79,
+      "message": "Celine Google Trends relative interest at 0.8451 is +54.79% vs its 32-day normal of 0.55 (z=4.81)."
+    },
     {
       "date": "2026-09-10",
       "type": "breakout",
@@ -10,11 +23,11 @@
       "series": "fp.medianPrice",
       "metric": "Fashionphile median price",
       "brand": "The Row",
-      "value": 2495,
-      "z": 4.32,
+      "value": 2460,
+      "z": 3.77,
       "baseline": 2222.5,
-      "changePct": 12.26,
-      "message": "The Row Fashionphile median price at 2495 is +12.26% vs its 15-day normal of 2222.5 (z=4.32)."
+      "changePct": 10.69,
+      "message": "The Row Fashionphile median price at 2460 is +10.69% vs its 15-day normal of 2222.5 (z=3.77)."
     },
     {
       "date": "2026-09-10",
@@ -23,11 +36,11 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Chanel",
-      "value": 4140,
-      "z": -3.64,
+      "value": 4135,
+      "z": -3.7,
       "baseline": 4469.5,
-      "changePct": -7.37,
-      "message": "Chanel Fashionphile listings (tracked segment) at 4140 is -7.37% vs its 15-day normal of 4469.5 (z=-3.64)."
+      "changePct": -7.48,
+      "message": "Chanel Fashionphile listings (tracked segment) at 4135 is -7.48% vs its 15-day normal of 4469.5 (z=-3.7)."
     },
     {
       "date": "2026-09-10",
@@ -36,24 +49,24 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "The Row",
-      "value": 132,
-      "z": -3.46,
+      "value": 133,
+      "z": -3.29,
       "baseline": 152.5,
-      "changePct": -13.44,
-      "message": "The Row Fashionphile listings (tracked segment) at 132 is -13.44% vs its 15-day normal of 152.5 (z=-3.46)."
+      "changePct": -12.79,
+      "message": "The Row Fashionphile listings (tracked segment) at 133 is -12.79% vs its 15-day normal of 152.5 (z=-3.29)."
     },
     {
       "date": "2026-09-10",
       "type": "breakout",
       "severity": "high",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Celine",
-      "value": 0.7716,
-      "z": 3.46,
-      "baseline": 0.54,
-      "changePct": 42.8,
-      "message": "Celine Google Trends relative interest at 0.7716 is +42.8% vs its 32-day normal of 0.54 (z=3.46)."
+      "series": "fp.p90Price",
+      "metric": "Fashionphile 90th-pct price",
+      "brand": "Cartier",
+      "value": 7120,
+      "z": -3.13,
+      "baseline": 7595,
+      "changePct": -6.25,
+      "message": "Cartier Fashionphile 90th-pct price at 7120 is -6.25% vs its 15-day normal of 7595 (z=-3.13)."
     },
     {
       "date": "2026-09-10",
@@ -69,27 +82,14 @@
       "date": "2026-09-10",
       "type": "breakout",
       "severity": "medium",
-      "series": "fp.p90Price",
-      "metric": "Fashionphile 90th-pct price",
-      "brand": "Cartier",
-      "value": 7195,
-      "z": -2.63,
-      "baseline": 7595,
-      "changePct": -5.27,
-      "message": "Cartier Fashionphile 90th-pct price at 7195 is -5.27% vs its 15-day normal of 7595 (z=-2.63)."
-    },
-    {
-      "date": "2026-09-10",
-      "type": "breakout",
-      "severity": "medium",
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Chanel",
-      "value": 6726,
-      "z": -2.59,
+      "value": 6740,
+      "z": -2.51,
       "baseline": 7189,
-      "changePct": -6.44,
-      "message": "Chanel Fashionphile listings (all categories) at 6726 is -6.44% vs its 38-day normal of 7189 (z=-2.59)."
+      "changePct": -6.25,
+      "message": "Chanel Fashionphile listings (all categories) at 6740 is -6.25% vs its 38-day normal of 7189 (z=-2.51)."
     },
     {
       "date": "2026-09-10",
@@ -98,24 +98,37 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Cartier",
-      "value": 439,
-      "z": 2.33,
+      "value": 441,
+      "z": 2.44,
       "baseline": 394,
-      "changePct": 11.42,
-      "message": "Cartier Fashionphile listings (tracked segment) at 439 is +11.42% vs its 15-day normal of 394 (z=2.33)."
+      "changePct": 11.93,
+      "message": "Cartier Fashionphile listings (tracked segment) at 441 is +11.93% vs its 15-day normal of 394 (z=2.44)."
     },
     {
       "date": "2026-09-10",
       "type": "breakout",
       "severity": "medium",
-      "series": "fp.listings",
-      "metric": "Fashionphile listings (tracked segment)",
-      "brand": "Dior",
-      "value": 796,
-      "z": -2.28,
-      "baseline": 840,
-      "changePct": -5.24,
-      "message": "Dior Fashionphile listings (tracked segment) at 796 is -5.24% vs its 15-day normal of 840 (z=-2.28)."
+      "series": "fp.p90Price",
+      "metric": "Fashionphile 90th-pct price",
+      "brand": "Chanel",
+      "value": 7595,
+      "z": -2.14,
+      "baseline": 7935,
+      "changePct": -4.28,
+      "message": "Chanel Fashionphile 90th-pct price at 7595 is -4.28% vs its 15-day normal of 7935 (z=-2.14)."
+    },
+    {
+      "date": "2026-09-10",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Rolex",
+      "value": 1.5111,
+      "z": -2.04,
+      "baseline": 1.66,
+      "changePct": -8.94,
+      "message": "Rolex Google Trends relative interest at 1.5111 is -8.94% vs its 32-day normal of 1.66 (z=-2.04)."
     },
     {
       "date": "2026-09-10",
@@ -147,42 +160,9 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "The Row",
-      "value": 134,
-      "wowPct": -15.72,
-      "message": "The Row Fashionphile listings (all categories) moved -15.72% in 7 days to 134."
-    },
-    {
-      "date": "2026-09-10",
-      "type": "weekly-move",
-      "severity": "low",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Goyard",
-      "value": 0.3435,
-      "wowPct": -19.93,
-      "message": "Goyard Google Trends relative interest moved -19.93% in 7 days to 0.3435."
-    },
-    {
-      "date": "2026-09-10",
-      "type": "streak",
-      "severity": "low",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Hermès",
-      "value": 1.0834,
-      "streak": 4,
-      "message": "Hermès Google Trends relative interest has risen 4 days straight to 1.0834."
-    },
-    {
-      "date": "2026-09-10",
-      "type": "streak",
-      "severity": "low",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Prada",
-      "value": 1.1362,
-      "streak": -4,
-      "message": "Prada Google Trends relative interest has fallen 4 days straight to 1.1362."
+      "value": 135,
+      "wowPct": -15.09,
+      "message": "The Row Fashionphile listings (all categories) moved -15.09% in 7 days to 135."
     }
   ]
 }
