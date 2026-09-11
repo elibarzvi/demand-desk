@@ -1,8 +1,21 @@
 {
-  "generatedAt": "2026-09-11T17:47:29.381Z",
+  "generatedAt": "2026-09-11T23:18:04.794Z",
   "date": "2026-09-11",
-  "count": 5,
+  "count": 7,
   "alerts": [
+    {
+      "date": "2026-09-11",
+      "type": "breakout",
+      "severity": "high",
+      "series": "fp.listings",
+      "metric": "Fashionphile listings (tracked segment)",
+      "brand": "Chanel",
+      "value": 4151,
+      "z": -3.09,
+      "baseline": 4467,
+      "changePct": -7.07,
+      "message": "Chanel Fashionphile listings (tracked segment) at 4151 is -7.07% vs its 16-day normal of 4467 (z=-3.09)."
+    },
     {
       "date": "2026-09-11",
       "type": "stale-source",
@@ -17,14 +30,14 @@
       "date": "2026-09-11",
       "type": "breakout",
       "severity": "medium",
-      "series": "fp.listings",
-      "metric": "Fashionphile listings (tracked segment)",
-      "brand": "Chanel",
-      "value": 4217,
-      "z": -2.44,
-      "baseline": 4467,
-      "changePct": -5.6,
-      "message": "Chanel Fashionphile listings (tracked segment) at 4217 is -5.6% vs its 16-day normal of 4467 (z=-2.44)."
+      "series": "fp.p90Price",
+      "metric": "Fashionphile 90th-pct price",
+      "brand": "Cartier",
+      "value": 7195,
+      "z": -2.63,
+      "baseline": 7595,
+      "changePct": -5.27,
+      "message": "Cartier Fashionphile 90th-pct price at 7195 is -5.27% vs its 16-day normal of 7595 (z=-2.63)."
     },
     {
       "date": "2026-09-11",
@@ -32,12 +45,12 @@
       "severity": "medium",
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
-      "brand": "Celine",
-      "value": 0.6844,
-      "z": 2.09,
-      "baseline": 0.55,
-      "changePct": 25.57,
-      "message": "Celine Google Trends relative interest at 0.6844 is +25.57% vs its 32-day normal of 0.55 (z=2.09)."
+      "brand": "Prada",
+      "value": 1.0643,
+      "z": -2.24,
+      "baseline": 1.3,
+      "changePct": -18.44,
+      "message": "Prada Google Trends relative interest at 1.0643 is -18.44% vs its 32-day normal of 1.3 (z=-2.24)."
     },
     {
       "date": "2026-09-11",
@@ -45,12 +58,12 @@
       "severity": "medium",
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
-      "brand": "Cartier",
-      "value": 534,
-      "z": 2.01,
-      "baseline": 471.5,
-      "changePct": 13.26,
-      "message": "Cartier Fashionphile listings (all categories) at 534 is +13.26% vs its 39-day normal of 471.5 (z=2.01)."
+      "brand": "Chanel",
+      "value": 6781,
+      "z": -2.15,
+      "baseline": 7183.5,
+      "changePct": -5.6,
+      "message": "Chanel Fashionphile listings (all categories) at 6781 is -5.6% vs its 39-day normal of 7183.5 (z=-2.15)."
     },
     {
       "date": "2026-09-11",
@@ -61,6 +74,17 @@
       "unchangedDays": 6,
       "lastChanged": "2026-09-05",
       "message": "Source \"mirror\" has returned identical data for 6 consecutive days (last change 2026-09-05)."
+    },
+    {
+      "date": "2026-09-11",
+      "type": "weekly-move",
+      "severity": "low",
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Celine",
+      "value": 0.6814,
+      "wowPct": 23.69,
+      "message": "Celine Google Trends relative interest moved +23.69% in 7 days to 0.6814."
     }
   ]
 }
