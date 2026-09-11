@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-11T12:51:05.431Z",
+  "generatedAt": "2026-09-11T17:47:29.381Z",
   "date": "2026-09-11",
-  "count": 7,
+  "count": 5,
   "alerts": [
     {
       "date": "2026-09-11",
@@ -20,11 +20,24 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Chanel",
-      "value": 4212,
-      "z": -2.49,
+      "value": 4217,
+      "z": -2.44,
       "baseline": 4467,
-      "changePct": -5.71,
-      "message": "Chanel Fashionphile listings (tracked segment) at 4212 is -5.71% vs its 16-day normal of 4467 (z=-2.49)."
+      "changePct": -5.6,
+      "message": "Chanel Fashionphile listings (tracked segment) at 4217 is -5.6% vs its 16-day normal of 4467 (z=-2.44)."
+    },
+    {
+      "date": "2026-09-11",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Celine",
+      "value": 0.6844,
+      "z": 2.09,
+      "baseline": 0.55,
+      "changePct": 25.57,
+      "message": "Celine Google Trends relative interest at 0.6844 is +25.57% vs its 32-day normal of 0.55 (z=2.09)."
     },
     {
       "date": "2026-09-11",
@@ -33,24 +46,11 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Cartier",
-      "value": 537,
-      "z": 2.1,
+      "value": 534,
+      "z": 2.01,
       "baseline": 471.5,
-      "changePct": 13.89,
-      "message": "Cartier Fashionphile listings (all categories) at 537 is +13.89% vs its 39-day normal of 471.5 (z=2.1)."
-    },
-    {
-      "date": "2026-09-11",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "fp.medianPrice",
-      "metric": "Fashionphile median price",
-      "brand": "The Row",
-      "value": 2460,
-      "z": 2.02,
-      "baseline": 2250,
-      "changePct": 9.33,
-      "message": "The Row Fashionphile median price at 2460 is +9.33% vs its 16-day normal of 2250 (z=2.02)."
+      "changePct": 13.26,
+      "message": "Cartier Fashionphile listings (all categories) at 534 is +13.26% vs its 39-day normal of 471.5 (z=2.01)."
     },
     {
       "date": "2026-09-11",
@@ -61,28 +61,6 @@
       "unchangedDays": 6,
       "lastChanged": "2026-09-05",
       "message": "Source \"mirror\" has returned identical data for 6 consecutive days (last change 2026-09-05)."
-    },
-    {
-      "date": "2026-09-11",
-      "type": "weekly-move",
-      "severity": "low",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Goyard",
-      "value": 0.3478,
-      "wowPct": -15.03,
-      "message": "Goyard Google Trends relative interest moved -15.03% in 7 days to 0.3478."
-    },
-    {
-      "date": "2026-09-11",
-      "type": "weekly-move",
-      "severity": "low",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Celine",
-      "value": 0.6957,
-      "wowPct": 29.5,
-      "message": "Celine Google Trends relative interest moved +29.5% in 7 days to 0.6957."
     }
   ]
 }
