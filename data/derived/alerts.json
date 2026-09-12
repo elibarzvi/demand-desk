@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-12T17:14:59.385Z",
+  "generatedAt": "2026-09-12T23:05:25.574Z",
   "date": "2026-09-12",
-  "count": 6,
+  "count": 8,
   "alerts": [
     {
       "date": "2026-09-12",
@@ -10,11 +10,11 @@
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
       "brand": "Celine",
-      "value": 0.7062,
-      "z": 3.02,
+      "value": 0.8378,
+      "z": 4.81,
       "baseline": 0.55,
-      "changePct": 28.99,
-      "message": "Celine Google Trends relative interest at 0.7062 is +28.99% vs its 32-day normal of 0.55 (z=3.02)."
+      "changePct": 52.51,
+      "message": "Celine Google Trends relative interest at 0.8378 is +52.51% vs its 32-day normal of 0.55 (z=4.81)."
     },
     {
       "date": "2026-09-12",
@@ -42,25 +42,12 @@
       "severity": "medium",
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
-      "brand": "Goyard",
-      "value": 0.321,
-      "z": -2.86,
-      "baseline": 0.43,
-      "changePct": -24.59,
-      "message": "Goyard Google Trends relative interest at 0.321 is -24.59% vs its 32-day normal of 0.43 (z=-2.86)."
-    },
-    {
-      "date": "2026-09-12",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
       "brand": "Cartier",
-      "value": 1.0058,
-      "z": 2.4,
+      "value": 0.9868,
+      "z": 2.77,
       "baseline": 0.92,
-      "changePct": 9.09,
-      "message": "Cartier Google Trends relative interest at 1.0058 is +9.09% vs its 32-day normal of 0.92 (z=2.4)."
+      "changePct": 7.31,
+      "message": "Cartier Google Trends relative interest at 0.9868 is +7.31% vs its 32-day normal of 0.92 (z=2.77)."
     },
     {
       "date": "2026-09-12",
@@ -74,6 +61,45 @@
       "baseline": 7545,
       "changePct": -4.64,
       "message": "Cartier Fashionphile 90th-pct price at 7195 is -4.64% vs its 17-day normal of 7545 (z=-2.32)."
+    },
+    {
+      "date": "2026-09-12",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Goyard",
+      "value": 0.3359,
+      "z": -2.17,
+      "baseline": 0.42,
+      "changePct": -20.42,
+      "message": "Goyard Google Trends relative interest at 0.3359 is -20.42% vs its 32-day normal of 0.42 (z=-2.17)."
+    },
+    {
+      "date": "2026-09-12",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "fp.listings",
+      "metric": "Fashionphile listings (tracked segment)",
+      "brand": "Chanel",
+      "value": 4162,
+      "z": -2.1,
+      "baseline": 4446.5,
+      "changePct": -6.4,
+      "message": "Chanel Fashionphile listings (tracked segment) at 4162 is -6.4% vs its 17-day normal of 4446.5 (z=-2.1)."
+    },
+    {
+      "date": "2026-09-12",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Chanel",
+      "value": 6795,
+      "z": -2.09,
+      "baseline": 7172,
+      "changePct": -5.26,
+      "message": "Chanel Fashionphile listings (all categories) at 6795 is -5.26% vs its 40-day normal of 7172 (z=-2.09)."
     }
   ]
 }
