@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-16T18:16:25.659Z",
+  "generatedAt": "2026-09-16T23:41:49.651Z",
   "date": "2026-09-16",
-  "count": 7,
+  "count": 8,
   "alerts": [
     {
       "date": "2026-09-16",
@@ -10,11 +10,11 @@
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
       "brand": "Rolex",
-      "value": 1.9946,
-      "z": 5.29,
-      "baseline": 1.67,
-      "changePct": 19.42,
-      "message": "Rolex Google Trends relative interest at 1.9946 is +19.42% vs its 32-day normal of 1.67 (z=5.29)."
+      "value": 1.9638,
+      "z": 4.26,
+      "baseline": 1.65,
+      "changePct": 18.88,
+      "message": "Rolex Google Trends relative interest at 1.9638 is +18.88% vs its 32-day normal of 1.65 (z=4.26)."
     },
     {
       "date": "2026-09-16",
@@ -23,11 +23,11 @@
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
       "brand": "Celine",
-      "value": 0.8446,
-      "z": 3.27,
+      "value": 0.877,
+      "z": 4.11,
       "baseline": 0.56,
-      "changePct": 49.58,
-      "message": "Celine Google Trends relative interest at 0.8446 is +49.58% vs its 32-day normal of 0.56 (z=3.27)."
+      "changePct": 56.96,
+      "message": "Celine Google Trends relative interest at 0.877 is +56.96% vs its 32-day normal of 0.56 (z=4.11)."
     },
     {
       "date": "2026-09-16",
@@ -43,51 +43,64 @@
       "date": "2026-09-16",
       "type": "breakout",
       "severity": "medium",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Louis Vuitton",
-      "value": 1.3544,
-      "z": -2.8,
-      "baseline": 1.51,
-      "changePct": -10.33,
-      "message": "Louis Vuitton Google Trends relative interest at 1.3544 is -10.33% vs its 32-day normal of 1.51 (z=-2.8)."
-    },
-    {
-      "date": "2026-09-16",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Prada",
-      "value": 1.054,
-      "z": -2.62,
-      "baseline": 1.24,
-      "changePct": -15.32,
-      "message": "Prada Google Trends relative interest at 1.054 is -15.32% vs its 32-day normal of 1.24 (z=-2.62)."
-    },
-    {
-      "date": "2026-09-16",
-      "type": "breakout",
-      "severity": "medium",
       "series": "ebay.listings",
       "metric": "eBay active listings",
       "brand": "Prada",
-      "value": 219496,
-      "z": -2.41,
+      "value": 219321,
+      "z": -2.44,
       "baseline": 230596,
-      "changePct": -4.81,
-      "message": "Prada eBay active listings at 219496 is -4.81% vs its 8-day normal of 230596 (z=-2.41)."
+      "changePct": -4.89,
+      "message": "Prada eBay active listings at 219321 is -4.89% vs its 8-day normal of 230596 (z=-2.44)."
     },
     {
       "date": "2026-09-16",
-      "type": "weekly-move",
-      "severity": "low",
+      "type": "breakout",
+      "severity": "medium",
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
+      "brand": "Louis Vuitton",
+      "value": 1.3451,
+      "z": -2.41,
+      "baseline": 1.51,
+      "changePct": -11.15,
+      "message": "Louis Vuitton Google Trends relative interest at 1.3451 is -11.15% vs its 32-day normal of 1.51 (z=-2.41)."
+    },
+    {
+      "date": "2026-09-16",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "fp.listings",
+      "metric": "Fashionphile listings (tracked segment)",
+      "brand": "Celine",
+      "value": 504,
+      "z": -2.27,
+      "baseline": 528,
+      "changePct": -4.55,
+      "message": "Celine Fashionphile listings (tracked segment) at 504 is -4.55% vs its 8-day normal of 528 (z=-2.27)."
+    },
+    {
+      "date": "2026-09-16",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "fp.listings",
+      "metric": "Fashionphile listings (tracked segment)",
       "brand": "Goyard",
-      "value": 0.3448,
-      "wowPct": -17.57,
-      "message": "Goyard Google Trends relative interest moved -17.57% in 7 days to 0.3448."
+      "value": 286,
+      "z": -2.2,
+      "baseline": 310.5,
+      "changePct": -7.89,
+      "message": "Goyard Fashionphile listings (tracked segment) at 286 is -7.89% vs its 21-day normal of 310.5 (z=-2.2)."
+    },
+    {
+      "date": "2026-09-16",
+      "type": "streak",
+      "severity": "low",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Celine",
+      "value": 620,
+      "streak": -6,
+      "message": "Celine Fashionphile listings (all categories) has fallen 6 days straight to 620."
     }
   ]
 }
