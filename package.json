@@ -13,7 +13,8 @@
     "build": "node scripts/build-site.mjs",
     "bundle": "node scripts/bundle.mjs",
     "all": "npm run scrape && npm run export && npm run derive && npm run build && npm run bundle",
-    "serve": "node scripts/serve.mjs"
+    "serve": "node scripts/serve.mjs",
+    "probe:ebay": "node scripts/probe-ebay.mjs"
   },
   "dependencies": {
     "playwright": "^1.48.0"
