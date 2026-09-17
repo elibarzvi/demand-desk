@@ -72,8 +72,8 @@ async function main() {
       seen[key] = today;
       fresh.push(m);
     }
-    for (const f of flagged) console.log(`   flagged [${f.verdict}] ${money(f.price)} ${f.title.slice(0, 60)}`);
-    for (const m of matches) console.log(`   ${seen[`${w.id}|${m.itemId}`] === today ? 'NEW ' : '    '}${money(m.price)} ${m.title.slice(0, 60)}`);
+    for (const f of flagged) console.log(`   flagged [${f.verdict}] ${money(f.price)} ${f.title.slice(0, 52)}  [seller ${f.sellerPct ?? '?'}% / ${f.sellerScore ?? '?'} ratings]`);
+    for (const m of matches) console.log(`   ${money(m.price)} ${m.title.slice(0, 52)}  [seller ${m.sellerPct ?? '?'}% / ${m.sellerScore ?? '?'} ratings]`);
   }
 
   // Forget listings we have not seen in a while so the file cannot grow forever.
