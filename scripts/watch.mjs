@@ -82,8 +82,17 @@ async function main() {
 
   if (!fresh.length) { console.log('[watch] nothing new'); writeSeen(seen); return; }
 
-  const text = `*Demand Desk grail watch* · ${fresh.length} new listing${fresh.length > 1 ? 's' : ''}\n`
-    + fresh.map(m => `• ${money(m.price)} <${m.url}|${m.title.slice(0, 80)}>\n   ${m.condition || 'condition unstated'} · seller ${m.seller} ${m.sellerPct != null ? `(${m.sellerPct}%)` : ''}`).join('\n')
+  // A first run sees every standing listing at once: the Chrome Hearts rules
+  // matched 44 on their first pass. Send the most expensive few and leave the
+  // rest recorded as seen, so the backlog clears without flooding the channel.
+  const cap = Math.min(...active.map(w => w.maxAlertsPerRun ?? Infinity));
+  fresh.sort((a, b) => b.price - a.price);
+  const held = Number.isFinite(cap) && fresh.length > cap ? fresh.length - cap : 0;
+  const sending = held ? fresh.slice(0, cap) : fresh;
+
+  const text = `*Demand Desk grail watch* · ${sending.length} new listing${sending.length > 1 ? 's' : ''}`
+    + (held ? ` (plus ${held} more, see the run log)` : '') + '\n'
+    + sending.map(m => `• ${money(m.price)} <${m.url}|${m.title.slice(0, 80)}>\n   ${m.condition || 'condition unstated'} · seller ${m.seller} ${m.sellerPct != null ? `(${m.sellerPct}%)` : ''}`).join('\n')
     + `\n<${SITE}|Open the dashboard>`;
 
   const hook = process.env.SLACK_WEBHOOK_URL;
@@ -93,7 +102,7 @@ async function main() {
   const r = await fetch(hook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, unfurl_links: false }) });
   // Only remember what was actually delivered, so a failed post retries tomorrow.
   if (r.ok) writeSeen(seen);
-  console.log(r.ok ? `[watch] sent ${fresh.length} new listing(s)` : `[watch] Slack rejected the post: HTTP ${r.status}`);
+  console.log(r.ok ? `[watch] sent ${sending.length} new listing(s)${held ? `, held ${held}` : ''}` : `[watch] Slack rejected the post: HTTP ${r.status}`);
 }
 
 main().catch(e => console.log('[watch] skipped after error:', e.message));
