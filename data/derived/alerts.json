@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-09-17T19:59:17.867Z",
+  "generatedAt": "2026-09-17T20:03:21.971Z",
   "date": "2026-09-17",
-  "count": 16,
+  "count": 19,
   "alerts": [
     {
       "date": "2026-09-17",
@@ -10,11 +10,11 @@
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
       "brand": "Celine",
-      "value": 0.8342,
-      "z": 3.59,
+      "value": 0.8567,
+      "z": 3.37,
       "baseline": 0.56,
-      "changePct": 49.31,
-      "message": "Celine Google Trends relative interest at 0.8342 is +49.31% vs its 32-day normal of 0.56 (z=3.59)."
+      "changePct": 52.76,
+      "message": "Celine Google Trends relative interest at 0.8567 is +52.76% vs its 32-day normal of 0.56 (z=3.37)."
     },
     {
       "date": "2026-09-17",
@@ -33,11 +33,11 @@
       "series": "ebay.listings",
       "metric": "eBay active listings",
       "brand": "Prada",
-      "value": 218699,
-      "z": -2.5,
+      "value": 218656,
+      "z": -2.51,
       "baseline": 230209,
-      "changePct": -5,
-      "message": "Prada eBay active listings at 218699 is -5% vs its 9-day normal of 230209 (z=-2.5)."
+      "changePct": -5.02,
+      "message": "Prada eBay active listings at 218656 is -5.02% vs its 9-day normal of 230209 (z=-2.51)."
     },
     {
       "date": "2026-09-17",
@@ -56,14 +56,40 @@
       "date": "2026-09-17",
       "type": "breakout",
       "severity": "medium",
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Goyard",
+      "value": 0.3502,
+      "z": -2.25,
+      "baseline": 0.4,
+      "changePct": -13.35,
+      "message": "Goyard Google Trends relative interest at 0.3502 is -13.35% vs its 32-day normal of 0.4 (z=-2.25)."
+    },
+    {
+      "date": "2026-09-17",
+      "type": "breakout",
+      "severity": "medium",
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Goyard",
-      "value": 283,
-      "z": -2.11,
+      "value": 282,
+      "z": -2.19,
       "baseline": 308,
-      "changePct": -8.12,
-      "message": "Goyard Fashionphile listings (tracked segment) at 283 is -8.12% vs its 22-day normal of 308 (z=-2.11)."
+      "changePct": -8.44,
+      "message": "Goyard Fashionphile listings (tracked segment) at 282 is -8.44% vs its 22-day normal of 308 (z=-2.19)."
+    },
+    {
+      "date": "2026-09-17",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "ebay.listings",
+      "metric": "eBay active listings",
+      "brand": "Celine",
+      "value": 90350,
+      "z": 2.14,
+      "baseline": 86641.5,
+      "changePct": 4.28,
+      "message": "Celine eBay active listings at 90350 is +4.28% vs its 9-day normal of 86641.5 (z=2.14)."
     },
     {
       "date": "2026-09-17",
@@ -137,9 +163,9 @@
       "series": "fp.turnover",
       "metric": "Daily sell-through %",
       "brand": "Goyard",
-      "value": 2.8,
-      "wowPct": -29.29,
-      "message": "Goyard Daily sell-through % moved -29.29% in 7 days to 2.8."
+      "value": 3.15,
+      "wowPct": -20.45,
+      "message": "Goyard Daily sell-through % moved -20.45% in 7 days to 3.15."
     },
     {
       "date": "2026-09-17",
@@ -165,14 +191,14 @@
     },
     {
       "date": "2026-09-17",
-      "type": "streak",
+      "type": "weekly-move",
       "severity": "low",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Louis Vuitton",
-      "value": 1.4402,
-      "streak": 4,
-      "message": "Louis Vuitton Google Trends relative interest has risen 4 days straight to 1.4402."
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "Goyard",
+      "value": 50,
+      "wowPct": -26.47,
+      "message": "Goyard Median days to sell moved -26.47% in 7 days to 50."
     },
     {
       "date": "2026-09-17",
@@ -180,10 +206,21 @@
       "severity": "low",
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
-      "brand": "Hermès",
-      "value": 1.087,
+      "brand": "Louis Vuitton",
+      "value": 1.4279,
       "streak": 4,
-      "message": "Hermès Google Trends relative interest has risen 4 days straight to 1.087."
+      "message": "Louis Vuitton Google Trends relative interest has risen 4 days straight to 1.4279."
+    },
+    {
+      "date": "2026-09-17",
+      "type": "streak",
+      "severity": "low",
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Dior",
+      "value": 1.4818,
+      "streak": 4,
+      "message": "Dior Google Trends relative interest has risen 4 days straight to 1.4818."
     }
   ]
 }
