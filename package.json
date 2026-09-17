@@ -14,7 +14,8 @@
     "bundle": "node scripts/bundle.mjs",
     "all": "npm run scrape && npm run export && npm run derive && npm run build && npm run bundle",
     "serve": "node scripts/serve.mjs",
-    "probe:ebay": "node scripts/probe-ebay.mjs"
+    "probe:ebay": "node scripts/probe-ebay.mjs",
+    "watch": "node scripts/watch.mjs"
   },
   "dependencies": {
     "playwright": "^1.48.0"

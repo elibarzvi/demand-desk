@@ -22,6 +22,10 @@ on:
         description: 'Run the eBay search probe instead of a capture (credentials only exist in CI)'
         type: boolean
         default: false
+      watch_dry_run:
+        description: 'Run the grail watcher in report-only mode, sending nothing'
+        type: boolean
+        default: false
   # A push that changes the site, scripts or libraries redeploys immediately.
   # Without this, a UI fix sat invisible until the next scheduled capture, up to
   # eight hours later, because only the cron rebuilt Pages. Push runs skip the
@@ -76,6 +80,15 @@ jobs:
       - name: Probe eBay search
         if: inputs.ebay_probe
         run: npm run probe:ebay
+        env:
+          EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
+          EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
+
+      # Report-only pass so a rule set can be reviewed against live listings before
+      # it is ever allowed to post.
+      - name: Grail watcher (dry run)
+        if: inputs.watch_dry_run
+        run: npm run watch
         env:
           EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
           EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}

@@ -1,0 +1,36 @@
+{
+  "_comment": "Item-level watches. Separate from src/data/tracking.json on purpose: tracked brands produce aggregate statistics (counts, medians, velocity), whereas a watch hunts individual listings and alerts on them. A brand with no comparable segment, like Chrome Hearts, belongs here rather than on the brand board, where its jewelry would corrupt the price medians.",
+  "_rules": "A listing matches when it clears minPrice, its title contains at least one term from require.any (and every term from require.all, if given), and contains none from exclude. Terms are matched case-insensitively on word boundaries, so 'ring' does not match 'earring' or 'Bering'. Set enabled:false to park a watch without deleting it.",
+  "_credibility": "eBay returns asking prices, not sales. A probe on 2026-09-17 found Chrome Hearts jeans listed at $121,010, which is aspirational rather than real. minSellerFeedbackPct and minSellerFeedbackScore filter out throwaway accounts; maxPrice caps the fantasy tier.",
+  "watches": [
+    {
+      "id": "chrome-hearts-denim",
+      "label": "Chrome Hearts grail denim",
+      "enabled": true,
+      "source": "ebay",
+      "queries": [
+        "Chrome Hearts Levi's jeans",
+        "Chrome Hearts cross patch denim",
+        "Chrome Hearts Carhartt denim",
+        "Chrome Hearts patch jeans"
+      ],
+      "minPrice": 3000,
+      "maxPrice": 80000,
+      "require": {
+        "all": ["chrome hearts"],
+        "any": ["jeans", "denim", "levi", "levis", "carhartt", "trucker", "jacket", "pants"]
+      },
+      "exclude": [
+        "necklace", "bracelet", "pendant", "earring", "earrings", "ring", "rings",
+        "sunglasses", "sunglass", "eyewear", "glasses", "hat", "cap", "beanie",
+        "wallet", "keychain", "key ring", "lighter", "sticker", "poster", "book",
+        "candle", "mug", "sock", "socks", "belt buckle", "bag charm",
+        "replica", "inspired", "style of", "custom made", "reproduction", "fake",
+        "patch only", "patches only", "iron on", "diy"
+      ],
+      "minSellerFeedbackPct": 97,
+      "minSellerFeedbackScore": 50,
+      "notes": "Targets the tier that sells five figures: Levi's and Carhartt collabs with leather or ponyhair cross patches. Fashionphile carries no Chrome Hearts apparel at all, so eBay is the only accessible source."
+    }
+  ]
+}
