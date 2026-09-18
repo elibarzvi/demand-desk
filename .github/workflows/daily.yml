@@ -79,7 +79,7 @@ jobs:
       # inventing a second workflow.
       - name: Probe eBay search
         if: inputs.ebay_probe
-        run: npm run probe:ebay
+        run: npm run probe:ebay && npm run probe:ebay-scopes
         env:
           EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
           EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
