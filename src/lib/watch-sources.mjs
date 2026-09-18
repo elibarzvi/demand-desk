@@ -25,6 +25,12 @@ async function ebayAuth() {
 }
 const ebayHeaders = tok => ({ 'Authorization': `Bearer ${tok}`, 'X-EBAY-C-MARKETPLACE-ID': 'EBAY_US' });
 
+// The Browse API returns 225px thumbnails (169x225), which look soft stretched
+// across a listing card. eBay serves other sizes on the same path; s-l500 is
+// 375x500, the card's own 4:5 shape at about 1.5x density, for roughly 45KB.
+// s-l1600 exists too but runs to 400KB, too heavy for a grid of dozens.
+const ebayImage = u => u ? u.replace(/\/s-l\d+\.(jpg|jpeg|png|webp)/i, '/s-l500.$1') : null;
+
 const ebay = {
   async search(watch) {
     const tok = await ebayAuth();
@@ -40,7 +46,7 @@ const ebay = {
           source: 'ebay', id: it.itemId, title: it.title || '',
           price: it.price?.value != null ? Number(it.price.value) : null,
           url: it.itemWebUrl || null, condition: it.condition || null,
-          image: it.image?.imageUrl || it.thumbnailImages?.[0]?.imageUrl || null,
+          image: ebayImage(it.image?.imageUrl || it.thumbnailImages?.[0]?.imageUrl),
           listed: (it.itemCreationDate || '').slice(0, 10) || null,
           seller: it.seller?.username ?? null,
           sellerPct: it.seller?.feedbackPercentage != null ? Number(it.seller.feedbackPercentage) : null,
