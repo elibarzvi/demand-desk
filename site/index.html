@@ -47,6 +47,10 @@
   .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);
     margin:.18em 0 .12em;letter-spacing:-.01em;text-wrap:balance;line-height:1.02}
   .mast p{margin:0;color:var(--ink-2);max-width:56ch;font-size:14px}
+  .tabs{display:flex;gap:4px;margin-top:14px}
+  .tabs a{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;
+    padding:6px 12px;border:1px solid var(--line);border-radius:99px;color:var(--ink-2)}
+  .tabs a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
   .stamp{text-align:right;font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.7;white-space:nowrap}
   .stamp b{color:var(--ink-2);font-weight:600}
   .live{display:inline-flex;align-items:center;gap:6px;color:var(--good)}
@@ -252,6 +256,10 @@
       <div class="eyebrow">Demand Desk · Luxury Buying Intelligence</div>
       <h1>The Demand Desk</h1>
       <p>What luxury buyers are requesting, what's being supplied and at what price, and which pieces hold value. Captured daily, logged forever.</p>
+      <nav class="tabs" aria-label="Sections">
+        <a href="./" class="on" aria-current="page">Dashboard</a>
+        <a href="./listings.html">Listings</a>
+      </nav>
     </div>
     <div class="stamp" id="stamp">
       <div><span class="live">LIVE</span></div>

@@ -19,8 +19,12 @@ export function readStore() {
 }
 export function writeStore(store) {
   fs.mkdirSync(path.dirname(STORE_FILE), { recursive: true });
+  store._meta = { updatedAt: new Date().toISOString() };
   fs.writeFileSync(STORE_FILE, JSON.stringify(store, null, 2) + '\n');
 }
+
+// Keys beginning with an underscore hold metadata, not listings.
+const isListing = ([k, r]) => !k.startsWith('_') && r && r.watch;
 
 export const keyOf = m => `${m.source}:${m.id}`;
 
@@ -41,7 +45,7 @@ export function reconcile(store, watch, matches, date) {
   // The first time a watch runs, every standing listing is unseen, but none of
   // them is newly listed. Record them silently rather than calling a month-old
   // listing "new".
-  const seeding = !Object.values(store).some(r => r.watch === watch.id);
+  const seeding = !Object.entries(store).filter(isListing).some(([, r]) => r.watch === watch.id);
 
   for (const m of matches) {
     const k = keyOf(m);
@@ -51,6 +55,8 @@ export function reconcile(store, watch, matches, date) {
     if (!rec) {
       store[k] = {
         watch: watch.id, source: m.source, id: m.id, title: m.title, url: m.url,
+        image: m.image ?? null, condition: m.condition ?? null,
+        seller: m.seller ?? null, sellerPct: m.sellerPct ?? null, sellerScore: m.sellerScore ?? null,
         listed: m.listed ?? null, firstSeen: date, lastSeen: date, missedRuns: 0,
         price: m.price, firstPrice: m.price, lowPrice: m.price, status: 'live'
       };
@@ -64,7 +70,7 @@ export function reconcile(store, watch, matches, date) {
   }
 
   const missing = [];
-  for (const [k, rec] of Object.entries(store)) {
+  for (const [k, rec] of Object.entries(store).filter(isListing)) {
     if (rec.watch !== watch.id || rec.status !== 'live' || present.has(k)) continue;
     rec.missedRuns = (rec.missedRuns || 0) + 1;
     if (rec.missedRuns >= MISSES_BEFORE_CHECK) missing.push(k);
@@ -107,6 +113,10 @@ function observe(rec, m, date) {
   rec.missedRuns = 0;
   rec.title = m.title;
   rec.url = m.url;
+  // Records written before images were captured get filled in on their next sighting.
+  if (m.image) rec.image = m.image;
+  if (m.condition) rec.condition = m.condition;
+  if (m.seller) { rec.seller = m.seller; rec.sellerPct = m.sellerPct ?? rec.sellerPct; rec.sellerScore = m.sellerScore ?? rec.sellerScore; }
   if (rec.status !== 'live') rec.status = 'live';
 }
 
@@ -130,7 +140,7 @@ const underTarget = (watch, price) => watch.targetPrice != null && price != null
 // Keep ended listings for a while so a relist is recognised, then forget them.
 export function prune(store, date, keepDays = 90) {
   const cutoff = new Date(new Date(date) - keepDays * 86400000).toISOString().slice(0, 10);
-  for (const [k, r] of Object.entries(store)) {
+  for (const [k, r] of Object.entries(store).filter(isListing)) {
     if (r.status !== 'live' && (r.endedOn || r.lastSeen) < cutoff) delete store[k];
   }
 }

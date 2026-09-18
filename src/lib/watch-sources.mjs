@@ -40,6 +40,7 @@ const ebay = {
           source: 'ebay', id: it.itemId, title: it.title || '',
           price: it.price?.value != null ? Number(it.price.value) : null,
           url: it.itemWebUrl || null, condition: it.condition || null,
+          image: it.image?.imageUrl || it.thumbnailImages?.[0]?.imageUrl || null,
           listed: (it.itemCreationDate || '').slice(0, 10) || null,
           seller: it.seller?.username ?? null,
           sellerPct: it.seller?.feedbackPercentage != null ? Number(it.seller.feedbackPercentage) : null,
@@ -75,7 +76,7 @@ const fashionphile = {
       + `&restrictSearchableAttributes=${encodeURIComponent(JSON.stringify(['title']))}`
       + `&hitsPerPage=1000&facetFilters=${encodeURIComponent(JSON.stringify(ff))}`
       + `&filters=${encodeURIComponent(filters)}`
-      + `&attributesToRetrieve=${encodeURIComponent(JSON.stringify(['objectID', 'title', 'price', 'handle', 'published_at', 'meta.custom.condition']))}`;
+      + `&attributesToRetrieve=${encodeURIComponent(JSON.stringify(['objectID', 'title', 'price', 'handle', 'published_at', 'image', 'meta.custom.condition']))}`;
     const r = await fetch(`https://${FP.app}-dsn.algolia.net/1/indexes/${FP.index}/query`, { method: 'POST', headers: fpHeaders, body: JSON.stringify({ params }) });
     if (!r.ok) throw new Error(`Fashionphile HTTP ${r.status}`);
     // Fashionphile titles omit the house ("Togo Birkin 25 Capucine"), which is fine
@@ -85,6 +86,7 @@ const fashionphile = {
       title: `${watch.brand} ${h.title || ''}`.trim(),
       price: h.price ?? null,
       url: h.handle ? `https://www.fashionphile.com/products/${h.handle}` : null,
+      image: typeof h.image === 'string' ? h.image : null,
       condition: h.meta?.custom?.condition || null,
       listed: (h.published_at || '').slice(0, 10) || null,
       seller: 'Fashionphile', sellerPct: null, sellerScore: null

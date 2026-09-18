@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Listings · The Demand Desk</title>
+<style>
+  :root{
+    --bg:#14110e; --surface:#1c1815; --surface-2:#241f1b; --line:#332b25;
+    --ink:#ede7dd; --ink-2:#b7ac9f; --ink-3:#7d7269;
+    --gold:#d4b678; --gold-strong:#c79a3f; --gold-dim:#8a7448;
+    --cool:#6f8ea3; --heat:#c8894a; --good:#7fae6b; --warn:#c98b45;
+    --radius:14px; --maxw:1240px;
+    --serif:"Hoefler Text","Baskerville Old Face","Big Caslon",Palatino,Georgia,serif;
+    --sans:"Neue Haas Grotesk Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,"Roboto Mono",monospace;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#f3efe8; --surface:#fbf9f5; --surface-2:#f6f1e8; --line:#e3dccf;
+      --ink:#201b15; --ink-2:#5f574c; --ink-3:#928777;
+      --gold:#9a7b3f; --gold-strong:#8a6a2c; --gold-dim:#b79a63;
+      --cool:#5a7d94; --heat:#b06a2e; --good:#4f7d3c; --warn:#a76a24;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#f3efe8; --surface:#fbf9f5; --surface-2:#f6f1e8; --line:#e3dccf;
+    --ink:#201b15; --ink-2:#5f574c; --ink-3:#928777;
+    --gold:#9a7b3f; --gold-strong:#8a6a2c; --gold-dim:#b79a63;
+    --cool:#5a7d94; --heat:#b06a2e; --good:#4f7d3c; --warn:#a76a24;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:22px 22px 48px;width:100%}
+  a{color:inherit}
+
+  .mast{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(28px,4.5vw,42px);margin:6px 0 4px;letter-spacing:-.01em}
+  .mast p{margin:0;color:var(--ink-2);max-width:560px}
+  .tabs{display:flex;gap:4px;margin-top:14px}
+  .tabs a{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;
+    padding:6px 12px;border:1px solid var(--line);border-radius:99px;color:var(--ink-2)}
+  .tabs a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .stamp{text-align:right;font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.7;white-space:nowrap}
+  .live{color:var(--good)}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0 14px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px}
+  .kpi .lab{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .kpi .val{font-family:var(--serif);font-size:26px;margin-top:3px}
+  .kpi .sub{font-size:12px;color:var(--ink-2)}
+
+  .bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+  .bar input,.bar select{font:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:7px 10px}
+  .bar input{flex:1 1 220px;min-width:0}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .seg button{font:inherit;font-size:12.5px;background:var(--surface);color:var(--ink-2);border:0;padding:7px 11px;cursor:pointer}
+  .seg button+button{border-left:1px solid var(--line)}
+  .seg button.on{background:var(--ink);color:var(--bg)}
+  .count{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-left:auto;white-space:nowrap}
+
+  .criteria{margin:12px 0 4px;display:flex;flex-wrap:wrap;gap:8px}
+  .crit{font-size:12px;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:7px 11px}
+  .crit b{color:var(--ink);font-weight:600}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-top:14px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;
+    text-decoration:none;transition:border-color .15s,transform .15s}
+  .card:hover{border-color:var(--gold-dim);transform:translateY(-1px)}
+  .card:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .ph{position:relative;aspect-ratio:4/5;background:var(--surface-2)}
+  .ph img{width:100%;height:100%;object-fit:cover;display:block}
+  .ph .noimg{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .badge{position:absolute;top:8px;left:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+    padding:3px 7px;border-radius:5px;background:rgba(20,17,14,.78);color:#ede7dd}
+  .badge.sold{background:#8a3a2a;color:#fff}
+  .badge.gone{background:rgba(90,82,74,.85);color:#fff}
+  .badge.under{left:auto;right:8px;background:var(--gold);color:#14110e}
+  .card.ended .ph img{filter:grayscale(.6);opacity:.72}
+  .body{padding:10px 12px 12px;display:flex;flex-direction:column;gap:5px;flex:1}
+  .price{font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums;display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+  .was{font-size:11.5px;color:var(--ink-3);text-decoration:line-through}
+  .drop{font-size:11px;color:var(--good)}
+  .title{font-size:13px;line-height:1.35;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em}
+  .meta{font-size:11.5px;color:var(--ink-3);margin-top:auto;display:flex;justify-content:space-between;gap:6px}
+  .meta .src{text-transform:capitalize}
+
+  .empty{padding:48px 12px;text-align:center;color:var(--ink-2)}
+  .err{padding:14px;border:1px solid var(--heat);border-radius:10px;color:var(--heat);margin-top:14px}
+  .foot{margin-top:28px;font-size:12px;color:var(--ink-3);line-height:1.6}
+
+  @media (max-width:760px){
+    .mast{flex-direction:column;align-items:flex-start}
+    .stamp{text-align:left}
+    .kpis{grid-template-columns:repeat(2,1fr);gap:8px}
+    .kpi{padding:10px 11px}
+    .kpi .val{font-size:22px}
+    /* On a phone the controls wrap to several rows; left sticky they would cover
+       half the screen while scrolling, so they scroll away with the page here. */
+    .bar{position:static;display:grid;grid-template-columns:1fr 1fr}
+    .bar input,.seg{grid-column:1 / -1}
+    .seg{display:flex}.seg button{flex:1}
+    .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+    .count{margin-left:0;grid-column:1 / -1}
+  }
+  @media (prefers-reduced-motion: reduce){.card{transition:none}.card:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <div class="eyebrow">Demand Desk · Grail Watch</div>
+      <h1>Listings</h1>
+      <p>Every listing the watches are tracking, live and ended. Alerts go to Slack; this is for browsing.</p>
+      <nav class="tabs" aria-label="Sections">
+        <a href="./">Dashboard</a>
+        <a href="./listings.html" class="on" aria-current="page">Listings</a>
+      </nav>
+    </div>
+    <div class="stamp" id="stamp"><div><span class="live">●</span> loading…</div></div>
+  </header>
+
+  <section class="kpis" id="kpis" aria-label="Summary"></section>
+
+  <div class="bar" role="search">
+    <input id="q" type="search" placeholder="Search titles, e.g. leopard, Carhartt, Togo" aria-label="Search listings">
+    <select id="watch" aria-label="Watch"><option value="">All watches</option></select>
+    <div class="seg" id="status" role="group" aria-label="Status">
+      <button data-v="live" class="on">Live</button>
+      <button data-v="ended">Sold / ended</button>
+      <button data-v="all">All</button>
+    </div>
+    <select id="sort" aria-label="Sort">
+      <option value="price-desc">Price, high to low</option>
+      <option value="price-asc">Price, low to high</option>
+      <option value="newest">Newest listed</option>
+      <option value="drop">Biggest price drop</option>
+      <option value="ended">Most recently ended</option>
+    </select>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="criteria" id="criteria"></div>
+  <div id="err"></div>
+  <div class="grid" id="grid" aria-live="polite"></div>
+
+  <p class="foot">
+    Updated hourly from the watches in <code>watchlist.json</code>. Fashionphile sales are confirmed: the item is flagged sold in their index.
+    eBay cannot tell a sale from a withdrawn listing, so ended eBay items say <em>no longer listed</em> rather than sold.
+    Prices are asking prices.
+  </p>
+</div>
+
+<script>
+// Read straight from the repository so the page is as fresh as the last hourly
+// watch run, without waiting for the site to redeploy. GitHub serves these with
+// open CORS and a five-minute cache. The copies bundled with the site are the
+// fallback if that request fails.
+const RAW = 'https://raw.githubusercontent.com/elibarzvi/demand-desk/main/';
+// A local preview reads the bundled copies first, so it shows what is on disk
+// rather than what is on GitHub.
+const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
+const pick = (remote, local) => LOCAL ? [local, remote] : [remote, local];
+const SOURCES = {
+  items: pick(RAW + 'data/state/watch-items.json', './data/watch-items.json'),
+  watches: pick(RAW + 'src/data/watchlist.json', './data/watchlist.json')
+};
+
+const $ = s => document.querySelector(s);
+// Listing titles are written by marketplace sellers, so treat every one as
+// untrusted text and never insert it as markup.
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safeUrl = u => /^https:\/\//i.test(u || '') ? u : null;
+const money = n => n == null ? '' : '$' + Math.round(n).toLocaleString('en-US');
+const days = (a, b) => Math.max(0, Math.round((new Date(b) - new Date(a)) / 86400000));
+const today = new Date().toISOString().slice(0, 10);
+
+async function load(urls) {
+  for (const u of urls) {
+    try { const r = await fetch(u, { cache: 'no-cache' }); if (r.ok) return await r.json(); } catch (_) {}
+  }
+  throw new Error('unreachable: ' + urls[0]);
+}
+
+let ITEMS = [], WATCH = {};
+const state = { q: '', watch: '', status: 'live', sort: 'price-desc' };
+
+function restore() {
+  const p = new URLSearchParams(location.search);
+  for (const k of Object.keys(state)) if (p.get(k)) state[k] = p.get(k);
+  $('#q').value = state.q; $('#sort').value = state.sort;
+  document.querySelectorAll('#status button').forEach(b => b.classList.toggle('on', b.dataset.v === state.status));
+}
+function persist() {
+  const p = new URLSearchParams();
+  for (const [k, v] of Object.entries(state)) if (v && !(k === 'status' && v === 'live') && !(k === 'sort' && v === 'price-desc')) p.set(k, v);
+  history.replaceState(null, '', p.toString() ? '?' + p : location.pathname);
+}
+
+function kpis(list) {
+  const live = list.filter(x => x.status === 'live');
+  const week = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10);
+  const ended = list.filter(x => x.status !== 'live' && (x.endedOn || '') >= week);
+  const drops = live.filter(x => x.lowPrice != null && x.firstPrice != null && x.lowPrice < x.firstPrice);
+  const sold = list.filter(x => x.status === 'sold' && x.listed && x.endedOn);
+  const med = a => { if (!a.length) return null; const s = [...a].sort((x, y) => x - y); return s[Math.floor(s.length / 2)]; };
+  const dom = med(sold.map(x => days(x.listed, x.endedOn)));
+  $('#kpis').innerHTML = [
+    ['Live listings', live.length, `${Object.keys(WATCH).length} watch${Object.keys(WATCH).length === 1 ? '' : 'es'}`],
+    ['Ended this week', ended.length, `${ended.filter(x => x.status === 'sold').length} confirmed sold`],
+    ['Below first ask', drops.length, `live listing${drops.length === 1 ? '' : 's'} marked down`],
+    ['Median days to sell', dom == null ? 'n/a' : dom + 'd', sold.length ? `across ${sold.length} confirmed sale${sold.length === 1 ? '' : 's'}` : 'needs a confirmed sale']
+  ].map(([l, v, s]) => `<div class="kpi"><div class="lab">${l}</div><div class="val">${v}</div><div class="sub">${s}</div></div>`).join('');
+}
+
+function criteria() {
+  const ws = state.watch ? [WATCH[state.watch]].filter(Boolean) : Object.values(WATCH);
+  $('#criteria').innerHTML = ws.map(w => {
+    const bits = [];
+    if (w.minPrice) bits.push(`from ${money(w.minPrice)}`);
+    if (w.maxPrice) bits.push(`asks above ${money(w.maxPrice)} held back`);
+    if (w.targetPrice) bits.push(`target ${money(w.targetPrice)}`);
+    bits.push(w.source === 'ebay' ? 'eBay' : 'Fashionphile');
+    return `<div class="crit"><b>${esc(w.label)}</b> · ${esc(bits.join(' · '))}</div>`;
+  }).join('');
+}
+
+function render() {
+  const q = state.q.trim().toLowerCase();
+  let list = ITEMS.filter(x =>
+    (!state.watch || x.watch === state.watch) &&
+    (state.status === 'all' || (state.status === 'live' ? x.status === 'live' : x.status !== 'live')) &&
+    (!q || (x.title || '').toLowerCase().includes(q)));
+
+  const dropPct = x => (x.firstPrice && x.price && x.price < x.firstPrice) ? (x.firstPrice - x.price) / x.firstPrice : 0;
+  const sorters = {
+    'price-desc': (a, b) => (b.price ?? 0) - (a.price ?? 0),
+    'price-asc': (a, b) => (a.price ?? 1e12) - (b.price ?? 1e12),
+    'newest': (a, b) => (b.listed || b.firstSeen || '').localeCompare(a.listed || a.firstSeen || ''),
+    'drop': (a, b) => dropPct(b) - dropPct(a),
+    'ended': (a, b) => (b.endedOn || '').localeCompare(a.endedOn || '')
+  };
+  list.sort(sorters[state.sort] || sorters['price-desc']);
+
+  $('#count').textContent = `${list.length} of ${ITEMS.length} listings`;
+  criteria();
+
+  if (!list.length) {
+    $('#grid').innerHTML = `<div class="empty">${ITEMS.length ? 'Nothing matches these filters.' : 'No listings tracked yet. The first watch run records what is standing.'}</div>`;
+    return;
+  }
+
+  $('#grid').innerHTML = list.map(x => {
+    const url = safeUrl(x.url), img = safeUrl(x.image);
+    const ended = x.status !== 'live';
+    const w = WATCH[x.watch];
+    const under = !ended && w?.targetPrice != null && x.price != null && x.price <= w.targetPrice;
+    const badge = x.status === 'sold' ? '<span class="badge sold">Sold</span>'
+      : x.status === 'gone' ? '<span class="badge gone">No longer listed</span>'
+      : `<span class="badge">${esc(x.source === 'ebay' ? 'eBay' : 'Fashionphile')}</span>`;
+    const dropped = !ended && x.firstPrice && x.price && x.price < x.firstPrice;
+    const since = x.listed || x.firstSeen;
+    const when = ended
+      ? (x.status === 'sold' ? `sold after ${days(since, x.endedOn)}d` : `ended ${x.endedOn}`)
+      : (since ? `listed ${days(since, today)}d ago` : '');
+    const seller = x.source === 'ebay' && x.sellerPct != null ? `${x.sellerPct}% · ${x.sellerScore ?? '?'} ratings` : (x.condition || '');
+    const inner = `
+      <div class="ph">
+        ${img ? `<img src="${esc(img)}" alt="${esc(x.title)}" loading="lazy" referrerpolicy="no-referrer">` : '<div class="noimg">no image yet</div>'}
+        ${badge}${under ? '<span class="badge under">Under target</span>' : ''}
+      </div>
+      <div class="body">
+        <div class="price">${money(x.price)}${dropped ? `<span class="was">${money(x.firstPrice)}</span><span class="drop">-${Math.round(dropPct(x) * 100)}%</span>` : ''}</div>
+        <div class="title">${esc(x.title)}</div>
+        <div class="meta"><span>${esc(when)}</span><span title="${esc(seller)}">${esc(seller)}</span></div>
+      </div>`;
+    return url
+      ? `<a class="card${ended ? ' ended' : ''}" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${inner}</a>`
+      : `<div class="card${ended ? ' ended' : ''}">${inner}</div>`;
+  }).join('');
+}
+
+function wire() {
+  let t;
+  $('#q').addEventListener('input', e => { clearTimeout(t); t = setTimeout(() => { state.q = e.target.value; persist(); render(); }, 120); });
+  $('#watch').addEventListener('change', e => { state.watch = e.target.value; persist(); render(); });
+  $('#sort').addEventListener('change', e => { state.sort = e.target.value; persist(); render(); });
+  $('#status').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    state.status = b.dataset.v;
+    document.querySelectorAll('#status button').forEach(x => x.classList.toggle('on', x === b));
+    persist(); render();
+  });
+}
+
+(async () => {
+  restore(); wire();
+  try {
+    const [items, cfg] = await Promise.all([load(SOURCES.items), load(SOURCES.watches)]);
+    for (const w of cfg.watches || []) WATCH[w.id] = w;
+    ITEMS = Object.entries(items).filter(([k, v]) => !k.startsWith('_') && v && v.watch).map(([, v]) => v);
+    $('#watch').insertAdjacentHTML('beforeend', Object.values(WATCH).map(w => `<option value="${esc(w.id)}">${esc(w.label)}</option>`).join(''));
+    $('#watch').value = state.watch;
+    const updated = items._meta?.updatedAt;
+    $('#stamp').innerHTML = `<div><span class="live">●</span> ${updated ? 'updated ' + new Date(updated).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : 'live'}</div><div>${ITEMS.length} tracked</div>`;
+    kpis(ITEMS); render();
+  } catch (e) {
+    $('#err').innerHTML = `<div class="err">Could not load listings (${esc(e.message)}).</div>`;
+  }
+})();
+</script>
+</body>
+</html>
