@@ -5,6 +5,10 @@ name: Grail watch
 # in hours, so it needs to run far more often and touch far less. It only reads
 # marketplaces, posts to Slack, and commits its own small state file.
 on:
+  # Hourly, off the top of the hour when GitHub's scheduler is busiest. The repo is
+  # public, so Actions minutes are free, and a pass takes about two seconds.
+  schedule:
+    - cron: '23 * * * *'
   workflow_dispatch:
     inputs:
       dry_run:
