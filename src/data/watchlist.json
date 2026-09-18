@@ -79,7 +79,43 @@
       "minSellerFeedbackPct": 95,
       "minSellerFeedbackScore": 20,
       "notes": "Targets the tier that sells five figures: Levi's and Carhartt collabs with leather or ponyhair cross patches. Fashionphile carries no Chrome Hearts apparel at all, so eBay is the only accessible source.",
-      "maxAlertsPerRun": 12
+      "maxAlertsPerRun": 12,
+      "dropPct": 5,
+      "targetPrice": null
+    },
+    {
+      "id": "hermes-birkin-25",
+      "label": "Hermès Birkin 25",
+      "enabled": true,
+      "source": "fashionphile",
+      "brand": "Hermès",
+      "vendor": "Hermes",
+      "phrase": "Birkin 25",
+      "minPrice": 0,
+      "maxPrice": null,
+      "targetPrice": null,
+      "dropPct": 5,
+      "require": {
+        "any": [
+          "birkin 25"
+        ]
+      },
+      "exclude": [
+        "wallet",
+        "pouch",
+        "card holder",
+        "charm",
+        "twilly",
+        "strap",
+        "cover",
+        "dust bag",
+        "insert",
+        "organizer"
+      ],
+      "maxAlertsPerRun": 12,
+      "notes": "Core cohort. Fashionphile confirms sales, so SOLD here is a real transaction. Set targetPrice to be told when one lists or drops below what you would pay."
     }
-  ]
+  ],
+  "_events": "Each watch reports three events. NEW: an eligible listing appeared. PRICE DROP: a tracked listing fell to a new low by at least dropPct (default 5), so a seller raising a price and trimming it back does not count. SOLD / NO LONGER LISTED: a tracked listing left the market. Fashionphile confirms sales; eBay cannot distinguish a sale from a withdrawal, so its departures are reported as no longer listed. targetPrice marks any new listing or drop at or below it as UNDER TARGET. The first run of a new watch records standing listings silently, so a month-old listing is never announced as new.",
+  "_privacy": "This repository is public, so this file is world-readable. A targetPrice here tells anyone what you are hunting and what you would pay. Keep sensitive targets out of the file or make the repository private before setting them."
 }

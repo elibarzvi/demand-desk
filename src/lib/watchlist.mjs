@@ -25,9 +25,13 @@ function hasTerm(haystack, term) {
 // Reporting why something matched matters as much as matching: a rule set is only
 // maintainable if a wrong hit tells you which term to fix.
 export function matchItem(item, watch) {
+  // Items arrive already normalised by src/lib/watch-sources.mjs: a flat numeric
+  // price, an id, and seller figures as numbers. The first version read eBay's raw
+  // shape (price.value, itemId), so once sources were normalised every price read
+  // as null and a live run matched 0 of 51 Birkin 25s.
   const title = String(item.title || '');
   const hay = ' ' + title.toLowerCase() + ' ';
-  const price = item.price?.value != null ? Number(item.price.value) : null;
+  const price = item.price != null ? Number(item.price) : null;
 
   if (price == null) return null;
   if (watch.minPrice != null && price < watch.minPrice) return null;
@@ -52,8 +56,8 @@ export function matchItem(item, watch) {
 
   // Credibility. eBay lists asking prices from anyone, so a five-figure ask from a
   // brand new account is noise rather than a find.
-  const pct = item.seller?.feedbackPercentage != null ? Number(item.seller.feedbackPercentage) : null;
-  const score = item.seller?.feedbackScore != null ? Number(item.seller.feedbackScore) : null;
+  const pct = item.sellerPct ?? null;
+  const score = item.sellerScore ?? null;
   const weak = [];
   if (watch.minSellerFeedbackPct != null && pct != null && pct < watch.minSellerFeedbackPct) weak.push(`seller feedback ${pct}%`);
   if (watch.minSellerFeedbackScore != null && score != null && score < watch.minSellerFeedbackScore) weak.push(`only ${score} seller ratings`);
@@ -61,18 +65,10 @@ export function matchItem(item, watch) {
   return { ...base(item, price, watch), verdict: weak.length ? 'weak-seller' : 'match', why: `matched on ${hit.join(', ')}`, concerns: weak };
 }
 
+// Carry the whole normalised listing through, so the lifecycle store receives
+// source, id, url and listing date without re-deriving them.
 function base(item, price, watch) {
-  return {
-    watch: watch.id,
-    itemId: item.itemId || item.legacyItemId || null,
-    title: item.title || '',
-    price,
-    condition: item.condition || null,
-    url: item.itemWebUrl || null,
-    seller: item.seller?.username || null,
-    sellerPct: item.seller?.feedbackPercentage ?? null,
-    sellerScore: item.seller?.feedbackScore ?? null
-  };
+  return { ...item, watch: watch.id, price };
 }
 
 // Run a whole feed through one watch, keeping only real matches and separating the
@@ -83,8 +79,9 @@ export function applyWatch(items, watch) {
   for (const it of items) {
     const r = matchItem(it, watch);
     if (!r) continue;
-    if (r.itemId && seen.has(r.itemId)) continue;      // same listing across queries
-    if (r.itemId) seen.add(r.itemId);
+    const k = `${r.source}:${r.id}`;
+    if (seen.has(k)) continue;                        // same listing across queries
+    seen.add(k);
     (r.verdict === 'match' ? matches : flagged).push(r);
   }
   matches.sort((a, b) => b.price - a.price);

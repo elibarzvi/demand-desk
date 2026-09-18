@@ -1,108 +1,94 @@
-// Grail watcher: searches eBay item by item and reports listings that match a
-// curated rule set, rather than the aggregate statistics the rest of the pipeline
-// produces.
+// Grail watcher. Hunts individual listings across marketplaces and reports three
+// events: a new eligible listing, a price drop to a new low, and a listing that
+// left the market (confirmed sold on Fashionphile, "no longer listed" on eBay).
 //
-// Alerts only on listings not seen before, because a watch that re-reports the
-// same standing listing every few hours is a watch nobody reads. Seen listings are
-// remembered in data/state/watch-seen.json.
+//   npm run watch            report only, nothing sent, state not saved
+//   npm run watch -- --send  post to Slack and remember what was sent
 //
-//   npm run watch            report only, nothing sent
-//   npm run watch -- --send  post new matches to Slack
-import fs from 'node:fs';
-import path from 'node:path';
-import { ROOT } from '../src/lib/util.mjs';
+// Posts to SLACK_WATCH_WEBHOOK_URL if set, otherwise the alerts channel, so
+// buying signals can live in their own channel without being required to.
 import { WATCHES, applyWatch } from '../src/lib/watchlist.mjs';
+import { SOURCES } from '../src/lib/watch-sources.mjs';
+import { readStore, writeStore, reconcile, settle, prune } from '../src/lib/watch-store.mjs';
 
-const SEEN_FILE = path.join(ROOT, 'data', 'state', 'watch-seen.json');
 const SITE = 'https://elibarzvi.github.io/demand-desk/';
-const KEEP_DAYS = 60;
+const money = n => n == null ? '?' : '$' + Math.round(Number(n)).toLocaleString('en-US');
+const MAX_CHECKS = 40;   // bound the per-run lookups for listings that went missing
 
-const money = n => '$' + Number(n).toLocaleString('en-US');
-const readSeen = () => { try { return JSON.parse(fs.readFileSync(SEEN_FILE, 'utf8')); } catch { return {}; } };
-function writeSeen(o) {
-  fs.mkdirSync(path.dirname(SEEN_FILE), { recursive: true });
-  fs.writeFileSync(SEEN_FILE, JSON.stringify(o, null, 2) + '\n');
-}
-
-async function token() {
-  const id = process.env.EBAY_CLIENT_ID, secret = process.env.EBAY_CLIENT_SECRET;
-  if (!id || !secret) throw new Error('eBay credentials not set');
-  const r = await fetch('https://api.ebay.com/identity/v1/oauth2/token', {
-    method: 'POST',
-    headers: { 'Authorization': `Basic ${Buffer.from(`${id}:${secret}`).toString('base64')}`, 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: 'grant_type=client_credentials&scope=' + encodeURIComponent('https://api.ebay.com/oauth/api_scope')
-  });
-  if (!r.ok) throw new Error(`eBay OAuth HTTP ${r.status}`);
-  return (await r.json()).access_token;
-}
-
-async function search(tok, q, minPrice) {
-  const url = 'https://api.ebay.com/buy/browse/v1/item_summary/search'
-    + '?q=' + encodeURIComponent(q)
-    + '&limit=100&sort=-price'
-    + '&filter=' + encodeURIComponent(`buyingOptions:{FIXED_PRICE},price:[${minPrice || 1}..],priceCurrency:USD`)
-    + '&fieldgroups=EXTENDED';
-  const r = await fetch(url, { headers: { 'Authorization': `Bearer ${tok}`, 'X-EBAY-C-MARKETPLACE-ID': 'EBAY_US' } });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  return (await r.json()).itemSummaries || [];
+function line(e) {
+  const link = e.url ? `<${e.url}|${(e.title || '').slice(0, 78)}>` : (e.title || '').slice(0, 78);
+  const target = e.underTarget ? '  *UNDER TARGET*' : '';
+  switch (e.type) {
+    case 'new':  return `NEW  ${money(e.price)}  ${link}${target}${e.listed ? `\n      listed ${e.listed} · ${e.source}` : ` · ${e.source}`}`;
+    case 'drop': return `PRICE DROP  ${money(e.from)} → ${money(e.to)} (-${e.dropPct}%)  ${link}${target}`;
+    case 'sold': return `SOLD  ${money(e.price)}  ${link}${e.daysOnMarket != null ? `  · ${e.daysOnMarket}d on market` : ''}`;
+    case 'gone': return `NO LONGER LISTED  ${money(e.price)}  ${link}  · sold or withdrawn, eBay does not say which`;
+  }
 }
 
 async function main() {
   const send = process.argv.includes('--send');
-  const active = WATCHES.filter(w => w.enabled !== false);
-  if (!active.length) { console.log('[watch] no enabled watches'); return; }
+  const date = new Date().toISOString().slice(0, 10);
+  const store = readStore();
+  const out = [];
 
-  const tok = await token();
-  const seen = readSeen();
-  const today = new Date().toISOString().slice(0, 10);
-  const fresh = [];
+  for (const w of WATCHES.filter(w => w.enabled !== false)) {
+    const src = SOURCES[w.source];
+    if (!src) { console.log(`[watch] ${w.id}: unknown source "${w.source}"`); continue; }
 
-  for (const w of active) {
-    const items = [];
-    for (const q of w.queries || []) {
-      try { items.push(...await search(tok, q, w.minPrice)); }
-      catch (e) { console.log(`[watch] query "${q}" failed: ${e.message}`); }
-    }
+    let items = [];
+    try { items = await src.search(w); }
+    catch (e) { console.log(`[watch] ${w.id}: search failed, skipping this run: ${e.message}`); continue; }
+
     const { matches, flagged } = applyWatch(items, w);
-    console.log(`[watch] ${w.id}: scanned ${items.length} listings, ${matches.length} match, ${flagged.length} flagged`);
+    const { events, missing, seeding } = reconcile(store, w, matches, date);
 
-    for (const m of matches) {
-      const key = `${w.id}|${m.itemId}`;
-      if (seen[key]) continue;
-      seen[key] = today;
-      fresh.push(m);
+    // Confirm listings that disappeared before saying anything about them.
+    for (const k of missing.slice(0, MAX_CHECKS)) {
+      let verdict = { state: 'unknown' };
+      try { verdict = await src.confirm(store[k]); } catch { /* stays unknown */ }
+      const ev = settle(store, w, k, verdict, date);
+      if (ev) events.push(ev);
     }
-    for (const f of flagged) console.log(`   flagged [${f.verdict}] ${money(f.price)} ${f.title.slice(0, 52)}  [seller ${f.sellerPct ?? '?'}% / ${f.sellerScore ?? '?'} ratings]`);
-    for (const m of matches) console.log(`   ${money(m.price)} ${m.title.slice(0, 52)}  [seller ${m.sellerPct ?? '?'}% / ${m.sellerScore ?? '?'} ratings]`);
+
+    console.log(`[watch] ${w.id}: ${items.length} scanned, ${matches.length} eligible, ${flagged.length} held back`
+      + (seeding ? `, first run so ${matches.length} standing listings recorded silently` : '')
+      + `, ${events.length} event(s)`);
+    for (const e of events) console.log('   ' + line(e).replace(/<([^|]+)\|([^>]+)>/g, '$2'));
+
+    if (seeding && matches.length) {
+      const top = [...matches].sort((a, b) => b.price - a.price).slice(0, 3);
+      events.unshift({ type: 'seed', count: matches.length, top });
+    }
+    if (events.length) out.push({ w, events });
   }
 
-  // Forget listings we have not seen in a while so the file cannot grow forever.
-  const cutoff = new Date(Date.now() - KEEP_DAYS * 86400000).toISOString().slice(0, 10);
-  for (const [k, d] of Object.entries(seen)) if (d < cutoff) delete seen[k];
+  prune(store, date);
 
-  if (!fresh.length) { console.log('[watch] nothing new'); writeSeen(seen); return; }
+  if (!out.length) { console.log('[watch] nothing to report'); if (send) writeStore(store); return; }
 
-  // A first run sees every standing listing at once: the Chrome Hearts rules
-  // matched 44 on their first pass. Send the most expensive few and leave the
-  // rest recorded as seen, so the backlog clears without flooding the channel.
-  const cap = Math.min(...active.map(w => w.maxAlertsPerRun ?? Infinity));
-  fresh.sort((a, b) => b.price - a.price);
-  const held = Number.isFinite(cap) && fresh.length > cap ? fresh.length - cap : 0;
-  const sending = held ? fresh.slice(0, cap) : fresh;
+  const blocks = out.map(({ w, events }) => {
+    const rows = [];
+    for (const e of events) {
+      if (e.type === 'seed') {
+        rows.push(`Now watching ${e.count} standing listings. From here on you hear about new ones, price drops and sales. Highest now: `
+          + e.top.map(t => `${money(t.price)} <${t.url}|${t.title.slice(0, 50)}>`).join(', '));
+      } else rows.push(line(e));
+    }
+    const cap = w.maxAlertsPerRun ?? 12;
+    const held = rows.length > cap ? rows.length - cap : 0;
+    return `*${w.label}*\n` + rows.slice(0, cap).map(r => `• ${r}`).join('\n') + (held ? `\n• plus ${held} more in the run log` : '');
+  });
+  const text = `*Demand Desk watch* · ${date}\n\n` + blocks.join('\n\n') + `\n\n<${SITE}|Open the dashboard>`;
 
-  const text = `*Demand Desk grail watch* · ${sending.length} new listing${sending.length > 1 ? 's' : ''}`
-    + (held ? ` (plus ${held} more, see the run log)` : '') + '\n'
-    + sending.map(m => `• ${money(m.price)} <${m.url}|${m.title.slice(0, 80)}>\n   ${m.condition || 'condition unstated'} · seller ${m.seller} ${m.sellerPct != null ? `(${m.sellerPct}%)` : ''}`).join('\n')
-    + `\n<${SITE}|Open the dashboard>`;
-
-  const hook = process.env.SLACK_WEBHOOK_URL;
   if (!send) { console.log(`\n[watch] dry run, would have sent:\n${text}`); return; }
-  if (!hook) { console.log('[watch] SLACK_WEBHOOK_URL not set, nothing sent'); return; }
 
+  const hook = process.env.SLACK_WATCH_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL;
+  if (!hook) { console.log('[watch] no Slack webhook set, nothing sent'); return; }
   const r = await fetch(hook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, unfurl_links: false }) });
-  // Only remember what was actually delivered, so a failed post retries tomorrow.
-  if (r.ok) writeSeen(seen);
-  console.log(r.ok ? `[watch] sent ${sending.length} new listing(s)${held ? `, held ${held}` : ''}` : `[watch] Slack rejected the post: HTTP ${r.status}`);
+  // Persist only after delivery, so a failed post is retried rather than lost.
+  if (r.ok) writeStore(store);
+  console.log(r.ok ? `[watch] sent ${out.reduce((a, o) => a + o.events.length, 0)} event(s)` : `[watch] Slack rejected the post: HTTP ${r.status}`);
 }
 
-main().catch(e => console.log('[watch] skipped after error:', e.message));
+main().catch(e => { console.log('[watch] failed:', e.message); process.exitCode = 1; });

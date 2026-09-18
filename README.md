@@ -90,6 +90,35 @@ categories, with small leather goods filtered out. Add one with `brand`, `vendor
 `keepAccessories: true` where the line legitimately is an accessory, as with
 Chanel's Wallet On Chain or the Cartier LOVE bracelet.
 
+## Grail watch: alerts on individual listings
+
+Separate from the statistics above. `scripts/watch.mjs` hunts individual listings
+defined in [`src/data/watchlist.json`](src/data/watchlist.json) and posts three kinds
+of event to Slack:
+
+- **NEW**: an eligible listing appeared.
+- **PRICE DROP**: a tracked listing fell to a new low by at least `dropPct`
+  (default 5). A seller who raises a price and trims it back does not count.
+- **SOLD / NO LONGER LISTED**: a tracked listing left the market.
+
+How certain a departure is depends on the marketplace, and the alert says which.
+Fashionphile keeps sold items in its index flagged as unavailable, so a sale there
+is confirmed. eBay's Browse API cannot tell a sale from a seller withdrawing the
+listing (real sold data needs eBay's restricted Marketplace Insights API), so an
+eBay departure is reported as no longer listed, never as sold. A listing must be
+absent twice and then checked directly before anything is said, because listings
+routinely fall out of a search without leaving the market.
+
+The first run of a new watch records standing listings silently and sends one
+summary, so a listing that has been up for a month is never announced as new.
+
+It runs from its own workflow, [`watch.yml`](.github/workflows/watch.yml), since
+grails can sell within hours. It posts to `SLACK_WATCH_WEBHOOK_URL` if that secret
+exists, otherwise to the alerts channel.
+
+**This repository is public**, so `watchlist.json` is world-readable. A
+`targetPrice` there tells anyone what you are hunting and what you would pay.
+
 ## Reading the numbers
 
 A few things are worth knowing before you act on a figure.

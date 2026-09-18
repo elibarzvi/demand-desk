@@ -1,0 +1,57 @@
+name: Grail watch
+
+# Separate from the daily capture on purpose. The capture builds aggregate
+# statistics three times a day; this hunts individual listings, and grails sell
+# in hours, so it needs to run far more often and touch far less. It only reads
+# marketplaces, posts to Slack, and commits its own small state file.
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Report what it would send without posting or saving state'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write            # commit data/state/watch-items.json
+
+concurrency:
+  group: watch               # never two watch runs at once, or the state file races itself
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund
+
+      - name: Watch marketplaces
+        run: npm run watch ${{ inputs.dry_run && ' ' || '-- --send' }}
+        env:
+          EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
+          EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
+          SLACK_WATCH_WEBHOOK_URL: ${{ secrets.SLACK_WATCH_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      # Same race the daily capture has: both jobs commit to main. Rebase and
+      # retry rather than fail. This job only ever changes its own state file, so
+      # there is nothing of the capture's for it to overwrite.
+      - name: Save watch state
+        if: ${{ !inputs.dry_run }}
+        run: |
+          git config user.name "demand-desk-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/state/watch-items.json 2>/dev/null || true
+          git diff --cached --quiet && { echo "no state change"; exit 0; }
+          git commit -m "watch state $(date -u +%F)"
+          for attempt in 1 2 3; do
+            if git push; then exit 0; fi
+            git fetch origin main
+            git rebase -X theirs origin/main || { git rebase --abort || true; exit 1; }
+          done
+          exit 1
