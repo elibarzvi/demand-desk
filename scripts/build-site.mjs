@@ -55,6 +55,7 @@ function build() {
   // Fallback copies for the listings page, which normally reads these live from
   // the repository so it is as fresh as the hourly watch rather than the deploy.
   for (const [src, name] of [[path.join(ROOT, 'data', 'state', 'watch-items.json'), 'watch-items.json'],
+                             [path.join(ROOT, 'data', 'state', 'watch-held.json'), 'watch-held.json'],
                              [path.join(ROOT, 'src', 'data', 'watchlist.json'), 'watchlist.json']]) {
     if (fs.existsSync(src)) fs.cpSync(src, path.join(SITE_DATA_DIR, name));
   }

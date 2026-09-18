@@ -50,7 +50,7 @@ jobs:
         run: |
           git config user.name "demand-desk-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/state/watch-items.json 2>/dev/null || true
+          git add data/state/watch-items.json data/state/watch-held.json 2>/dev/null || true
           git diff --cached --quiet && { echo "no state change"; exit 0; }
           git commit -m "watch state $(date -u +%F)"
           for attempt in 1 2 3; do

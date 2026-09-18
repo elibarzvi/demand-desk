@@ -9,7 +9,23 @@
 // buying signals can live in their own channel without being required to.
 import { WATCHES, applyWatch } from '../src/lib/watchlist.mjs';
 import { SOURCES } from '../src/lib/watch-sources.mjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import { ROOT } from '../src/lib/util.mjs';
 import { readStore, writeStore, reconcile, settle, prune } from '../src/lib/watch-store.mjs';
+
+// Listings the rules held back, with the reason. A current snapshot rather than a
+// tracked history: they never alert, but seeing them is how the rules get tuned.
+// The first live run held back 19 eBay listings, including a $52,000 pair from a
+// seller with three ratings, and none of that was visible anywhere.
+const HELD_FILE = path.join(ROOT, 'data', 'state', 'watch-held.json');
+function writeHeld(held) {
+  fs.mkdirSync(path.dirname(HELD_FILE), { recursive: true });
+  fs.writeFileSync(HELD_FILE, JSON.stringify({ _meta: { updatedAt: new Date().toISOString() }, items: held }, null, 2) + '\n');
+}
+const reasonOf = f => f.verdict === 'over-cap'
+  ? 'asks above the credibility cap'
+  : (f.concerns || []).join(', ') || f.verdict;
 
 const SITE = 'https://elibarzvi.github.io/demand-desk/';
 const money = n => n == null ? '?' : '$' + Math.round(Number(n)).toLocaleString('en-US');
@@ -31,6 +47,7 @@ async function main() {
   const date = new Date().toISOString().slice(0, 10);
   const store = readStore();
   const out = [];
+  const held = [];
 
   for (const w of WATCHES.filter(w => w.enabled !== false)) {
     const src = SOURCES[w.source];
@@ -41,6 +58,12 @@ async function main() {
     catch (e) { console.log(`[watch] ${w.id}: search failed, skipping this run: ${e.message}`); continue; }
 
     const { matches, flagged } = applyWatch(items, w);
+    for (const f of flagged) {
+      held.push({ watch: w.id, source: f.source, id: f.id, title: f.title, url: f.url, image: f.image ?? null,
+        price: f.price, condition: f.condition ?? null, listed: f.listed ?? null,
+        seller: f.seller ?? null, sellerPct: f.sellerPct ?? null, sellerScore: f.sellerScore ?? null,
+        verdict: f.verdict, reason: reasonOf(f) });
+    }
     const { events, missing, seeding } = reconcile(store, w, matches, date);
 
     // Confirm listings that disappeared before saying anything about them.
@@ -65,7 +88,11 @@ async function main() {
 
   prune(store, date);
 
-  if (!out.length) { console.log('[watch] nothing to report'); if (send) writeStore(store); return; }
+  if (!out.length) {
+    console.log('[watch] nothing to report');
+    if (send) { writeStore(store); writeHeld(held); }
+    return;
+  }
 
   const blocks = out.map(({ w, events }) => {
     const rows = [];
@@ -87,7 +114,7 @@ async function main() {
   if (!hook) { console.log('[watch] no Slack webhook set, nothing sent'); return; }
   const r = await fetch(hook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, unfurl_links: false }) });
   // Persist only after delivery, so a failed post is retried rather than lost.
-  if (r.ok) writeStore(store);
+  if (r.ok) { writeStore(store); writeHeld(held); }
   console.log(r.ok ? `[watch] sent ${out.reduce((a, o) => a + o.events.length, 0)} event(s)` : `[watch] Slack rejected the post: HTTP ${r.status}`);
 }
 
