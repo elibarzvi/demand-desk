@@ -1,20 +1,33 @@
 {
-  "generatedAt": "2026-09-21T15:07:24.150Z",
+  "generatedAt": "2026-09-21T19:35:06.722Z",
   "date": "2026-09-21",
-  "count": 22,
+  "count": 20,
   "alerts": [
     {
       "date": "2026-09-21",
       "type": "breakout",
       "severity": "high",
-      "series": "fp.daysToSell",
-      "metric": "Median days to sell",
-      "brand": "Goyard",
-      "value": 116,
-      "z": 4.1,
-      "baseline": 37,
-      "changePct": 213.51,
-      "message": "Goyard Median days to sell at 116 is +213.51% vs its 25-day normal of 37 (z=4.1)."
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Rolex",
+      "value": 1.9616,
+      "z": 4.45,
+      "baseline": 1.69,
+      "changePct": 15.97,
+      "message": "Rolex Google Trends relative interest at 1.9616 is +15.97% vs its 32-day normal of 1.69 (z=4.45)."
+    },
+    {
+      "date": "2026-09-21",
+      "type": "breakout",
+      "severity": "high",
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Dior",
+      "value": 1.5995,
+      "z": 4.06,
+      "baseline": 1.45,
+      "changePct": 10.63,
+      "message": "Dior Google Trends relative interest at 1.5995 is +10.63% vs its 32-day normal of 1.45 (z=4.06)."
     },
     {
       "date": "2026-09-21",
@@ -66,27 +79,27 @@
       "date": "2026-09-21",
       "type": "breakout",
       "severity": "medium",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Rolex",
-      "value": 1.9493,
-      "z": 2.93,
-      "baseline": 1.68,
-      "changePct": 15.8,
-      "message": "Rolex Google Trends relative interest at 1.9493 is +15.8% vs its 32-day normal of 1.68 (z=2.93)."
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Goyard",
+      "value": 334,
+      "z": -2.96,
+      "baseline": 362.5,
+      "changePct": -7.86,
+      "message": "Goyard Fashionphile listings (all categories) at 334 is -7.86% vs its 49-day normal of 362.5 (z=-2.96)."
     },
     {
       "date": "2026-09-21",
       "type": "breakout",
       "severity": "medium",
-      "series": "fp.turnover",
-      "metric": "Daily sell-through %",
-      "brand": "Louis Vuitton",
-      "value": 1.28,
-      "z": -2.42,
-      "baseline": 2.68,
-      "changePct": -52.24,
-      "message": "Louis Vuitton Daily sell-through % at 1.28 is -52.24% vs its 25-day normal of 2.68 (z=-2.42)."
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Cartier",
+      "value": 0.7846,
+      "z": -2.82,
+      "baseline": 0.92,
+      "changePct": -14.34,
+      "message": "Cartier Google Trends relative interest at 0.7846 is -14.34% vs its 32-day normal of 0.92 (z=-2.82)."
     },
     {
       "date": "2026-09-21",
@@ -95,24 +108,11 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Prada",
-      "value": 731,
-      "z": -2.31,
+      "value": 728,
+      "z": -2.46,
       "baseline": 775.5,
-      "changePct": -5.74,
-      "message": "Prada Fashionphile listings (all categories) at 731 is -5.74% vs its 13-day normal of 775.5 (z=-2.31)."
-    },
-    {
-      "date": "2026-09-21",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Dior",
-      "value": 1.5811,
-      "z": 2.31,
-      "baseline": 1.45,
-      "changePct": 8.99,
-      "message": "Dior Google Trends relative interest at 1.5811 is +8.99% vs its 32-day normal of 1.45 (z=2.31)."
+      "changePct": -6.13,
+      "message": "Prada Fashionphile listings (all categories) at 728 is -6.13% vs its 13-day normal of 775.5 (z=-2.46)."
     },
     {
       "date": "2026-09-21",
@@ -120,25 +120,12 @@
       "severity": "medium",
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
-      "brand": "Goyard",
-      "value": 342,
-      "z": -2.13,
-      "baseline": 362.5,
-      "changePct": -5.66,
-      "message": "Goyard Fashionphile listings (all categories) at 342 is -5.66% vs its 49-day normal of 362.5 (z=-2.13)."
-    },
-    {
-      "date": "2026-09-21",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "fp.daysToSell",
-      "metric": "Median days to sell",
-      "brand": "Hermès",
-      "value": 71,
-      "z": 2.02,
-      "baseline": 41,
-      "changePct": 73.17,
-      "message": "Hermès Median days to sell at 71 is +73.17% vs its 25-day normal of 41 (z=2.02)."
+      "brand": "Louis Vuitton",
+      "value": 7704,
+      "z": -2.19,
+      "baseline": 8056.5,
+      "changePct": -4.38,
+      "message": "Louis Vuitton Fashionphile listings (all categories) at 7704 is -4.38% vs its 49-day normal of 8056.5 (z=-2.19)."
     },
     {
       "date": "2026-09-21",
@@ -146,12 +133,12 @@
       "severity": "medium",
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
-      "brand": "Goyard",
-      "value": 0.2978,
-      "z": -2.02,
-      "baseline": 0.38,
-      "changePct": -22.33,
-      "message": "Goyard Google Trends relative interest at 0.2978 is -22.33% vs its 32-day normal of 0.38 (z=-2.02)."
+      "brand": "Prada",
+      "value": 0.9959,
+      "z": -2.06,
+      "baseline": 1.2,
+      "changePct": -16.93,
+      "message": "Prada Google Trends relative interest at 0.9959 is -16.93% vs its 32-day normal of 1.2 (z=-2.06)."
     },
     {
       "date": "2026-09-21",
@@ -159,32 +146,10 @@
       "severity": "medium",
       "series": "fp.turnover",
       "metric": "Daily sell-through %",
-      "brand": "Chanel",
-      "value": 1.37,
-      "wowPct": -54.33,
-      "message": "Chanel Daily sell-through % moved -54.33% in 7 days to 1.37."
-    },
-    {
-      "date": "2026-09-21",
-      "type": "weekly-move",
-      "severity": "medium",
-      "series": "fp.turnover",
-      "metric": "Daily sell-through %",
-      "brand": "Goyard",
-      "value": 2.47,
-      "wowPct": -53.04,
-      "message": "Goyard Daily sell-through % moved -53.04% in 7 days to 2.47."
-    },
-    {
-      "date": "2026-09-21",
-      "type": "weekly-move",
-      "severity": "medium",
-      "series": "fp.turnover",
-      "metric": "Daily sell-through %",
-      "brand": "Dior",
-      "value": 2.02,
-      "wowPct": -44.66,
-      "message": "Dior Daily sell-through % moved -44.66% in 7 days to 2.02."
+      "brand": "Hermès",
+      "value": 3.86,
+      "wowPct": 51.97,
+      "message": "Hermès Daily sell-through % moved +51.97% in 7 days to 3.86."
     },
     {
       "date": "2026-09-21",
@@ -203,10 +168,21 @@
       "severity": "medium",
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
-      "brand": "Louis Vuitton",
-      "value": 41,
-      "wowPct": 57.69,
-      "message": "Louis Vuitton Median days to sell moved +57.69% in 7 days to 41."
+      "brand": "Hermès",
+      "value": 53,
+      "wowPct": 70.97,
+      "message": "Hermès Median days to sell moved +70.97% in 7 days to 53."
+    },
+    {
+      "date": "2026-09-21",
+      "type": "weekly-move",
+      "severity": "medium",
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "Goyard",
+      "value": 54,
+      "wowPct": 671.43,
+      "message": "Goyard Median days to sell moved +671.43% in 7 days to 54."
     },
     {
       "date": "2026-09-21",
@@ -215,9 +191,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Dior",
-      "value": 49,
-      "wowPct": 133.33,
-      "message": "Dior Median days to sell moved +133.33% in 7 days to 49."
+      "value": 61,
+      "wowPct": 190.48,
+      "message": "Dior Median days to sell moved +190.48% in 7 days to 61."
     },
     {
       "date": "2026-09-21",
@@ -226,31 +202,9 @@
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
       "brand": "Celine",
-      "value": 0.6389,
-      "wowPct": -67.67,
-      "message": "Celine Google Trends relative interest moved -67.67% in 7 days to 0.6389."
-    },
-    {
-      "date": "2026-09-21",
-      "type": "weekly-move",
-      "severity": "low",
-      "series": "fp.turnover",
-      "metric": "Daily sell-through %",
-      "brand": "Hermès",
-      "value": 1.82,
-      "wowPct": -28.35,
-      "message": "Hermès Daily sell-through % moved -28.35% in 7 days to 1.82."
-    },
-    {
-      "date": "2026-09-21",
-      "type": "weekly-move",
-      "severity": "low",
-      "series": "fp.turnover",
-      "metric": "Daily sell-through %",
-      "brand": "Cartier",
-      "value": 2.01,
-      "wowPct": -26.64,
-      "message": "Cartier Daily sell-through % moved -26.64% in 7 days to 2.01."
+      "value": 0.5794,
+      "wowPct": -68.67,
+      "message": "Celine Google Trends relative interest moved -68.67% in 7 days to 0.5794."
     },
     {
       "date": "2026-09-21",
@@ -262,6 +216,28 @@
       "value": 47,
       "wowPct": 20.51,
       "message": "Chanel Median days to sell moved +20.51% in 7 days to 47."
+    },
+    {
+      "date": "2026-09-21",
+      "type": "weekly-move",
+      "severity": "low",
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "Louis Vuitton",
+      "value": 30,
+      "wowPct": 15.38,
+      "message": "Louis Vuitton Median days to sell moved +15.38% in 7 days to 30."
+    },
+    {
+      "date": "2026-09-21",
+      "type": "weekly-move",
+      "severity": "low",
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Louis Vuitton",
+      "value": 1.5391,
+      "wowPct": 16.67,
+      "message": "Louis Vuitton Google Trends relative interest moved +16.67% in 7 days to 1.5391."
     }
   ]
 }
