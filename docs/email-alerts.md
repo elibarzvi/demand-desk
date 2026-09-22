@@ -17,7 +17,7 @@ here. If Followed Search mail never arrives despite these being on, that is the
 likely cause, and the fix is to ask Grailed support to clear the suppression
 rather than to keep toggling this page.
 
-## The RealReal: broken by the unsubscribe
+## The RealReal: was broken by the unsubscribe, now fixed
 
 `/account/preferences/email_preferences` offers exactly four delivery cadences,
 and after the unsubscribe none of them is selected:
@@ -39,3 +39,16 @@ description limits it to Obsessions and consignments. Note that the page never
 mentions Saved Searches by name, so whether feed mail rides on this setting is
 not something the page states. It has to be confirmed by switching it on and
 watching for a feed email.
+
+### The fix, applied 2026-09-22
+
+"When Personalized" is now selected and "consignment offers and newsletters" is
+set to No, so the account sends Obsession and consignment mail and nothing else.
+The five category interest boxes were left cleared on purpose, since they steer
+promotional mail rather than alerts.
+
+If saved-search mail still does not arrive, try in this order. First tick the
+interest categories that cover the watchlist, Women and Jewelry, in case The
+RealReal gates all sending on having at least one. Second, suspect a suppression
+list held by their mail provider, which sits underneath this page and is only
+clearable by their support team.
