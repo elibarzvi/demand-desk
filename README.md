@@ -119,6 +119,24 @@ exists, otherwise to the alerts channel.
 **This repository is public**, so `watchlist.json` is world-readable. A
 `targetPrice` there tells anyone what you are hunting and what you would pay.
 
+## Scheduling: why an external trigger
+
+GitHub's cron is best-effort, and on a shared runner pool it drops most firings.
+Measured over 36 hours, the watch's hourly schedule actually fired every 4.4 hours
+on average, worst gap 7h49m, roughly 5 runs a day rather than 24. That is fine for
+the daily capture and not fine for a watch whose whole point is catching a listing
+within the hour.
+
+The cron therefore stays only as a floor, and the real cadence comes from an
+external caller hitting `repository_dispatch` with event type `watch-now`. The
+script for that is [`docs/apps-script/demand-desk.gs`](docs/apps-script/demand-desk.gs),
+which runs on a Google Apps Script time trigger: reliable, free, and running inside
+Google rather than on anyone's laptop, so nothing depends on a machine being awake.
+
+Nothing in this project runs locally. The capture, the watch, the derived layer and
+the deploy all run on GitHub's servers; the scheduler runs on Google's. A laptop is
+needed only to change the code.
+
 ## Reading the numbers
 
 A few things are worth knowing before you act on a figure.
