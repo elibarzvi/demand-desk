@@ -8,10 +8,10 @@ on:
   # Hourly, off the top of the hour when GitHub's scheduler is busiest. The repo is
   # public, so Actions minutes are free, and a pass takes about two seconds.
   # GitHub's scheduler is best-effort and drops most firings on a busy shared
-  # runner pool. Measured over 36 hours this cron fired every 4.4 hours on
-  # average, worst gap 7h49m, about 5 runs a day rather than 24. Grails sell in
-  # hours, so the cron stays only as a floor and an external caller drives the
-  # real cadence through repository_dispatch.
+  # runner pool. Measured over 96 hours to 2026-09-22 this cron fired every 3.3
+  # hours on average, worst gap 7h49m, about 7.5 runs a day rather than 24.
+  # Grails sell in hours, so the cron stays only as a floor and an external
+  # caller drives the real cadence through repository_dispatch.
   schedule:
     - cron: '23 * * * *'
   repository_dispatch:
