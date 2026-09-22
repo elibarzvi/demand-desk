@@ -58,3 +58,10 @@ discarded most of them.
 ## Email delivery
 
 These searches only matter if their mail arrives. See `docs/email-alerts.md`.
+
+## Turning the mail into listings
+
+`docs/apps-script/inspect-mail.gs` reads the alert mail in place and logs its
+shape, so the parser can be written against a real template rather than a guess.
+It is read-only and sends nothing. Run `inspectAlertMail` first to see what has
+arrived, then `dumpMessage` on one alert to see how its listings are laid out.
