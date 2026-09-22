@@ -1,9 +1,10 @@
 /**
  * Demand Desk scheduler, run from Google Apps Script.
  *
- * Why this exists: GitHub's own cron is best-effort. Measured over 36 hours, an
- * hourly schedule on this repository actually fired every 4.4 hours on average,
- * with a worst gap of 7h49m, roughly 5 runs a day instead of 24. Grails sell in
+ * Why this exists: GitHub's own cron is best-effort. Measured over 96 hours to
+ * 2026-09-22, an hourly schedule on this repository actually fired every 3.3
+ * hours on average, with a worst gap of 7h49m, roughly 7.5 runs a day instead of
+ * 24. That leaves blind spots most of a working day long, and grails sell in
  * hours, so the watch needs a scheduler that keeps its word. Apps Script triggers
  * are reliable, free, and run inside Google rather than on your machine, so
  * nothing here depends on your computer being awake.
