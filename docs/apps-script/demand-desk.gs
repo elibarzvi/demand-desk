@@ -23,6 +23,11 @@
  *  3. Run installTriggers once and approve the permissions prompt.
  *  4. Check Executions after an hour to confirm it is firing.
  *
+ * Verified live on 2026-09-22. Three consecutive dispatches landed at 21:56:56,
+ * 22:56:56 and 23:56:56 UTC, so the hourly cadence anchors to the install time
+ * and holds to the second. Note that the first automatic fire is one full hour
+ * after installTriggers rather than at some random minute inside that hour.
+ *
  * Never paste the token into this file. Script Properties keeps it out of the
  * code, out of version control, and out of any copy of this script you share.
  */
