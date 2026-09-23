@@ -1,46 +1,20 @@
 {
-  "generatedAt": "2026-09-23T14:51:48.463Z",
+  "generatedAt": "2026-09-23T18:27:29.001Z",
   "date": "2026-09-23",
-  "count": 8,
+  "count": 10,
   "alerts": [
     {
       "date": "2026-09-23",
       "type": "breakout",
-      "severity": "medium",
-      "series": "fp.medianPrice",
-      "metric": "Fashionphile median price",
-      "brand": "Hermès",
-      "value": 6850,
-      "z": 2.39,
-      "baseline": 6495,
-      "changePct": 5.47,
-      "message": "Hermès Fashionphile median price at 6850 is +5.47% vs its 28-day normal of 6495 (z=2.39)."
-    },
-    {
-      "date": "2026-09-23",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "fp.listingsAll",
-      "metric": "Fashionphile listings (all categories)",
-      "brand": "Louis Vuitton",
-      "value": 7676,
-      "z": -2.36,
-      "baseline": 8056.5,
-      "changePct": -4.72,
-      "message": "Louis Vuitton Fashionphile listings (all categories) at 7676 is -4.72% vs its 51-day normal of 8056.5 (z=-2.36)."
-    },
-    {
-      "date": "2026-09-23",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Chanel",
-      "value": 2.1424,
-      "z": 2.3,
-      "baseline": 1.92,
-      "changePct": 11.68,
-      "message": "Chanel Google Trends relative interest at 2.1424 is +11.68% vs its 32-day normal of 1.92 (z=2.3)."
+      "severity": "high",
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "The Row",
+      "value": 165,
+      "z": 3.59,
+      "baseline": 34.5,
+      "changePct": 378.26,
+      "message": "The Row Median days to sell at 165 is +378.26% vs its 27-day normal of 34.5 (z=3.59)."
     },
     {
       "date": "2026-09-23",
@@ -49,11 +23,59 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Goyard",
-      "value": 343,
-      "z": -2.02,
+      "value": 340,
+      "z": -2.33,
       "baseline": 362.5,
-      "changePct": -5.38,
-      "message": "Goyard Fashionphile listings (all categories) at 343 is -5.38% vs its 51-day normal of 362.5 (z=-2.02)."
+      "changePct": -6.21,
+      "message": "Goyard Fashionphile listings (all categories) at 340 is -6.21% vs its 51-day normal of 362.5 (z=-2.33)."
+    },
+    {
+      "date": "2026-09-23",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "Cartier",
+      "value": 60,
+      "z": 2.17,
+      "baseline": 29.5,
+      "changePct": 103.39,
+      "message": "Cartier Median days to sell at 60 is +103.39% vs its 27-day normal of 29.5 (z=2.17)."
+    },
+    {
+      "date": "2026-09-23",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Goyard",
+      "value": 0.2981,
+      "z": -2.05,
+      "baseline": 0.38,
+      "changePct": -21.47,
+      "message": "Goyard Google Trends relative interest at 0.2981 is -21.47% vs its 32-day normal of 0.38 (z=-2.05)."
+    },
+    {
+      "date": "2026-09-23",
+      "type": "weekly-move",
+      "severity": "medium",
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "Goyard",
+      "value": 12,
+      "wowPct": -75.51,
+      "message": "Goyard Median days to sell moved -75.51% in 7 days to 12."
+    },
+    {
+      "date": "2026-09-23",
+      "type": "weekly-move",
+      "severity": "medium",
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "Dior",
+      "value": 35,
+      "wowPct": 34.62,
+      "message": "Dior Median days to sell moved +34.62% in 7 days to 35."
     },
     {
       "date": "2026-09-23",
@@ -62,9 +84,9 @@
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
       "brand": "Celine",
-      "value": 0.63,
-      "wowPct": -30.7,
-      "message": "Celine Google Trends relative interest moved -30.7% in 7 days to 0.63."
+      "value": 0.6086,
+      "wowPct": -32.79,
+      "message": "Celine Google Trends relative interest moved -32.79% in 7 days to 0.6086."
     },
     {
       "date": "2026-09-23",
@@ -73,31 +95,31 @@
       "series": "fp.turnover",
       "brand": null,
       "metric": "Daily sell-through %",
-      "affected": 10,
+      "affected": 7,
       "of": 11,
-      "message": "Daily sell-through % fell across 10 of 11 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 10 separate market events."
-    },
-    {
-      "date": "2026-09-23",
-      "type": "systemic",
-      "severity": "medium",
-      "series": "fp.daysToSell",
-      "brand": null,
-      "metric": "Median days to sell",
-      "affected": 10,
-      "of": 11,
-      "message": "Median days to sell rose across 10 of 11 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 10 separate market events."
+      "message": "Daily sell-through % fell across 7 of 11 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 7 separate market events."
     },
     {
       "date": "2026-09-23",
       "type": "weekly-move",
       "severity": "low",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Prada",
-      "value": 1.2242,
-      "wowPct": 18.23,
-      "message": "Prada Google Trends relative interest moved +18.23% in 7 days to 1.2242."
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "Hermès",
+      "value": 34,
+      "wowPct": -15,
+      "message": "Hermès Median days to sell moved -15% in 7 days to 34."
+    },
+    {
+      "date": "2026-09-23",
+      "type": "weekly-move",
+      "severity": "low",
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "Louis Vuitton",
+      "value": 43,
+      "wowPct": 26.47,
+      "message": "Louis Vuitton Median days to sell moved +26.47% in 7 days to 43."
     }
   ]
 }
