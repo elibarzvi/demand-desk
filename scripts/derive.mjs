@@ -208,9 +208,15 @@ function buildAlerts(series, latest, snaps) {
   // wall of correlated alerts and buried everything else. Collapse it into a
   // single line that says so.
   const SYSTEMIC_SHARE = 0.6;
+  // Direction, from whichever measure this alert type carries. Keying on `z`
+  // alone silently excluded every weekly-move, which carries wowPct and no z.
+  // On 2026-09-23 that made the guard count 3 of 11 brands instead of 7 of 11,
+  // so it stayed under the threshold and shipped seven correlated lines about
+  // what was really one capture artifact.
+  const dirOf = a => a.z ?? a.wowPct ?? a.changePct ?? null;
   const bySeries = {};
   for (const a of alerts) {
-    if (!a.brand || a.z == null) continue;
+    if (!a.brand || dirOf(a) == null) continue;
     (bySeries[a.series] ||= []).push(a);
   }
   const systemic = [];
@@ -218,7 +224,7 @@ function buildAlerts(series, latest, snaps) {
   for (const [key, group] of Object.entries(bySeries)) {
     const total = Object.keys(series[key]?.brands || {}).length;
     if (total < 4 || group.length < Math.ceil(total * SYSTEMIC_SHARE)) continue;
-    const up = group.filter(a => a.z > 0).length, down = group.length - up;
+    const up = group.filter(a => dirOf(a) > 0).length, down = group.length - up;
     const dir = up >= down ? 'rose' : 'fell';
     if (Math.max(up, down) < Math.ceil(group.length * 0.8)) continue;   // mixed, not systemic
     group.forEach(a => absorbed.add(a));
