@@ -47,7 +47,9 @@ function build() {
     }
     for (const [brand, v] of Object.entries(s.sources?.fp_sell_through?.brands || {})) {
       sellThrough.push({ date: d, brand, live: v.live ?? '', arrivals: v.arrivals ?? '', departures: v.departures ?? '',
-        turnover_pct: v.turnoverPct ?? '', median_days_to_sell: v.medianDaysToSell ?? '', median_departure_price: v.medianDeparturePrice ?? '' });
+        turnover_pct: v.turnoverPct ?? '', turnover_pct_per_day: v.turnoverPctPerDay ?? '',
+        window_hours: s.sources?.fp_sell_through?.windowHours ?? '',
+        median_days_to_sell: v.medianDaysToSell ?? '', median_departure_price: v.medianDeparturePrice ?? '' });
     }
 
     const trr = s.sources?.therealreal || {};
@@ -76,7 +78,7 @@ function build() {
     ['google-trends.csv', ['date', 'brand', 'interest'], gtrends],
     ['fashionphile.csv', ['date', 'brand', 'segment', 'listings_all', 'listings_segment', 'p10_price', 'median_price', 'p90_price', 'mean_price', 'legacy_low_price'], fp],
     ['fashionphile-condition.csv', ['date', 'brand', 'condition', 'count'], fpCondition],
-    ['fp-sell-through.csv', ['date', 'brand', 'live', 'arrivals', 'departures', 'turnover_pct', 'median_days_to_sell', 'median_departure_price'], sellThrough],
+    ['fp-sell-through.csv', ['date', 'brand', 'live', 'arrivals', 'departures', 'turnover_pct', 'turnover_pct_per_day', 'window_hours', 'median_days_to_sell', 'median_departure_price'], sellThrough],
     ['therealreal-value-climbers.csv', ['date', 'item', 'yoy_change_pct'], trrClimb],
     ['vestiaire-value-ranking.csv', ['date', 'rank', 'brand', 'points'], vcRank],
     ['vestiaire-fastest-selling.csv', ['date', 'item', 'seconds'], vcSelling],

@@ -64,9 +64,24 @@ function daysBetween(a, b) {
 // published_at. We prefer `listed` for days-to-sell because it predates our own
 // history, and fall back to firstSeen when it is missing. Departures for SKUs we
 // have never seen before cannot happen, so the first run only establishes state.
-export function diffLive(prev, captures, date, modelBySku = new Map()) {
+export function diffLive(prev, captures, date, modelBySku = new Map(), now = new Date()) {
   const brands = {};
-  const nextState = { date, brands: {} };
+  const capturedAt = now.toISOString();
+  const nextState = { date, capturedAt, brands: {} };
+
+  // How long this diff actually covers. GitHub's cron drifts by hours, so the
+  // gap between one capture and the next has ranged from 14h to 28h while every
+  // reading was still labelled a daily rate. On 2026-09-23 a 14.0h window that
+  // fell almost entirely in overnight US hours made sell-through look like it
+  // had collapsed 75% across ten brands at once. Measuring the window lets the
+  // rate be stated per 24h, so the series tracks the market rather than the
+  // scheduler. Snapshots captured before this existed have no capturedAt, and
+  // fall back to the raw figure.
+  const prevAt = prev?.capturedAt ? new Date(prev.capturedAt) : null;
+  const rawHours = prevAt ? (now - prevAt) / 3600000 : null;
+  // Guard against a clock skew or a same-day rerun producing a wild multiplier.
+  const windowHours = (rawHours != null && rawHours >= 2 && rawHours <= 96) ? +rawHours.toFixed(2) : null;
+  const perDay = v => (v == null || windowHours == null) ? v : +(v * 24 / windowHours).toFixed(2);
 
   for (const cap of captures) {
     const prevBrand = prev?.brands?.[cap.brand] || null;
@@ -105,15 +120,19 @@ export function diffLive(prev, captures, date, modelBySku = new Map()) {
     }
 
     nextState.brands[cap.brand] = stateBrand;
+    const turnoverRaw = prevBrand && Object.keys(prevBrand).length
+      ? +(departures.length / Object.keys(prevBrand).length * 100).toFixed(2)
+      : null;
     brands[cap.brand] = {
       live: cap.live,
       arrivals,
       departures: departures.length,
       // Turnover is departures measured against yesterday's live pool: the share
-      // of standing inventory that cleared in a day.
-      turnoverPct: prevBrand && Object.keys(prevBrand).length
-        ? +(departures.length / Object.keys(prevBrand).length * 100).toFixed(2)
-        : null,
+      // of standing inventory that cleared over the window. `turnoverPct` is
+      // what was actually observed; `turnoverPctPerDay` scales it to 24h and is
+      // what the series should trend, since the window itself varies.
+      turnoverPct: turnoverRaw,
+      turnoverPctPerDay: perDay(turnoverRaw),
       medianDaysToSell: median(departures.map(d => d.days).filter(d => d != null)),
       medianDeparturePrice: median(departures.map(d => d.price).filter(p => p != null)),
       events: departures
@@ -138,7 +157,7 @@ export function diffLive(prev, captures, date, modelBySku = new Map()) {
     delete m.days; delete m.prices;
   }
 
-  return { brands, byModel, nextState, baseline: !prev };
+  return { brands, byModel, nextState, windowHours, baseline: !prev };
 }
 
 export function median(arr) {

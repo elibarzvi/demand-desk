@@ -372,9 +372,9 @@ async function main() {
     for (const m of fashionphile.models || []) {
       for (const sku of m.skus || []) modelBySku.set(sku, m.model);
     }
-    const { brands, byModel, nextState, baseline } = diffLive(prevState, fashionphile.focus, date, modelBySku);
+    const { brands, byModel, nextState, windowHours, baseline } = diffLive(prevState, fashionphile.focus, date, modelBySku);
     writeLiveState(nextState);
-    sellThrough = { status: baseline ? 'baseline' : 'ok', via: 'sku-diff', brands, byModel };
+    sellThrough = { status: baseline ? 'baseline' : 'ok', via: 'sku-diff', windowHours, brands, byModel };
     // SKU lists are far too large to append daily; they live in the state file.
     fashionphile.focus = fashionphile.focus.map(({ skus, ...rest }) => rest);
     fashionphile.models = (fashionphile.models || []).map(({ skus, ...rest }) => rest);

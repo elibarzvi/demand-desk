@@ -33,7 +33,10 @@ const SERIES = {
   // ageing artifact rather than eight simultaneous market events. Hold them to a
   // longer baseline before they are allowed to alert.
   'fp.turnover':      { label: 'Daily sell-through %', dir: 'demand', minN: 21,
-    get: s => Object.entries(s.sources?.fp_sell_through?.brands || {}).map(([b, v]) => [b, v.turnoverPct ?? null]) },
+    // Prefer the 24h-normalised rate. The window between captures swings from
+    // 14h to 28h with GitHub's cron, so the raw figure partly measures the
+    // scheduler. Older snapshots carry only the raw value and fall back to it.
+    get: s => Object.entries(s.sources?.fp_sell_through?.brands || {}).map(([b, v]) => [b, v.turnoverPctPerDay ?? v.turnoverPct ?? null]) },
   'fp.daysToSell':    { label: 'Median days to sell', dir: 'demand-inverse', minN: 21,
     get: s => Object.entries(s.sources?.fp_sell_through?.brands || {}).map(([b, v]) => [b, v.medianDaysToSell ?? null]) },
   'ebay.listings':    { label: 'eBay active listings', dir: 'supply',
@@ -142,7 +145,17 @@ const Z_BREAKOUT = 2;
 const MIN_N_FOR_Z = 8;
 const STREAK_MIN = 4;
 const WOW_MIN = 15;     // percent
+// Three days of identical data means a live feed has frozen. It does not mean
+// the same for a source that updates slowly on purpose, and applying one number
+// to all of them cried wolf every week. search_volume is a paid call refreshed
+// weekly against Google Ads figures that are monthly averages, so it legitimately
+// repeats for a fortnight. Mirror is a small concierge's request board: it had
+// eight standing requests, most opened in June, and a genuinely quiet month
+// there is normal. Both still need catching when they freeze for real, just on
+// their own clock.
 const STALE_DAYS = 3;
+const STALE_DAYS_BY_SOURCE = { search_volume: 16, mirror: 30 };
+const staleDaysFor = source => STALE_DAYS_BY_SOURCE[source] ?? STALE_DAYS;
 // A z-score says a move is statistically unusual; it does not say the move is
 // worth reading. eBay listing counts are so stable (a standard deviation near 1%
 // of the mean) that a 2.3% drift cleared z=2 and was reported as a breakout.
@@ -194,8 +207,9 @@ function buildAlerts(series, latest, snaps) {
   // Computed from the snapshot history rather than a stored counter, so it is
   // correct for days captured before freshness tracking existed.
   for (const f of staleness(snaps)) {
-    if (f.unchangedDays >= STALE_DAYS) {
-      push({ type: 'stale-source', severity: f.unchangedDays >= 7 ? 'high' : 'medium', series: f.source, brand: null,
+    const limit = staleDaysFor(f.source);
+    if (f.unchangedDays >= limit) {
+      push({ type: 'stale-source', severity: f.unchangedDays >= limit * 2 ? 'high' : 'medium', series: f.source, brand: null,
         unchangedDays: f.unchangedDays, lastChanged: f.lastChanged,
         message: `Source "${f.source}" has returned identical data for ${f.unchangedDays} consecutive days (last change ${f.lastChanged || 'before this log began'}).` });
     }
