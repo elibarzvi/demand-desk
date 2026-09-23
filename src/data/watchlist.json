@@ -5,14 +5,17 @@
   "watches": [
     {
       "id": "chrome-hearts-denim",
-      "label": "Chrome Hearts grail denim",
+      "label": "Chrome Hearts grail denim and high-ticket tops",
       "enabled": true,
       "source": "ebay",
       "queries": [
         "Chrome Hearts Levi's jeans",
         "Chrome Hearts cross patch denim",
         "Chrome Hearts Carhartt denim",
-        "Chrome Hearts patch jeans"
+        "Chrome Hearts patch jeans",
+        "Chrome Hearts Matty Boy",
+        "Chrome Hearts Sex Records",
+        "Chrome Hearts exclusive jacket"
       ],
       "minPrice": 5000,
       "maxPrice": 80000,
@@ -28,7 +31,27 @@
           "carhartt",
           "trucker",
           "jacket",
-          "pants"
+          "pants",
+          "matty boy",
+          "sex records",
+          "gallery dept",
+          "cross patch",
+          "star patch",
+          "fleur knee",
+          "double knee",
+          "single knee",
+          "carpenter",
+          "carpenters",
+          "stencil",
+          "501",
+          "505",
+          "517",
+          "bomber",
+          "varsity",
+          "vest",
+          "coat",
+          "workdog",
+          "leather jacket"
         ]
       },
       "exclude": [
@@ -78,7 +101,7 @@
       ],
       "minSellerFeedbackPct": 95,
       "minSellerFeedbackScore": 20,
-      "notes": "Targets the tier that sells five figures: Levi's and Carhartt collabs with leather or ponyhair cross patches. Fashionphile carries no Chrome Hearts apparel at all, so eBay is the only accessible source.",
+      "notes": "Targets the tier that sells five figures: Levi's and Carhartt collabs with leather or ponyhair cross patches, the Matty Boy and Sex Records lines, city and event exclusives, and high-ticket outerwear. Scope is denim plus expensive tops only. Hoodies, tees and sweats are the standard tier and are not hunted; the $5,000 floor is what keeps them out, so it should not be lowered to chase recall. Marker vocabulary comes from Eli's own catalogue, where 140 of 256 pieces carry one of these and the rest are plain stock. Fashionphile carries no Chrome Hearts apparel at all, so eBay is the only accessible source.",
       "maxAlertsPerRun": 12,
       "dropPct": 5,
       "targetPrice": null

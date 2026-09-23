@@ -16,7 +16,8 @@
     "serve": "node scripts/serve.mjs",
     "probe:ebay": "node scripts/probe-ebay.mjs",
     "watch": "node scripts/watch.mjs",
-    "probe:ebay-scopes": "node scripts/probe-ebay-scopes.mjs"
+    "probe:ebay-scopes": "node scripts/probe-ebay-scopes.mjs",
+    "test": "node test/watchlist.test.mjs"
   },
   "dependencies": {
     "playwright": "^1.48.0"
