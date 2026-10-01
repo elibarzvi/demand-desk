@@ -1,14 +1,9 @@
 {
   "date": "2026-10-01",
-  "capturedAt": "2026-10-01T00:38:40.030Z",
+  "capturedAt": "2026-10-01T15:30:57.178Z",
   "capture": {
     "method": "scrape",
-    "errors": [
-      {
-        "source": "stockx",
-        "error": "no StockX data parsed (bot-block or layout)"
-      }
-    ],
+    "errors": [],
     "freshness": {
       "mirror": {
         "fingerprint": "449d327462b2",
@@ -21,22 +16,22 @@
         "lastChanged": "2026-09-23"
       },
       "stockx_brands": {
-        "fingerprint": "ce1aed85c9a8",
-        "unchangedDays": 1,
-        "lastChanged": "2026-09-30"
+        "fingerprint": "7c2108fe437b",
+        "unchangedDays": 0,
+        "lastChanged": "2026-10-01"
       },
       "fashionphile": {
-        "fingerprint": "6b8d39f30711",
+        "fingerprint": "d3c8f983731c",
         "unchangedDays": 0,
         "lastChanged": "2026-10-01"
       },
       "fp_sell_through": {
-        "fingerprint": "b40f9649b37f",
+        "fingerprint": "49a79c63e3fc",
         "unchangedDays": 0,
         "lastChanged": "2026-10-01"
       },
       "ebay": {
-        "fingerprint": "66e321ad2adb",
+        "fingerprint": "038887698595",
         "unchangedDays": 0,
         "lastChanged": "2026-10-01"
       },
@@ -46,7 +41,7 @@
         "lastChanged": "2026-09-14"
       },
       "google_trends": {
-        "fingerprint": "a269b39e9b4c",
+        "fingerprint": "90f21a8b4554",
         "unchangedDays": 0,
         "lastChanged": "2026-10-01"
       },
@@ -300,12 +295,62 @@
       ]
     },
     "stockx_goyard": {
-      "status": "error",
+      "status": "ok",
       "items": []
     },
     "stockx_brands": {
-      "status": "error",
-      "focus": []
+      "status": "ok",
+      "focus": [
+        {
+          "brand": "Hermès",
+          "low": null,
+          "results": null,
+          "resultsCapped": false,
+          "listed": 0
+        },
+        {
+          "brand": "Chanel",
+          "low": null,
+          "results": null,
+          "resultsCapped": false,
+          "listed": 0
+        },
+        {
+          "brand": "Louis Vuitton",
+          "low": null,
+          "results": null,
+          "resultsCapped": false,
+          "listed": 0
+        },
+        {
+          "brand": "Goyard",
+          "low": null,
+          "results": null,
+          "resultsCapped": false,
+          "listed": 0
+        },
+        {
+          "brand": "Dior",
+          "low": 323,
+          "results": null,
+          "resultsCapped": true,
+          "listed": 40
+        },
+        {
+          "brand": "Cartier",
+          "low": null,
+          "results": null,
+          "resultsCapped": false,
+          "listed": 0
+        },
+        {
+          "brand": "Rolex",
+          "low": null,
+          "results": null,
+          "resultsCapped": false,
+          "listed": 0
+        }
+      ]
     },
     "fashionphile": {
       "status": "ok",
@@ -315,23 +360,23 @@
         {
           "brand": "Hermès",
           "segment": "Handbags",
-          "live": 1234,
-          "liveAll": 2548,
+          "live": 1247,
+          "liveAll": 2590,
           "exactHistogram": true,
           "price": {
             "p10": 2595,
             "p25": 3495,
-            "median": 7195,
-            "p75": 15950,
-            "p90": 24145,
+            "median": 7220,
+            "p75": 15995,
+            "p90": 24500,
             "min": 310,
             "max": 243795,
-            "mean": 11017
+            "mean": 11072
           },
           "condition": {
-            "Excellent": 694,
-            "Shows Wear": 483,
-            "Giftable": 50,
+            "Excellent": 704,
+            "Shows Wear": 484,
+            "Giftable": 52,
             "New": 4,
             "Worn": 3
           }
@@ -339,45 +384,45 @@
         {
           "brand": "Chanel",
           "segment": "Handbags",
-          "live": 3687,
-          "liveAll": 6020,
+          "live": 3719,
+          "liveAll": 6065,
           "exactHistogram": true,
           "price": {
             "p10": 2095,
             "p25": 2845,
-            "median": 3895,
-            "p75": 5510,
-            "p90": 7730,
+            "median": 3905,
+            "p75": 5595,
+            "p90": 7785,
             "min": 550,
             "max": 72075,
-            "mean": 4516
+            "mean": 4538
           },
           "condition": {
-            "Excellent": 2073,
-            "Shows Wear": 1400,
-            "Giftable": 130,
-            "New": 70,
-            "Worn": 13
+            "Excellent": 2093,
+            "Shows Wear": 1409,
+            "Giftable": 133,
+            "New": 71,
+            "Worn": 12
           }
         },
         {
           "brand": "The Row",
           "segment": "Handbags",
-          "live": 144,
-          "liveAll": 147,
+          "live": 142,
+          "liveAll": 145,
           "exactHistogram": true,
           "price": {
             "p10": 895,
-            "p25": 1395,
+            "p25": 1400,
             "median": 2085,
-            "p75": 4295,
+            "p75": 4395,
             "p90": 5495,
             "min": 500,
             "max": 7395,
-            "mean": 2845
+            "mean": 2866
           },
           "condition": {
-            "Excellent": 99,
+            "Excellent": 97,
             "Shows Wear": 42,
             "New": 2
           }
@@ -385,22 +430,22 @@
         {
           "brand": "Louis Vuitton",
           "segment": "Handbags",
-          "live": 5555,
-          "liveAll": 7577,
+          "live": 5556,
+          "liveAll": 7598,
           "exactHistogram": true,
           "price": {
             "p10": 760,
             "p25": 985,
             "median": 1495,
-            "p75": 2110,
+            "p75": 2095,
             "p90": 2850,
             "min": 265,
             "max": 18315,
-            "mean": 1719
+            "mean": 1718
           },
           "condition": {
-            "Shows Wear": 3729,
-            "Excellent": 1777,
+            "Shows Wear": 3725,
+            "Excellent": 1782,
             "Worn": 39,
             "Giftable": 3,
             "New": 1
@@ -409,22 +454,22 @@
         {
           "brand": "Goyard",
           "segment": "Handbags",
-          "live": 259,
-          "liveAll": 317,
+          "live": 257,
+          "liveAll": 316,
           "exactHistogram": true,
           "price": {
-            "p10": 1750,
+            "p10": 1780,
             "p25": 2135,
             "median": 2635,
-            "p75": 3095,
-            "p90": 3890,
+            "p75": 3055,
+            "p90": 3865,
             "min": 1095,
             "max": 9295,
-            "mean": 2721
+            "mean": 2718
           },
           "condition": {
-            "Excellent": 156,
-            "Shows Wear": 85,
+            "Excellent": 155,
+            "Shows Wear": 84,
             "New": 16,
             "Giftable": 1
           }
@@ -432,22 +477,22 @@
         {
           "brand": "Dior",
           "segment": "Handbags",
-          "live": 734,
-          "liveAll": 1091,
+          "live": 731,
+          "liveAll": 1087,
           "exactHistogram": true,
           "price": {
-            "p10": 1080,
-            "p25": 1550,
-            "median": 2180,
-            "p75": 3055,
-            "p90": 3845,
+            "p10": 1090,
+            "p25": 1565,
+            "median": 2195,
+            "p75": 3084,
+            "p90": 3895,
             "min": 405,
             "max": 21845,
-            "mean": 2461
+            "mean": 2472
           },
           "condition": {
             "Excellent": 390,
-            "Shows Wear": 336,
+            "Shows Wear": 333,
             "Worn": 6,
             "New": 2
           }
@@ -455,44 +500,44 @@
         {
           "brand": "Cartier",
           "segment": "Fine jewelry",
-          "live": 329,
-          "liveAll": 426,
+          "live": 378,
+          "liveAll": 475,
           "exactHistogram": true,
           "price": {
             "p10": 1095,
             "p25": 1375,
             "median": 2595,
-            "p75": 4995,
-            "p90": 7495,
+            "p75": 5250,
+            "p90": 7450,
             "min": 590,
             "max": 27500,
-            "mean": 3755
+            "mean": 3769
           },
           "condition": {
-            "Shows Wear": 168,
-            "Excellent": 157,
-            "Giftable": 2,
+            "Shows Wear": 192,
+            "Excellent": 181,
+            "Giftable": 3,
             "New": 2
           }
         },
         {
           "brand": "Prada",
           "segment": "Handbags",
-          "live": 487,
-          "liveAll": 648,
+          "live": 489,
+          "liveAll": 656,
           "exactHistogram": true,
           "price": {
-            "p10": 625,
+            "p10": 635,
             "p25": 805,
             "median": 1250,
-            "p75": 1615,
+            "p75": 1610,
             "p90": 2195,
             "min": 305,
             "max": 3510,
-            "mean": 1320
+            "mean": 1319
           },
           "condition": {
-            "Shows Wear": 258,
+            "Shows Wear": 260,
             "Excellent": 222,
             "New": 4,
             "Worn": 2,
@@ -502,22 +547,22 @@
         {
           "brand": "Bottega Veneta",
           "segment": "Handbags",
-          "live": 516,
-          "liveAll": 611,
+          "live": 522,
+          "liveAll": 619,
           "exactHistogram": true,
           "price": {
             "p10": 760,
             "p25": 1040,
-            "median": 1515,
-            "p75": 2450,
+            "median": 1525,
+            "p75": 2460,
             "p90": 3595,
             "min": 375,
             "max": 6595,
-            "mean": 1851
+            "mean": 1863
           },
           "condition": {
-            "Excellent": 342,
-            "Shows Wear": 169,
+            "Excellent": 347,
+            "Shows Wear": 170,
             "New": 3,
             "Worn": 2
           }
@@ -525,21 +570,21 @@
         {
           "brand": "Celine",
           "segment": "Handbags",
-          "live": 503,
-          "liveAll": 599,
+          "live": 505,
+          "liveAll": 601,
           "exactHistogram": true,
           "price": {
             "p10": 855,
-            "p25": 1050,
+            "p25": 1070,
             "median": 1395,
             "p75": 2040,
             "p90": 2750,
             "min": 350,
             "max": 6995,
-            "mean": 1610
+            "mean": 1612
           },
           "condition": {
-            "Excellent": 259,
+            "Excellent": 261,
             "Shows Wear": 238,
             "Worn": 3,
             "New": 2
@@ -550,12 +595,12 @@
         {
           "brand": "Hermès",
           "model": "Birkin 25",
-          "live": 50,
-          "matchedBeforeFilter": 50,
+          "live": 51,
+          "matchedBeforeFilter": 51,
           "price": {
             "p10": 18995,
-            "p25": 22950,
-            "median": 26495,
+            "p25": 23950,
+            "median": 26595,
             "p75": 28995,
             "p90": 32500,
             "min": 16950,
@@ -580,13 +625,13 @@
         {
           "brand": "Hermès",
           "model": "Kelly",
-          "live": 217,
-          "matchedBeforeFilter": 236,
+          "live": 220,
+          "matchedBeforeFilter": 238,
           "price": {
-            "p10": 10445,
+            "p10": 11350,
             "p25": 14995,
-            "median": 18995,
-            "p75": 25195,
+            "median": 19295,
+            "p75": 25495,
             "p90": 30995,
             "min": 805,
             "max": 243795
@@ -595,14 +640,14 @@
         {
           "brand": "Hermès",
           "model": "Constance",
-          "live": 117,
-          "matchedBeforeFilter": 131,
+          "live": 120,
+          "matchedBeforeFilter": 134,
           "price": {
             "p10": 7895,
             "p25": 8920,
             "median": 10295,
             "p75": 11995,
-            "p90": 13500,
+            "p90": 13495,
             "min": 6745,
             "max": 20905
           }
@@ -610,27 +655,27 @@
         {
           "brand": "Hermès",
           "model": "Lindy",
-          "live": 61,
-          "matchedBeforeFilter": 61,
+          "live": 65,
+          "matchedBeforeFilter": 65,
           "price": {
-            "p10": 4985,
+            "p10": 4825,
             "p25": 5995,
-            "median": 7765,
-            "p75": 9265,
+            "median": 7825,
+            "p75": 8995,
             "p90": 9995,
-            "min": 4295,
+            "min": 3450,
             "max": 11335
           }
         },
         {
           "brand": "Chanel",
           "model": "Double Flap",
-          "live": 261,
-          "matchedBeforeFilter": 261,
+          "live": 267,
+          "matchedBeforeFilter": 267,
           "price": {
-            "p10": 4945,
-            "p25": 5790,
-            "median": 6950,
+            "p10": 4995,
+            "p25": 5845,
+            "median": 6995,
             "p75": 8095,
             "p90": 9115,
             "min": 2150,
@@ -640,13 +685,13 @@
         {
           "brand": "Chanel",
           "model": "Chanel 19",
-          "live": 180,
-          "matchedBeforeFilter": 214,
+          "live": 178,
+          "matchedBeforeFilter": 212,
           "price": {
-            "p10": 2395,
-            "p25": 3320,
-            "median": 3850,
-            "p75": 4275,
+            "p10": 2495,
+            "p25": 3325,
+            "median": 3895,
+            "p75": 4295,
             "p90": 4695,
             "min": 1425,
             "max": 6995
@@ -655,12 +700,12 @@
         {
           "brand": "Chanel",
           "model": "Boy",
-          "live": 325,
-          "matchedBeforeFilter": 343,
+          "live": 331,
+          "matchedBeforeFilter": 349,
           "price": {
-            "p10": 2410,
+            "p10": 2420,
             "p25": 2895,
-            "median": 3480,
+            "median": 3490,
             "p75": 3825,
             "p90": 4460,
             "min": 1595,
@@ -670,14 +715,14 @@
         {
           "brand": "Chanel",
           "model": "Wallet On Chain",
-          "live": 222,
-          "matchedBeforeFilter": 222,
+          "live": 225,
+          "matchedBeforeFilter": 225,
           "price": {
             "p10": 2035,
-            "p25": 2460,
+            "p25": 2465,
             "median": 3055,
-            "p75": 3700,
-            "p90": 4225,
+            "p75": 3695,
+            "p90": 4195,
             "min": 1185,
             "max": 5695
           }
@@ -685,44 +730,44 @@
         {
           "brand": "Louis Vuitton",
           "model": "Neverfull",
-          "live": 320,
-          "matchedBeforeFilter": 320,
+          "live": 317,
+          "matchedBeforeFilter": 317,
           "price": {
-            "p10": 1100,
-            "p25": 1250,
+            "p10": 1125,
+            "p25": 1255,
             "median": 1595,
             "p75": 2120,
             "p90": 2595,
-            "min": 395,
+            "min": 425,
             "max": 4295
           }
         },
         {
           "brand": "Louis Vuitton",
           "model": "Speedy",
-          "live": 469,
-          "matchedBeforeFilter": 469,
+          "live": 475,
+          "matchedBeforeFilter": 475,
           "price": {
             "p10": 950,
-            "p25": 1145,
-            "median": 1950,
+            "p25": 1125,
+            "median": 1895,
             "p75": 2995,
-            "p90": 4595,
-            "min": 805,
+            "p90": 4495,
+            "min": 715,
             "max": 14960
           }
         },
         {
           "brand": "Louis Vuitton",
           "model": "Alma",
-          "live": 203,
-          "matchedBeforeFilter": 203,
+          "live": 197,
+          "matchedBeforeFilter": 197,
           "price": {
             "p10": 795,
-            "p25": 950,
-            "median": 1395,
+            "p25": 985,
+            "median": 1400,
             "p75": 1650,
-            "p90": 2335,
+            "p90": 2500,
             "min": 595,
             "max": 5695
           }
@@ -730,14 +775,14 @@
         {
           "brand": "Louis Vuitton",
           "model": "Pochette Metis",
-          "live": 152,
-          "matchedBeforeFilter": 152,
+          "live": 155,
+          "matchedBeforeFilter": 155,
           "price": {
             "p10": 1450,
             "p25": 1595,
             "median": 1850,
             "p75": 2150,
-            "p90": 2650,
+            "p90": 2655,
             "min": 1095,
             "max": 3395
           }
@@ -745,8 +790,8 @@
         {
           "brand": "Dior",
           "model": "Lady Dior",
-          "live": 185,
-          "matchedBeforeFilter": 193,
+          "live": 188,
+          "matchedBeforeFilter": 195,
           "price": {
             "p10": 1795,
             "p25": 2475,
@@ -765,7 +810,7 @@
           "price": {
             "p10": 1660,
             "p25": 1885,
-            "median": 2165,
+            "median": 2155,
             "p75": 2605,
             "p90": 3140,
             "min": 675,
@@ -775,13 +820,13 @@
         {
           "brand": "Goyard",
           "model": "Saint Louis",
-          "live": 81,
-          "matchedBeforeFilter": 81,
+          "live": 82,
+          "matchedBeforeFilter": 82,
           "price": {
             "p10": 1750,
             "p25": 2050,
-            "median": 2395,
-            "p75": 2750,
+            "median": 2370,
+            "p75": 2785,
             "p90": 3745,
             "min": 1195,
             "max": 5175
@@ -820,26 +865,26 @@
         {
           "brand": "Cartier",
           "model": "LOVE",
-          "live": 55,
-          "matchedBeforeFilter": 55,
+          "live": 67,
+          "matchedBeforeFilter": 67,
           "price": {
-            "p10": 4395,
-            "p25": 4850,
+            "p10": 4385,
+            "p25": 4935,
             "median": 6095,
-            "p75": 6745,
+            "p75": 6595,
             "p90": 10495,
-            "min": 1795,
+            "min": 1425,
             "max": 22995
           }
         },
         {
           "brand": "Prada",
           "model": "Galleria",
-          "live": 41,
-          "matchedBeforeFilter": 41,
+          "live": 42,
+          "matchedBeforeFilter": 42,
           "price": {
-            "p10": 755,
-            "p25": 895,
+            "p10": 785,
+            "p25": 945,
             "median": 1230,
             "p75": 1705,
             "p90": 2550,
@@ -850,13 +895,13 @@
         {
           "brand": "Prada",
           "model": "Re-Edition",
-          "live": 78,
-          "matchedBeforeFilter": 78,
+          "live": 76,
+          "matchedBeforeFilter": 76,
           "price": {
             "p10": 720,
             "p25": 900,
             "median": 1325,
-            "p75": 1615,
+            "p75": 1595,
             "p90": 1895,
             "min": 535,
             "max": 2250
@@ -865,8 +910,8 @@
         {
           "brand": "Bottega Veneta",
           "model": "Cassette",
-          "live": 78,
-          "matchedBeforeFilter": 86,
+          "live": 79,
+          "matchedBeforeFilter": 87,
           "price": {
             "p10": 550,
             "p25": 795,
@@ -900,7 +945,7 @@
           "price": {
             "p10": 2630,
             "p25": 2995,
-            "median": 3605,
+            "median": 3700,
             "p75": 4195,
             "p90": 4495,
             "min": 1795,
@@ -911,7 +956,7 @@
           "brand": "Celine",
           "model": "Triomphe",
           "live": 187,
-          "matchedBeforeFilter": 204,
+          "matchedBeforeFilter": 205,
           "price": {
             "p10": 895,
             "p25": 1150,
@@ -925,11 +970,11 @@
         {
           "brand": "Celine",
           "model": "Luggage",
-          "live": 79,
-          "matchedBeforeFilter": 79,
+          "live": 78,
+          "matchedBeforeFilter": 78,
           "price": {
-            "p10": 820,
-            "p25": 945,
+            "p10": 825,
+            "p25": 950,
             "median": 1150,
             "p75": 1495,
             "p90": 2875,
@@ -942,16 +987,16 @@
     "fp_sell_through": {
       "status": "ok",
       "via": "sku-diff",
-      "windowHours": 5.13,
+      "windowHours": 20.01,
       "brands": {
         "Hermès": {
-          "live": 1234,
-          "arrivals": 9,
-          "departures": 34,
-          "turnoverPct": 2.7,
-          "turnoverPctPerDay": 12.63,
-          "medianDaysToSell": 100,
-          "medianDeparturePrice": 9145,
+          "live": 1247,
+          "arrivals": 35,
+          "departures": 47,
+          "turnoverPct": 3.73,
+          "turnoverPctPerDay": 4.47,
+          "medianDaysToSell": 93,
+          "medianDeparturePrice": 6795,
           "events": [
             {
               "sku": "1654213",
@@ -969,6 +1014,15 @@
               "listed": "2026-02-04",
               "firstSeen": "2026-08-27",
               "days": 239,
+              "observedDays": 35
+            },
+            {
+              "sku": "1797300",
+              "model": "Birkin 25",
+              "price": 23660,
+              "listed": "2026-01-23",
+              "firstSeen": "2026-08-27",
+              "days": 251,
               "observedDays": 35
             },
             {
@@ -996,6 +1050,24 @@
               "listed": "2026-02-12",
               "firstSeen": "2026-08-27",
               "days": 231,
+              "observedDays": 35
+            },
+            {
+              "sku": "1818587",
+              "model": "Birkin 30",
+              "price": 20030,
+              "listed": "2026-02-24",
+              "firstSeen": "2026-08-27",
+              "days": 219,
+              "observedDays": 35
+            },
+            {
+              "sku": "1826202",
+              "model": null,
+              "price": 2420,
+              "listed": "2026-03-13",
+              "firstSeen": "2026-08-27",
+              "days": 202,
               "observedDays": 35
             },
             {
@@ -1035,6 +1107,15 @@
               "observedDays": 35
             },
             {
+              "sku": "1844109",
+              "model": null,
+              "price": 3195,
+              "listed": "2026-04-04",
+              "firstSeen": "2026-08-27",
+              "days": 180,
+              "observedDays": 35
+            },
+            {
               "sku": "1859412",
               "model": null,
               "price": 2895,
@@ -1042,6 +1123,15 @@
               "firstSeen": "2026-09-20",
               "days": 136,
               "observedDays": 11
+            },
+            {
+              "sku": "1863188",
+              "model": null,
+              "price": 5995,
+              "listed": "2026-04-29",
+              "firstSeen": "2026-08-27",
+              "days": 155,
+              "observedDays": 35
             },
             {
               "sku": "1864675",
@@ -1125,6 +1215,24 @@
               "observedDays": 2
             },
             {
+              "sku": "1912421",
+              "model": "Kelly",
+              "price": 7645,
+              "listed": "2026-06-26",
+              "firstSeen": "2026-08-27",
+              "days": 97,
+              "observedDays": 35
+            },
+            {
+              "sku": "1917759",
+              "model": null,
+              "price": 3415,
+              "listed": "2026-06-30",
+              "firstSeen": "2026-08-27",
+              "days": 93,
+              "observedDays": 35
+            },
+            {
               "sku": "1921048",
               "model": null,
               "price": 3495,
@@ -1134,12 +1242,30 @@
               "observedDays": 15
             },
             {
+              "sku": "1923313",
+              "model": null,
+              "price": 6995,
+              "listed": "2026-07-09",
+              "firstSeen": "2026-08-28",
+              "days": 84,
+              "observedDays": 34
+            },
+            {
               "sku": "1939056",
               "model": null,
               "price": 3035,
               "listed": "2026-07-24",
               "firstSeen": "2026-08-27",
               "days": 69,
+              "observedDays": 35
+            },
+            {
+              "sku": "1942472",
+              "model": null,
+              "price": 4450,
+              "listed": "2026-08-01",
+              "firstSeen": "2026-08-27",
+              "days": 61,
               "observedDays": 35
             },
             {
@@ -1159,6 +1285,15 @@
               "firstSeen": "2026-08-27",
               "days": 56,
               "observedDays": 35
+            },
+            {
+              "sku": "1949311",
+              "model": null,
+              "price": 5295,
+              "listed": "2026-09-01",
+              "firstSeen": "2026-09-01",
+              "days": 30,
+              "observedDays": 30
             },
             {
               "sku": "1949332",
@@ -1188,6 +1323,33 @@
               "observedDays": 35
             },
             {
+              "sku": "1962610",
+              "model": "Kelly",
+              "price": 21995,
+              "listed": "2026-08-28",
+              "firstSeen": "2026-09-15",
+              "days": 34,
+              "observedDays": 16
+            },
+            {
+              "sku": "1965255",
+              "model": null,
+              "price": 4295,
+              "listed": "2026-09-04",
+              "firstSeen": "2026-09-04",
+              "days": 27,
+              "observedDays": 27
+            },
+            {
+              "sku": "1967577",
+              "model": "Birkin 30",
+              "price": 19950,
+              "listed": "2026-09-23",
+              "firstSeen": "2026-09-30",
+              "days": 8,
+              "observedDays": 1
+            },
+            {
               "sku": "1967733",
               "model": "Birkin 25",
               "price": 25595,
@@ -1195,15 +1357,6 @@
               "firstSeen": "2026-09-25",
               "days": 26,
               "observedDays": 6
-            },
-            {
-              "sku": "1969340",
-              "model": "Kelly",
-              "price": 26950,
-              "listed": "2026-09-18",
-              "firstSeen": "2026-09-20",
-              "days": 13,
-              "observedDays": 11
             },
             {
               "sku": "1970045",
@@ -1222,6 +1375,15 @@
               "firstSeen": "2026-09-15",
               "days": 16,
               "observedDays": 16
+            },
+            {
+              "sku": "1971906",
+              "model": null,
+              "price": 11500,
+              "listed": "2026-09-29",
+              "firstSeen": "2026-09-29",
+              "days": 2,
+              "observedDays": 2
             },
             {
               "sku": "1974386",
@@ -1262,13 +1424,13 @@
           ]
         },
         "Chanel": {
-          "live": 3687,
-          "arrivals": 24,
-          "departures": 78,
-          "turnoverPct": 2.09,
-          "turnoverPctPerDay": 9.78,
-          "medianDaysToSell": 107,
-          "medianDeparturePrice": 4330,
+          "live": 3719,
+          "arrivals": 94,
+          "departures": 116,
+          "turnoverPct": 3.1,
+          "turnoverPctPerDay": 3.72,
+          "medianDaysToSell": 99,
+          "medianDeparturePrice": 4143,
           "events": [
             {
               "sku": "1714177",
@@ -1307,6 +1469,15 @@
               "observedDays": 5
             },
             {
+              "sku": "1798311",
+              "model": null,
+              "price": 5035,
+              "listed": "2026-01-20",
+              "firstSeen": "2026-08-27",
+              "days": 254,
+              "observedDays": 35
+            },
+            {
               "sku": "1800045",
               "model": null,
               "price": 3495,
@@ -1325,6 +1496,15 @@
               "observedDays": 35
             },
             {
+              "sku": "1808375",
+              "model": null,
+              "price": 3795,
+              "listed": "2026-02-19",
+              "firstSeen": "2026-09-30",
+              "days": 224,
+              "observedDays": 1
+            },
+            {
               "sku": "1811668",
               "model": "Boy",
               "price": 3995,
@@ -1341,6 +1521,24 @@
               "firstSeen": "2026-08-27",
               "days": 204,
               "observedDays": 35
+            },
+            {
+              "sku": "1831414",
+              "model": null,
+              "price": 5605,
+              "listed": "2026-03-13",
+              "firstSeen": "2026-08-27",
+              "days": 202,
+              "observedDays": 35
+            },
+            {
+              "sku": "1832180",
+              "model": null,
+              "price": 1875,
+              "listed": "2026-03-11",
+              "firstSeen": "2026-09-29",
+              "days": 204,
+              "observedDays": 2
             },
             {
               "sku": "1832811",
@@ -1442,6 +1640,15 @@
               "observedDays": 35
             },
             {
+              "sku": "1861901",
+              "model": null,
+              "price": 1395,
+              "listed": "2026-04-23",
+              "firstSeen": "2026-09-30",
+              "days": 161,
+              "observedDays": 1
+            },
+            {
               "sku": "1865304",
               "model": "Boy",
               "price": 3295,
@@ -1449,6 +1656,15 @@
               "firstSeen": "2026-08-27",
               "days": 148,
               "observedDays": 35
+            },
+            {
+              "sku": "1865457",
+              "model": "Double Flap",
+              "price": 6835,
+              "listed": "2026-05-11",
+              "firstSeen": "2026-09-27",
+              "days": 143,
+              "observedDays": 4
             },
             {
               "sku": "1865677",
@@ -1469,15 +1685,6 @@
               "observedDays": 35
             },
             {
-              "sku": "1874308",
-              "model": null,
-              "price": 9995,
-              "listed": "2026-05-07",
-              "firstSeen": "2026-09-27",
-              "days": 147,
-              "observedDays": 4
-            },
-            {
               "sku": "1877104",
               "model": "Double Flap",
               "price": 8055,
@@ -1487,13 +1694,13 @@
               "observedDays": 35
             },
             {
-              "sku": "1878018",
+              "sku": "1877845",
               "model": null,
-              "price": 2395,
-              "listed": "2026-05-13",
-              "firstSeen": "2026-09-23",
-              "days": 141,
-              "observedDays": 8
+              "price": 6645,
+              "listed": "2026-05-09",
+              "firstSeen": "2026-08-27",
+              "days": 145,
+              "observedDays": 35
             },
             {
               "sku": "1880872",
@@ -1505,12 +1712,39 @@
               "observedDays": 35
             },
             {
+              "sku": "1882993",
+              "model": "Chanel 19",
+              "price": 1795,
+              "listed": "2026-06-04",
+              "firstSeen": "2026-08-27",
+              "days": 119,
+              "observedDays": 35
+            },
+            {
+              "sku": "1884668",
+              "model": null,
+              "price": 5895,
+              "listed": "2026-05-19",
+              "firstSeen": "2026-08-27",
+              "days": 135,
+              "observedDays": 35
+            },
+            {
               "sku": "1885783",
               "model": "Chanel 19",
               "price": 3515,
               "listed": "2026-05-20",
               "firstSeen": "2026-08-27",
               "days": 134,
+              "observedDays": 35
+            },
+            {
+              "sku": "1885784",
+              "model": null,
+              "price": 2120,
+              "listed": "2026-05-21",
+              "firstSeen": "2026-08-27",
+              "days": 133,
               "observedDays": 35
             },
             {
@@ -1529,15 +1763,6 @@
               "listed": "2026-05-22",
               "firstSeen": "2026-08-27",
               "days": 132,
-              "observedDays": 35
-            },
-            {
-              "sku": "1891445",
-              "model": "Boy",
-              "price": 3250,
-              "listed": "2026-06-01",
-              "firstSeen": "2026-08-27",
-              "days": 122,
               "observedDays": 35
             },
             {
@@ -1577,6 +1802,15 @@
               "observedDays": 35
             },
             {
+              "sku": "1895804",
+              "model": null,
+              "price": 8895,
+              "listed": "2026-06-08",
+              "firstSeen": "2026-08-27",
+              "days": 115,
+              "observedDays": 35
+            },
+            {
               "sku": "1901533",
               "model": "Chanel 19",
               "price": 3905,
@@ -1595,6 +1829,15 @@
               "observedDays": 35
             },
             {
+              "sku": "1903356",
+              "model": null,
+              "price": 4075,
+              "listed": "2026-06-11",
+              "firstSeen": "2026-08-27",
+              "days": 112,
+              "observedDays": 35
+            },
+            {
               "sku": "1903666",
               "model": null,
               "price": 2205,
@@ -1602,6 +1845,15 @@
               "firstSeen": "2026-09-07",
               "days": 111,
               "observedDays": 24
+            },
+            {
+              "sku": "1904037",
+              "model": null,
+              "price": 10195,
+              "listed": "2026-06-15",
+              "firstSeen": "2026-08-27",
+              "days": 108,
+              "observedDays": 35
             },
             {
               "sku": "1904206",
@@ -1613,13 +1865,13 @@
               "observedDays": 35
             },
             {
-              "sku": "1904658",
-              "model": "Double Flap",
-              "price": 7625,
-              "listed": "2026-06-16",
-              "firstSeen": "2026-08-27",
-              "days": 107,
-              "observedDays": 35
+              "sku": "1904802",
+              "model": null,
+              "price": 6795,
+              "listed": "2026-06-13",
+              "firstSeen": "2026-09-25",
+              "days": 110,
+              "observedDays": 6
             },
             {
               "sku": "1905716",
@@ -1631,18 +1883,18 @@
               "observedDays": 35
             },
             {
-              "sku": "1905856",
+              "sku": "1905731",
               "model": null,
-              "price": 1950,
-              "listed": "2026-06-16",
+              "price": 4135,
+              "listed": "2026-06-15",
               "firstSeen": "2026-08-27",
-              "days": 107,
+              "days": 108,
               "observedDays": 35
             },
             {
-              "sku": "1906666",
+              "sku": "1905856",
               "model": null,
-              "price": 4295,
+              "price": 1950,
               "listed": "2026-06-16",
               "firstSeen": "2026-08-27",
               "days": 107,
@@ -1658,6 +1910,15 @@
               "observedDays": 35
             },
             {
+              "sku": "1908192",
+              "model": "Chanel 19",
+              "price": 3905,
+              "listed": "2026-06-18",
+              "firstSeen": "2026-08-27",
+              "days": 105,
+              "observedDays": 35
+            },
+            {
               "sku": "1908407",
               "model": null,
               "price": 2325,
@@ -1665,15 +1926,6 @@
               "firstSeen": "2026-09-30",
               "days": 56,
               "observedDays": 1
-            },
-            {
-              "sku": "1909039",
-              "model": "Boy",
-              "price": 3905,
-              "listed": "2026-06-19",
-              "firstSeen": "2026-08-27",
-              "days": 104,
-              "observedDays": 35
             },
             {
               "sku": "1909255",
@@ -1694,12 +1946,48 @@
               "observedDays": 13
             },
             {
+              "sku": "1911588",
+              "model": null,
+              "price": 4695,
+              "listed": "2026-06-25",
+              "firstSeen": "2026-08-27",
+              "days": 98,
+              "observedDays": 35
+            },
+            {
               "sku": "1911689",
               "model": null,
               "price": 4945,
               "listed": "2026-06-30",
               "firstSeen": "2026-08-27",
               "days": 93,
+              "observedDays": 35
+            },
+            {
+              "sku": "1912063",
+              "model": null,
+              "price": 7650,
+              "listed": "2026-07-01",
+              "firstSeen": "2026-08-27",
+              "days": 92,
+              "observedDays": 35
+            },
+            {
+              "sku": "1912595",
+              "model": null,
+              "price": 5265,
+              "listed": "2026-06-20",
+              "firstSeen": "2026-08-27",
+              "days": 103,
+              "observedDays": 35
+            },
+            {
+              "sku": "1912839",
+              "model": "Chanel 19",
+              "price": 3905,
+              "listed": "2026-06-20",
+              "firstSeen": "2026-08-27",
+              "days": 103,
               "observedDays": 35
             },
             {
@@ -1721,6 +2009,15 @@
               "observedDays": 35
             },
             {
+              "sku": "1916652",
+              "model": null,
+              "price": 2245,
+              "listed": "2026-07-09",
+              "firstSeen": "2026-08-27",
+              "days": 84,
+              "observedDays": 35
+            },
+            {
               "sku": "1916729",
               "model": "Boy",
               "price": 5035,
@@ -1730,6 +2027,15 @@
               "observedDays": 35
             },
             {
+              "sku": "1918034",
+              "model": null,
+              "price": 4935,
+              "listed": "2026-06-26",
+              "firstSeen": "2026-09-04",
+              "days": 97,
+              "observedDays": 27
+            },
+            {
               "sku": "1918539",
               "model": "Double Flap",
               "price": 7645,
@@ -1737,6 +2043,15 @@
               "firstSeen": "2026-09-08",
               "days": 83,
               "observedDays": 23
+            },
+            {
+              "sku": "1918946",
+              "model": null,
+              "price": 4595,
+              "listed": "2026-07-14",
+              "firstSeen": "2026-08-27",
+              "days": 79,
+              "observedDays": 35
             },
             {
               "sku": "1920042",
@@ -1784,6 +2099,15 @@
               "observedDays": 35
             },
             {
+              "sku": "1926550",
+              "model": null,
+              "price": 5595,
+              "listed": "2026-07-16",
+              "firstSeen": "2026-09-14",
+              "days": 77,
+              "observedDays": 17
+            },
+            {
               "sku": "1928964",
               "model": null,
               "price": 2655,
@@ -1820,6 +2144,24 @@
               "observedDays": 35
             },
             {
+              "sku": "1936901",
+              "model": null,
+              "price": 3890,
+              "listed": "2026-07-20",
+              "firstSeen": "2026-08-27",
+              "days": 73,
+              "observedDays": 35
+            },
+            {
+              "sku": "1937970",
+              "model": null,
+              "price": 10825,
+              "listed": "2026-08-01",
+              "firstSeen": "2026-08-27",
+              "days": 61,
+              "observedDays": 35
+            },
+            {
               "sku": "1938645",
               "model": null,
               "price": 4095,
@@ -1829,6 +2171,15 @@
               "observedDays": 2
             },
             {
+              "sku": "1939935",
+              "model": null,
+              "price": 615,
+              "listed": "2026-07-31",
+              "firstSeen": "2026-08-27",
+              "days": 62,
+              "observedDays": 35
+            },
+            {
               "sku": "1940551",
               "model": null,
               "price": 5980,
@@ -1836,6 +2187,33 @@
               "firstSeen": "2026-08-27",
               "days": 64,
               "observedDays": 35
+            },
+            {
+              "sku": "1941399",
+              "model": null,
+              "price": 3415,
+              "listed": "2026-08-01",
+              "firstSeen": "2026-08-27",
+              "days": 61,
+              "observedDays": 35
+            },
+            {
+              "sku": "1943008",
+              "model": null,
+              "price": 3095,
+              "listed": "2026-08-06",
+              "firstSeen": "2026-08-27",
+              "days": 56,
+              "observedDays": 35
+            },
+            {
+              "sku": "1944237",
+              "model": null,
+              "price": 5095,
+              "listed": "2026-08-06",
+              "firstSeen": "2026-09-30",
+              "days": 56,
+              "observedDays": 1
             },
             {
               "sku": "1948672",
@@ -1865,13 +2243,58 @@
               "observedDays": 35
             },
             {
-              "sku": "1956381",
-              "model": "Boy",
-              "price": 4095,
-              "listed": "2026-08-29",
-              "firstSeen": "2026-08-29",
-              "days": 33,
-              "observedDays": 33
+              "sku": "1954063",
+              "model": "Wallet On Chain",
+              "price": 4450,
+              "listed": "2026-08-21",
+              "firstSeen": "2026-08-27",
+              "days": 41,
+              "observedDays": 35
+            },
+            {
+              "sku": "1955638",
+              "model": null,
+              "price": 3395,
+              "listed": "2026-08-21",
+              "firstSeen": "2026-08-27",
+              "days": 41,
+              "observedDays": 35
+            },
+            {
+              "sku": "1955661",
+              "model": null,
+              "price": 4295,
+              "listed": "2026-08-18",
+              "firstSeen": "2026-08-27",
+              "days": 44,
+              "observedDays": 35
+            },
+            {
+              "sku": "1956301",
+              "model": "Double Flap",
+              "price": 3750,
+              "listed": "2026-08-20",
+              "firstSeen": "2026-09-14",
+              "days": 42,
+              "observedDays": 17
+            },
+            {
+              "sku": "1958388",
+              "model": null,
+              "price": 1795,
+              "listed": "2026-08-26",
+              "firstSeen": "2026-09-09",
+              "days": 36,
+              "observedDays": 22
+            },
+            {
+              "sku": "1958737",
+              "model": null,
+              "price": 3660,
+              "listed": "2026-08-26",
+              "firstSeen": "2026-08-27",
+              "days": 36,
+              "observedDays": 35
             },
             {
               "sku": "1960349",
@@ -1883,6 +2306,15 @@
               "observedDays": 9
             },
             {
+              "sku": "1961736",
+              "model": null,
+              "price": 10995,
+              "listed": "2026-08-24",
+              "firstSeen": "2026-09-07",
+              "days": 38,
+              "observedDays": 24
+            },
+            {
               "sku": "1961867",
               "model": null,
               "price": 1995,
@@ -1890,6 +2322,33 @@
               "firstSeen": "2026-09-30",
               "days": 34,
               "observedDays": 1
+            },
+            {
+              "sku": "1964792",
+              "model": null,
+              "price": 2995,
+              "listed": "2026-09-12",
+              "firstSeen": "2026-09-12",
+              "days": 19,
+              "observedDays": 19
+            },
+            {
+              "sku": "1967401",
+              "model": null,
+              "price": 4095,
+              "listed": "2026-09-04",
+              "firstSeen": "2026-09-09",
+              "days": 27,
+              "observedDays": 22
+            },
+            {
+              "sku": "1967885",
+              "model": null,
+              "price": 1050,
+              "listed": "2026-09-05",
+              "firstSeen": "2026-09-05",
+              "days": 26,
+              "observedDays": 26
             },
             {
               "sku": "1967952",
@@ -1901,13 +2360,13 @@
               "observedDays": 13
             },
             {
-              "sku": "1968479",
-              "model": null,
-              "price": 1995,
-              "listed": "2026-09-11",
-              "firstSeen": "2026-09-29",
-              "days": 20,
-              "observedDays": 2
+              "sku": "1968341",
+              "model": "Double Flap",
+              "price": 4095,
+              "listed": "2026-09-05",
+              "firstSeen": "2026-09-05",
+              "days": 26,
+              "observedDays": 26
             },
             {
               "sku": "1970654",
@@ -1937,6 +2396,24 @@
               "observedDays": 14
             },
             {
+              "sku": "1972106",
+              "model": null,
+              "price": 3395,
+              "listed": "2026-09-22",
+              "firstSeen": "2026-09-22",
+              "days": 9,
+              "observedDays": 9
+            },
+            {
+              "sku": "1972162",
+              "model": null,
+              "price": 3895,
+              "listed": "2026-09-23",
+              "firstSeen": "2026-09-23",
+              "days": 8,
+              "observedDays": 8
+            },
+            {
               "sku": "1974852",
               "model": null,
               "price": 14995,
@@ -1944,6 +2421,33 @@
               "firstSeen": "2026-09-22",
               "days": 9,
               "observedDays": 9
+            },
+            {
+              "sku": "1975510",
+              "model": null,
+              "price": 1695,
+              "listed": "2026-09-23",
+              "firstSeen": "2026-09-23",
+              "days": 8,
+              "observedDays": 8
+            },
+            {
+              "sku": "1977037",
+              "model": null,
+              "price": 3375,
+              "listed": "2026-09-26",
+              "firstSeen": "2026-09-26",
+              "days": 5,
+              "observedDays": 5
+            },
+            {
+              "sku": "1977514",
+              "model": null,
+              "price": 4150,
+              "listed": "2026-09-26",
+              "firstSeen": "2026-09-30",
+              "days": 5,
+              "observedDays": 1
             },
             {
               "sku": "1980441",
@@ -1975,14 +2479,23 @@
           ]
         },
         "The Row": {
-          "live": 144,
+          "live": 142,
           "arrivals": 3,
-          "departures": 4,
-          "turnoverPct": 2.76,
-          "turnoverPctPerDay": 12.91,
+          "departures": 6,
+          "turnoverPct": 4.14,
+          "turnoverPctPerDay": 4.97,
           "medianDaysToSell": 45,
-          "medianDeparturePrice": 3505,
+          "medianDeparturePrice": 2005,
           "events": [
+            {
+              "sku": "1873510",
+              "model": null,
+              "price": 1435,
+              "listed": "2026-05-07",
+              "firstSeen": "2026-08-27",
+              "days": 147,
+              "observedDays": 35
+            },
             {
               "sku": "1925470",
               "model": null,
@@ -2018,17 +2531,26 @@
               "firstSeen": "2026-09-30",
               "days": 13,
               "observedDays": 1
+            },
+            {
+              "sku": "1977961",
+              "model": null,
+              "price": 1395,
+              "listed": "2026-09-25",
+              "firstSeen": "2026-09-25",
+              "days": 6,
+              "observedDays": 6
             }
           ]
         },
         "Louis Vuitton": {
-          "live": 5555,
-          "arrivals": 34,
-          "departures": 85,
-          "turnoverPct": 1.52,
-          "turnoverPctPerDay": 7.11,
-          "medianDaysToSell": 86,
-          "medianDeparturePrice": 1595,
+          "live": 5556,
+          "arrivals": 86,
+          "departures": 136,
+          "turnoverPct": 2.43,
+          "turnoverPctPerDay": 2.91,
+          "medianDaysToSell": 51,
+          "medianDeparturePrice": 1673,
           "events": [
             {
               "sku": "1696967",
@@ -2055,15 +2577,6 @@
               "listed": "2026-01-12",
               "firstSeen": "2026-08-27",
               "days": 262,
-              "observedDays": 35
-            },
-            {
-              "sku": "1801481",
-              "model": "Speedy",
-              "price": 755,
-              "listed": "2026-02-19",
-              "firstSeen": "2026-08-27",
-              "days": 224,
               "observedDays": 35
             },
             {
@@ -2103,6 +2616,15 @@
               "observedDays": 10
             },
             {
+              "sku": "1825774",
+              "model": null,
+              "price": 1505,
+              "listed": "2026-03-03",
+              "firstSeen": "2026-08-27",
+              "days": 212,
+              "observedDays": 35
+            },
+            {
               "sku": "1831234",
               "model": null,
               "price": 2265,
@@ -2121,13 +2643,13 @@
               "observedDays": 22
             },
             {
-              "sku": "1843394",
-              "model": "Speedy",
-              "price": 930,
-              "listed": "2026-03-25",
-              "firstSeen": "2026-08-27",
-              "days": 190,
-              "observedDays": 35
+              "sku": "1851938",
+              "model": null,
+              "price": 2595,
+              "listed": "2026-04-04",
+              "firstSeen": "2026-09-28",
+              "days": 180,
+              "observedDays": 3
             },
             {
               "sku": "1852900",
@@ -2145,6 +2667,15 @@
               "listed": "2026-04-14",
               "firstSeen": "2026-08-27",
               "days": 170,
+              "observedDays": 35
+            },
+            {
+              "sku": "1858593",
+              "model": null,
+              "price": 2795,
+              "listed": "2026-04-17",
+              "firstSeen": "2026-08-27",
+              "days": 167,
               "observedDays": 35
             },
             {
@@ -2166,6 +2697,15 @@
               "observedDays": 28
             },
             {
+              "sku": "1870428",
+              "model": null,
+              "price": 1120,
+              "listed": "2026-05-05",
+              "firstSeen": "2026-08-27",
+              "days": 149,
+              "observedDays": 35
+            },
+            {
               "sku": "1874002",
               "model": null,
               "price": 1895,
@@ -2175,6 +2715,33 @@
               "observedDays": 11
             },
             {
+              "sku": "1882066",
+              "model": "Neverfull",
+              "price": 1495,
+              "listed": "2026-05-19",
+              "firstSeen": "2026-09-09",
+              "days": 135,
+              "observedDays": 22
+            },
+            {
+              "sku": "1887294",
+              "model": null,
+              "price": 2295,
+              "listed": "2026-05-21",
+              "firstSeen": "2026-09-30",
+              "days": 133,
+              "observedDays": 1
+            },
+            {
+              "sku": "1887321",
+              "model": null,
+              "price": 4175,
+              "listed": "2026-05-29",
+              "firstSeen": "2026-08-30",
+              "days": 125,
+              "observedDays": 32
+            },
+            {
               "sku": "1889794",
               "model": null,
               "price": 700,
@@ -2182,6 +2749,15 @@
               "firstSeen": "2026-08-27",
               "days": 110,
               "observedDays": 35
+            },
+            {
+              "sku": "1892109",
+              "model": null,
+              "price": 2595,
+              "listed": "2026-06-05",
+              "firstSeen": "2026-09-17",
+              "days": 118,
+              "observedDays": 14
             },
             {
               "sku": "1892486",
@@ -2236,6 +2812,15 @@
               "firstSeen": "2026-09-20",
               "days": 107,
               "observedDays": 11
+            },
+            {
+              "sku": "1903788",
+              "model": "Neverfull",
+              "price": 1215,
+              "listed": "2026-06-24",
+              "firstSeen": "2026-08-27",
+              "days": 99,
+              "observedDays": 35
             },
             {
               "sku": "1904781",
@@ -2436,6 +3021,15 @@
               "observedDays": 33
             },
             {
+              "sku": "1917412",
+              "model": null,
+              "price": 1795,
+              "listed": "2026-06-27",
+              "firstSeen": "2026-08-27",
+              "days": 96,
+              "observedDays": 35
+            },
+            {
               "sku": "1917525",
               "model": null,
               "price": 1195,
@@ -2463,9 +3057,27 @@
               "observedDays": 35
             },
             {
+              "sku": "1922056",
+              "model": null,
+              "price": 1150,
+              "listed": "2026-07-29",
+              "firstSeen": "2026-09-29",
+              "days": 64,
+              "observedDays": 2
+            },
+            {
               "sku": "1925315",
               "model": "Speedy",
               "price": 9975,
+              "listed": "2026-07-17",
+              "firstSeen": "2026-08-27",
+              "days": 76,
+              "observedDays": 35
+            },
+            {
+              "sku": "1927924",
+              "model": null,
+              "price": 1230,
               "listed": "2026-07-17",
               "firstSeen": "2026-08-27",
               "days": 76,
@@ -2479,6 +3091,33 @@
               "firstSeen": "2026-09-12",
               "days": 79,
               "observedDays": 19
+            },
+            {
+              "sku": "1928752",
+              "model": null,
+              "price": 4295,
+              "listed": "2026-08-07",
+              "firstSeen": "2026-08-27",
+              "days": 55,
+              "observedDays": 35
+            },
+            {
+              "sku": "1935779",
+              "model": null,
+              "price": 2115,
+              "listed": "2026-07-14",
+              "firstSeen": "2026-09-23",
+              "days": 79,
+              "observedDays": 8
+            },
+            {
+              "sku": "1936099",
+              "model": null,
+              "price": 1040,
+              "listed": "2026-07-31",
+              "firstSeen": "2026-08-27",
+              "days": 62,
+              "observedDays": 35
             },
             {
               "sku": "1939359",
@@ -2499,12 +3138,12 @@
               "observedDays": 35
             },
             {
-              "sku": "1944128",
-              "model": "Speedy",
-              "price": 1595,
-              "listed": "2026-08-19",
+              "sku": "1941095",
+              "model": null,
+              "price": 950,
+              "listed": "2026-08-08",
               "firstSeen": "2026-08-27",
-              "days": 43,
+              "days": 54,
               "observedDays": 35
             },
             {
@@ -2535,6 +3174,15 @@
               "observedDays": 27
             },
             {
+              "sku": "1949321",
+              "model": null,
+              "price": 795,
+              "listed": "2026-08-18",
+              "firstSeen": "2026-08-27",
+              "days": 44,
+              "observedDays": 35
+            },
+            {
               "sku": "1949370",
               "model": null,
               "price": 1095,
@@ -2553,6 +3201,15 @@
               "observedDays": 35
             },
             {
+              "sku": "1953396",
+              "model": null,
+              "price": 3025,
+              "listed": "2026-08-14",
+              "firstSeen": "2026-08-27",
+              "days": 48,
+              "observedDays": 35
+            },
+            {
               "sku": "1953637",
               "model": null,
               "price": 1895,
@@ -2560,6 +3217,33 @@
               "firstSeen": "2026-09-14",
               "days": 47,
               "observedDays": 17
+            },
+            {
+              "sku": "1954676",
+              "model": "Neverfull",
+              "price": 4295,
+              "listed": "2026-09-09",
+              "firstSeen": "2026-09-09",
+              "days": 22,
+              "observedDays": 22
+            },
+            {
+              "sku": "1954816",
+              "model": "Alma",
+              "price": 1500,
+              "listed": "2026-09-29",
+              "firstSeen": "2026-09-29",
+              "days": 2,
+              "observedDays": 2
+            },
+            {
+              "sku": "1955190",
+              "model": null,
+              "price": 1650,
+              "listed": "2026-08-13",
+              "firstSeen": "2026-08-27",
+              "days": 49,
+              "observedDays": 35
             },
             {
               "sku": "1955239",
@@ -2580,6 +3264,15 @@
               "observedDays": 35
             },
             {
+              "sku": "1957908",
+              "model": null,
+              "price": 1895,
+              "listed": "2026-08-20",
+              "firstSeen": "2026-08-27",
+              "days": 42,
+              "observedDays": 35
+            },
+            {
               "sku": "1958156",
               "model": null,
               "price": 1795,
@@ -2587,6 +3280,15 @@
               "firstSeen": "2026-08-27",
               "days": 38,
               "observedDays": 35
+            },
+            {
+              "sku": "1958380",
+              "model": "Speedy",
+              "price": 2040,
+              "listed": "2026-08-22",
+              "firstSeen": "2026-09-25",
+              "days": 40,
+              "observedDays": 6
             },
             {
               "sku": "1958943",
@@ -2598,6 +3300,24 @@
               "observedDays": 15
             },
             {
+              "sku": "1959051",
+              "model": null,
+              "price": 1795,
+              "listed": "2026-08-19",
+              "firstSeen": "2026-08-27",
+              "days": 43,
+              "observedDays": 35
+            },
+            {
+              "sku": "1959710",
+              "model": null,
+              "price": 1950,
+              "listed": "2026-08-24",
+              "firstSeen": "2026-09-29",
+              "days": 38,
+              "observedDays": 2
+            },
+            {
               "sku": "1959747",
               "model": null,
               "price": 1950,
@@ -2605,6 +3325,42 @@
               "firstSeen": "2026-08-29",
               "days": 37,
               "observedDays": 33
+            },
+            {
+              "sku": "1960516",
+              "model": null,
+              "price": 795,
+              "listed": "2026-08-22",
+              "firstSeen": "2026-08-27",
+              "days": 40,
+              "observedDays": 35
+            },
+            {
+              "sku": "1961032",
+              "model": null,
+              "price": 1695,
+              "listed": "2026-08-28",
+              "firstSeen": "2026-09-11",
+              "days": 34,
+              "observedDays": 20
+            },
+            {
+              "sku": "1961225",
+              "model": null,
+              "price": 1995,
+              "listed": "2026-08-29",
+              "firstSeen": "2026-09-27",
+              "days": 33,
+              "observedDays": 4
+            },
+            {
+              "sku": "1961453",
+              "model": null,
+              "price": 895,
+              "listed": "2026-08-26",
+              "firstSeen": "2026-08-27",
+              "days": 36,
+              "observedDays": 35
             },
             {
               "sku": "1962892",
@@ -2616,6 +3372,15 @@
               "observedDays": 35
             },
             {
+              "sku": "1963281",
+              "model": null,
+              "price": 795,
+              "listed": "2026-09-03",
+              "firstSeen": "2026-09-14",
+              "days": 28,
+              "observedDays": 17
+            },
+            {
               "sku": "1963857",
               "model": "Alma",
               "price": 3595,
@@ -2623,6 +3388,51 @@
               "firstSeen": "2026-09-01",
               "days": 30,
               "observedDays": 30
+            },
+            {
+              "sku": "1964258",
+              "model": "Neverfull",
+              "price": 395,
+              "listed": "2026-09-30",
+              "firstSeen": "2026-09-30",
+              "days": 1,
+              "observedDays": 1
+            },
+            {
+              "sku": "1965541",
+              "model": "Speedy",
+              "price": 2495,
+              "listed": "2026-09-01",
+              "firstSeen": "2026-09-28",
+              "days": 30,
+              "observedDays": 3
+            },
+            {
+              "sku": "1965716",
+              "model": null,
+              "price": 1850,
+              "listed": "2026-09-03",
+              "firstSeen": "2026-09-30",
+              "days": 28,
+              "observedDays": 1
+            },
+            {
+              "sku": "1967103",
+              "model": "Alma",
+              "price": 1650,
+              "listed": "2026-09-04",
+              "firstSeen": "2026-09-24",
+              "days": 27,
+              "observedDays": 7
+            },
+            {
+              "sku": "1967231",
+              "model": "Alma",
+              "price": 1550,
+              "listed": "2026-09-04",
+              "firstSeen": "2026-09-25",
+              "days": 27,
+              "observedDays": 6
             },
             {
               "sku": "1967365",
@@ -2643,9 +3453,27 @@
               "observedDays": 27
             },
             {
+              "sku": "1967920",
+              "model": "Neverfull",
+              "price": 1595,
+              "listed": "2026-09-10",
+              "firstSeen": "2026-09-10",
+              "days": 21,
+              "observedDays": 21
+            },
+            {
               "sku": "1968101",
               "model": null,
               "price": 3995,
+              "listed": "2026-09-05",
+              "firstSeen": "2026-09-05",
+              "days": 26,
+              "observedDays": 26
+            },
+            {
+              "sku": "1968393",
+              "model": "Alma",
+              "price": 1495,
               "listed": "2026-09-05",
               "firstSeen": "2026-09-05",
               "days": 26,
@@ -2670,15 +3498,6 @@
               "observedDays": 6
             },
             {
-              "sku": "1969451",
-              "model": null,
-              "price": 995,
-              "listed": "2026-09-10",
-              "firstSeen": "2026-09-18",
-              "days": 21,
-              "observedDays": 13
-            },
-            {
               "sku": "1969612",
               "model": null,
               "price": 1450,
@@ -2686,6 +3505,15 @@
               "firstSeen": "2026-09-11",
               "days": 20,
               "observedDays": 20
+            },
+            {
+              "sku": "1970566",
+              "model": null,
+              "price": 2350,
+              "listed": "2026-09-29",
+              "firstSeen": "2026-09-29",
+              "days": 2,
+              "observedDays": 2
             },
             {
               "sku": "1971206",
@@ -2697,6 +3525,15 @@
               "observedDays": 15
             },
             {
+              "sku": "1971820",
+              "model": "Speedy",
+              "price": 1895,
+              "listed": "2026-09-12",
+              "firstSeen": "2026-09-29",
+              "days": 19,
+              "observedDays": 2
+            },
+            {
               "sku": "1971941",
               "model": "Speedy",
               "price": 1095,
@@ -2704,6 +3541,24 @@
               "firstSeen": "2026-09-15",
               "days": 16,
               "observedDays": 16
+            },
+            {
+              "sku": "1972335",
+              "model": null,
+              "price": 850,
+              "listed": "2026-09-30",
+              "firstSeen": "2026-09-30",
+              "days": 1,
+              "observedDays": 1
+            },
+            {
+              "sku": "1972405",
+              "model": null,
+              "price": 1150,
+              "listed": "2026-09-29",
+              "firstSeen": "2026-09-30",
+              "days": 2,
+              "observedDays": 1
             },
             {
               "sku": "1972571",
@@ -2715,13 +3570,58 @@
               "observedDays": 15
             },
             {
-              "sku": "1973925",
+              "sku": "1973255",
+              "model": null,
+              "price": 825,
+              "listed": "2026-09-18",
+              "firstSeen": "2026-09-18",
+              "days": 13,
+              "observedDays": 13
+            },
+            {
+              "sku": "1973945",
+              "model": null,
+              "price": 3195,
+              "listed": "2026-09-15",
+              "firstSeen": "2026-09-15",
+              "days": 16,
+              "observedDays": 16
+            },
+            {
+              "sku": "1974337",
+              "model": null,
+              "price": 1995,
+              "listed": "2026-09-17",
+              "firstSeen": "2026-09-17",
+              "days": 14,
+              "observedDays": 14
+            },
+            {
+              "sku": "1974535",
+              "model": null,
+              "price": 1295,
+              "listed": "2026-09-18",
+              "firstSeen": "2026-09-18",
+              "days": 13,
+              "observedDays": 13
+            },
+            {
+              "sku": "1974862",
               "model": null,
               "price": 850,
-              "listed": "2026-09-16",
-              "firstSeen": "2026-09-27",
-              "days": 15,
-              "observedDays": 4
+              "listed": "2026-09-18",
+              "firstSeen": "2026-09-18",
+              "days": 13,
+              "observedDays": 13
+            },
+            {
+              "sku": "1974898",
+              "model": null,
+              "price": 2095,
+              "listed": "2026-09-19",
+              "firstSeen": "2026-09-19",
+              "days": 12,
+              "observedDays": 12
             },
             {
               "sku": "1975033",
@@ -2742,6 +3642,15 @@
               "observedDays": 6
             },
             {
+              "sku": "1976384",
+              "model": null,
+              "price": 2550,
+              "listed": "2026-09-30",
+              "firstSeen": "2026-09-30",
+              "days": 1,
+              "observedDays": 1
+            },
+            {
               "sku": "1976905",
               "model": "Pochette Metis",
               "price": 1895,
@@ -2749,6 +3658,15 @@
               "firstSeen": "2026-09-23",
               "days": 8,
               "observedDays": 8
+            },
+            {
+              "sku": "1977017",
+              "model": null,
+              "price": 1495,
+              "listed": "2026-09-25",
+              "firstSeen": "2026-09-25",
+              "days": 6,
+              "observedDays": 6
             },
             {
               "sku": "1977040",
@@ -2769,13 +3687,49 @@
               "observedDays": 7
             },
             {
-              "sku": "1979206",
+              "sku": "1977655",
+              "model": "Alma",
+              "price": 1250,
+              "listed": "2026-09-23",
+              "firstSeen": "2026-09-23",
+              "days": 8,
+              "observedDays": 8
+            },
+            {
+              "sku": "1980267",
               "model": "Speedy",
-              "price": 3795,
-              "listed": "2026-09-24",
-              "firstSeen": "2026-09-24",
-              "days": 7,
-              "observedDays": 7
+              "price": 1025,
+              "listed": "2026-09-26",
+              "firstSeen": "2026-09-26",
+              "days": 5,
+              "observedDays": 5
+            },
+            {
+              "sku": "1980500",
+              "model": "Speedy",
+              "price": 1795,
+              "listed": "2026-09-29",
+              "firstSeen": "2026-09-29",
+              "days": 2,
+              "observedDays": 2
+            },
+            {
+              "sku": "1980608",
+              "model": null,
+              "price": 550,
+              "listed": "2026-09-30",
+              "firstSeen": "2026-09-30",
+              "days": 1,
+              "observedDays": 1
+            },
+            {
+              "sku": "1980925",
+              "model": null,
+              "price": 895,
+              "listed": "2026-09-30",
+              "firstSeen": "2026-09-30",
+              "days": 1,
+              "observedDays": 1
             },
             {
               "sku": "1980968",
@@ -2794,18 +3748,63 @@
               "firstSeen": "2026-09-26",
               "days": 5,
               "observedDays": 5
+            },
+            {
+              "sku": "1981417",
+              "model": null,
+              "price": 2095,
+              "listed": "2026-09-26",
+              "firstSeen": "2026-09-26",
+              "days": 5,
+              "observedDays": 5
+            },
+            {
+              "sku": "1981530",
+              "model": null,
+              "price": 1795,
+              "listed": "2026-09-29",
+              "firstSeen": "2026-09-29",
+              "days": 2,
+              "observedDays": 2
+            },
+            {
+              "sku": "1982872",
+              "model": null,
+              "price": 695,
+              "listed": "2026-09-29",
+              "firstSeen": "2026-09-29",
+              "days": 2,
+              "observedDays": 2
             }
           ]
         },
         "Goyard": {
-          "live": 259,
-          "arrivals": 0,
-          "departures": 6,
-          "turnoverPct": 2.26,
-          "turnoverPctPerDay": 10.57,
-          "medianDaysToSell": 34,
-          "medianDeparturePrice": 2495,
+          "live": 257,
+          "arrivals": 6,
+          "departures": 14,
+          "turnoverPct": 5.28,
+          "turnoverPctPerDay": 6.33,
+          "medianDaysToSell": 47,
+          "medianDeparturePrice": 2673,
           "events": [
+            {
+              "sku": "1887490",
+              "model": "Saint Louis",
+              "price": 2650,
+              "listed": "2026-06-01",
+              "firstSeen": "2026-08-28",
+              "days": 122,
+              "observedDays": 34
+            },
+            {
+              "sku": "1894361",
+              "model": null,
+              "price": 3105,
+              "listed": "2026-06-06",
+              "firstSeen": "2026-09-03",
+              "days": 117,
+              "observedDays": 28
+            },
             {
               "sku": "1901506",
               "model": null,
@@ -2825,6 +3824,33 @@
               "observedDays": 35
             },
             {
+              "sku": "1917829",
+              "model": null,
+              "price": 4295,
+              "listed": "2026-07-08",
+              "firstSeen": "2026-09-22",
+              "days": 85,
+              "observedDays": 9
+            },
+            {
+              "sku": "1939254",
+              "model": null,
+              "price": 2795,
+              "listed": "2026-08-01",
+              "firstSeen": "2026-09-29",
+              "days": 61,
+              "observedDays": 2
+            },
+            {
+              "sku": "1946748",
+              "model": null,
+              "price": 1750,
+              "listed": "2026-08-05",
+              "firstSeen": "2026-08-27",
+              "days": 57,
+              "observedDays": 35
+            },
+            {
               "sku": "1956350",
               "model": null,
               "price": 2295,
@@ -2832,6 +3858,15 @@
               "firstSeen": "2026-08-29",
               "days": 33,
               "observedDays": 33
+            },
+            {
+              "sku": "1956764",
+              "model": "Saint Louis",
+              "price": 1950,
+              "listed": "2026-08-25",
+              "firstSeen": "2026-08-27",
+              "days": 37,
+              "observedDays": 35
             },
             {
               "sku": "1958850",
@@ -2852,6 +3887,24 @@
               "observedDays": 20
             },
             {
+              "sku": "1977521",
+              "model": null,
+              "price": 2995,
+              "listed": "2026-09-24",
+              "firstSeen": "2026-09-24",
+              "days": 7,
+              "observedDays": 7
+            },
+            {
+              "sku": "1980243",
+              "model": "Saint Louis",
+              "price": 1750,
+              "listed": "2026-09-29",
+              "firstSeen": "2026-09-29",
+              "days": 2,
+              "observedDays": 2
+            },
+            {
               "sku": "1980645",
               "model": "Saint Louis",
               "price": 1750,
@@ -2863,14 +3916,23 @@
           ]
         },
         "Dior": {
-          "live": 734,
-          "arrivals": 3,
-          "departures": 15,
-          "turnoverPct": 2.01,
-          "turnoverPctPerDay": 9.4,
-          "medianDaysToSell": 96,
-          "medianDeparturePrice": 2850,
+          "live": 731,
+          "arrivals": 10,
+          "departures": 25,
+          "turnoverPct": 3.35,
+          "turnoverPctPerDay": 4.02,
+          "medianDaysToSell": 68,
+          "medianDeparturePrice": 2225,
           "events": [
+            {
+              "sku": "1688857",
+              "model": null,
+              "price": 3190,
+              "listed": "2025-08-18",
+              "firstSeen": "2026-09-25",
+              "days": 409,
+              "observedDays": 6
+            },
             {
               "sku": "1819944",
               "model": "Lady Dior",
@@ -2896,6 +3958,24 @@
               "listed": "2026-03-28",
               "firstSeen": "2026-08-27",
               "days": 187,
+              "observedDays": 35
+            },
+            {
+              "sku": "1867036",
+              "model": "Saddle",
+              "price": 2515,
+              "listed": "2026-04-27",
+              "firstSeen": "2026-08-27",
+              "days": 157,
+              "observedDays": 35
+            },
+            {
+              "sku": "1878949",
+              "model": null,
+              "price": 950,
+              "listed": "2026-05-12",
+              "firstSeen": "2026-08-27",
+              "days": 142,
               "observedDays": 35
             },
             {
@@ -2926,15 +4006,6 @@
               "observedDays": 35
             },
             {
-              "sku": "1910494",
-              "model": null,
-              "price": 1275,
-              "listed": "2026-06-19",
-              "firstSeen": "2026-09-30",
-              "days": 104,
-              "observedDays": 1
-            },
-            {
               "sku": "1914805",
               "model": "Lady Dior",
               "price": 4415,
@@ -2942,6 +4013,15 @@
               "firstSeen": "2026-09-23",
               "days": 96,
               "observedDays": 8
+            },
+            {
+              "sku": "1923778",
+              "model": null,
+              "price": 1165,
+              "listed": "2026-07-09",
+              "firstSeen": "2026-08-27",
+              "days": 84,
+              "observedDays": 35
             },
             {
               "sku": "1928171",
@@ -2953,6 +4033,33 @@
               "observedDays": 35
             },
             {
+              "sku": "1936474",
+              "model": null,
+              "price": 2465,
+              "listed": "2026-07-25",
+              "firstSeen": "2026-08-27",
+              "days": 68,
+              "observedDays": 35
+            },
+            {
+              "sku": "1953193",
+              "model": "Lady Dior",
+              "price": 1995,
+              "listed": "2026-08-27",
+              "firstSeen": "2026-08-27",
+              "days": 35,
+              "observedDays": 35
+            },
+            {
+              "sku": "1958224",
+              "model": null,
+              "price": 1395,
+              "listed": "2026-08-26",
+              "firstSeen": "2026-09-02",
+              "days": 36,
+              "observedDays": 29
+            },
+            {
               "sku": "1960764",
               "model": "Lady Dior",
               "price": 4555,
@@ -2960,6 +4067,15 @@
               "firstSeen": "2026-09-30",
               "days": 37,
               "observedDays": 1
+            },
+            {
+              "sku": "1961286",
+              "model": null,
+              "price": 1995,
+              "listed": "2026-08-28",
+              "firstSeen": "2026-08-28",
+              "days": 34,
+              "observedDays": 34
             },
             {
               "sku": "1964971",
@@ -2971,18 +4087,45 @@
               "observedDays": 34
             },
             {
-              "sku": "1975183",
-              "model": "Lady Dior",
-              "price": 4995,
-              "listed": "2026-09-29",
-              "firstSeen": "2026-09-29",
-              "days": 2,
-              "observedDays": 2
+              "sku": "1968040",
+              "model": null,
+              "price": 3250,
+              "listed": "2026-09-15",
+              "firstSeen": "2026-09-15",
+              "days": 16,
+              "observedDays": 16
             },
             {
-              "sku": "1978364",
+              "sku": "1971425",
               "model": null,
-              "price": 2995,
+              "price": 2695,
+              "listed": "2026-09-23",
+              "firstSeen": "2026-09-23",
+              "days": 8,
+              "observedDays": 8
+            },
+            {
+              "sku": "1974493",
+              "model": "Lady Dior",
+              "price": 2895,
+              "listed": "2026-09-17",
+              "firstSeen": "2026-09-17",
+              "days": 14,
+              "observedDays": 14
+            },
+            {
+              "sku": "1975729",
+              "model": null,
+              "price": 1495,
+              "listed": "2026-09-18",
+              "firstSeen": "2026-09-18",
+              "days": 13,
+              "observedDays": 13
+            },
+            {
+              "sku": "1978660",
+              "model": null,
+              "price": 895,
               "listed": "2026-09-30",
               "firstSeen": "2026-09-30",
               "days": 1,
@@ -3009,14 +4152,23 @@
           ]
         },
         "Cartier": {
-          "live": 329,
-          "arrivals": 4,
-          "departures": 8,
-          "turnoverPct": 2.4,
-          "turnoverPctPerDay": 11.23,
-          "medianDaysToSell": 87,
-          "medianDeparturePrice": 1460,
+          "live": 378,
+          "arrivals": 56,
+          "departures": 11,
+          "turnoverPct": 3.3,
+          "turnoverPctPerDay": 3.96,
+          "medianDaysToSell": 63,
+          "medianDeparturePrice": 1695,
           "events": [
+            {
+              "sku": "1804383",
+              "model": null,
+              "price": 3295,
+              "listed": "2026-02-11",
+              "firstSeen": "2026-09-25",
+              "days": 232,
+              "observedDays": 6
+            },
             {
               "sku": "1811071",
               "model": "LOVE",
@@ -3036,15 +4188,6 @@
               "observedDays": 14
             },
             {
-              "sku": "1876602",
-              "model": "LOVE",
-              "price": 1425,
-              "listed": "2026-05-23",
-              "firstSeen": "2026-09-21",
-              "days": 131,
-              "observedDays": 10
-            },
-            {
               "sku": "1906960",
               "model": null,
               "price": 4495,
@@ -3060,6 +4203,24 @@
               "listed": "2026-07-04",
               "firstSeen": "2026-08-27",
               "days": 89,
+              "observedDays": 35
+            },
+            {
+              "sku": "1925386",
+              "model": null,
+              "price": 1095,
+              "listed": "2026-07-30",
+              "firstSeen": "2026-09-30",
+              "days": 63,
+              "observedDays": 1
+            },
+            {
+              "sku": "1947476",
+              "model": null,
+              "price": 5250,
+              "listed": "2026-08-21",
+              "firstSeen": "2026-08-27",
+              "days": 41,
               "observedDays": 35
             },
             {
@@ -3081,6 +4242,15 @@
               "observedDays": 22
             },
             {
+              "sku": "1962819",
+              "model": null,
+              "price": 1695,
+              "listed": "2026-09-11",
+              "firstSeen": "2026-09-27",
+              "days": 20,
+              "observedDays": 4
+            },
+            {
               "sku": "1967072",
               "model": null,
               "price": 950,
@@ -3092,13 +4262,13 @@
           ]
         },
         "Prada": {
-          "live": 487,
-          "arrivals": 4,
-          "departures": 5,
-          "turnoverPct": 1.02,
-          "turnoverPctPerDay": 4.77,
-          "medianDaysToSell": 77,
-          "medianDeparturePrice": 1255,
+          "live": 489,
+          "arrivals": 13,
+          "departures": 12,
+          "turnoverPct": 2.46,
+          "turnoverPctPerDay": 2.95,
+          "medianDaysToSell": 64,
+          "medianDeparturePrice": 1225,
           "events": [
             {
               "sku": "1870702",
@@ -3110,12 +4280,30 @@
               "observedDays": 22
             },
             {
+              "sku": "1909751",
+              "model": null,
+              "price": 930,
+              "listed": "2026-06-19",
+              "firstSeen": "2026-09-09",
+              "days": 104,
+              "observedDays": 22
+            },
+            {
               "sku": "1912269",
               "model": null,
               "price": 1255,
               "listed": "2026-06-20",
               "firstSeen": "2026-09-09",
               "days": 103,
+              "observedDays": 22
+            },
+            {
+              "sku": "1921343",
+              "model": "Re-Edition",
+              "price": 1780,
+              "listed": "2026-07-01",
+              "firstSeen": "2026-09-09",
+              "days": 92,
               "observedDays": 22
             },
             {
@@ -3137,6 +4325,24 @@
               "observedDays": 22
             },
             {
+              "sku": "1941989",
+              "model": null,
+              "price": 1420,
+              "listed": "2026-08-04",
+              "firstSeen": "2026-09-09",
+              "days": 58,
+              "observedDays": 22
+            },
+            {
+              "sku": "1963837",
+              "model": null,
+              "price": 550,
+              "listed": "2026-09-03",
+              "firstSeen": "2026-09-09",
+              "days": 28,
+              "observedDays": 22
+            },
+            {
               "sku": "1963863",
               "model": null,
               "price": 1195,
@@ -3144,17 +4350,44 @@
               "firstSeen": "2026-09-09",
               "days": 30,
               "observedDays": 22
+            },
+            {
+              "sku": "1966273",
+              "model": "Galleria",
+              "price": 725,
+              "listed": "2026-09-04",
+              "firstSeen": "2026-09-09",
+              "days": 27,
+              "observedDays": 22
+            },
+            {
+              "sku": "1972136",
+              "model": null,
+              "price": 3050,
+              "listed": "2026-09-23",
+              "firstSeen": "2026-09-23",
+              "days": 8,
+              "observedDays": 8
+            },
+            {
+              "sku": "1978460",
+              "model": "Re-Edition",
+              "price": 895,
+              "listed": "2026-09-25",
+              "firstSeen": "2026-09-25",
+              "days": 6,
+              "observedDays": 6
             }
           ]
         },
         "Bottega Veneta": {
-          "live": 516,
-          "arrivals": 8,
-          "departures": 18,
-          "turnoverPct": 3.42,
-          "turnoverPctPerDay": 16,
-          "medianDaysToSell": 93,
-          "medianDeparturePrice": 1445,
+          "live": 522,
+          "arrivals": 17,
+          "departures": 21,
+          "turnoverPct": 3.99,
+          "turnoverPctPerDay": 4.79,
+          "medianDaysToSell": 96,
+          "medianDeparturePrice": 1575,
           "events": [
             {
               "sku": "1806416",
@@ -3181,6 +4414,33 @@
               "listed": "2026-03-04",
               "firstSeen": "2026-09-09",
               "days": 211,
+              "observedDays": 22
+            },
+            {
+              "sku": "1830874",
+              "model": null,
+              "price": 1690,
+              "listed": "2026-07-29",
+              "firstSeen": "2026-09-09",
+              "days": 64,
+              "observedDays": 22
+            },
+            {
+              "sku": "1838320",
+              "model": null,
+              "price": 2335,
+              "listed": "2026-03-14",
+              "firstSeen": "2026-09-09",
+              "days": 201,
+              "observedDays": 22
+            },
+            {
+              "sku": "1842143",
+              "model": "Andiamo",
+              "price": 3445,
+              "listed": "2026-03-25",
+              "firstSeen": "2026-09-09",
+              "days": 190,
               "observedDays": 22
             },
             {
@@ -3247,6 +4507,15 @@
               "observedDays": 4
             },
             {
+              "sku": "1936790",
+              "model": "Andiamo",
+              "price": 3015,
+              "listed": "2026-07-20",
+              "firstSeen": "2026-09-09",
+              "days": 73,
+              "observedDays": 22
+            },
+            {
               "sku": "1938438",
               "model": null,
               "price": 1125,
@@ -3274,15 +4543,6 @@
               "observedDays": 22
             },
             {
-              "sku": "1951525",
-              "model": "Andiamo",
-              "price": 4195,
-              "listed": "2026-08-25",
-              "firstSeen": "2026-09-17",
-              "days": 37,
-              "observedDays": 14
-            },
-            {
               "sku": "1965382",
               "model": null,
               "price": 1395,
@@ -3301,6 +4561,15 @@
               "observedDays": 14
             },
             {
+              "sku": "1977556",
+              "model": null,
+              "price": 4495,
+              "listed": "2026-09-25",
+              "firstSeen": "2026-09-25",
+              "days": 6,
+              "observedDays": 6
+            },
+            {
               "sku": "1978113",
               "model": "Jodie",
               "price": 1195,
@@ -3308,26 +4577,17 @@
               "firstSeen": "2026-09-25",
               "days": 6,
               "observedDays": 6
-            },
-            {
-              "sku": "1979807",
-              "model": "Andiamo",
-              "price": 4150,
-              "listed": "2026-09-26",
-              "firstSeen": "2026-09-26",
-              "days": 5,
-              "observedDays": 5
             }
           ]
         },
         "Celine": {
-          "live": 503,
-          "arrivals": 3,
-          "departures": 5,
-          "turnoverPct": 0.99,
-          "turnoverPctPerDay": 4.63,
-          "medianDaysToSell": 26,
-          "medianDeparturePrice": 1275,
+          "live": 505,
+          "arrivals": 6,
+          "departures": 6,
+          "turnoverPct": 1.19,
+          "turnoverPctPerDay": 1.43,
+          "medianDaysToSell": 66,
+          "medianDeparturePrice": 1185,
           "events": [
             {
               "sku": "1886865",
@@ -3345,6 +4605,15 @@
               "listed": "2026-06-12",
               "firstSeen": "2026-09-09",
               "days": 111,
+              "observedDays": 22
+            },
+            {
+              "sku": "1907876",
+              "model": "Luggage",
+              "price": 785,
+              "listed": "2026-06-17",
+              "firstSeen": "2026-09-09",
+              "days": 106,
               "observedDays": 22
             },
             {
@@ -3380,9 +4649,15 @@
       "byModel": {
         "Kelly": {
           "brand": "Hermès",
-          "sold": 3,
-          "medianDaysToSell": 153,
-          "medianPrice": 19995
+          "sold": 4,
+          "medianDaysToSell": 125,
+          "medianPrice": 16273
+        },
+        "Birkin 25": {
+          "brand": "Hermès",
+          "sold": 5,
+          "medianDaysToSell": 62,
+          "medianPrice": 25595
         },
         "Constance": {
           "brand": "Hermès",
@@ -3392,15 +4667,9 @@
         },
         "Birkin 30": {
           "brand": "Hermès",
-          "sold": 7,
+          "sold": 9,
           "medianDaysToSell": 184,
           "medianPrice": 19995
-        },
-        "Birkin 25": {
-          "brand": "Hermès",
-          "sold": 4,
-          "medianDaysToSell": 44,
-          "medianPrice": 29795
         },
         "Lindy": {
           "brand": "Hermès",
@@ -3410,27 +4679,27 @@
         },
         "Chanel 19": {
           "brand": "Chanel",
-          "sold": 7,
-          "medianDaysToSell": 134,
-          "medianPrice": 3895
+          "sold": 10,
+          "medianDaysToSell": 117,
+          "medianPrice": 3900
         },
         "Boy": {
           "brand": "Chanel",
-          "sold": 9,
-          "medianDaysToSell": 148,
-          "medianPrice": 3905
+          "sold": 6,
+          "medianDaysToSell": 193,
+          "medianPrice": 3745
         },
         "Wallet On Chain": {
           "brand": "Chanel",
-          "sold": 2,
-          "medianDaysToSell": 214,
-          "medianPrice": 3323
+          "sold": 3,
+          "medianDaysToSell": 170,
+          "medianPrice": 3650
         },
         "Double Flap": {
           "brand": "Chanel",
-          "sold": 13,
+          "sold": 15,
           "medianDaysToSell": 107,
-          "medianPrice": 7625
+          "medianPrice": 6835
         },
         "Margaux": {
           "brand": "The Row",
@@ -3440,21 +4709,21 @@
         },
         "Alma": {
           "brand": "Louis Vuitton",
-          "sold": 3,
-          "medianDaysToSell": 30,
-          "medianPrice": 2450
+          "sold": 8,
+          "medianDaysToSell": 27,
+          "medianPrice": 1573
         },
         "Neverfull": {
           "brand": "Louis Vuitton",
-          "sold": 7,
-          "medianDaysToSell": 100,
-          "medianPrice": 1895
+          "sold": 12,
+          "medianDaysToSell": 96,
+          "medianPrice": 1695
         },
         "Speedy": {
           "brand": "Louis Vuitton",
-          "sold": 14,
-          "medianDaysToSell": 40,
-          "medianPrice": 1303
+          "sold": 15,
+          "medianDaysToSell": 27,
+          "medianPrice": 1750
         },
         "Pochette Metis": {
           "brand": "Louis Vuitton",
@@ -3464,33 +4733,39 @@
         },
         "Saint Louis": {
           "brand": "Goyard",
-          "sold": 2,
-          "medianDaysToSell": 18,
-          "medianPrice": 1900
+          "sold": 5,
+          "medianDaysToSell": 34,
+          "medianPrice": 1950
         },
         "Lady Dior": {
           "brand": "Dior",
-          "sold": 8,
-          "medianDaysToSell": 36,
-          "medianPrice": 3800
+          "sold": 9,
+          "medianDaysToSell": 35,
+          "medianPrice": 3495
         },
         "Saddle": {
           "brand": "Dior",
-          "sold": 1,
-          "medianDaysToSell": 187,
-          "medianPrice": 1580
+          "sold": 2,
+          "medianDaysToSell": 172,
+          "medianPrice": 2048
         },
         "LOVE": {
           "brand": "Cartier",
-          "sold": 2,
-          "medianDaysToSell": 160,
-          "medianPrice": 1460
+          "sold": 1,
+          "medianDaysToSell": 189,
+          "medianPrice": 1495
         },
         "Galleria": {
           "brand": "Prada",
-          "sold": 1,
-          "medianDaysToSell": 93,
-          "medianPrice": 2760
+          "sold": 2,
+          "medianDaysToSell": 60,
+          "medianPrice": 1743
+        },
+        "Re-Edition": {
+          "brand": "Prada",
+          "sold": 2,
+          "medianDaysToSell": 49,
+          "medianPrice": 1338
         },
         "Jodie": {
           "brand": "Bottega Veneta",
@@ -3501,14 +4776,14 @@
         "Andiamo": {
           "brand": "Bottega Veneta",
           "sold": 3,
-          "medianDaysToSell": 37,
-          "medianPrice": 4150
+          "medianDaysToSell": 190,
+          "medianPrice": 3445
         },
         "Luggage": {
           "brand": "Celine",
-          "sold": 2,
-          "medianDaysToSell": 56,
-          "medianPrice": 968
+          "sold": 3,
+          "medianDaysToSell": 106,
+          "medianPrice": 840
         },
         "Triomphe": {
           "brand": "Celine",
@@ -3524,57 +4799,57 @@
       "focus": [
         {
           "brand": "Hermès",
-          "total": 290578,
+          "total": 291302,
           "low": 100
         },
         {
           "brand": "Chanel",
-          "total": 204356,
+          "total": 207441,
           "low": 100
         },
         {
           "brand": "The Row",
-          "total": 5149,
+          "total": 5158,
           "low": 105
         },
         {
           "brand": "Louis Vuitton",
-          "total": 630893,
+          "total": 648825,
           "low": 100
         },
         {
           "brand": "Goyard",
-          "total": 6953,
+          "total": 6975,
           "low": 100
         },
         {
           "brand": "Dior",
-          "total": 116210,
+          "total": 116910,
           "low": 100
         },
         {
           "brand": "Cartier",
-          "total": 85444,
+          "total": 85896,
           "low": 100
         },
         {
           "brand": "Rolex",
-          "total": 146372,
+          "total": 146152,
           "low": 100
         },
         {
           "brand": "Prada",
-          "total": 216689,
+          "total": 219793,
           "low": 100
         },
         {
           "brand": "Bottega Veneta",
-          "total": 64671,
+          "total": 65093,
           "low": 100
         },
         {
           "brand": "Celine",
-          "total": 89508,
+          "total": 90938,
           "low": 100
         }
       ]
@@ -3655,7 +4930,7 @@
           "series": [
             {
               "date": "2026-09-01",
-              "value": 71
+              "value": 69
             },
             {
               "date": "2026-09-02",
@@ -3663,23 +4938,23 @@
             },
             {
               "date": "2026-09-03",
-              "value": 67
+              "value": 64
             },
             {
               "date": "2026-09-04",
-              "value": 69
+              "value": 66
             },
             {
               "date": "2026-09-05",
-              "value": 79
+              "value": 77
             },
             {
               "date": "2026-09-06",
-              "value": 90
+              "value": 88
             },
             {
               "date": "2026-09-07",
-              "value": 75
+              "value": 73
             },
             {
               "date": "2026-09-08",
@@ -3687,221 +4962,221 @@
             },
             {
               "date": "2026-09-09",
-              "value": 70
+              "value": 72
             },
             {
               "date": "2026-09-10",
-              "value": 71
+              "value": 70
             },
             {
               "date": "2026-09-11",
-              "value": 76
+              "value": 70
             },
             {
               "date": "2026-09-12",
-              "value": 83
-            },
-            {
-              "date": "2026-09-13",
-              "value": 99
-            },
-            {
-              "date": "2026-09-14",
-              "value": 74
-            },
-            {
-              "date": "2026-09-15",
-              "value": 69
-            },
-            {
-              "date": "2026-09-16",
-              "value": 72
-            },
-            {
-              "date": "2026-09-17",
-              "value": 72
-            },
-            {
-              "date": "2026-09-18",
-              "value": 77
-            },
-            {
-              "date": "2026-09-19",
-              "value": 91
-            },
-            {
-              "date": "2026-09-20",
-              "value": 93
-            },
-            {
-              "date": "2026-09-21",
-              "value": 66
-            },
-            {
-              "date": "2026-09-22",
-              "value": 74
-            },
-            {
-              "date": "2026-09-23",
-              "value": 80
-            },
-            {
-              "date": "2026-09-24",
-              "value": 77
-            },
-            {
-              "date": "2026-09-25",
-              "value": 80
-            },
-            {
-              "date": "2026-09-26",
-              "value": 97
-            },
-            {
-              "date": "2026-09-27",
               "value": 100
             },
             {
+              "date": "2026-09-13",
+              "value": 90
+            },
+            {
+              "date": "2026-09-14",
+              "value": 82
+            },
+            {
+              "date": "2026-09-15",
+              "value": 68
+            },
+            {
+              "date": "2026-09-16",
+              "value": 71
+            },
+            {
+              "date": "2026-09-17",
+              "value": 75
+            },
+            {
+              "date": "2026-09-18",
+              "value": 78
+            },
+            {
+              "date": "2026-09-19",
+              "value": 89
+            },
+            {
+              "date": "2026-09-20",
+              "value": 92
+            },
+            {
+              "date": "2026-09-21",
+              "value": 64
+            },
+            {
+              "date": "2026-09-22",
+              "value": 70
+            },
+            {
+              "date": "2026-09-23",
+              "value": 78
+            },
+            {
+              "date": "2026-09-24",
+              "value": 76
+            },
+            {
+              "date": "2026-09-25",
+              "value": 79
+            },
+            {
+              "date": "2026-09-26",
+              "value": 93
+            },
+            {
+              "date": "2026-09-27",
+              "value": 98
+            },
+            {
               "date": "2026-09-28",
-              "value": 88
+              "value": 84
             },
             {
               "date": "2026-09-29",
-              "value": 86
+              "value": 85
             },
             {
               "date": "2026-09-30",
-              "value": 81
+              "value": 80
             },
             {
               "date": "2026-10-01",
-              "value": 75
+              "value": 79
             }
           ],
           "rel": [
             {
               "date": "2026-09-01",
-              "value": 2.0233
+              "value": 1.9817
             },
             {
               "date": "2026-09-02",
-              "value": 1.8378
+              "value": 1.9023
             },
             {
               "date": "2026-09-03",
-              "value": 1.9193
+              "value": 1.8381
             },
             {
               "date": "2026-09-04",
-              "value": 1.8787
+              "value": 1.8329
             },
             {
               "date": "2026-09-05",
-              "value": 1.8688
+              "value": 1.8603
             },
             {
               "date": "2026-09-06",
-              "value": 2.037
+              "value": 2.0112
             },
             {
               "date": "2026-09-07",
-              "value": 1.8333
+              "value": 1.8037
             },
             {
               "date": "2026-09-08",
-              "value": 1.9562
+              "value": 1.9921
             },
             {
               "date": "2026-09-09",
-              "value": 2.0588
+              "value": 2.0679
             },
             {
               "date": "2026-09-10",
-              "value": 1.9476
+              "value": 1.9444
             },
             {
               "date": "2026-09-11",
-              "value": 1.9905
+              "value": 1.878
             },
             {
               "date": "2026-09-12",
-              "value": 1.8482
+              "value": 2.1518
             },
             {
               "date": "2026-09-13",
-              "value": 1.9206
+              "value": 1.8162
             },
             {
               "date": "2026-09-14",
-              "value": 1.817
+              "value": 1.9916
             },
             {
               "date": "2026-09-15",
-              "value": 1.8245
+              "value": 1.8028
             },
             {
               "date": "2026-09-16",
-              "value": 1.8902
+              "value": 1.891
             },
             {
               "date": "2026-09-17",
-              "value": 1.927
+              "value": 1.988
             },
             {
               "date": "2026-09-18",
-              "value": 1.9836
+              "value": 2.0089
             },
             {
               "date": "2026-09-19",
-              "value": 1.9551
+              "value": 1.9298
             },
             {
               "date": "2026-09-20",
-              "value": 2.1093
+              "value": 2.1252
             },
             {
               "date": "2026-09-21",
-              "value": 1.9675
+              "value": 1.9341
             },
             {
               "date": "2026-09-22",
-              "value": 2.0452
+              "value": 1.9794
             },
             {
               "date": "2026-09-23",
-              "value": 2.1053
+              "value": 2.0571
             },
             {
               "date": "2026-09-24",
-              "value": 2.0508
+              "value": 2.0242
             },
             {
               "date": "2026-09-25",
-              "value": 2.0804
+              "value": 2.0534
             },
             {
               "date": "2026-09-26",
-              "value": 2.1213
+              "value": 2.0658
             },
             {
               "date": "2026-09-27",
-              "value": 2.2541
+              "value": 2.2126
             },
             {
               "date": "2026-09-28",
-              "value": 2.2723
+              "value": 2.1839
             },
             {
               "date": "2026-09-29",
-              "value": 2.2524
+              "value": 2.2257
             },
             {
               "date": "2026-09-30",
-              "value": 2.25
+              "value": 2.2564
             },
             {
               "date": "2026-10-01",
-              "value": 2.1941
+              "value": 2.1612
             }
           ]
         },
@@ -3916,23 +5191,23 @@
             },
             {
               "date": "2026-09-02",
-              "value": 65
+              "value": 56
             },
             {
               "date": "2026-09-03",
-              "value": 54
+              "value": 53
             },
             {
               "date": "2026-09-04",
-              "value": 55
+              "value": 54
             },
             {
               "date": "2026-09-05",
-              "value": 69
+              "value": 64
             },
             {
               "date": "2026-09-06",
-              "value": 67
+              "value": 68
             },
             {
               "date": "2026-09-07",
@@ -3940,7 +5215,7 @@
             },
             {
               "date": "2026-09-08",
-              "value": 53
+              "value": 52
             },
             {
               "date": "2026-09-09",
@@ -3948,217 +5223,217 @@
             },
             {
               "date": "2026-09-10",
-              "value": 52
+              "value": 51
             },
             {
               "date": "2026-09-11",
-              "value": 57
+              "value": 56
             },
             {
               "date": "2026-09-12",
-              "value": 67
+              "value": 73
             },
             {
               "date": "2026-09-13",
-              "value": 72
+              "value": 65
             },
             {
               "date": "2026-09-14",
-              "value": 56
+              "value": 55
             },
             {
               "date": "2026-09-15",
-              "value": 54
-            },
-            {
-              "date": "2026-09-16",
-              "value": 54
-            },
-            {
-              "date": "2026-09-17",
-              "value": 52
-            },
-            {
-              "date": "2026-09-18",
-              "value": 54
-            },
-            {
-              "date": "2026-09-19",
-              "value": 66
-            },
-            {
-              "date": "2026-09-20",
-              "value": 66
-            },
-            {
-              "date": "2026-09-21",
-              "value": 50
-            },
-            {
-              "date": "2026-09-22",
-              "value": 52
-            },
-            {
-              "date": "2026-09-23",
-              "value": 56
-            },
-            {
-              "date": "2026-09-24",
               "value": 53
             },
             {
+              "date": "2026-09-16",
+              "value": 53
+            },
+            {
+              "date": "2026-09-17",
+              "value": 53
+            },
+            {
+              "date": "2026-09-18",
+              "value": 55
+            },
+            {
+              "date": "2026-09-19",
+              "value": 65
+            },
+            {
+              "date": "2026-09-20",
+              "value": 65
+            },
+            {
+              "date": "2026-09-21",
+              "value": 48
+            },
+            {
+              "date": "2026-09-22",
+              "value": 51
+            },
+            {
+              "date": "2026-09-23",
+              "value": 57
+            },
+            {
+              "date": "2026-09-24",
+              "value": 55
+            },
+            {
               "date": "2026-09-25",
-              "value": 58
+              "value": 56
             },
             {
               "date": "2026-09-26",
-              "value": 72
+              "value": 71
             },
             {
               "date": "2026-09-27",
-              "value": 66
+              "value": 70
             },
             {
               "date": "2026-09-28",
-              "value": 56
+              "value": 55
             },
             {
               "date": "2026-09-29",
-              "value": 56
+              "value": 55
             },
             {
               "date": "2026-09-30",
-              "value": 52
+              "value": 51
             },
             {
               "date": "2026-10-01",
-              "value": 50
+              "value": 55
             }
           ],
           "rel": [
             {
               "date": "2026-09-01",
-              "value": 1.4819
+              "value": 1.4935
             },
             {
               "date": "2026-09-02",
-              "value": 1.7312
+              "value": 1.5439
             },
             {
               "date": "2026-09-03",
-              "value": 1.5469
+              "value": 1.5222
             },
             {
               "date": "2026-09-04",
-              "value": 1.4975
+              "value": 1.4996
             },
             {
               "date": "2026-09-05",
-              "value": 1.6323
+              "value": 1.5462
             },
             {
               "date": "2026-09-06",
-              "value": 1.5165
+              "value": 1.5541
             },
             {
               "date": "2026-09-07",
-              "value": 1.54
+              "value": 1.5566
             },
             {
               "date": "2026-09-08",
-              "value": 1.5026
+              "value": 1.5013
             },
             {
               "date": "2026-09-09",
-              "value": 1.4706
+              "value": 1.436
             },
             {
               "date": "2026-09-10",
-              "value": 1.4264
+              "value": 1.4167
             },
             {
               "date": "2026-09-11",
-              "value": 1.4929
+              "value": 1.5024
             },
             {
               "date": "2026-09-12",
-              "value": 1.4919
+              "value": 1.5708
             },
             {
               "date": "2026-09-13",
-              "value": 1.3968
+              "value": 1.3117
             },
             {
               "date": "2026-09-14",
-              "value": 1.375
+              "value": 1.3358
             },
             {
               "date": "2026-09-15",
-              "value": 1.4279
+              "value": 1.4052
             },
             {
               "date": "2026-09-16",
-              "value": 1.4177
-            },
-            {
-              "date": "2026-09-17",
-              "value": 1.3917
-            },
-            {
-              "date": "2026-09-18",
-              "value": 1.3911
-            },
-            {
-              "date": "2026-09-19",
-              "value": 1.418
-            },
-            {
-              "date": "2026-09-20",
-              "value": 1.4969
-            },
-            {
-              "date": "2026-09-21",
-              "value": 1.4905
-            },
-            {
-              "date": "2026-09-22",
-              "value": 1.4372
-            },
-            {
-              "date": "2026-09-23",
-              "value": 1.4737
-            },
-            {
-              "date": "2026-09-24",
               "value": 1.4116
             },
             {
+              "date": "2026-09-17",
+              "value": 1.4048
+            },
+            {
+              "date": "2026-09-18",
+              "value": 1.4165
+            },
+            {
+              "date": "2026-09-19",
+              "value": 1.4094
+            },
+            {
+              "date": "2026-09-20",
+              "value": 1.5015
+            },
+            {
+              "date": "2026-09-21",
+              "value": 1.4505
+            },
+            {
+              "date": "2026-09-22",
+              "value": 1.4422
+            },
+            {
+              "date": "2026-09-23",
+              "value": 1.5032
+            },
+            {
+              "date": "2026-09-24",
+              "value": 1.4649
+            },
+            {
               "date": "2026-09-25",
-              "value": 1.5083
+              "value": 1.4556
             },
             {
               "date": "2026-09-26",
-              "value": 1.5746
+              "value": 1.5771
             },
             {
               "date": "2026-09-27",
-              "value": 1.4877
+              "value": 1.5805
             },
             {
               "date": "2026-09-28",
-              "value": 1.446
+              "value": 1.4299
             },
             {
               "date": "2026-09-29",
-              "value": 1.4667
+              "value": 1.4401
             },
             {
               "date": "2026-09-30",
-              "value": 1.4444
+              "value": 1.4385
             },
             {
               "date": "2026-10-01",
-              "value": 1.4628
+              "value": 1.5046
             }
           ]
         },
@@ -4181,11 +5456,11 @@
             },
             {
               "date": "2026-09-04",
-              "value": 16
+              "value": 15
             },
             {
               "date": "2026-09-05",
-              "value": 16
+              "value": 15
             },
             {
               "date": "2026-09-06",
@@ -4201,7 +5476,7 @@
             },
             {
               "date": "2026-09-09",
-              "value": 13
+              "value": 14
             },
             {
               "date": "2026-09-10",
@@ -4229,7 +5504,7 @@
             },
             {
               "date": "2026-09-16",
-              "value": 13
+              "value": 12
             },
             {
               "date": "2026-09-17",
@@ -4241,7 +5516,7 @@
             },
             {
               "date": "2026-09-19",
-              "value": 15
+              "value": 14
             },
             {
               "date": "2026-09-20",
@@ -4253,7 +5528,7 @@
             },
             {
               "date": "2026-09-22",
-              "value": 12
+              "value": 11
             },
             {
               "date": "2026-09-23",
@@ -4261,11 +5536,11 @@
             },
             {
               "date": "2026-09-24",
-              "value": 14
+              "value": 13
             },
             {
               "date": "2026-09-25",
-              "value": 12
+              "value": 13
             },
             {
               "date": "2026-09-26",
@@ -4281,7 +5556,7 @@
             },
             {
               "date": "2026-09-29",
-              "value": 11
+              "value": 12
             },
             {
               "date": "2026-09-30",
@@ -4289,133 +5564,133 @@
             },
             {
               "date": "2026-10-01",
-              "value": 11
+              "value": 10
             }
           ],
           "rel": [
             {
               "date": "2026-09-01",
-              "value": 0.4275
+              "value": 0.4308
             },
             {
               "date": "2026-09-02",
-              "value": 0.3729
+              "value": 0.386
             },
             {
               "date": "2026-09-03",
-              "value": 0.4297
+              "value": 0.4308
             },
             {
               "date": "2026-09-04",
-              "value": 0.4356
+              "value": 0.4166
             },
             {
               "date": "2026-09-05",
-              "value": 0.3785
+              "value": 0.3624
             },
             {
               "date": "2026-09-06",
-              "value": 0.3621
+              "value": 0.3657
             },
             {
               "date": "2026-09-07",
-              "value": 0.3911
+              "value": 0.3953
             },
             {
               "date": "2026-09-08",
-              "value": 0.3686
+              "value": 0.3753
             },
             {
               "date": "2026-09-09",
-              "value": 0.3824
+              "value": 0.4021
             },
             {
               "date": "2026-09-10",
-              "value": 0.384
+              "value": 0.3889
             },
             {
               "date": "2026-09-11",
-              "value": 0.3667
+              "value": 0.3756
             },
             {
               "date": "2026-09-12",
-              "value": 0.3563
+              "value": 0.3443
             },
             {
               "date": "2026-09-13",
-              "value": 0.3104
+              "value": 0.3229
             },
             {
               "date": "2026-09-14",
-              "value": 0.3438
+              "value": 0.34
             },
             {
               "date": "2026-09-15",
-              "value": 0.3173
+              "value": 0.3181
             },
             {
               "date": "2026-09-16",
-              "value": 0.3413
+              "value": 0.3196
             },
             {
               "date": "2026-09-17",
-              "value": 0.3479
+              "value": 0.3446
             },
             {
               "date": "2026-09-18",
-              "value": 0.3607
+              "value": 0.3606
             },
             {
               "date": "2026-09-19",
-              "value": 0.3223
+              "value": 0.3036
             },
             {
               "date": "2026-09-20",
-              "value": 0.2722
+              "value": 0.2772
             },
             {
               "date": "2026-09-21",
-              "value": 0.2981
+              "value": 0.3022
             },
             {
               "date": "2026-09-22",
-              "value": 0.3317
+              "value": 0.3111
             },
             {
               "date": "2026-09-23",
-              "value": 0.3421
+              "value": 0.3428
             },
             {
               "date": "2026-09-24",
-              "value": 0.3729
+              "value": 0.3462
             },
             {
               "date": "2026-09-25",
-              "value": 0.3121
+              "value": 0.3379
             },
             {
               "date": "2026-09-26",
-              "value": 0.328
+              "value": 0.3332
             },
             {
               "date": "2026-09-27",
-              "value": 0.3156
+              "value": 0.3161
             },
             {
               "date": "2026-09-28",
-              "value": 0.3099
+              "value": 0.312
             },
             {
               "date": "2026-09-29",
-              "value": 0.2881
+              "value": 0.3142
             },
             {
               "date": "2026-09-30",
-              "value": 0.3056
+              "value": 0.3103
             },
             {
               "date": "2026-10-01",
-              "value": 0.3218
+              "value": 0.2736
             }
           ]
         },
@@ -4430,31 +5705,31 @@
             },
             {
               "date": "2026-09-02",
-              "value": 34
+              "value": 33
             },
             {
               "date": "2026-09-03",
-              "value": 33
+              "value": 32
             },
             {
               "date": "2026-09-04",
-              "value": 35
+              "value": 34
             },
             {
               "date": "2026-09-05",
-              "value": 40
+              "value": 39
             },
             {
               "date": "2026-09-06",
-              "value": 43
+              "value": 42
             },
             {
               "date": "2026-09-07",
-              "value": 38
+              "value": 37
             },
             {
               "date": "2026-09-08",
-              "value": 33
+              "value": 32
             },
             {
               "date": "2026-09-09",
@@ -4462,19 +5737,19 @@
             },
             {
               "date": "2026-09-10",
-              "value": 35
+              "value": 34
             },
             {
               "date": "2026-09-11",
-              "value": 35
+              "value": 34
             },
             {
               "date": "2026-09-12",
-              "value": 47
+              "value": 46
             },
             {
               "date": "2026-09-13",
-              "value": 43
+              "value": 41
             },
             {
               "date": "2026-09-14",
@@ -4482,7 +5757,7 @@
             },
             {
               "date": "2026-09-15",
-              "value": 33
+              "value": 32
             },
             {
               "date": "2026-09-16",
@@ -4494,15 +5769,15 @@
             },
             {
               "date": "2026-09-18",
-              "value": 37
+              "value": 35
             },
             {
               "date": "2026-09-19",
-              "value": 45
+              "value": 44
             },
             {
               "date": "2026-09-20",
-              "value": 39
+              "value": 37
             },
             {
               "date": "2026-09-21",
@@ -4510,7 +5785,7 @@
             },
             {
               "date": "2026-09-22",
-              "value": 33
+              "value": 32
             },
             {
               "date": "2026-09-23",
@@ -4522,125 +5797,125 @@
             },
             {
               "date": "2026-09-25",
-              "value": 36
-            },
-            {
-              "date": "2026-09-26",
-              "value": 44
-            },
-            {
-              "date": "2026-09-27",
-              "value": 44
-            },
-            {
-              "date": "2026-09-28",
-              "value": 38
-            },
-            {
-              "date": "2026-09-29",
-              "value": 37
-            },
-            {
-              "date": "2026-09-30",
               "value": 35
             },
             {
-              "date": "2026-10-01",
+              "date": "2026-09-26",
+              "value": 42
+            },
+            {
+              "date": "2026-09-27",
+              "value": 43
+            },
+            {
+              "date": "2026-09-28",
+              "value": 37
+            },
+            {
+              "date": "2026-09-29",
+              "value": 35
+            },
+            {
+              "date": "2026-09-30",
               "value": 32
+            },
+            {
+              "date": "2026-10-01",
+              "value": 33
             }
           ],
           "rel": [
             {
               "date": "2026-09-01",
-              "value": 0.8834
+              "value": 0.8903
             },
             {
               "date": "2026-09-02",
-              "value": 0.9056
+              "value": 0.9098
             },
             {
               "date": "2026-09-03",
-              "value": 0.9453
+              "value": 0.9191
             },
             {
               "date": "2026-09-04",
-              "value": 0.953
+              "value": 0.9442
             },
             {
               "date": "2026-09-05",
-              "value": 0.9462
+              "value": 0.9422
             },
             {
               "date": "2026-09-06",
-              "value": 0.9733
+              "value": 0.9599
             },
             {
               "date": "2026-09-07",
-              "value": 0.9289
+              "value": 0.9142
             },
             {
               "date": "2026-09-08",
-              "value": 0.9356
+              "value": 0.9239
             },
             {
               "date": "2026-09-09",
-              "value": 0.9118
+              "value": 0.8903
             },
             {
               "date": "2026-09-10",
-              "value": 0.9601
+              "value": 0.9444
             },
             {
               "date": "2026-09-11",
-              "value": 0.9167
+              "value": 0.9122
             },
             {
               "date": "2026-09-12",
-              "value": 1.0466
+              "value": 0.9898
             },
             {
               "date": "2026-09-13",
-              "value": 0.8342
+              "value": 0.8274
             },
             {
               "date": "2026-09-14",
-              "value": 0.8103
+              "value": 0.8015
             },
             {
               "date": "2026-09-15",
-              "value": 0.8726
+              "value": 0.8484
             },
             {
               "date": "2026-09-16",
-              "value": 0.8663
+              "value": 0.8789
             },
             {
               "date": "2026-09-17",
-              "value": 0.9635
+              "value": 0.9542
             },
             {
               "date": "2026-09-18",
-              "value": 0.9532
+              "value": 0.9014
             },
             {
               "date": "2026-09-19",
-              "value": 0.9668
+              "value": 0.9541
             },
             {
               "date": "2026-09-20",
-              "value": 0.8845
+              "value": 0.8547
             },
             {
               "date": "2026-09-21",
-              "value": 0.8943
+              "value": 0.9066
             },
             {
               "date": "2026-09-22",
-              "value": 0.9121
+              "value": 0.9049
             },
             {
               "date": "2026-09-23",
-              "value": 0.8947
+              "value": 0.8967
             },
             {
               "date": "2026-09-24",
@@ -4648,31 +5923,31 @@
             },
             {
               "date": "2026-09-25",
-              "value": 0.9362
+              "value": 0.9097
             },
             {
               "date": "2026-09-26",
-              "value": 0.9622
+              "value": 0.933
             },
             {
               "date": "2026-09-27",
-              "value": 0.9918
+              "value": 0.9709
             },
             {
               "date": "2026-09-28",
-              "value": 0.9812
+              "value": 0.9619
             },
             {
               "date": "2026-09-29",
-              "value": 0.969
+              "value": 0.9164
             },
             {
               "date": "2026-09-30",
-              "value": 0.9722
+              "value": 0.9026
             },
             {
               "date": "2026-10-01",
-              "value": 0.9362
+              "value": 0.9028
             }
           ]
         },
@@ -4683,19 +5958,19 @@
           "series": [
             {
               "date": "2026-09-01",
-              "value": 61
+              "value": 59
             },
             {
               "date": "2026-09-02",
-              "value": 60
-            },
-            {
-              "date": "2026-09-03",
               "value": 58
             },
             {
-              "date": "2026-09-04",
+              "date": "2026-09-03",
               "value": 63
+            },
+            {
+              "date": "2026-09-04",
+              "value": 61
             },
             {
               "date": "2026-09-05",
@@ -4703,47 +5978,47 @@
             },
             {
               "date": "2026-09-06",
-              "value": 75
+              "value": 73
             },
             {
               "date": "2026-09-07",
-              "value": 68
+              "value": 65
             },
             {
               "date": "2026-09-08",
-              "value": 63
+              "value": 58
             },
             {
               "date": "2026-09-09",
-              "value": 57
+              "value": 59
             },
             {
               "date": "2026-09-10",
-              "value": 57
+              "value": 55
             },
             {
               "date": "2026-09-11",
-              "value": 64
+              "value": 63
             },
             {
               "date": "2026-09-12",
-              "value": 74
+              "value": 71
             },
             {
               "date": "2026-09-13",
-              "value": 69
+              "value": 67
             },
             {
               "date": "2026-09-14",
-              "value": 56
+              "value": 55
             },
             {
               "date": "2026-09-15",
-              "value": 66
+              "value": 72
             },
             {
               "date": "2026-09-16",
-              "value": 72
+              "value": 71
             },
             {
               "date": "2026-09-17",
@@ -4751,23 +6026,23 @@
             },
             {
               "date": "2026-09-18",
-              "value": 67
+              "value": 69
             },
             {
               "date": "2026-09-19",
-              "value": 83
-            },
-            {
-              "date": "2026-09-20",
               "value": 81
             },
             {
+              "date": "2026-09-20",
+              "value": 77
+            },
+            {
               "date": "2026-09-21",
-              "value": 62
+              "value": 65
             },
             {
               "date": "2026-09-22",
-              "value": 65
+              "value": 63
             },
             {
               "date": "2026-09-23",
@@ -4775,11 +6050,11 @@
             },
             {
               "date": "2026-09-24",
-              "value": 63
+              "value": 67
             },
             {
               "date": "2026-09-25",
-              "value": 65
+              "value": 64
             },
             {
               "date": "2026-09-26",
@@ -4787,11 +6062,11 @@
             },
             {
               "date": "2026-09-27",
-              "value": 71
+              "value": 69
             },
             {
               "date": "2026-09-28",
-              "value": 63
+              "value": 64
             },
             {
               "date": "2026-09-29",
@@ -4799,405 +6074,405 @@
             },
             {
               "date": "2026-09-30",
-              "value": 59
+              "value": 60
             },
             {
               "date": "2026-10-01",
-              "value": 58
+              "value": 59
             }
           ],
           "rel": [
             {
               "date": "2026-09-01",
-              "value": 1.7383
+              "value": 1.6945
             },
             {
               "date": "2026-09-02",
-              "value": 1.5981
+              "value": 1.599
             },
             {
               "date": "2026-09-03",
-              "value": 1.6615
+              "value": 1.8094
             },
             {
               "date": "2026-09-04",
-              "value": 1.7153
+              "value": 1.694
             },
             {
               "date": "2026-09-05",
-              "value": 1.7032
+              "value": 1.7395
             },
             {
               "date": "2026-09-06",
-              "value": 1.6975
+              "value": 1.6684
             },
             {
               "date": "2026-09-07",
-              "value": 1.6622
+              "value": 1.606
             },
             {
               "date": "2026-09-08",
-              "value": 1.7861
+              "value": 1.6745
             },
             {
               "date": "2026-09-09",
-              "value": 1.6765
+              "value": 1.6945
             },
             {
               "date": "2026-09-10",
-              "value": 1.5636
+              "value": 1.5278
             },
             {
               "date": "2026-09-11",
-              "value": 1.6762
+              "value": 1.6902
             },
             {
               "date": "2026-09-12",
-              "value": 1.6478
+              "value": 1.5278
             },
             {
               "date": "2026-09-13",
-              "value": 1.3386
+              "value": 1.352
             },
             {
               "date": "2026-09-14",
-              "value": 1.375
+              "value": 1.3358
             },
             {
               "date": "2026-09-15",
-              "value": 1.7452
+              "value": 1.9089
             },
             {
               "date": "2026-09-16",
-              "value": 1.8902
+              "value": 1.891
             },
             {
               "date": "2026-09-17",
-              "value": 1.7397
+              "value": 1.7229
             },
             {
               "date": "2026-09-18",
-              "value": 1.726
+              "value": 1.7771
             },
             {
               "date": "2026-09-19",
-              "value": 1.7832
+              "value": 1.7564
             },
             {
               "date": "2026-09-20",
-              "value": 1.8371
+              "value": 1.7787
             },
             {
               "date": "2026-09-21",
-              "value": 1.8482
+              "value": 1.9643
             },
             {
               "date": "2026-09-22",
-              "value": 1.7965
+              "value": 1.7815
             },
             {
               "date": "2026-09-23",
-              "value": 1.6842
+              "value": 1.6878
             },
             {
               "date": "2026-09-24",
-              "value": 1.678
+              "value": 1.7845
             },
             {
               "date": "2026-09-25",
-              "value": 1.6903
+              "value": 1.6635
             },
             {
               "date": "2026-09-26",
-              "value": 1.6183
+              "value": 1.6438
             },
             {
               "date": "2026-09-27",
-              "value": 1.6004
+              "value": 1.5579
             },
             {
               "date": "2026-09-28",
-              "value": 1.6268
+              "value": 1.6639
             },
             {
               "date": "2026-09-29",
-              "value": 1.6762
+              "value": 1.6758
             },
             {
               "date": "2026-09-30",
-              "value": 1.6389
+              "value": 1.6923
             },
             {
               "date": "2026-10-01",
-              "value": 1.6968
+              "value": 1.614
             }
           ]
         },
         {
           "brand": "Hermès",
           "keyword": "hermes",
-          "scale": 1.0004,
+          "scale": 1.0079,
           "series": [
             {
               "date": "2026-09-01",
-              "value": 38
+              "value": 38.3
             },
             {
               "date": "2026-09-02",
-              "value": 40
+              "value": 39.3
             },
             {
               "date": "2026-09-03",
-              "value": 37
+              "value": 37.3
             },
             {
               "date": "2026-09-04",
-              "value": 39
+              "value": 38.3
             },
             {
               "date": "2026-09-05",
-              "value": 39
+              "value": 39.3
             },
             {
               "date": "2026-09-06",
-              "value": 41
+              "value": 40.3
             },
             {
               "date": "2026-09-07",
-              "value": 41
+              "value": 39.3
             },
             {
               "date": "2026-09-08",
-              "value": 35
+              "value": 35.3
             },
             {
               "date": "2026-09-09",
-              "value": 39
+              "value": 40.3
             },
             {
               "date": "2026-09-10",
-              "value": 40
+              "value": 40.3
             },
             {
               "date": "2026-09-11",
-              "value": 41
+              "value": 40.3
             },
             {
               "date": "2026-09-12",
-              "value": 41
+              "value": 40.3
             },
             {
               "date": "2026-09-13",
-              "value": 43
+              "value": 43.3
             },
             {
               "date": "2026-09-14",
-              "value": 37
+              "value": 37.3
             },
             {
               "date": "2026-09-15",
-              "value": 37
+              "value": 36.3
             },
             {
               "date": "2026-09-16",
-              "value": 40
+              "value": 39.3
             },
             {
               "date": "2026-09-17",
-              "value": 39
+              "value": 40.3
             },
             {
               "date": "2026-09-18",
-              "value": 40
+              "value": 39.3
             },
             {
               "date": "2026-09-19",
-              "value": 46
+              "value": 47.4
             },
             {
               "date": "2026-09-20",
-              "value": 40
+              "value": 40.3
             },
             {
               "date": "2026-09-21",
-              "value": 35
+              "value": 35.3
             },
             {
               "date": "2026-09-22",
-              "value": 39
+              "value": 39.3
             },
             {
               "date": "2026-09-23",
-              "value": 42
+              "value": 40.3
             },
             {
               "date": "2026-09-24",
-              "value": 40
+              "value": 40.3
             },
             {
               "date": "2026-09-25",
-              "value": 41
+              "value": 41.3
             },
             {
               "date": "2026-09-26",
-              "value": 43
+              "value": 43.3
             },
             {
               "date": "2026-09-27",
-              "value": 39
+              "value": 40.3
             },
             {
               "date": "2026-09-28",
-              "value": 39
+              "value": 38.3
             },
             {
               "date": "2026-09-29",
-              "value": 40
+              "value": 40.3
             },
             {
               "date": "2026-09-30",
-              "value": 37
+              "value": 36.3
             },
             {
               "date": "2026-10-01",
-              "value": 33
+              "value": 36.3
             }
           ],
           "rel": [
             {
               "date": "2026-09-01",
-              "value": 1.0829
+              "value": 1.1
             },
             {
               "date": "2026-09-02",
-              "value": 1.0654
+              "value": 1.0835
             },
             {
               "date": "2026-09-03",
-              "value": 1.0599
+              "value": 1.0713
             },
             {
               "date": "2026-09-04",
-              "value": 1.0619
+              "value": 1.0636
             },
             {
               "date": "2026-09-05",
-              "value": 0.9226
+              "value": 0.9495
             },
             {
               "date": "2026-09-06",
-              "value": 0.928
+              "value": 0.921
             },
             {
               "date": "2026-09-07",
-              "value": 1.0022
+              "value": 0.971
             },
             {
               "date": "2026-09-08",
-              "value": 0.9923
+              "value": 1.0192
             },
             {
               "date": "2026-09-09",
-              "value": 1.1471
+              "value": 1.1574
             },
             {
               "date": "2026-09-10",
-              "value": 1.0973
+              "value": 1.1194
             },
             {
               "date": "2026-09-11",
-              "value": 1.0738
+              "value": 1.0812
             },
             {
               "date": "2026-09-12",
-              "value": 0.913
+              "value": 0.8672
             },
             {
               "date": "2026-09-13",
-              "value": 0.8342
+              "value": 0.8738
             },
             {
               "date": "2026-09-14",
-              "value": 0.9085
+              "value": 0.9059
             },
             {
               "date": "2026-09-15",
-              "value": 0.9784
+              "value": 0.9624
             },
             {
               "date": "2026-09-16",
-              "value": 1.0501
+              "value": 1.0467
             },
             {
               "date": "2026-09-17",
-              "value": 1.0438
+              "value": 1.0682
             },
             {
               "date": "2026-09-18",
-              "value": 1.0304
+              "value": 1.0122
             },
             {
               "date": "2026-09-19",
-              "value": 0.9883
-            },
-            {
-              "date": "2026-09-20",
-              "value": 0.9072
-            },
-            {
-              "date": "2026-09-21",
-              "value": 1.0434
-            },
-            {
-              "date": "2026-09-22",
-              "value": 1.0779
-            },
-            {
-              "date": "2026-09-23",
-              "value": 1.1053
-            },
-            {
-              "date": "2026-09-24",
-              "value": 1.0654
-            },
-            {
-              "date": "2026-09-25",
-              "value": 1.0662
-            },
-            {
-              "date": "2026-09-26",
-              "value": 0.9404
-            },
-            {
-              "date": "2026-09-27",
-              "value": 0.8791
-            },
-            {
-              "date": "2026-09-28",
-              "value": 1.007
-            },
-            {
-              "date": "2026-09-29",
-              "value": 1.0476
-            },
-            {
-              "date": "2026-09-30",
               "value": 1.0278
             },
             {
+              "date": "2026-09-20",
+              "value": 0.9309
+            },
+            {
+              "date": "2026-09-21",
+              "value": 1.0668
+            },
+            {
+              "date": "2026-09-22",
+              "value": 1.1113
+            },
+            {
+              "date": "2026-09-23",
+              "value": 1.0628
+            },
+            {
+              "date": "2026-09-24",
+              "value": 1.0734
+            },
+            {
+              "date": "2026-09-25",
+              "value": 1.0735
+            },
+            {
+              "date": "2026-09-26",
+              "value": 0.9618
+            },
+            {
+              "date": "2026-09-27",
+              "value": 0.9099
+            },
+            {
+              "date": "2026-09-28",
+              "value": 0.9957
+            },
+            {
+              "date": "2026-09-29",
+              "value": 1.0552
+            },
+            {
+              "date": "2026-09-30",
+              "value": 1.0238
+            },
+            {
               "date": "2026-10-01",
-              "value": 0.9654
+              "value": 0.993
             }
           ]
         },
         {
           "brand": "The Row",
           "keyword": "the row bag",
-          "scale": 1.0004,
+          "scale": 1.0079,
           "series": [
             {
               "date": "2026-09-01",
-              "value": 1
+              "value": 2
             },
             {
               "date": "2026-09-02",
@@ -5237,7 +6512,7 @@
             },
             {
               "date": "2026-09-11",
-              "value": 1
+              "value": 2
             },
             {
               "date": "2026-09-12",
@@ -5323,71 +6598,71 @@
           "rel": [
             {
               "date": "2026-09-01",
-              "value": 0.0285
+              "value": 0.0574
             },
             {
               "date": "2026-09-02",
-              "value": 0.0533
+              "value": 0.0551
             },
             {
               "date": "2026-09-03",
-              "value": 0.0286
+              "value": 0.0287
             },
             {
               "date": "2026-09-04",
-              "value": 0.0272
+              "value": 0.0278
             },
             {
               "date": "2026-09-05",
-              "value": 0.0237
+              "value": 0.0242
             },
             {
               "date": "2026-09-06",
-              "value": 0.0453
+              "value": 0.0457
             },
             {
               "date": "2026-09-07",
-              "value": 0.0489
+              "value": 0.0494
             },
             {
               "date": "2026-09-08",
-              "value": 0.0284
+              "value": 0.0289
             },
             {
               "date": "2026-09-09",
-              "value": 0.0294
+              "value": 0.0287
             },
             {
               "date": "2026-09-10",
-              "value": 0.0274
+              "value": 0.0278
             },
             {
               "date": "2026-09-11",
-              "value": 0.0262
+              "value": 0.0537
             },
             {
               "date": "2026-09-12",
-              "value": 0.0445
+              "value": 0.043
             },
             {
               "date": "2026-09-13",
-              "value": 0.0388
+              "value": 0.0404
             },
             {
               "date": "2026-09-14",
-              "value": 0.0246
+              "value": 0.0243
             },
             {
               "date": "2026-09-15",
-              "value": 0.0264
+              "value": 0.0265
             },
             {
               "date": "2026-09-16",
-              "value": 0.0263
+              "value": 0.0266
             },
             {
               "date": "2026-09-17",
-              "value": 0.0268
+              "value": 0.0265
             },
             {
               "date": "2026-09-18",
@@ -5395,23 +6670,23 @@
             },
             {
               "date": "2026-09-19",
-              "value": 0.0215
+              "value": 0.0217
             },
             {
               "date": "2026-09-20",
-              "value": 0.0227
+              "value": 0.0231
             },
             {
               "date": "2026-09-21",
-              "value": 0.0298
+              "value": 0.0302
             },
             {
               "date": "2026-09-22",
-              "value": 0.0276
+              "value": 0.0283
             },
             {
               "date": "2026-09-23",
-              "value": 0.0263
+              "value": 0.0264
             },
             {
               "date": "2026-09-24",
@@ -5423,15 +6698,15 @@
             },
             {
               "date": "2026-09-26",
-              "value": 0.0437
+              "value": 0.0444
             },
             {
               "date": "2026-09-27",
-              "value": 0.0451
+              "value": 0.0452
             },
             {
               "date": "2026-09-28",
-              "value": 0.0258
+              "value": 0.026
             },
             {
               "date": "2026-09-29",
@@ -5439,532 +6714,532 @@
             },
             {
               "date": "2026-09-30",
-              "value": 0.0278
+              "value": 0.0282
             },
             {
               "date": "2026-10-01",
-              "value": 0.0293
+              "value": 0.0274
             }
           ]
         },
         {
           "brand": "Dior",
           "keyword": "dior",
-          "scale": 1.0004,
+          "scale": 1.0079,
           "series": [
             {
               "date": "2026-09-01",
-              "value": 52
+              "value": 51.4
             },
             {
               "date": "2026-09-02",
-              "value": 54
+              "value": 53.4
             },
             {
               "date": "2026-09-03",
-              "value": 51
+              "value": 50.4
             },
             {
               "date": "2026-09-04",
-              "value": 55
+              "value": 55.4
             },
             {
               "date": "2026-09-05",
-              "value": 61
+              "value": 61.5
             },
             {
               "date": "2026-09-06",
-              "value": 62
+              "value": 62.5
             },
             {
               "date": "2026-09-07",
-              "value": 61
+              "value": 63.5
             },
             {
               "date": "2026-09-08",
-              "value": 52
+              "value": 52.4
             },
             {
               "date": "2026-09-09",
-              "value": 50
+              "value": 51.4
             },
             {
               "date": "2026-09-10",
-              "value": 52
+              "value": 52.4
             },
             {
               "date": "2026-09-11",
-              "value": 56
+              "value": 55.4
             },
             {
               "date": "2026-09-12",
-              "value": 64
+              "value": 63.5
             },
             {
               "date": "2026-09-13",
-              "value": 65
+              "value": 62.5
             },
             {
               "date": "2026-09-14",
-              "value": 54
+              "value": 53.4
             },
             {
               "date": "2026-09-15",
-              "value": 53
+              "value": 51.4
             },
             {
               "date": "2026-09-16",
-              "value": 54
+              "value": 53.4
             },
             {
               "date": "2026-09-17",
-              "value": 55
+              "value": 55.4
             },
             {
               "date": "2026-09-18",
-              "value": 58
+              "value": 57.5
             },
             {
               "date": "2026-09-19",
-              "value": 66
+              "value": 68.5
             },
             {
               "date": "2026-09-20",
-              "value": 69
+              "value": 68.5
             },
             {
               "date": "2026-09-21",
-              "value": 53
+              "value": 51.4
             },
             {
               "date": "2026-09-22",
-              "value": 53
+              "value": 53.4
             },
             {
               "date": "2026-09-23",
-              "value": 55
+              "value": 54.4
             },
             {
               "date": "2026-09-24",
-              "value": 54
+              "value": 51.4
             },
             {
               "date": "2026-09-25",
-              "value": 56
+              "value": 57.5
             },
             {
               "date": "2026-09-26",
-              "value": 65
+              "value": 65.5
             },
             {
               "date": "2026-09-27",
-              "value": 65
+              "value": 62.5
             },
             {
               "date": "2026-09-28",
-              "value": 57
+              "value": 59.5
             },
             {
               "date": "2026-09-29",
-              "value": 58
+              "value": 59.5
             },
             {
               "date": "2026-09-30",
-              "value": 55
+              "value": 54.4
             },
             {
               "date": "2026-10-01",
-              "value": 51
+              "value": 59.5
             }
           ],
           "rel": [
             {
               "date": "2026-09-01",
-              "value": 1.4819
+              "value": 1.4762
             },
             {
               "date": "2026-09-02",
-              "value": 1.4383
+              "value": 1.4722
             },
             {
               "date": "2026-09-03",
-              "value": 1.4609
+              "value": 1.4475
             },
             {
               "date": "2026-09-04",
-              "value": 1.4975
+              "value": 1.5385
             },
             {
               "date": "2026-09-05",
-              "value": 1.443
+              "value": 1.4858
             },
             {
               "date": "2026-09-06",
-              "value": 1.4033
+              "value": 1.4284
             },
             {
               "date": "2026-09-07",
-              "value": 1.4911
+              "value": 1.569
             },
             {
               "date": "2026-09-08",
-              "value": 1.4742
+              "value": 1.5129
             },
             {
               "date": "2026-09-09",
-              "value": 1.4706
+              "value": 1.4762
             },
             {
               "date": "2026-09-10",
-              "value": 1.4264
+              "value": 1.4556
             },
             {
               "date": "2026-09-11",
-              "value": 1.4667
+              "value": 1.4863
             },
             {
               "date": "2026-09-12",
-              "value": 1.4251
+              "value": 1.3664
             },
             {
               "date": "2026-09-13",
-              "value": 1.261
+              "value": 1.2612
             },
             {
               "date": "2026-09-14",
-              "value": 1.3259
+              "value": 1.297
             },
             {
               "date": "2026-09-15",
-              "value": 1.4014
+              "value": 1.3627
             },
             {
               "date": "2026-09-16",
-              "value": 1.4177
+              "value": 1.4223
             },
             {
               "date": "2026-09-17",
-              "value": 1.472
+              "value": 1.4684
             },
             {
               "date": "2026-09-18",
-              "value": 1.4941
+              "value": 1.4809
             },
             {
               "date": "2026-09-19",
-              "value": 1.418
+              "value": 1.4853
             },
             {
               "date": "2026-09-20",
-              "value": 1.5649
+              "value": 1.5823
             },
             {
               "date": "2026-09-21",
-              "value": 1.5799
+              "value": 1.5533
             },
             {
               "date": "2026-09-22",
-              "value": 1.4648
+              "value": 1.51
             },
             {
               "date": "2026-09-23",
-              "value": 1.4474
+              "value": 1.4347
             },
             {
               "date": "2026-09-24",
-              "value": 1.4383
+              "value": 1.369
             },
             {
               "date": "2026-09-25",
-              "value": 1.4563
+              "value": 1.4946
             },
             {
               "date": "2026-09-26",
-              "value": 1.4215
+              "value": 1.455
             },
             {
               "date": "2026-09-27",
-              "value": 1.4652
+              "value": 1.4111
             },
             {
               "date": "2026-09-28",
-              "value": 1.4718
+              "value": 1.5469
             },
             {
               "date": "2026-09-29",
-              "value": 1.519
+              "value": 1.558
             },
             {
               "date": "2026-09-30",
-              "value": 1.5278
+              "value": 1.5344
             },
             {
               "date": "2026-10-01",
-              "value": 1.492
+              "value": 1.6277
             }
           ]
         },
         {
           "brand": "Prada",
           "keyword": "prada",
-          "scale": 1.0004,
+          "scale": 1.0079,
           "series": [
             {
               "date": "2026-09-01",
-              "value": 42
+              "value": 42.3
             },
             {
               "date": "2026-09-02",
-              "value": 45
+              "value": 44.3
             },
             {
               "date": "2026-09-03",
-              "value": 41
+              "value": 41.3
             },
             {
               "date": "2026-09-04",
-              "value": 45
+              "value": 45.4
             },
             {
               "date": "2026-09-05",
-              "value": 58
+              "value": 57.5
             },
             {
               "date": "2026-09-06",
-              "value": 59
+              "value": 58.5
             },
             {
               "date": "2026-09-07",
-              "value": 55
+              "value": 55.4
             },
             {
               "date": "2026-09-08",
-              "value": 44
+              "value": 43.3
             },
             {
               "date": "2026-09-09",
-              "value": 38
+              "value": 39.3
             },
             {
               "date": "2026-09-10",
-              "value": 43
+              "value": 43.3
             },
             {
               "date": "2026-09-11",
-              "value": 44
+              "value": 43.3
             },
             {
               "date": "2026-09-12",
-              "value": 55
+              "value": 54.4
             },
             {
               "date": "2026-09-13",
-              "value": 56
+              "value": 55.4
             },
             {
               "date": "2026-09-14",
-              "value": 44
+              "value": 43.3
             },
             {
               "date": "2026-09-15",
-              "value": 42
+              "value": 41.3
             },
             {
               "date": "2026-09-16",
-              "value": 41
+              "value": 40.3
             },
             {
               "date": "2026-09-17",
-              "value": 41
+              "value": 40.3
             },
             {
               "date": "2026-09-18",
-              "value": 43
+              "value": 43.3
             },
             {
               "date": "2026-09-19",
-              "value": 55
+              "value": 55.4
             },
             {
               "date": "2026-09-20",
-              "value": 50
+              "value": 49.4
             },
             {
               "date": "2026-09-21",
-              "value": 36
+              "value": 34.3
             },
             {
               "date": "2026-09-22",
-              "value": 42
+              "value": 41.3
             },
             {
               "date": "2026-09-23",
-              "value": 45
+              "value": 47.4
             },
             {
               "date": "2026-09-24",
-              "value": 45
+              "value": 43.3
             },
             {
               "date": "2026-09-25",
-              "value": 43
+              "value": 46.4
             },
             {
               "date": "2026-09-26",
-              "value": 55
+              "value": 53.4
             },
             {
               "date": "2026-09-27",
-              "value": 51
+              "value": 53.4
             },
             {
               "date": "2026-09-28",
-              "value": 43
+              "value": 44.3
             },
             {
               "date": "2026-09-29",
-              "value": 38
+              "value": 39.3
             },
             {
               "date": "2026-09-30",
-              "value": 39
+              "value": 38.3
             },
             {
               "date": "2026-10-01",
-              "value": 40
+              "value": 41.3
             }
           ],
           "rel": [
             {
               "date": "2026-09-01",
-              "value": 1.1969
+              "value": 1.2149
             },
             {
               "date": "2026-09-02",
-              "value": 1.1985
+              "value": 1.2213
             },
             {
               "date": "2026-09-03",
-              "value": 1.1745
+              "value": 1.1862
             },
             {
               "date": "2026-09-04",
-              "value": 1.2252
+              "value": 1.2608
             },
             {
               "date": "2026-09-05",
-              "value": 1.372
+              "value": 1.3892
             },
             {
               "date": "2026-09-06",
-              "value": 1.3354
+              "value": 1.337
             },
             {
               "date": "2026-09-07",
-              "value": 1.3444
+              "value": 1.3688
             },
             {
               "date": "2026-09-08",
-              "value": 1.2474
+              "value": 1.2501
             },
             {
               "date": "2026-09-09",
-              "value": 1.1176
+              "value": 1.1287
             },
             {
               "date": "2026-09-10",
-              "value": 1.1796
-            },
-            {
-              "date": "2026-09-11",
-              "value": 1.1524
-            },
-            {
-              "date": "2026-09-12",
-              "value": 1.2247
-            },
-            {
-              "date": "2026-09-13",
-              "value": 1.0864
-            },
-            {
-              "date": "2026-09-14",
-              "value": 1.0804
-            },
-            {
-              "date": "2026-09-15",
-              "value": 1.1106
-            },
-            {
-              "date": "2026-09-16",
-              "value": 1.0764
-            },
-            {
-              "date": "2026-09-17",
-              "value": 1.0973
-            },
-            {
-              "date": "2026-09-18",
-              "value": 1.1077
-            },
-            {
-              "date": "2026-09-19",
-              "value": 1.1816
-            },
-            {
-              "date": "2026-09-20",
-              "value": 1.134
-            },
-            {
-              "date": "2026-09-21",
-              "value": 1.0732
-            },
-            {
-              "date": "2026-09-22",
-              "value": 1.1608
-            },
-            {
-              "date": "2026-09-23",
-              "value": 1.1842
-            },
-            {
-              "date": "2026-09-24",
-              "value": 1.1985
-            },
-            {
-              "date": "2026-09-25",
-              "value": 1.1182
-            },
-            {
-              "date": "2026-09-26",
               "value": 1.2028
             },
             {
+              "date": "2026-09-11",
+              "value": 1.1617
+            },
+            {
+              "date": "2026-09-12",
+              "value": 1.1706
+            },
+            {
+              "date": "2026-09-13",
+              "value": 1.118
+            },
+            {
+              "date": "2026-09-14",
+              "value": 1.0517
+            },
+            {
+              "date": "2026-09-15",
+              "value": 1.095
+            },
+            {
+              "date": "2026-09-16",
+              "value": 1.0734
+            },
+            {
+              "date": "2026-09-17",
+              "value": 1.0682
+            },
+            {
+              "date": "2026-09-18",
+              "value": 1.1152
+            },
+            {
+              "date": "2026-09-19",
+              "value": 1.2013
+            },
+            {
+              "date": "2026-09-20",
+              "value": 1.1411
+            },
+            {
+              "date": "2026-09-21",
+              "value": 1.0365
+            },
+            {
+              "date": "2026-09-22",
+              "value": 1.1679
+            },
+            {
+              "date": "2026-09-23",
+              "value": 1.2501
+            },
+            {
+              "date": "2026-09-24",
+              "value": 1.1533
+            },
+            {
+              "date": "2026-09-25",
+              "value": 1.206
+            },
+            {
+              "date": "2026-09-26",
+              "value": 1.1862
+            },
+            {
               "date": "2026-09-27",
-              "value": 1.1496
+              "value": 1.2057
             },
             {
               "date": "2026-09-28",
-              "value": 1.1103
+              "value": 1.1517
             },
             {
               "date": "2026-09-29",
-              "value": 0.9952
+              "value": 1.029
             },
             {
               "date": "2026-09-30",
-              "value": 1.0833
+              "value": 1.0803
             },
             {
               "date": "2026-10-01",
-              "value": 1.1702
+              "value": 1.1298
             }
           ]
         },
         {
           "brand": "Bottega Veneta",
           "keyword": "bottega veneta",
-          "scale": 1,
+          "scale": 0.9988,
           "series": [
             {
               "date": "2026-09-01",
@@ -5984,7 +7259,7 @@
             },
             {
               "date": "2026-09-05",
-              "value": 7
+              "value": 6
             },
             {
               "date": "2026-09-06",
@@ -6020,7 +7295,7 @@
             },
             {
               "date": "2026-09-14",
-              "value": 6
+              "value": 5
             },
             {
               "date": "2026-09-15",
@@ -6040,7 +7315,7 @@
             },
             {
               "date": "2026-09-19",
-              "value": 7
+              "value": 6
             },
             {
               "date": "2026-09-20",
@@ -6084,105 +7359,105 @@
             },
             {
               "date": "2026-09-30",
-              "value": 5
+              "value": 6
             },
             {
               "date": "2026-10-01",
-              "value": 4
+              "value": 5
             }
           ],
           "rel": [
             {
               "date": "2026-09-01",
-              "value": 0.171
+              "value": 0.1723
             },
             {
               "date": "2026-09-02",
-              "value": 0.1864
+              "value": 0.193
             },
             {
               "date": "2026-09-03",
-              "value": 0.1719
+              "value": 0.1723
             },
             {
               "date": "2026-09-04",
-              "value": 0.1906
+              "value": 0.1944
             },
             {
               "date": "2026-09-05",
-              "value": 0.1656
+              "value": 0.145
             },
             {
               "date": "2026-09-06",
-              "value": 0.1584
+              "value": 0.16
             },
             {
               "date": "2026-09-07",
-              "value": 0.1956
+              "value": 0.1977
             },
             {
               "date": "2026-09-08",
-              "value": 0.1985
+              "value": 0.2021
             },
             {
               "date": "2026-09-09",
-              "value": 0.1765
+              "value": 0.1723
             },
             {
               "date": "2026-09-10",
-              "value": 0.1646
+              "value": 0.1667
             },
             {
               "date": "2026-09-11",
-              "value": 0.1833
+              "value": 0.1878
             },
             {
               "date": "2026-09-12",
-              "value": 0.1559
+              "value": 0.1506
             },
             {
               "date": "2026-09-13",
-              "value": 0.1552
+              "value": 0.1614
             },
             {
               "date": "2026-09-14",
-              "value": 0.1473
+              "value": 0.1214
             },
             {
               "date": "2026-09-15",
-              "value": 0.1587
+              "value": 0.1591
             },
             {
               "date": "2026-09-16",
-              "value": 0.1575
+              "value": 0.1598
             },
             {
               "date": "2026-09-17",
-              "value": 0.1606
+              "value": 0.159
             },
             {
               "date": "2026-09-18",
-              "value": 0.1546
+              "value": 0.1545
             },
             {
               "date": "2026-09-19",
-              "value": 0.1504
+              "value": 0.1301
             },
             {
               "date": "2026-09-20",
-              "value": 0.1361
+              "value": 0.1386
             },
             {
               "date": "2026-09-21",
-              "value": 0.1491
+              "value": 0.1511
             },
             {
               "date": "2026-09-22",
-              "value": 0.1658
+              "value": 0.1697
             },
             {
               "date": "2026-09-23",
-              "value": 0.1316
+              "value": 0.1319
             },
             {
               "date": "2026-09-24",
@@ -6194,15 +7469,15 @@
             },
             {
               "date": "2026-09-26",
-              "value": 0.1531
+              "value": 0.1555
             },
             {
               "date": "2026-09-27",
-              "value": 0.1803
+              "value": 0.1806
             },
             {
               "date": "2026-09-28",
-              "value": 0.1549
+              "value": 0.156
             },
             {
               "date": "2026-09-29",
@@ -6210,18 +7485,18 @@
             },
             {
               "date": "2026-09-30",
-              "value": 0.1389
+              "value": 0.1692
             },
             {
               "date": "2026-10-01",
-              "value": 0.117
+              "value": 0.1368
             }
           ]
         },
         {
           "brand": "Celine",
           "keyword": "celine",
-          "scale": 1,
+          "scale": 0.9988,
           "series": [
             {
               "date": "2026-09-01",
@@ -6233,7 +7508,7 @@
             },
             {
               "date": "2026-09-03",
-              "value": 21
+              "value": 20
             },
             {
               "date": "2026-09-04",
@@ -6261,7 +7536,7 @@
             },
             {
               "date": "2026-09-10",
-              "value": 30
+              "value": 29
             },
             {
               "date": "2026-09-11",
@@ -6273,15 +7548,15 @@
             },
             {
               "date": "2026-09-13",
-              "value": 94
+              "value": 94.9
             },
             {
               "date": "2026-09-14",
-              "value": 73
+              "value": 73.9
             },
             {
               "date": "2026-09-15",
-              "value": 43
+              "value": 41.9
             },
             {
               "date": "2026-09-16",
@@ -6289,15 +7564,15 @@
             },
             {
               "date": "2026-09-17",
-              "value": 31
-            },
-            {
-              "date": "2026-09-18",
               "value": 30
             },
             {
+              "date": "2026-09-18",
+              "value": 29
+            },
+            {
               "date": "2026-09-19",
-              "value": 37
+              "value": 36
             },
             {
               "date": "2026-09-20",
@@ -6305,7 +7580,7 @@
             },
             {
               "date": "2026-09-21",
-              "value": 21
+              "value": 20
             },
             {
               "date": "2026-09-22",
@@ -6321,7 +7596,7 @@
             },
             {
               "date": "2026-09-25",
-              "value": 24
+              "value": 23
             },
             {
               "date": "2026-09-26",
@@ -6329,11 +7604,11 @@
             },
             {
               "date": "2026-09-27",
-              "value": 28
+              "value": 27
             },
             {
               "date": "2026-09-28",
-              "value": 23
+              "value": 22
             },
             {
               "date": "2026-09-29",
@@ -6341,105 +7616,105 @@
             },
             {
               "date": "2026-09-30",
-              "value": 21
+              "value": 20
             },
             {
               "date": "2026-10-01",
-              "value": 21
+              "value": 23
             }
           ],
           "rel": [
             {
               "date": "2026-09-01",
-              "value": 0.4845
+              "value": 0.4883
             },
             {
               "date": "2026-09-02",
-              "value": 0.6126
+              "value": 0.6341
             },
             {
               "date": "2026-09-03",
-              "value": 0.6016
+              "value": 0.5744
             },
             {
               "date": "2026-09-04",
-              "value": 0.5173
+              "value": 0.5276
             },
             {
               "date": "2026-09-05",
-              "value": 0.5441
+              "value": 0.5557
             },
             {
               "date": "2026-09-06",
-              "value": 0.5432
+              "value": 0.5485
             },
             {
               "date": "2026-09-07",
-              "value": 0.5622
+              "value": 0.5683
             },
             {
               "date": "2026-09-08",
-              "value": 0.5103
+              "value": 0.5197
             },
             {
               "date": "2026-09-09",
-              "value": 0.5588
+              "value": 0.5457
             },
             {
               "date": "2026-09-10",
-              "value": 0.8229
+              "value": 0.8056
             },
             {
               "date": "2026-09-11",
-              "value": 0.6548
+              "value": 0.6707
             },
             {
               "date": "2026-09-12",
-              "value": 0.8462
+              "value": 0.8177
             },
             {
               "date": "2026-09-13",
-              "value": 1.8236
+              "value": 1.9151
             },
             {
               "date": "2026-09-14",
-              "value": 1.7924
+              "value": 1.7949
             },
             {
               "date": "2026-09-15",
-              "value": 1.137
+              "value": 1.1109
             },
             {
               "date": "2026-09-16",
-              "value": 0.8663
+              "value": 0.8789
             },
             {
               "date": "2026-09-17",
-              "value": 0.8297
+              "value": 0.7952
             },
             {
               "date": "2026-09-18",
-              "value": 0.7728
+              "value": 0.7469
             },
             {
               "date": "2026-09-19",
-              "value": 0.7949
+              "value": 0.7806
             },
             {
               "date": "2026-09-20",
-              "value": 0.6351
+              "value": 0.6468
             },
             {
               "date": "2026-09-21",
-              "value": 0.626
+              "value": 0.6044
             },
             {
               "date": "2026-09-22",
-              "value": 0.5804
+              "value": 0.5938
             },
             {
               "date": "2026-09-23",
-              "value": 0.6053
+              "value": 0.6066
             },
             {
               "date": "2026-09-24",
@@ -6447,31 +7722,31 @@
             },
             {
               "date": "2026-09-25",
-              "value": 0.6241
+              "value": 0.5978
             },
             {
               "date": "2026-09-26",
-              "value": 0.6342
+              "value": 0.6442
             },
             {
               "date": "2026-09-27",
-              "value": 0.6311
+              "value": 0.6096
             },
             {
               "date": "2026-09-28",
-              "value": 0.5939
+              "value": 0.572
             },
             {
               "date": "2026-09-29",
-              "value": 0.6024
+              "value": 0.6022
             },
             {
               "date": "2026-09-30",
-              "value": 0.5833
+              "value": 0.5641
             },
             {
               "date": "2026-10-01",
-              "value": 0.6144
+              "value": 0.6292
             }
           ]
         }
