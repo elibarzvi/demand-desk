@@ -1,8 +1,21 @@
 {
-  "generatedAt": "2026-10-06T15:14:33.757Z",
+  "generatedAt": "2026-10-06T19:40:14.766Z",
   "date": "2026-10-06",
-  "count": 24,
+  "count": 28,
   "alerts": [
+    {
+      "date": "2026-10-06",
+      "type": "breakout",
+      "severity": "high",
+      "series": "fp.medianPrice",
+      "metric": "Fashionphile median price",
+      "brand": "Cartier",
+      "value": 2495,
+      "z": 3.24,
+      "baseline": 2315,
+      "changePct": 7.78,
+      "message": "Cartier Fashionphile median price at 2495 is +7.78% vs its 41-day normal of 2315 (z=3.24)."
+    },
     {
       "date": "2026-10-06",
       "type": "breakout",
@@ -10,11 +23,11 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Hermès",
-      "value": 1206,
-      "z": -3.28,
+      "value": 1208,
+      "z": -3.2,
       "baseline": 1293.5,
-      "changePct": -6.76,
-      "message": "Hermès Fashionphile listings (tracked segment) at 1206 is -6.76% vs its 41-day normal of 1293.5 (z=-3.28)."
+      "changePct": -6.61,
+      "message": "Hermès Fashionphile listings (tracked segment) at 1208 is -6.61% vs its 41-day normal of 1293.5 (z=-3.2)."
     },
     {
       "date": "2026-10-06",
@@ -25,19 +38,6 @@
       "unchangedDays": 13,
       "lastChanged": "2026-09-23",
       "message": "Source \"stockx_goyard\" has returned identical data for 13 consecutive days (last change 2026-09-23)."
-    },
-    {
-      "date": "2026-10-06",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "fp.listings",
-      "metric": "Fashionphile listings (tracked segment)",
-      "brand": "Bottega Veneta",
-      "value": 493,
-      "z": -2.98,
-      "baseline": 568,
-      "changePct": -13.2,
-      "message": "Bottega Veneta Fashionphile listings (tracked segment) at 493 is -13.2% vs its 28-day normal of 568 (z=-2.98)."
     },
     {
       "date": "2026-10-06",
@@ -56,14 +56,40 @@
       "date": "2026-10-06",
       "type": "breakout",
       "severity": "medium",
-      "series": "fp.medianPrice",
-      "metric": "Fashionphile median price",
-      "brand": "Cartier",
-      "value": 2465,
-      "z": 2.7,
-      "baseline": 2315,
-      "changePct": 6.48,
-      "message": "Cartier Fashionphile median price at 2465 is +6.48% vs its 41-day normal of 2315 (z=2.7)."
+      "series": "fp.listings",
+      "metric": "Fashionphile listings (tracked segment)",
+      "brand": "Bottega Veneta",
+      "value": 497,
+      "z": -2.82,
+      "baseline": 568,
+      "changePct": -12.5,
+      "message": "Bottega Veneta Fashionphile listings (tracked segment) at 497 is -12.5% vs its 28-day normal of 568 (z=-2.82)."
+    },
+    {
+      "date": "2026-10-06",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "fp.listings",
+      "metric": "Fashionphile listings (tracked segment)",
+      "brand": "The Row",
+      "value": 133,
+      "z": -2.59,
+      "baseline": 144.5,
+      "changePct": -7.96,
+      "message": "The Row Fashionphile listings (tracked segment) at 133 is -7.96% vs its 41-day normal of 144.5 (z=-2.59)."
+    },
+    {
+      "date": "2026-10-06",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "The Row",
+      "value": 136,
+      "z": -2.47,
+      "baseline": 147,
+      "changePct": -7.48,
+      "message": "The Row Fashionphile listings (all categories) at 136 is -7.48% vs its 64-day normal of 147 (z=-2.47)."
     },
     {
       "date": "2026-10-06",
@@ -72,11 +98,11 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Chanel",
-      "value": 5939,
-      "z": -2.56,
+      "value": 5966,
+      "z": -2.45,
       "baseline": 6571,
-      "changePct": -9.62,
-      "message": "Chanel Fashionphile listings (all categories) at 5939 is -9.62% vs its 64-day normal of 6571 (z=-2.56)."
+      "changePct": -9.21,
+      "message": "Chanel Fashionphile listings (all categories) at 5966 is -9.21% vs its 64-day normal of 6571 (z=-2.45)."
     },
     {
       "date": "2026-10-06",
@@ -85,24 +111,11 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Prada",
-      "value": 466,
-      "z": -2.53,
+      "value": 472,
+      "z": -2.33,
       "baseline": 541,
-      "changePct": -13.86,
-      "message": "Prada Fashionphile listings (tracked segment) at 466 is -13.86% vs its 28-day normal of 541 (z=-2.53)."
-    },
-    {
-      "date": "2026-10-06",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "fp.listings",
-      "metric": "Fashionphile listings (tracked segment)",
-      "brand": "The Row",
-      "value": 134,
-      "z": -2.36,
-      "baseline": 144.5,
-      "changePct": -7.27,
-      "message": "The Row Fashionphile listings (tracked segment) at 134 is -7.27% vs its 41-day normal of 144.5 (z=-2.36)."
+      "changePct": -12.75,
+      "message": "Prada Fashionphile listings (tracked segment) at 472 is -12.75% vs its 28-day normal of 541 (z=-2.33)."
     },
     {
       "date": "2026-10-06",
@@ -111,24 +124,11 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Hermès",
-      "value": 2537,
-      "z": -2.25,
+      "value": 2539,
+      "z": -2.22,
       "baseline": 2679,
-      "changePct": -5.3,
-      "message": "Hermès Fashionphile listings (all categories) at 2537 is -5.3% vs its 64-day normal of 2679 (z=-2.25)."
-    },
-    {
-      "date": "2026-10-06",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "fp.listingsAll",
-      "metric": "Fashionphile listings (all categories)",
-      "brand": "The Row",
-      "value": 137,
-      "z": -2.25,
-      "baseline": 147,
-      "changePct": -6.8,
-      "message": "The Row Fashionphile listings (all categories) at 137 is -6.8% vs its 64-day normal of 147 (z=-2.25)."
+      "changePct": -5.23,
+      "message": "Hermès Fashionphile listings (all categories) at 2539 is -5.23% vs its 64-day normal of 2679 (z=-2.22)."
     },
     {
       "date": "2026-10-06",
@@ -137,24 +137,11 @@
       "series": "fp.p90Price",
       "metric": "Fashionphile 90th-pct price",
       "brand": "Bottega Veneta",
-      "value": 3435,
-      "z": -2.23,
+      "value": 3450,
+      "z": -2.02,
       "baseline": 3595,
-      "changePct": -4.45,
-      "message": "Bottega Veneta Fashionphile 90th-pct price at 3435 is -4.45% vs its 28-day normal of 3595 (z=-2.23)."
-    },
-    {
-      "date": "2026-10-06",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "fp.listingsAll",
-      "metric": "Fashionphile listings (all categories)",
-      "brand": "Bottega Veneta",
-      "value": 587,
-      "z": -2.05,
-      "baseline": 666,
-      "changePct": -11.86,
-      "message": "Bottega Veneta Fashionphile listings (all categories) at 587 is -11.86% vs its 28-day normal of 666 (z=-2.05)."
+      "changePct": -4.03,
+      "message": "Bottega Veneta Fashionphile 90th-pct price at 3450 is -4.03% vs its 28-day normal of 3595 (z=-2.02)."
     },
     {
       "date": "2026-10-06",
@@ -170,12 +157,56 @@
       "date": "2026-10-06",
       "type": "weekly-move",
       "severity": "medium",
+      "series": "fp.turnover",
+      "metric": "Daily sell-through %",
+      "brand": "Dior",
+      "value": 2.1,
+      "wowPct": -51.16,
+      "message": "Dior Daily sell-through % moved -51.16% in 7 days to 2.1."
+    },
+    {
+      "date": "2026-10-06",
+      "type": "weekly-move",
+      "severity": "medium",
+      "series": "fp.turnover",
+      "metric": "Daily sell-through %",
+      "brand": "The Row",
+      "value": 2.46,
+      "wowPct": 59.74,
+      "message": "The Row Daily sell-through % moved +59.74% in 7 days to 2.46."
+    },
+    {
+      "date": "2026-10-06",
+      "type": "weekly-move",
+      "severity": "medium",
+      "series": "fp.turnover",
+      "metric": "Daily sell-through %",
+      "brand": "Bottega Veneta",
+      "value": 3.08,
+      "wowPct": -42.43,
+      "message": "Bottega Veneta Daily sell-through % moved -42.43% in 7 days to 3.08."
+    },
+    {
+      "date": "2026-10-06",
+      "type": "weekly-move",
+      "severity": "medium",
+      "series": "fp.turnover",
+      "metric": "Daily sell-through %",
+      "brand": "Celine",
+      "value": 3.78,
+      "wowPct": 34.04,
+      "message": "Celine Daily sell-through % moved +34.04% in 7 days to 3.78."
+    },
+    {
+      "date": "2026-10-06",
+      "type": "weekly-move",
+      "severity": "medium",
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Hermès",
-      "value": 56,
-      "wowPct": 107.41,
-      "message": "Hermès Median days to sell moved +107.41% in 7 days to 56."
+      "value": 45,
+      "wowPct": 66.67,
+      "message": "Hermès Median days to sell moved +66.67% in 7 days to 45."
     },
     {
       "date": "2026-10-06",
@@ -184,9 +215,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Chanel",
-      "value": 67,
-      "wowPct": 71.79,
-      "message": "Chanel Median days to sell moved +71.79% in 7 days to 67."
+      "value": 62,
+      "wowPct": 58.97,
+      "message": "Chanel Median days to sell moved +58.97% in 7 days to 62."
     },
     {
       "date": "2026-10-06",
@@ -195,9 +226,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Goyard",
-      "value": 42,
-      "wowPct": 180,
-      "message": "Goyard Median days to sell moved +180% in 7 days to 42."
+      "value": 39,
+      "wowPct": 160,
+      "message": "Goyard Median days to sell moved +160% in 7 days to 39."
     },
     {
       "date": "2026-10-06",
@@ -206,9 +237,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "The Row",
-      "value": 39,
-      "wowPct": -58.95,
-      "message": "The Row Median days to sell moved -58.95% in 7 days to 39."
+      "value": 35,
+      "wowPct": -63.16,
+      "message": "The Row Median days to sell moved -63.16% in 7 days to 35."
     },
     {
       "date": "2026-10-06",
@@ -228,9 +259,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Prada",
-      "value": 26,
-      "wowPct": 62.5,
-      "message": "Prada Median days to sell moved +62.5% in 7 days to 26."
+      "value": 25,
+      "wowPct": 56.25,
+      "message": "Prada Median days to sell moved +56.25% in 7 days to 25."
     },
     {
       "date": "2026-10-06",
@@ -239,9 +270,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Bottega Veneta",
-      "value": 23,
-      "wowPct": -62.9,
-      "message": "Bottega Veneta Median days to sell moved -62.9% in 7 days to 23."
+      "value": 33,
+      "wowPct": -46.77,
+      "message": "Bottega Veneta Median days to sell moved -46.77% in 7 days to 33."
     },
     {
       "date": "2026-10-06",
@@ -256,36 +287,47 @@
     },
     {
       "date": "2026-10-06",
-      "type": "systemic",
-      "severity": "medium",
-      "series": "fp.turnover",
-      "brand": null,
-      "metric": "Daily sell-through %",
-      "affected": 12,
-      "of": 11,
-      "message": "Daily sell-through % fell across 12 of 11 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 12 separate market events."
-    },
-    {
-      "date": "2026-10-06",
       "type": "streak",
       "severity": "low",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Dior",
-      "value": 1.5395,
-      "streak": 4,
-      "message": "Dior Google Trends relative interest has risen 4 days straight to 1.5395."
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Bottega Veneta",
+      "value": 591,
+      "streak": -4,
+      "message": "Bottega Veneta Fashionphile listings (all categories) has fallen 4 days straight to 591."
     },
     {
       "date": "2026-10-06",
       "type": "weekly-move",
       "severity": "low",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Prada",
-      "value": 1.2415,
-      "wowPct": 20.2,
-      "message": "Prada Google Trends relative interest moved +20.2% in 7 days to 1.2415."
+      "series": "fp.turnover",
+      "metric": "Daily sell-through %",
+      "brand": "Chanel",
+      "value": 3.01,
+      "wowPct": -19.09,
+      "message": "Chanel Daily sell-through % moved -19.09% in 7 days to 3.01."
+    },
+    {
+      "date": "2026-10-06",
+      "type": "weekly-move",
+      "severity": "low",
+      "series": "fp.turnover",
+      "metric": "Daily sell-through %",
+      "brand": "Louis Vuitton",
+      "value": 2.16,
+      "wowPct": -22.86,
+      "message": "Louis Vuitton Daily sell-through % moved -22.86% in 7 days to 2.16."
+    },
+    {
+      "date": "2026-10-06",
+      "type": "weekly-move",
+      "severity": "low",
+      "series": "fp.turnover",
+      "metric": "Daily sell-through %",
+      "brand": "Cartier",
+      "value": 4.26,
+      "wowPct": -20.22,
+      "message": "Cartier Daily sell-through % moved -20.22% in 7 days to 4.26."
     }
   ]
 }
