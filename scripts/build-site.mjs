@@ -46,10 +46,11 @@ function build() {
   // by scripts/derive.mjs. Copy it in if present so the dashboard can show what is
   // unusual today rather than only what today's raw numbers are.
   const derivedDir = path.join(ROOT, 'data', 'derived');
-  for (const name of ['metrics.json', 'alerts.json']) {
+  const EMPTY = { 'alerts.json': { alerts: [] }, 'overdue.json': { items: [] }, 'metrics.json': { metrics: {}, signals: [] } };
+  for (const name of ['metrics.json', 'alerts.json', 'overdue.json']) {
     const src = path.join(derivedDir, name);
     if (fs.existsSync(src)) fs.cpSync(src, path.join(SITE_DATA_DIR, name));
-    else writeFile(path.join(SITE_DATA_DIR, name), JSON.stringify(name === 'alerts.json' ? { alerts: [] } : { metrics: {}, signals: [] }) + '\n');
+    else writeFile(path.join(SITE_DATA_DIR, name), JSON.stringify(EMPTY[name]) + '\n');
   }
 
   // Fallback copies for the listings page, which normally reads these live from

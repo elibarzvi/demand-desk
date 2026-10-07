@@ -50,7 +50,12 @@ concurrency:
 
 jobs:
   capture:
-    runs-on: ubuntu-latest
+    # Pinned rather than ubuntu-latest. GitHub migrates that label to Ubuntu 26
+    # from 2026-10-19, and the capture installs Chromium through apt, a step that
+    # already broke once on 2026-09-09 and is allowed to fail so the rest of the
+    # day survives. An OS bump arriving on GitHub's schedule would therefore
+    # degrade StockX silently. Bump this deliberately instead.
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -107,6 +112,14 @@ jobs:
 
       - name: Derive metrics, signals and alerts
         run: npm run derive
+
+      # Separate from derive because it reads the live SKU state as well as the
+      # snapshot log, and calls Algolia to resolve titles and today's asking
+      # price. Allowed to fail: a missing overdue list is a lost feature for the
+      # day, not a lost day of statistics.
+      - name: Rank overdue listings
+        run: npm run overdue
+        continue-on-error: true
 
       # Runs before the commit so it can diff today's alerts against the version
       # still at HEAD, which is how it tells a new condition from an ongoing one.

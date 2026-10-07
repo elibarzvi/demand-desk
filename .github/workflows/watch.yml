@@ -32,7 +32,12 @@ concurrency:
 
 jobs:
   watch:
-    runs-on: ubuntu-latest
+    # Pinned rather than ubuntu-latest. GitHub migrates that label to Ubuntu 26
+    # from 2026-10-19, and the capture installs Chromium through apt, a step that
+    # already broke once on 2026-09-09 and is allowed to fail so the rest of the
+    # day survives. An OS bump arriving on GitHub's schedule would therefore
+    # degrade StockX silently. Bump this deliberately instead.
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4

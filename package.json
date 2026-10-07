@@ -12,12 +12,13 @@
     "digest": "node scripts/digest.mjs",
     "build": "node scripts/build-site.mjs",
     "bundle": "node scripts/bundle.mjs",
-    "all": "npm run scrape && npm run export && npm run derive && npm run build && npm run bundle",
+    "all": "npm run scrape && npm run export && npm run derive && npm run overdue && npm run build && npm run bundle",
     "serve": "node scripts/serve.mjs",
     "probe:ebay": "node scripts/probe-ebay.mjs",
     "watch": "node scripts/watch.mjs",
     "probe:ebay-scopes": "node scripts/probe-ebay-scopes.mjs",
-    "test": "node test/watchlist.test.mjs"
+    "test": "node test/watchlist.test.mjs && node test/clearing.test.mjs",
+    "overdue": "node scripts/overdue.mjs"
   },
   "dependencies": {
     "playwright": "^1.48.0"
