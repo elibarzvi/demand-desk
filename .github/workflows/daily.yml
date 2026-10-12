@@ -97,6 +97,7 @@ jobs:
         env:
           EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
           EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
+          SITE_URL: ${{ vars.SITE_URL }}
 
       - name: Capture today's snapshot
         if: github.event_name != 'push'
@@ -130,6 +131,7 @@ jobs:
         run: npm run notify ${{ inputs.notify_test && '-- --test' || '' }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SITE_URL: ${{ vars.SITE_URL }}
 
       # Runs unconditionally; the script itself gates to Mondays, so the schedule
       # stays in one place instead of being split between cron and code.
@@ -138,6 +140,7 @@ jobs:
         run: npm run digest ${{ inputs.digest_test && '-- --force' || '' }}
         env:
           SLACK_DIGEST_WEBHOOK_URL: ${{ secrets.SLACK_DIGEST_WEBHOOK_URL }}
+          SITE_URL: ${{ vars.SITE_URL }}
 
       - name: Commit snapshot + exports (permanent log)
         if: github.event_name != 'push'
@@ -171,6 +174,18 @@ jobs:
 
       - name: Bundle full dataset (ZIP)
         run: npm run bundle
+
+      # The byraph internal hub's copy of the site (Netlify, behind the hub login). Runs only once the
+      # NETLIFY_AUTH_TOKEN secret and NETLIFY_SITE_ID variable exist, and can never block the Pages
+      # deploy below.
+      - name: Deploy to Netlify (behind the byraph hub login)
+        continue-on-error: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
+        run: |
+          if [ -z "$NETLIFY_AUTH_TOKEN" ] || [ -z "$NETLIFY_SITE_ID" ]; then echo "Netlify not set up yet; skipping"; exit 0; fi
+          npx --yes netlify-cli@latest deploy --prod --dir site --site "$NETLIFY_SITE_ID" --message "daily $(date -u +%F)"
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

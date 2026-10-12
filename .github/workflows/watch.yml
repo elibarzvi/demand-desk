@@ -55,6 +55,7 @@ jobs:
           EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
           SLACK_WATCH_WEBHOOK_URL: ${{ secrets.SLACK_WATCH_WEBHOOK_URL }}
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SITE_URL: ${{ vars.SITE_URL }}
 
       # Same race the daily capture has: both jobs commit to main. Rebase and
       # retry rather than fail. This job only ever changes its own state file, so

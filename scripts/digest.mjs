@@ -13,7 +13,9 @@ import path from 'node:path';
 import { ROOT, readAllSnapshots, latestSnapshot } from '../src/lib/util.mjs';
 import { buildAnalytics } from '../src/lib/analytics.mjs';
 
-const SITE = 'https://elibarzvi.github.io/demand-desk/';
+// The repo variable SITE_URL points Slack links at the site's current home (the byraph hub's
+// Netlify copy once it moves); unset, it stays on GitHub Pages.
+const SITE = process.env.SITE_URL || 'https://elibarzvi.github.io/demand-desk/';
 const SENT_FILE = path.join(ROOT, 'data', 'state', 'digest-sent.json');
 
 const money = n => '$' + Number(n).toLocaleString('en-US');

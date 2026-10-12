@@ -27,7 +27,9 @@ const reasonOf = f => f.verdict === 'over-cap'
   ? 'asks above the credibility cap'
   : (f.concerns || []).join(', ') || f.verdict;
 
-const SITE = 'https://elibarzvi.github.io/demand-desk/';
+// The repo variable SITE_URL points Slack links at the site's current home (the byraph hub's
+// Netlify copy once it moves); unset, it stays on GitHub Pages.
+const SITE = process.env.SITE_URL || 'https://elibarzvi.github.io/demand-desk/';
 const money = n => n == null ? '?' : '$' + Math.round(Number(n)).toLocaleString('en-US');
 const MAX_CHECKS = 40;   // bound the per-run lookups for listings that went missing
 

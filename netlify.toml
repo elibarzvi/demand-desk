@@ -1,0 +1,12 @@
+# Netlify copy of the Demand Desk (byraph internal hub). GitHub Actions builds site/ and deploys it;
+# Netlify runs no build. The gate in netlify/edge-functions/gate.js requires the hub login.
+[build]
+  publish = "site"
+  command = ""
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "no-referrer"

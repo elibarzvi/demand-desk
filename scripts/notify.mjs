@@ -15,7 +15,9 @@ import zlib from 'node:zlib';
 import { ROOT, latestSnapshot, previousSnapshot } from '../src/lib/util.mjs';
 
 const DERIVED = path.join(ROOT, 'data', 'derived');
-const SITE = 'https://elibarzvi.github.io/demand-desk/';
+// The repo variable SITE_URL points Slack links at the site's current home (the byraph hub's
+// Netlify copy once it moves); unset, it stays on GitHub Pages.
+const SITE = process.env.SITE_URL || 'https://elibarzvi.github.io/demand-desk/';
 
 // Sources that sit still by design. Mirror is an editorial feed and search volume
 // is a monthly figure refreshed weekly, so both would otherwise fire a
