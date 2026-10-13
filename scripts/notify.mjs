@@ -13,7 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
 import { ROOT, latestSnapshot, previousSnapshot } from '../src/lib/util.mjs';
-import { header, section, context, divider, message, post } from '../src/lib/slack.mjs';
+import { section, context, message, post } from '../src/lib/slack.mjs';
 
 const DERIVED = path.join(ROOT, 'data', 'derived');
 // The repo variable SITE_URL points Slack links at the site's current home (the byraph hub's
@@ -168,17 +168,19 @@ async function main() {
   if (!payload) { console.log('[notify] nothing notable today, staying silent'); return; }
   if (!hook) { console.log(`[notify] SLACK_WEBHOOK_URL not set, would have sent:\n  ${payload.lines.join('\n  ')}`); return; }
 
-  // One section per line rather than one bullet list. A message in this channel
-  // means something unusual happened, so each finding gets its own weight
-  // instead of being stacked into a paragraph the eye slides off.
+  // One line per finding, and nothing around it.
+  //
+  // Slack prints the app name and a timestamp above every message already, so a
+  // header and a date line were repeating what the client had just said. A
+  // message in this channel is rare by design; the finding should be the whole
+  // of it.
   const body = message(
-    payload.lines.length === 1 ? payload.lines[0].replace(/[*_`<>]/g, '') : `${payload.lines.length} things worth knowing`,
+    payload.lines.length === 1
+      ? payload.lines[0].replace(/[*_`<>]/g, '')
+      : `${payload.lines.length} things worth knowing`,
     [
-      header('Demand Desk · Alert'),
-      context(payload.date),
-      divider(),
-      ...payload.lines.map(l => section(`• ${l}`)),
-      context(`<${SITE}|Open the dashboard>`)
+      section(payload.lines.map(l => `• ${l}`).join('\n')),
+      ...(payload.lines.length > 1 ? [context(`<${SITE}|Open the dashboard>`)] : [])
     ]
   );
 

@@ -13,7 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from '../src/lib/util.mjs';
 import { readStore, writeStore, reconcile, settle, prune } from '../src/lib/watch-store.mjs';
-import { header, section, context, divider, message, post } from '../src/lib/slack.mjs';
+import { section, context, message, post } from '../src/lib/slack.mjs';
 
 // Listings the rules held back, with the reason. A current snapshot rather than a
 // tracked history: they never alert, but seeing them is how the rules get tuned.
@@ -38,7 +38,7 @@ function line(e) {
   const link = e.url ? `<${e.url}|${(e.title || '').slice(0, 78)}>` : (e.title || '').slice(0, 78);
   const target = e.underTarget ? '  *UNDER TARGET*' : '';
   switch (e.type) {
-    case 'new':  return `*NEW* · ${money(e.price)} · ${link}${target}${e.listed ? `\n_listed ${e.listed} · ${e.source}_` : ` _· ${e.source}_`}`;
+    case 'new':  return `*NEW* · ${money(e.price)} · ${link}${target} _· ${e.source}${e.listed ? `, listed ${e.listed}` : ''}_`;
     case 'drop': return `*PRICE DROP* · ${money(e.from)} → *${money(e.to)}* (-${e.dropPct}%) · ${link}${target}`;
     case 'sold': return `*SOLD* · ${money(e.price)} · ${link}${e.daysOnMarket != null ? ` _· ${e.daysOnMarket}d on market_` : ''}`;
     case 'gone': return `*NO LONGER LISTED* · ${money(e.price)} · ${link} _· sold or withdrawn, eBay does not say which_`;
@@ -98,18 +98,29 @@ async function main() {
     return;
   }
 
-  const blocks = out.map(({ w, events }) => {
-    const rows = [];
+  // One line per event, and nothing else.
+  //
+  // Slack already renders the app name and a timestamp above every message, so a
+  // header saying "Demand Desk · Watch" and a context line repeating today's date
+  // were three blocks of furniture wrapped around one line of content. The event
+  // is the message. The watch label is only worth printing when more than one
+  // watch fired, since otherwise the listing title already says what it is.
+  const multi = out.length > 1;
+  const rows = [];
+  for (const { w, events } of out) {
+    const cap = w.maxAlertsPerRun ?? 12;
+    const mine = [];
     for (const e of events) {
       if (e.type === 'seed') {
-        rows.push(`Now watching ${e.count} standing listings. From here on you hear about new ones, price drops and sales. Highest now: `
+        mine.push(`Now watching ${e.count} standing listings. From here on you hear about new ones, price drops and sales. Highest now: `
           + e.top.map(t => `${money(t.price)} <${t.url}|${t.title.slice(0, 50)}>`).join(', '));
-      } else rows.push(line(e));
+      } else mine.push(line(e));
     }
-    const cap = w.maxAlertsPerRun ?? 12;
-    const held = rows.length > cap ? rows.length - cap : 0;
-    return `*${w.label}*\n` + rows.slice(0, cap).map(r => `• ${r}`).join('\n') + (held ? `\n• plus ${held} more in the run log` : '');
-  });
+    const over = mine.length > cap ? mine.length - cap : 0;
+    rows.push(...mine.slice(0, cap).map(r => multi ? `*${w.label}* · ${r}` : r));
+    if (over) rows.push(`_plus ${over} more in the run log_`);
+  }
+
   const total = out.reduce((a, o) => a + o.events.length, 0);
   // The preview is what reaches a locked phone, so it names the find rather than
   // repeating the channel name.
@@ -117,11 +128,11 @@ async function main() {
   const preview = first
     ? `${first.type.toUpperCase()} ${money(first.price ?? first.to)} · ${(first.title || '').slice(0, 60)}`
     : `${total} watch event(s)`;
+  // The dashboard link is worth a line only when there is more than one find to
+  // go and look at; a single event already links straight to the listing.
   const payload = message(preview, [
-    header('Demand Desk · Watch'),
-    context(date),
-    ...blocks.flatMap(b => [divider(), section(b)]),
-    context(`<${SITE}|Open the dashboard>`)
+    section(rows.join('\n')),
+    ...(rows.length > 1 ? [context(`<${SITE}|Open the dashboard>`)] : [])
   ]);
 
   if (!send) {
