@@ -160,7 +160,7 @@ export function summarise(items) {
 // looks exactly like that brand selling out. The rest of the store still
 // reports, so one bad collection costs one brand rather than the whole store.
 export async function captureStore(store, brands, opts = {}) {
-  const kept = [], failed = [];
+  const kept = [], failed = [], empty = [];
   let pages = 0, products = 0;
 
   for (const brand of brands) {
@@ -174,7 +174,13 @@ export async function captureStore(store, brands, opts = {}) {
       break;
     }
     if (got?.error) { failed.push(`${brand}: ${got.error}`); continue; }
-    if (!got?.products) continue;          // this store simply does not carry it
+    // A collection that answers 200 with an empty list looks exactly like a
+    // store that does not carry the brand. It is not always: on 2026-10-13 CI
+    // got empty responses for myGemma Hermès and Louis Vuitton minutes after
+    // both returned hundreds of items from a laptop. Record it so the caller can
+    // tell "not carried" from "did not answer", instead of silently losing a
+    // brand and, once state exists, reading its absence as a sellout.
+    if (!got?.products) { empty.push(brand); continue; }
     products += got.products.length;
     // A collection can contain the odd cross-listed vendor, so trust the item's
     // own vendor rather than the collection it was found in.
@@ -188,7 +194,7 @@ export async function captureStore(store, brands, opts = {}) {
     label: store.label,
     pages, products,
     live: live.length,
-    failed,
+    failed, empty,
     brands: summarise(kept),
     skus: live.map(({ sku, brand, price, listed }) => ({ sku, brand, price, listed }))
   };

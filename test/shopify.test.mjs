@@ -71,6 +71,20 @@ assert.deepEqual(handlesFor('Dior'), ['dior', 'christian-dior']);
 assert.deepEqual(handlesFor('Bottega Veneta'), ['bottega-veneta']);
 assert.deepEqual(handlesFor('Hermès'), ['hermes'], 'accents must not reach a URL');
 
+// An empty collection must be reported, not silently treated as "not carried".
+// A 200 with no products looks identical to a store that does not stock the
+// brand, and on 2026-10-13 CI got exactly that for brands holding hundreds of
+// items. Losing a brand quietly is how its absence later reads as a sellout.
+const blank = await captureStore(store, ['Hermès', 'Chanel'], {
+  fetchImpl: async (url) => url.includes('/collections/hermes/')
+    ? { ok: true, status: 200, json: async () => ({ products: [] }) }
+    : server(1)(url),
+  delay: 0
+});
+assert.deepEqual(blank.empty, ['Hermès'], 'an empty collection must be named');
+assert.ok(!blank.failed.length, 'but it is not a crawl failure');
+assert.ok(blank.brands['Chanel'], 'and the other brands still report');
+
 const ok = await captureStore(store, ['Hermès'], { fetchImpl: server(2), delay: 0 });
 assert.equal(ok.status, 'ok');
 assert.equal(ok.live, 4);

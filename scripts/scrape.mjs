@@ -370,12 +370,46 @@ async function main() {
         brand, live: v.live, price: v.price,
         skus: cap.skus.filter(s => s.brand === brand)
       }));
-      const { brands, nextState, windowHours, baseline } = diffLive(prevState, focus, date);
+      // A brand that vanishes, or collapses, between two captures is far more
+      // likely to be a feed that did not answer than a genuine sellout. Diffing
+      // it would book every missing SKU as a sale, which is the same mistake
+      // assertPlausible exists to stop on the Fashionphile side. So a brand is
+      // only diffed when today's count is within reach of what it held before;
+      // anything else keeps yesterday's state untouched and waits for a sane
+      // reading rather than destroying its history.
+      const COLLAPSE = 0.3;
+      const suspect = [];
+      const diffable = focus.filter(f => {
+        const before = Object.keys(prevState?.brands?.[f.brand] || {}).length;
+        if (!before) return true;                       // nothing to contradict
+        if (f.live >= before * COLLAPSE) return true;
+        suspect.push(`${f.brand}: ${f.live} against ${before}`);
+        return false;
+      });
+      // Brands that were present before and returned nothing at all today never
+      // reach `focus`, so catch those here too.
+      for (const b of Object.keys(prevState?.brands || {})) {
+        if (!focus.some(f => f.brand === b) && Object.keys(prevState.brands[b]).length) {
+          suspect.push(`${b}: absent from this capture`);
+        }
+      }
+
+      const { brands, nextState, windowHours, baseline } = diffLive(prevState, diffable, date);
+      // Carry forward everything we did not diff, so one bad response costs a day
+      // of readings for that brand rather than its whole history.
+      for (const [b, v] of Object.entries(prevState?.brands || {})) {
+        if (!nextState.brands[b]) nextState.brands[b] = v;
+      }
+      if (suspect.length) {
+        errors.push({ source: store.id, error: `not diffed, implausible counts: ${suspect.join('; ')}` });
+        console.log(`[scrape] ${store.id}: held back ${suspect.length} brand(s): ${suspect.join('; ')}`);
+      }
       writeLiveState(nextState, store.id);
       shops[store.id] = {
         status: 'ok', label: store.label, pages: cap.pages,
         products: cap.products, live: cap.live,
         focus: focus.map(({ skus, ...rest }) => rest),
+        empty: cap.empty, suspect,
         sellThrough: { status: baseline ? 'baseline' : 'ok', via: 'sku-diff', windowHours, brands }
       };
       console.log(`[scrape] ${store.id}: ${cap.live} live over ${cap.pages} pages, ${Object.keys(cap.brands).length} brands`);
