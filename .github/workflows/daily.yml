@@ -56,6 +56,11 @@ jobs:
     # day survives. An OS bump arriving on GitHub's schedule would therefore
     # degrade StockX silently. Bump this deliberately instead.
     runs-on: ubuntu-24.04
+    # The job had no limit, so GitHub's 6-hour default applied and a hung crawl
+    # could have burned hours before anyone noticed. A full capture ran 5.5 to
+    # 7.4 minutes before myGemma and Rebag, and those add about 6.7 more, so 30
+    # leaves comfortable headroom while still catching a hang quickly.
+    timeout-minutes: 30
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
