@@ -14,8 +14,12 @@ import zlib from 'node:zlib';
 import { ROOT, ensureDir } from './util.mjs';
 
 export const STATE_DIR = path.join(ROOT, 'data', 'state');
-const STATE_FILE = path.join(STATE_DIR, 'fp-live.json.gz');
-const PREV_FILE = path.join(STATE_DIR, 'fp-live-prev.json.gz');
+// One pair of state files per source. Fashionphile keeps the historic `fp-`
+// prefix so 71 days of continuity survives; new stores get their own id. Mixing
+// two retailers into one state file would read every SKU absent from the other
+// as a departure, inventing tens of thousands of sales on the first run.
+const stateFile = (src = 'fp') => path.join(STATE_DIR, `${src}-live.json.gz`);
+const prevFile = (src = 'fp') => path.join(STATE_DIR, `${src}-live-prev.json.gz`);
 
 function readGz(file) {
   if (!fs.existsSync(file)) return null;
@@ -38,19 +42,19 @@ function writeGz(file, data) {
 // diff today against today and record zero departures, silently erasing the day's
 // sell-through. Keeping the previous day's state alongside the current one makes
 // a re-run reproduce the same answer instead of destroying it.
-export function readLiveState(date) {
-  const current = readGz(STATE_FILE);
-  const previous = readGz(PREV_FILE);
+export function readLiveState(date, src = 'fp') {
+  const current = readGz(stateFile(src));
+  const previous = readGz(prevFile(src));
   // Re-run of a day already captured: compare against the day before it.
   if (current && date && current.date === date) return previous;
   return current;
 }
 
-export function writeLiveState(state) {
-  const current = readGz(STATE_FILE);
+export function writeLiveState(state, src = 'fp') {
+  const current = readGz(stateFile(src));
   // Rotate only when moving to a new day, so repeat runs cannot shift the baseline.
-  if (current && current.date !== state.date) writeGz(PREV_FILE, current);
-  writeGz(STATE_FILE, state);
+  if (current && current.date !== state.date) writeGz(prevFile(src), current);
+  writeGz(stateFile(src), state);
 }
 
 function daysBetween(a, b) {

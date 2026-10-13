@@ -15,6 +15,7 @@ import { SEGMENTS, captureSegment, MODELS, captureModel } from '../src/lib/fashi
 // Brand and keyword lists all resolve from src/data/tracking.json.
 import { EBAY_BRANDS, STOCKX_BRANDS, SEARCH_KEYWORDS, TREND_ANCHOR, TREND_BATCHES } from '../src/lib/tracking.mjs';
 import { readLiveState, writeLiveState, diffLive } from '../src/lib/sellthrough.mjs';
+import { STORES, captureStore } from '../src/lib/shopify.mjs';
 
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
 const deaccent = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
@@ -422,12 +423,49 @@ async function main() {
   // reference sources carried from src/data/indices.json.
   const { therealreal: trrReport, vestiaire: vcReport, ...periodicIndices } = indices;
 
+  // myGemma and Rebag, both on Shopify's public products.json. Each gets its own
+  // sell-through state keyed by store id, because one shared file would read
+  // every SKU absent from the other store as a departure. Each store fails on its
+  // own: a crawl that cannot complete is dropped for the day rather than diffed,
+  // since a half-fetched catalogue looks exactly like a mass sell-off.
+  // Same brand list the rest of the capture uses, so a brand added to
+  // tracking.json reaches all three retailers rather than only Fashionphile.
+  const SHOP_BRANDS = [...new Set(SEGMENTS.map(x => x.brand))];
+  const shops = {};
+  for (const store of STORES) {
+    try {
+      const cap = await captureStore(store, SHOP_BRANDS);
+      const prevState = readLiveState(date, store.id);
+      const focus = Object.entries(cap.brands).map(([brand, v]) => ({
+        brand, live: v.live, price: v.price,
+        skus: cap.skus.filter(s => s.brand === brand)
+      }));
+      const { brands, nextState, windowHours, baseline } = diffLive(prevState, focus, date);
+      writeLiveState(nextState, store.id);
+      shops[store.id] = {
+        status: 'ok', label: store.label, pages: cap.pages,
+        products: cap.products, live: cap.live,
+        focus: focus.map(({ skus, ...rest }) => rest),
+        sellThrough: { status: baseline ? 'baseline' : 'ok', via: 'sku-diff', windowHours, brands }
+      };
+      console.log(`[scrape] ${store.id}: ${cap.live} live over ${cap.pages} pages, ${Object.keys(cap.brands).length} brands`);
+    } catch (e) {
+      errors.push({ source: store.id, error: String(e.message || e) });
+      shops[store.id] = prev?.sources?.[store.id]
+        ? { ...prev.sources[store.id], status: 'carried' }
+        : { status: 'error', focus: [] };
+      console.log(`[scrape] ${store.id}: ${e.message}`);
+    }
+  }
+
   const sources = {
       mirror,
       stockx_goyard: { status: stockx.status, items: stockx.goyard || [] },
       stockx_brands: { status: stockx.status, focus: stockx.focus || [] },
       fashionphile,
       fp_sell_through: sellThrough,
+      mygemma: shops.mygemma,
+      rebag: shops.rebag,
       ebay,
       search_volume: searchVolume,
       google_trends: googleTrends,

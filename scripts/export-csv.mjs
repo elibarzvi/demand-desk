@@ -20,7 +20,7 @@ function build() {
 
   const hunt = [], invPriced = [], supply = [], stockx = [], searchRank = [], retention = [];
   const fp = [], trrClimb = [], vcRank = [], vcSelling = [], stockxBrands = [], ebay = [], searchVol = [], gtrends = [];
-  const fpCondition = [], sellThrough = [];
+  const fpCondition = [], sellThrough = [], shopPrices = [], shopSell = [];
 
   for (const s of snaps) {
     const d = s.date;
@@ -28,6 +28,24 @@ function build() {
     for (const h of m.hunt || []) hunt.push({ date: d, brand: h.brand, item: h.item, requesters: h.requesters });
     for (const p of m.inventoryPriced || m.inventory || []) invPriced.push({ date: d, brand: p.brand, item: p.item, price: p.price ?? '' });
     for (const c of m.inventoryCounts || []) supply.push({ date: d, brand: c.brand, listing_count: c.count });
+    // myGemma and Rebag, same shape for both so the two stores sit in one sheet
+    // and can be compared against Fashionphile without a join.
+    for (const id of ['mygemma', 'rebag']) {
+      const st = s.sources?.[id];
+      if (!st || st.status === 'error') continue;
+      for (const f of st.focus || []) {
+        shopPrices.push({ date: d, store: id, brand: f.brand, live: f.live ?? '',
+          p10_price: f.price?.p10 ?? '', median_price: f.price?.median ?? '',
+          p90_price: f.price?.p90 ?? '', mean_price: f.price?.mean ?? '' });
+      }
+      for (const [brand, v] of Object.entries(st.sellThrough?.brands || {})) {
+        shopSell.push({ date: d, store: id, brand, live: v.live ?? '', arrivals: v.arrivals ?? '',
+          departures: v.departures ?? '', turnover_pct: v.turnoverPct ?? '',
+          turnover_pct_per_day: v.turnoverPctPerDay ?? '',
+          window_hours: st.sellThrough?.windowHours ?? '',
+          median_days_to_sell: v.medianDaysToSell ?? '', median_departure_price: v.medianDeparturePrice ?? '' });
+      }
+    }
     for (const r of stockxRows(d, s.sources?.stockx_goyard)) stockx.push(r);
     for (const f of s.sources?.stockx_brands?.focus || []) stockxBrands.push({ date: d, brand: f.brand, lowest_ask: f.low ?? '', results: f.results ?? '', results_capped: f.resultsCapped ? 'yes' : '', listed: f.listed ?? '' });
     for (const f of s.sources?.ebay?.focus || []) ebay.push({ date: d, brand: f.brand, low_price: f.low ?? '', listings: f.total ?? '' });
@@ -78,6 +96,8 @@ function build() {
     ['google-trends.csv', ['date', 'brand', 'interest'], gtrends],
     ['fashionphile.csv', ['date', 'brand', 'segment', 'listings_all', 'listings_segment', 'p10_price', 'median_price', 'p90_price', 'mean_price', 'legacy_low_price'], fp],
     ['fashionphile-condition.csv', ['date', 'brand', 'condition', 'count'], fpCondition],
+    ['store-prices.csv', ['date', 'store', 'brand', 'live', 'p10_price', 'median_price', 'p90_price', 'mean_price'], shopPrices],
+    ['store-sell-through.csv', ['date', 'store', 'brand', 'live', 'arrivals', 'departures', 'turnover_pct', 'turnover_pct_per_day', 'window_hours', 'median_days_to_sell', 'median_departure_price'], shopSell],
     ['fp-sell-through.csv', ['date', 'brand', 'live', 'arrivals', 'departures', 'turnover_pct', 'turnover_pct_per_day', 'window_hours', 'median_days_to_sell', 'median_departure_price'], sellThrough],
     ['therealreal-value-climbers.csv', ['date', 'item', 'yoy_change_pct'], trrClimb],
     ['vestiaire-value-ranking.csv', ['date', 'rank', 'brand', 'points'], vcRank],
