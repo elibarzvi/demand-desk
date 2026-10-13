@@ -17,7 +17,7 @@
     "probe:ebay": "node scripts/probe-ebay.mjs",
     "watch": "node scripts/watch.mjs",
     "probe:ebay-scopes": "node scripts/probe-ebay-scopes.mjs",
-    "test": "node test/watchlist.test.mjs && node test/clearing.test.mjs",
+    "test": "node test/watchlist.test.mjs && node test/clearing.test.mjs && node test/slack.test.mjs",
     "overdue": "node scripts/overdue.mjs"
   },
   "dependencies": {

@@ -12,6 +12,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, readAllSnapshots, latestSnapshot } from '../src/lib/util.mjs';
 import { buildAnalytics } from '../src/lib/analytics.mjs';
+import { header, section, divider, context, table, message, post, money as fmtMoney } from '../src/lib/slack.mjs';
 
 // The repo variable SITE_URL points Slack links at the site's current home (the byraph hub's
 // Netlify copy once it moves); unset, it stays on GitHub Pages.
@@ -76,35 +77,102 @@ function readOut(a, weekly) {
   return out;
 }
 
+// The order is the argument. What you can act on today goes first, because a
+// digest that opens with a brand table trains you to skim past the part that
+// would have made you money. The market read follows, then the tables.
+function overdueBlocks() {
+  let d;
+  try { d = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'derived', 'overdue.json'), 'utf8')); }
+  catch { return { blocks: [], headline: null }; }
+
+  const items = (d.items || []).filter(i => i.price >= 5000);
+  if (!items.length) return { blocks: [], headline: null };
+
+  // A seller who has already cut is one who has started conceding, so those sort
+  // first among equally overdue listings.
+  const top = [...items].sort((a, b) =>
+    ((b.markdownPct ?? 0) > 0) - ((a.markdownPct ?? 0) > 0) || b.overdueRatio - a.overdueRatio
+  ).slice(0, 6);
+  const cut = items.filter(i => (i.markdownPct ?? 0) > 0).length;
+
+  const blocks = [
+    section(`*Offer candidates* · ${items.length} listings above $5,000 have sat past ${d.factor}x the normal clearing time for their brand and price band` +
+            (cut ? `, and ${cut} of those checked have already been marked down` : '')),
+    table(top, [
+      { key: 'brand', label: 'BRAND' },
+      { key: 'currentPrice', label: 'PRICE', align: 'right', fmt: (v, r) => fmtMoney(v ?? r.price) },
+      { key: 'markdownPct', label: 'CUT', align: 'right', fmt: v => (v > 0 ? `-${Math.round(v)}%` : '-') },
+      { key: 'ageDays', label: 'DAYS', align: 'right' },
+      { key: 'overdueRatio', label: 'VS NORM', align: 'right', fmt: v => `${v}x` },
+      { key: 'title', label: 'ITEM', fmt: v => (v || '').slice(0, 38) }
+    ])
+  ];
+  const t = top[0];
+  return { blocks, headline: `${items.length} offer candidates · top: ${t.brand} ${fmtMoney(t.currentPrice ?? t.price)} at ${t.ageDays}d` };
+}
+
+// Renders a payload the way Slack roughly will, for dry runs and eyeballing.
+function preview(payload) {
+  return payload.blocks.map(b => {
+    if (b.type === 'header') return '\n' + b.text.text.toUpperCase();
+    if (b.type === 'divider') return '─'.repeat(72);
+    if (b.type === 'context') return b.elements.map(e => e.text).join(' ');
+    if (b.fields) return b.fields.map(f => f.text).join('\n');
+    return b.text.text.replace(/```/g, '');
+  }).join('\n');
+}
+
 function compose(a, weekly) {
-  const L = [];
-  L.push(weekly
-    ? `*Demand Desk weekly* · ${a.window.from} to ${a.window.to} · ${a.totalSold.toLocaleString('en-US')} sales tracked`
-    : `*Demand Desk daily* · ${a.window.to} · ${a.window.days}-day window`);
+  const title = weekly ? 'Demand Desk · Weekly' : 'Demand Desk · Daily';
+  const sub = weekly
+    ? `${a.window.from} to ${a.window.to} · ${a.totalSold.toLocaleString('en-US')} sales tracked`
+    : `${a.window.to} · ${a.window.days}-day window`;
 
+  const od = overdueBlocks();
   const read = readOut(a, weekly);
-  if (read.length) { L.push(''); read.forEach(r => L.push(`• ${r}`)); }
 
-  L.push('');
-  L.push('*Shelf life by brand* (days of supply, lower is tighter)');
-  Object.entries(a.brands).filter(([, v]) => v.daysOfSupply != null)
+  const shelf = Object.entries(a.brands).filter(([, v]) => v.daysOfSupply != null)
     .sort((x, y) => x[1].daysOfSupply - y[1].daysOfSupply)
-    .forEach(([b, v]) => L.push(`• ${b}: ${v.daysOfSupply}d · ${v.soldPerDay}/day · median ${v.medianDaysToSell}d to sell · ${money(v.liveMedianPrice)}`));
+    .map(([brand, v]) => ({ brand, ...v }));
 
-  // The weekly edition adds the model table; the daily stays short on purpose.
+  const blocks = [
+    header(title),
+    context(sub),
+    ...(od.blocks.length ? [divider(), ...od.blocks] : []),
+    ...(read.length ? [divider(), section('*What the numbers say*\n' + read.map(r => `• ${r}`).join('\n'))] : []),
+    divider(),
+    section('*Shelf life by brand* · days of supply, lower is tighter'),
+    table(shelf, [
+      { key: 'brand', label: 'BRAND' },
+      { key: 'daysOfSupply', label: 'SUPPLY', align: 'right', fmt: v => `${v}d` },
+      { key: 'soldPerDay', label: '/DAY', align: 'right' },
+      { key: 'medianDaysToSell', label: 'TO SELL', align: 'right', fmt: v => `${v}d` },
+      { key: 'liveMedianPrice', label: 'MEDIAN', align: 'right', fmt: fmtMoney }
+    ])
+  ];
+
   if (weekly) {
     const ms = Object.entries(a.models).filter(([, v]) => v.sold > 0)
-      .sort((x, y) => y[1].sold - x[1].sold).slice(0, 8);
+      .sort((x, y) => y[1].sold - x[1].sold).slice(0, 8)
+      .map(([model, v]) => ({ model: label(model, v.brand), ...v }));
     if (ms.length) {
-      L.push('');
-      L.push('*Models by units sold*');
-      ms.forEach(([m, v]) => L.push(`• ${label(m, v.brand)}: ${v.sold} sold · ${v.daysOfSupply != null ? v.daysOfSupply + 'd supply · ' : ''}median ${v.medianDaysToSell}d · ${money(v.medianPrice)}`));
+      blocks.push(divider(), section('*Models by units sold*'),
+        table(ms, [
+          { key: 'model', label: 'MODEL' },
+          { key: 'sold', label: 'SOLD', align: 'right' },
+          { key: 'daysOfSupply', label: 'SUPPLY', align: 'right', fmt: v => v != null ? `${v}d` : '-' },
+          { key: 'medianDaysToSell', label: 'TO SELL', align: 'right', fmt: v => `${v}d` },
+          { key: 'medianPrice', label: 'MEDIAN', align: 'right', fmt: fmtMoney }
+        ]));
     }
   }
 
-  L.push('');
-  L.push(`<${SITE}|Open the dashboard>`);
-  return L.join('\n');
+  blocks.push(context(`<${SITE}|Open the dashboard>`));
+
+  // The notification preview: what shows on a locked phone, so it says the thing
+  // rather than repeating the title.
+  const preview = od.headline || (read[0] ? read[0].replace(/\*/g, '') : `${title} · ${sub}`);
+  return message(preview, blocks);
 }
 
 async function main() {
@@ -122,14 +190,20 @@ async function main() {
   if (!a) { console.log('[digest] sell-through has no comparable days yet, skipping'); return; }
 
   const weekly = new Date(latest.date + 'T00:00:00Z').getUTCDay() === 1;
-  const text = compose(a, weekly);
+  const payload = compose(a, weekly);
 
   const hook = process.env.SLACK_DIGEST_WEBHOOK_URL;
-  if (!hook) { console.log('[digest] SLACK_DIGEST_WEBHOOK_URL not set, would have sent:\n' + text); return; }
+  if (!hook) { console.log('[digest] SLACK_DIGEST_WEBHOOK_URL not set, would have sent:\n' + preview(payload)); return; }
 
-  const r = await fetch(hook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, unfurl_links: false }) });
-  if (r.ok) writeSent({ lastDate: latest.date, weekly });
-  console.log(r.ok ? `[digest] sent ${weekly ? 'weekly' : 'daily'} edition for ${latest.date}` : `[digest] Slack rejected the post: HTTP ${r.status}`);
+  try {
+    await post(hook, payload);
+    writeSent({ lastDate: latest.date, weekly });
+    console.log(`[digest] sent ${weekly ? 'weekly' : 'daily'} edition for ${latest.date} (${payload.blocks.length} blocks)`);
+  } catch (e) {
+    // Deliberately not recorded as sent, so the next run retries rather than
+    // treating a rejected post as delivered.
+    console.log(`[digest] Slack rejected the post: ${e.message}`);
+  }
 }
 
 main().catch(e => console.log('[digest] skipped after error:', e.message));

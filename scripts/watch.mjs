@@ -13,6 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from '../src/lib/util.mjs';
 import { readStore, writeStore, reconcile, settle, prune } from '../src/lib/watch-store.mjs';
+import { header, section, context, divider, message, post } from '../src/lib/slack.mjs';
 
 // Listings the rules held back, with the reason. A current snapshot rather than a
 // tracked history: they never alert, but seeing them is how the rules get tuned.
@@ -37,12 +38,13 @@ function line(e) {
   const link = e.url ? `<${e.url}|${(e.title || '').slice(0, 78)}>` : (e.title || '').slice(0, 78);
   const target = e.underTarget ? '  *UNDER TARGET*' : '';
   switch (e.type) {
-    case 'new':  return `NEW  ${money(e.price)}  ${link}${target}${e.listed ? `\n      listed ${e.listed} · ${e.source}` : ` · ${e.source}`}`;
-    case 'drop': return `PRICE DROP  ${money(e.from)} → ${money(e.to)} (-${e.dropPct}%)  ${link}${target}`;
-    case 'sold': return `SOLD  ${money(e.price)}  ${link}${e.daysOnMarket != null ? `  · ${e.daysOnMarket}d on market` : ''}`;
-    case 'gone': return `NO LONGER LISTED  ${money(e.price)}  ${link}  · sold or withdrawn, eBay does not say which`;
+    case 'new':  return `*NEW* · ${money(e.price)} · ${link}${target}${e.listed ? `\n_listed ${e.listed} · ${e.source}_` : ` _· ${e.source}_`}`;
+    case 'drop': return `*PRICE DROP* · ${money(e.from)} → *${money(e.to)}* (-${e.dropPct}%) · ${link}${target}`;
+    case 'sold': return `*SOLD* · ${money(e.price)} · ${link}${e.daysOnMarket != null ? ` _· ${e.daysOnMarket}d on market_` : ''}`;
+    case 'gone': return `*NO LONGER LISTED* · ${money(e.price)} · ${link} _· sold or withdrawn, eBay does not say which_`;
   }
 }
+
 
 async function main() {
   const send = process.argv.includes('--send');
@@ -108,16 +110,36 @@ async function main() {
     const held = rows.length > cap ? rows.length - cap : 0;
     return `*${w.label}*\n` + rows.slice(0, cap).map(r => `• ${r}`).join('\n') + (held ? `\n• plus ${held} more in the run log` : '');
   });
-  const text = `*Demand Desk watch* · ${date}\n\n` + blocks.join('\n\n') + `\n\n<${SITE}|Open the dashboard>`;
+  const total = out.reduce((a, o) => a + o.events.length, 0);
+  // The preview is what reaches a locked phone, so it names the find rather than
+  // repeating the channel name.
+  const first = out[0]?.events.find(e => e.type !== 'seed');
+  const preview = first
+    ? `${first.type.toUpperCase()} ${money(first.price ?? first.to)} · ${(first.title || '').slice(0, 60)}`
+    : `${total} watch event(s)`;
+  const payload = message(preview, [
+    header('Demand Desk · Watch'),
+    context(date),
+    ...blocks.flatMap(b => [divider(), section(b)]),
+    context(`<${SITE}|Open the dashboard>`)
+  ]);
 
-  if (!send) { console.log(`\n[watch] dry run, would have sent:\n${text}`); return; }
+  if (!send) {
+    console.log(`\n[watch] dry run, would have sent:\n` + payload.blocks
+      .map(b => b.type === 'divider' ? '─'.repeat(60) : (b.text?.text ?? b.elements?.map(e => e.text).join(' '))).join('\n'));
+    return;
+  }
 
   const hook = process.env.SLACK_WATCH_WEBHOOK_URL || process.env.SLACK_WEBHOOK_URL;
   if (!hook) { console.log('[watch] no Slack webhook set, nothing sent'); return; }
-  const r = await fetch(hook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, unfurl_links: false }) });
-  // Persist only after delivery, so a failed post is retried rather than lost.
-  if (r.ok) { writeStore(store); writeHeld(held); }
-  console.log(r.ok ? `[watch] sent ${out.reduce((a, o) => a + o.events.length, 0)} event(s)` : `[watch] Slack rejected the post: HTTP ${r.status}`);
+  try {
+    await post(hook, payload);
+    // Persist only after delivery, so a failed post is retried rather than lost.
+    writeStore(store); writeHeld(held);
+    console.log(`[watch] sent ${total} event(s)`);
+  } catch (e) {
+    console.log(`[watch] Slack rejected the post: ${e.message}`);
+  }
 }
 
 main().catch(e => { console.log('[watch] failed:', e.message); process.exitCode = 1; });

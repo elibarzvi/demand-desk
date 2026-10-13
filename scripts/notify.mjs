@@ -13,6 +13,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
 import { ROOT, latestSnapshot, previousSnapshot } from '../src/lib/util.mjs';
+import { header, section, context, divider, message, post } from '../src/lib/slack.mjs';
 
 const DERIVED = path.join(ROOT, 'data', 'derived');
 // The repo variable SITE_URL points Slack links at the site's current home (the byraph hub's
@@ -167,15 +168,23 @@ async function main() {
   if (!payload) { console.log('[notify] nothing notable today, staying silent'); return; }
   if (!hook) { console.log(`[notify] SLACK_WEBHOOK_URL not set, would have sent:\n  ${payload.lines.join('\n  ')}`); return; }
 
-  const text = `*Demand Desk, ${payload.date}*\n`
-    + payload.lines.map(l => `• ${l}`).join('\n')
-    + `\n<${SITE}|Open the dashboard>`;
+  // One section per line rather than one bullet list. A message in this channel
+  // means something unusual happened, so each finding gets its own weight
+  // instead of being stacked into a paragraph the eye slides off.
+  const body = message(
+    payload.lines.length === 1 ? payload.lines[0].replace(/[*_`<>]/g, '') : `${payload.lines.length} things worth knowing`,
+    [
+      header('Demand Desk · Alert'),
+      context(payload.date),
+      divider(),
+      ...payload.lines.map(l => section(`• ${l}`)),
+      context(`<${SITE}|Open the dashboard>`)
+    ]
+  );
 
-  const r = await fetch(hook, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, unfurl_links: false })
-  });
+  let r = { ok: true };
+  try { await post(hook, body); }
+  catch (e) { r = { ok: false, status: e.message }; }
   // Only record the cooldown once Slack has actually accepted the message, so a
   // failed post is retried tomorrow rather than silently suppressed for days.
   if (r.ok && payload.sentNow) {
