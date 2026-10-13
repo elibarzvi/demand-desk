@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-10-13T16:03:11.067Z",
+  "generatedAt": "2026-10-13T20:27:18.425Z",
   "date": "2026-10-13",
-  "count": 19,
+  "count": 20,
   "alerts": [
     {
       "date": "2026-10-13",
@@ -10,37 +10,37 @@
       "series": "ebay.listings",
       "metric": "eBay active listings",
       "brand": "Goyard",
-      "value": 7438,
-      "z": 3.29,
+      "value": 7509,
+      "z": 3.8,
       "baseline": 6979,
-      "changePct": 6.58,
-      "message": "Goyard eBay active listings at 7438 is +6.58% vs its 68-day normal of 6979 (z=3.29)."
+      "changePct": 7.59,
+      "message": "Goyard eBay active listings at 7509 is +7.59% vs its 68-day normal of 6979 (z=3.8)."
     },
     {
       "date": "2026-10-13",
       "type": "breakout",
-      "severity": "medium",
-      "series": "ebay.listings",
-      "metric": "eBay active listings",
-      "brand": "Prada",
-      "value": 232115,
-      "z": 2.99,
-      "baseline": 219002.5,
-      "changePct": 5.99,
-      "message": "Prada eBay active listings at 232115 is +5.99% vs its 35-day normal of 219002.5 (z=2.99)."
-    },
-    {
-      "date": "2026-10-13",
-      "type": "breakout",
-      "severity": "medium",
+      "severity": "high",
       "series": "ebay.listings",
       "metric": "eBay active listings",
       "brand": "Bottega Veneta",
-      "value": 69254,
-      "z": 2.74,
+      "value": 69760,
+      "z": 3.13,
       "baseline": 65650.5,
-      "changePct": 5.49,
-      "message": "Bottega Veneta eBay active listings at 69254 is +5.49% vs its 35-day normal of 65650.5 (z=2.74)."
+      "changePct": 6.26,
+      "message": "Bottega Veneta eBay active listings at 69760 is +6.26% vs its 35-day normal of 65650.5 (z=3.13)."
+    },
+    {
+      "date": "2026-10-13",
+      "type": "breakout",
+      "severity": "high",
+      "series": "ebay.listings",
+      "metric": "eBay active listings",
+      "brand": "Prada",
+      "value": 232207,
+      "z": 3.01,
+      "baseline": 219002.5,
+      "changePct": 6.03,
+      "message": "Prada eBay active listings at 232207 is +6.03% vs its 35-day normal of 219002.5 (z=3.01)."
     },
     {
       "date": "2026-10-13",
@@ -49,11 +49,11 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Chanel",
-      "value": 15,
-      "z": -2.61,
+      "value": 17,
+      "z": -2.49,
       "baseline": 59.5,
-      "changePct": -74.79,
-      "message": "Chanel Median days to sell at 15 is -74.79% vs its 47-day normal of 59.5 (z=-2.61)."
+      "changePct": -71.43,
+      "message": "Chanel Median days to sell at 17 is -71.43% vs its 47-day normal of 59.5 (z=-2.49)."
     },
     {
       "date": "2026-10-13",
@@ -62,24 +62,24 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Louis Vuitton",
-      "value": 12,
-      "z": -2.43,
+      "value": 13,
+      "z": -2.34,
       "baseline": 39,
-      "changePct": -69.23,
-      "message": "Louis Vuitton Median days to sell at 12 is -69.23% vs its 47-day normal of 39 (z=-2.43)."
+      "changePct": -66.67,
+      "message": "Louis Vuitton Median days to sell at 13 is -66.67% vs its 47-day normal of 39 (z=-2.34)."
     },
     {
       "date": "2026-10-13",
       "type": "breakout",
       "severity": "medium",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Goyard",
-      "value": 0.2506,
-      "z": -2.4,
-      "baseline": 0.32,
-      "changePct": -20.83,
-      "message": "Goyard Google Trends relative interest at 0.2506 is -20.83% vs its 31-day normal of 0.32 (z=-2.4)."
+      "series": "fp.medianPrice",
+      "metric": "Fashionphile median price",
+      "brand": "The Row",
+      "value": 1895,
+      "z": -2.17,
+      "baseline": 2040,
+      "changePct": -7.11,
+      "message": "The Row Fashionphile median price at 1895 is -7.11% vs its 48-day normal of 2040 (z=-2.17)."
     },
     {
       "date": "2026-10-13",
@@ -93,6 +93,19 @@
       "baseline": 7295,
       "changePct": -4.11,
       "message": "Cartier Fashionphile 90th-pct price at 6995 is -4.11% vs its 48-day normal of 7295 (z=-2.02)."
+    },
+    {
+      "date": "2026-10-13",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "fp.p90Price",
+      "metric": "Fashionphile 90th-pct price",
+      "brand": "Bottega Veneta",
+      "value": 3450,
+      "z": -2.02,
+      "baseline": 3595,
+      "changePct": -4.03,
+      "message": "Bottega Veneta Fashionphile 90th-pct price at 3450 is -4.03% vs its 35-day normal of 3595 (z=-2.02)."
     },
     {
       "date": "2026-10-13",
@@ -155,9 +168,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Dior",
-      "value": 33,
-      "wowPct": -43.1,
-      "message": "Dior Median days to sell moved -43.1% in 7 days to 33."
+      "value": 28,
+      "wowPct": -51.72,
+      "message": "Dior Median days to sell moved -51.72% in 7 days to 28."
     },
     {
       "date": "2026-10-13",
@@ -166,9 +179,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "The Row",
-      "value": 28,
-      "wowPct": -72.55,
-      "message": "The Row Median days to sell moved -72.55% in 7 days to 28."
+      "value": 33,
+      "wowPct": -67.65,
+      "message": "The Row Median days to sell moved -67.65% in 7 days to 33."
     },
     {
       "date": "2026-10-13",
@@ -177,9 +190,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Prada",
-      "value": 49,
-      "wowPct": 96,
-      "message": "Prada Median days to sell moved +96% in 7 days to 49."
+      "value": 36,
+      "wowPct": 44,
+      "message": "Prada Median days to sell moved +44% in 7 days to 36."
     },
     {
       "date": "2026-10-13",
@@ -199,9 +212,9 @@
       "series": "fp.turnover",
       "brand": null,
       "metric": "Daily sell-through %",
-      "affected": 18,
+      "affected": 16,
       "of": 11,
-      "message": "Daily sell-through % rose across 18 of 11 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 18 separate market events."
+      "message": "Daily sell-through % rose across 16 of 11 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 16 separate market events."
     },
     {
       "date": "2026-10-13",
