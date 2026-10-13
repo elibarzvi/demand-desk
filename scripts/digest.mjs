@@ -83,10 +83,10 @@ function readOut(a, weekly) {
 function overdueBlocks() {
   let d;
   try { d = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'derived', 'overdue.json'), 'utf8')); }
-  catch { return { blocks: [], headline: null }; }
+  catch { return { lead: null, table: null, headline: null }; }
 
   const items = (d.items || []).filter(i => i.price >= 5000);
-  if (!items.length) return { blocks: [], headline: null };
+  if (!items.length) return { lead: null, table: null, headline: null };
 
   // A seller who has already cut is one who has started conceding, so those sort
   // first among equally overdue listings.
@@ -95,20 +95,18 @@ function overdueBlocks() {
   ).slice(0, 6);
   const cut = items.filter(i => (i.markdownPct ?? 0) > 0).length;
 
-  const blocks = [
-    section(`*Offer candidates* · ${items.length} listings above $5,000 have sat past ${d.factor}x the normal clearing time for their brand and price band` +
-            (cut ? `, and ${cut} of those checked have already been marked down` : '')),
-    table(top, [
+  const lead = `*${items.length} offer candidates* above $5,000 · past ${d.factor}x normal clearing time`
+    + (cut ? ` · ${cut} already cut` : '');
+  const tbl = table(top, [
       { key: 'brand', label: 'BRAND' },
       { key: 'currentPrice', label: 'PRICE', align: 'right', fmt: (v, r) => fmtMoney(v ?? r.price) },
       { key: 'markdownPct', label: 'CUT', align: 'right', fmt: v => (v > 0 ? `-${Math.round(v)}%` : '-') },
       { key: 'ageDays', label: 'DAYS', align: 'right' },
       { key: 'overdueRatio', label: 'VS NORM', align: 'right', fmt: v => `${v}x` },
       { key: 'title', label: 'ITEM', fmt: v => (v || '').slice(0, 38) }
-    ])
-  ];
+    ]);
   const t = top[0];
-  return { blocks, headline: `${items.length} offer candidates · top: ${t.brand} ${fmtMoney(t.currentPrice ?? t.price)} at ${t.ageDays}d` };
+  return { lead, table: tbl, headline: `${items.length} offer candidates · top: ${t.brand} ${fmtMoney(t.currentPrice ?? t.price)} at ${t.ageDays}d` };
 }
 
 // Renders a payload the way Slack roughly will, for dry runs and eyeballing.
@@ -123,11 +121,11 @@ function preview(payload) {
 }
 
 function compose(a, weekly) {
-  const title = weekly ? 'Demand Desk · Weekly' : 'Demand Desk · Daily';
-  const sub = weekly
-    ? `${a.window.from} to ${a.window.to} · ${a.totalSold.toLocaleString('en-US')} sales tracked`
-    : `${a.window.to} · ${a.window.days}-day window`;
-
+  // Trimmed to the same principle as the alerts: Slack draws the app name and a
+  // timestamp above this already, so a header block and a date line were saying
+  // it a third time. What survives is the two tables and the written read, which
+  // are the only parts that would be missed. Dividers went with the headers,
+  // since a table against prose is already a visible edge.
   const od = overdueBlocks();
   const read = readOut(a, weekly);
 
@@ -135,20 +133,21 @@ function compose(a, weekly) {
     .sort((x, y) => x[1].daysOfSupply - y[1].daysOfSupply)
     .map(([brand, v]) => ({ brand, ...v }));
 
+  const lead = weekly
+    ? `*Weekly* · ${a.window.from} to ${a.window.to} · ${a.totalSold.toLocaleString('en-US')} sales tracked`
+    : `*Daily* · ${a.window.to} · ${a.window.days}-day window`;
+
   const blocks = [
-    header(title),
-    context(sub),
-    ...(od.blocks.length ? [divider(), ...od.blocks] : []),
-    ...(read.length ? [divider(), section('*What the numbers say*\n' + read.map(r => `• ${r}`).join('\n'))] : []),
-    divider(),
-    section('*Shelf life by brand* · days of supply, lower is tighter'),
+    section(od.lead ? `${lead}\n${od.lead}` : lead),
+    od.table,
+    ...(read.length ? [section(read.map(r => `• ${r}`).join('\n'))] : []),
     table(shelf, [
       { key: 'brand', label: 'BRAND' },
       { key: 'daysOfSupply', label: 'SUPPLY', align: 'right', fmt: v => `${v}d` },
       { key: 'soldPerDay', label: '/DAY', align: 'right' },
       { key: 'medianDaysToSell', label: 'TO SELL', align: 'right', fmt: v => `${v}d` },
       { key: 'liveMedianPrice', label: 'MEDIAN', align: 'right', fmt: fmtMoney }
-    ])
+    ], '*Shelf life* · days of supply, lower is tighter')
   ];
 
   if (weekly) {
@@ -156,22 +155,19 @@ function compose(a, weekly) {
       .sort((x, y) => y[1].sold - x[1].sold).slice(0, 8)
       .map(([model, v]) => ({ model: label(model, v.brand), ...v }));
     if (ms.length) {
-      blocks.push(divider(), section('*Models by units sold*'),
-        table(ms, [
+      blocks.push(table(ms, [
           { key: 'model', label: 'MODEL' },
           { key: 'sold', label: 'SOLD', align: 'right' },
           { key: 'daysOfSupply', label: 'SUPPLY', align: 'right', fmt: v => v != null ? `${v}d` : '-' },
           { key: 'medianDaysToSell', label: 'TO SELL', align: 'right', fmt: v => `${v}d` },
           { key: 'medianPrice', label: 'MEDIAN', align: 'right', fmt: fmtMoney }
-        ]));
+        ], '*Models by units sold*'));
     }
   }
 
   blocks.push(context(`<${SITE}|Open the dashboard>`));
 
-  // The notification preview: what shows on a locked phone, so it says the thing
-  // rather than repeating the title.
-  const preview = od.headline || (read[0] ? read[0].replace(/\*/g, '') : `${title} · ${sub}`);
+  const preview = od.headline || (read[0] ? read[0].replace(/\*/g, '') : lead.replace(/\*/g, ''));
   return message(preview, blocks);
 }
 

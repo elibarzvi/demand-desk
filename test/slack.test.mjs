@@ -51,6 +51,13 @@ assert.ok(lines[1].includes('$23,110') && lines[2].includes('$4,365'));
 
 assert.equal(table([], [{ key: 'a', label: 'A' }]), null, 'an empty table is no block at all, not an empty one');
 
+// A caption rides inside the table's own block. As a separate section it cost a
+// whole block to say one short thing, and Slack's inter-block spacing floated
+// the label away from the table it was labelling.
+const cap = table([{ a: 1 }], [{ key: 'a', label: 'A' }], '*Shelf life*');
+assert.ok(cap.text.text.startsWith('*Shelf life*\n```'), 'caption must precede the fence in the same block');
+assert.ok(cap.text.text.endsWith('```'));
+
 // --- formatting ------------------------------------------------------------
 
 assert.equal(money(23110.4), '$23,110');

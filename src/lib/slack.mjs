@@ -43,7 +43,7 @@ export function fields(pairs) {
 
 // A monospace table. `cols` is [{key, label, align, fmt}]. Columns are padded to
 // their widest cell so they line up in Slack's code font.
-export function table(rows, cols) {
+export function table(rows, cols, caption = null) {
   if (!rows.length) return null;
   const cells = rows.map(r => cols.map(c => String(c.fmt ? c.fmt(r[c.key], r) : (r[c.key] ?? ''))));
   const widths = cols.map((c, i) => Math.max(c.label.length, ...cells.map(r => r[i].length)));
@@ -52,7 +52,10 @@ export function table(rows, cols) {
     cols.map((c, i) => pad(c.label, i)).join('  '),
     ...cells.map(r => r.map(pad).join('  '))
   ];
-  return section('```\n' + lines.join('\n').trimEnd() + '\n```');
+  // The caption rides inside the same block. As its own section it cost a whole
+  // block to say one short thing, and Slack's spacing between blocks made a
+  // label float away from the table it was labelling.
+  return section((caption ? caption + '\n' : '') + '```\n' + lines.join('\n').trimEnd() + '\n```');
 }
 
 export const money = n => n == null ? '-' : '$' + Math.round(Number(n)).toLocaleString('en-US');
