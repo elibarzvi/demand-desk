@@ -15,7 +15,11 @@ on:
         type: boolean
         default: false
       digest_test:
-        description: 'Force-send the weekly digest now, ignoring the Monday gate'
+        description: 'Force-send the digest now, ignoring the already-sent gate'
+        type: boolean
+        default: false
+      skip_capture:
+        description: 'Skip the scrape and work from the data already committed'
         type: boolean
         default: false
       ebay_probe:
@@ -91,8 +95,12 @@ jobs:
           EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
           SITE_URL: ${{ vars.SITE_URL }}
 
+      # Skipping the capture lets a digest be re-sent, or the site rebuilt, without
+      # crawling three retailers again. myGemma and Rebag visibly throttle when
+      # asked repeatedly in one afternoon, and a thin answer from them is worse
+      # than no answer: it overwrites good state with a worse baseline.
       - name: Capture today's snapshot
-        if: github.event_name != 'push'
+        if: github.event_name != 'push' && !inputs.skip_capture
         run: npm run scrape
         env:
           EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
