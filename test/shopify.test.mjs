@@ -7,7 +7,7 @@
 // follows pins that, and the brand normalisation that stops one house splitting
 // into two histories.
 import assert from 'node:assert/strict';
-import { crawlCollection, captureStore, toItems, summarise, normaliseBrand, handlesFor } from '../src/lib/shopify.mjs';
+import { crawlCollection, captureStore, toItems, summarise, normaliseBrand, handlesFor, plausibleBrands } from '../src/lib/shopify.mjs';
 
 const store = { id: 'test', label: 'Test', base: 'https://example.test' };
 
@@ -128,4 +128,56 @@ const s = summarise(items);
 assert.equal(s['Hermès'].live, 1, 'unavailable items must not enter the distribution');
 assert.equal(s['Hermès'].price.median, 500);
 
-console.log('[test] shopify: partial-crawl refusal, brand normalisation and flattening passed');
+// --- the collapse guard --------------------------------------------------
+//
+// The real-world case: on 2026-10-13 a capture eight minutes after a healthy one
+// returned myGemma Hermès and Louis Vuitton as empty, while both collections
+// plainly held 127 and 151 available items. With prior state in place that would
+// have booked every missing SKU as a sale.
+
+const skus = n => Object.fromEntries(Array.from({ length: n }, (_, i) => [`s${i}`, { p: 100 }]));
+const prev = { 'Hermès': skus(170), 'Louis Vuitton': skus(369), 'Chanel': skus(366) };
+
+// Healthy day: everything within reach of yesterday, nothing held back.
+{
+  const { diffable, suspect } = plausibleBrands(
+    [{ brand: 'Hermès', live: 168 }, { brand: 'Louis Vuitton', live: 372 }, { brand: 'Chanel', live: 366 }], prev);
+  assert.equal(diffable.length, 3);
+  assert.deepEqual(suspect, [], 'ordinary movement must not be held back');
+}
+
+// The actual incident: two brands absent entirely. They never reach `focus`, so
+// the filter alone cannot catch them.
+{
+  const { diffable, suspect } = plausibleBrands([{ brand: 'Chanel', live: 366 }], prev);
+  assert.deepEqual(diffable.map(d => d.brand), ['Chanel'], 'only the brand that reported may be diffed');
+  assert.equal(suspect.length, 2);
+  assert.ok(suspect.some(x => x.startsWith('Hermès: absent')), 'a vanished brand must be named');
+  assert.ok(suspect.some(x => x.startsWith('Louis Vuitton: absent')));
+}
+
+// A brand that reports a tiny fraction of yesterday is a broken feed, not a
+// sellout. 10 against 170 is 6%.
+{
+  const { diffable, suspect } = plausibleBrands([{ brand: 'Hermès', live: 10 }], prev);
+  assert.equal(diffable.length, 0, 'a 94% collapse must not be diffed');
+  assert.ok(suspect[0].includes('10 against 170'), 'and must say what it saw');
+}
+
+// The boundary is 30%, and it must be inclusive so a real 70% clearance is still
+// measured rather than quietly discarded as implausible.
+assert.equal(plausibleBrands([{ brand: 'Hermès', live: 51 }], prev).diffable.length, 1, '30% exactly must pass');
+assert.equal(plausibleBrands([{ brand: 'Hermès', live: 50 }], prev).diffable.length, 0, 'just under must not');
+
+// A brand with no history cannot be contradicted, so it passes: that is a first
+// sighting, not a collapse.
+{
+  const { diffable, suspect } = plausibleBrands([{ brand: 'Goyard', live: 3 }], {});
+  assert.equal(diffable.length, 1);
+  assert.deepEqual(suspect, []);
+}
+
+// A brand whose stored state is empty must not be reported as vanished.
+assert.deepEqual(plausibleBrands([], { 'Rolex': {} }).suspect, [], 'an empty prior brand is not a disappearance');
+
+console.log('[test] shopify: partial-crawl refusal, collapse guard, brand normalisation and flattening passed');

@@ -199,3 +199,33 @@ export async function captureStore(store, brands, opts = {}) {
     skus: live.map(({ sku, brand, price, listed }) => ({ sku, brand, price, listed }))
   };
 }
+
+// A brand that vanishes, or collapses, between two captures is far more likely
+// to be a feed that did not answer than a genuine sellout. Diffing it would book
+// every missing SKU as a sale. So a brand is only diffed when today's count is
+// within reach of what it held before.
+//
+// `prevBrands` is the stored state's brands map, { [brand]: { [sku]: rec } }.
+// Returns the focus entries safe to diff, plus a human-readable account of what
+// was held back and why, which is the part that has to reach the log: a guard
+// that silently drops brands is the bug it was written to prevent.
+export const COLLAPSE_FLOOR = 0.3;
+
+export function plausibleBrands(focus, prevBrands = {}, floor = COLLAPSE_FLOOR) {
+  const suspect = [];
+  const diffable = focus.filter(f => {
+    const before = Object.keys(prevBrands?.[f.brand] || {}).length;
+    if (!before) return true;                        // nothing to contradict
+    if ((f.live ?? 0) >= before * floor) return true;
+    suspect.push(`${f.brand}: ${f.live ?? 0} against ${before}`);
+    return false;
+  });
+  // A brand that returned nothing at all never reaches `focus`, so it cannot be
+  // caught by the filter above.
+  for (const [brand, skus] of Object.entries(prevBrands || {})) {
+    if (Object.keys(skus || {}).length && !focus.some(f => f.brand === brand)) {
+      suspect.push(`${brand}: absent from this capture`);
+    }
+  }
+  return { diffable, suspect };
+}
