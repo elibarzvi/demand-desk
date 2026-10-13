@@ -1,4 +1,4 @@
-// Daily capture. Pulls the live sources (Mirror API, Fashionphile Algolia, StockX),
+// Daily capture. Pulls the live sources (Mirror API, Fashionphile Algolia, eBay,
 // folds in the periodic index reports, and writes one append-only snapshot per day.
 //
 // Design goals:
@@ -9,11 +9,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { chromium } from 'playwright';
 import { ROOT, SNAP_DIR, today, ensureDir, writeFile, previousSnapshot } from '../src/lib/util.mjs';
 import { SEGMENTS, captureSegment, MODELS, captureModel } from '../src/lib/fashionphile.mjs';
 // Brand and keyword lists all resolve from src/data/tracking.json.
-import { EBAY_BRANDS, STOCKX_BRANDS, SEARCH_KEYWORDS, TREND_ANCHOR, TREND_BATCHES } from '../src/lib/tracking.mjs';
+import { EBAY_BRANDS, SEARCH_KEYWORDS, TREND_ANCHOR, TREND_BATCHES } from '../src/lib/tracking.mjs';
 import { readLiveState, writeLiveState, diffLive } from '../src/lib/sellthrough.mjs';
 import { STORES, captureStore } from '../src/lib/shopify.mjs';
 
@@ -250,60 +249,6 @@ async function scrapeGoogleTrends() {
   return { status: 'ok', via: 'dataforseo-google-trends', anchor: TREND_ANCHOR.keyword, relativeTo: 'mean-of-tracked-brands', focus };
 }
 
-// ---- StockX: rendered search results (bot-protected GraphQL behind the scenes, so
-// this stays best-effort). Results render as name -> "Lowest Ask" -> $price; sponsored
-// ads lack "Lowest Ask" so they filter out naturally. Also grabs the "Browse N results".
-function parseStockx(text) {
-  const lines = cleanLines(text);
-  const items = [];
-  for (let i = 1; i < lines.length - 1; i++) {
-    if (/^Lowest Ask$/i.test(lines[i]) && /^\$[\d,]+/.test(lines[i + 1])) {
-      items.push({ item: lines[i - 1], price: Number(lines[i + 1].replace(/[^\d]/g, '')) });
-    }
-  }
-  const rm = text.match(/Browse\s+([\d,]+)\s+results/i);
-  return { items, results: rm ? Number(rm[1].replace(/,/g, '')) : null };
-}
-async function scrapeStockx(browser) {
-  const focus = [];
-  let goyard = [];
-  for (let bi = 0; bi < STOCKX_BRANDS.length; bi++) {
-    const brand = STOCKX_BRANDS[bi];
-    // Fresh, isolated session per brand — StockX soft-blocks repeat searches within a
-    // session, so new cookies/storage each time gives each brand its own clean shot.
-    const ctx = await browser.newContext({ userAgent: UA });
-    const page = await ctx.newPage();
-    try {
-      if (bi > 0) await new Promise(r => setTimeout(r, 3000));
-      const q = deaccent(brand);
-      await page.goto('https://stockx.com/search?s=' + encodeURIComponent(q), { waitUntil: 'domcontentloaded', timeout: 45000 });
-      await page.waitForFunction(
-        () => /Lowest Ask|Browse [\d,]+ results|Pardon Our Interruption|captcha|Access Denied/i.test(document.body.innerText),
-        { timeout: 15000 }
-      ).catch(() => {});
-      await page.waitForTimeout(1200);
-      const body = await page.innerText('body');
-      if (/Access Denied|captcha|unusual traffic|are you a human|Pardon Our Interruption/i.test(body)) throw new Error('bot-blocked');
-      const { items, results } = parseStockx(body);
-      const key = deaccent(q).split(' ')[0].toLowerCase();
-      const branded = items.filter(x => deaccent(x.item).toLowerCase().includes(key));
-      const low = branded.length ? Math.min(...branded.map(x => x.price)) : null;
-      // StockX stops counting at 1000, so "1000" means "1000 or more" and is not a
-      // supply measure. Seven of eight brands returned exactly 1000 every day for
-      // 24 days. Record the cap explicitly instead of publishing it as a count.
-      const capped = results != null && results >= 1000;
-      focus.push({ brand, low, results: capped ? null : results, resultsCapped: capped, listed: branded.length });
-      if (brand === 'Goyard') goyard = branded.slice(0, 12);
-    } catch (e) {
-      focus.push({ brand, low: null, results: null, listed: 0, error: String(e.message || e) });
-    } finally {
-      await ctx.close();
-    }
-  }
-  if (!focus.some(f => f.low != null)) throw new Error('no StockX data parsed (bot-block or layout)');
-  return { status: 'ok', focus, goyard };
-}
-
 // ---- Freshness ----
 // Mirror's request feed sat byte-identical for 22 straight days while the
 // dashboard presented it as live demand. Nothing in the pipeline noticed, because
@@ -339,21 +284,6 @@ async function main() {
   const errors = [];
   const indices = JSON.parse(fs.readFileSync(path.join(ROOT, 'src', 'data', 'indices.json'), 'utf8'));
   delete indices._comment;
-
-  // StockX needs a browser; Mirror + Fashionphile are plain fetch. The launch sits
-  // inside the try because a browser that fails to start (missing binary, sandbox
-  // refusal, disk pressure in CI) would otherwise throw past every handler and
-  // lose the entire day's capture, including the sources that were perfectly fine.
-  let stockx, browser = null;
-  try {
-    browser = await chromium.launch({ args: ['--no-sandbox'] });
-    stockx = await scrapeStockx(browser);
-  } catch (e) {
-    errors.push({ source: 'stockx', error: String(e.message || e) });
-    stockx = { status: 'error', focus: [], goyard: [] };
-  } finally {
-    if (browser) await browser.close().catch(() => {});
-  }
 
   let mirror;
   try { mirror = await scrapeMirror(); }
@@ -460,8 +390,6 @@ async function main() {
 
   const sources = {
       mirror,
-      stockx_goyard: { status: stockx.status, items: stockx.goyard || [] },
-      stockx_brands: { status: stockx.status, focus: stockx.focus || [] },
       fashionphile,
       fp_sell_through: sellThrough,
       mygemma: shops.mygemma,
@@ -483,7 +411,7 @@ async function main() {
 
   ensureDir(SNAP_DIR);
   writeFile(path.join(SNAP_DIR, `${date}.json`), JSON.stringify(snapshot, null, 2) + '\n');
-  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} stockx:${stockx.status} brands:${(stockx.focus || []).filter(f => f.low != null).length}/${STOCKX_BRANDS.length} fashionphile:${fashionphile.status}(${fashionphile.focus?.length ?? 0}) ebay:${ebay.status}(${(ebay.focus || []).filter(f => f.total != null).length}) searchvol:${searchVolume.status}(${(searchVolume.focus || []).filter(f => f.volume != null).length}) trends:${googleTrends.status}(${(googleTrends.focus || []).filter(f => f.series?.length).length})` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
+  console.log(`[scrape] wrote ${date}.json — mirror:${mirror.status} hunt:${mirror.hunt?.length ?? 0} inv:${mirror.inventoryPriced?.length ?? 0} fashionphile:${fashionphile.status}(${fashionphile.focus?.length ?? 0}) ebay:${ebay.status}(${(ebay.focus || []).filter(f => f.total != null).length}) searchvol:${searchVolume.status}(${(searchVolume.focus || []).filter(f => f.volume != null).length}) trends:${googleTrends.status}(${(googleTrends.focus || []).filter(f => f.series?.length).length})` + (errors.length ? ` (errors: ${errors.map(e => e.source).join(', ')})` : ''));
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

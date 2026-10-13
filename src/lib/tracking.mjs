@@ -2,7 +2,7 @@
 //
 // These lists used to live as six separate literals across two files: the
 // Fashionphile segments, the model watchlist, the eBay brands, the search
-// keywords, the Trends batches and the StockX brands. Adding a brand meant
+// keywords and the Trends batches. Adding a brand meant
 // editing all six and keeping them consistent, and nothing checked that they
 // agreed. src/data/tracking.json is now the single source of truth and every
 // source derives its list from it.
@@ -22,7 +22,6 @@ export const SEGMENTS = BRANDS.filter(b => b.fashionphile).map(b => ({
 }));
 
 export const EBAY_BRANDS = BRANDS.filter(b => b.ebay).map(b => b.name);
-export const STOCKX_BRANDS = BRANDS.filter(b => b.stockx).map(b => b.name);
 export const SEARCH_KEYWORDS = BRANDS.filter(b => b.searchKeyword)
   .map(b => ({ brand: b.name, keyword: b.searchKeyword }));
 

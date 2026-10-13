@@ -64,13 +64,11 @@ const SERIES = {
       });
     } },
   // Captured and charted, but excluded from alerting. Search volume is a monthly
-  // average, so its only movement is a bucket rollover, and StockX's "lowest ask"
+  // average, so its only movement is a bucket rollover.
   // is the cheapest object a brand sells (Chanel reads $35, which is a sticker,
   // not a bag). Alerting on either produces confident noise.
   'search.volume':    { label: 'Monthly search volume', dir: 'demand', alert: false,
     get: s => (s.sources?.search_volume?.focus || []).map(f => [f.brand, f.volume ?? null]) },
-  'stockx.low':       { label: 'StockX lowest ask', dir: 'price', alert: false,
-    get: s => (s.sources?.stockx_brands?.focus || []).map(f => [f.brand, f.low ?? null]) }
 };
 
 // Brands that sat in the second Trends batch and were therefore rescaled by the

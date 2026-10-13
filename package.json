@@ -19,8 +19,5 @@
     "probe:ebay-scopes": "node scripts/probe-ebay-scopes.mjs",
     "test": "node test/watchlist.test.mjs && node test/clearing.test.mjs && node test/slack.test.mjs && node test/shopify.test.mjs",
     "overdue": "node scripts/overdue.mjs"
-  },
-  "dependencies": {
-    "playwright": "^1.48.0"
   }
 }

@@ -38,7 +38,7 @@ caller stops. See `docs/apps-script/demand-desk.gs`.
 | Fashionphile | Price distribution, inventory, and the SKU set | Public Algolia index, price facet read as a histogram so percentiles are exact over the whole population rather than a sample |
 | Fashionphile diff | Sell-through, days to sell, departure prices | Yesterday's live SKUs minus today's. Resale is one-of-one, so a SKU that vanishes has left the market |
 | eBay | Active listing counts, and every watch candidate | Browse API. Marketplace Insights, which carries sold prices, was requested and refused |
-| StockX | Lowest ask | Browser-rendered, so it runs under Playwright |
+| myGemma, Rebag | A second and third price distribution and SKU set | Public Shopify products.json, crawled one brand collection at a time |
 | Google Trends | Relative search interest | DataForSEO |
 | Google Ads | Monthly search volume | DataForSEO, refreshed weekly because each call is paid and the figure is a monthly average |
 | Mirror | Live buyer requests with counts | `mirrorconcierge.com` public API. The only demand-side signal here; everything else measures supply, price or curiosity |
@@ -49,9 +49,9 @@ sell rather than only what it costs.
 
 ## What gets computed
 
-Ten series, each tracked per brand: listings, tracked-segment listings, median
+Nine series, each tracked per brand: listings, tracked-segment listings, median
 price, 90th percentile price, sell-through, days to sell, eBay listings, Trends
-interest, search volume, StockX low.
+interest and search volume.
 
 Baselines are median and MAD rather than mean and standard deviation. On
 2026-08-10 a corrupted capture returned 41 Chanel listings instead of 7,326 with
@@ -83,8 +83,15 @@ sell-through look like it had collapsed 75% across ten brands at once.
 
 ## What is wired, and what is not
 
-Wired end to end: Fashionphile, eBay, StockX, Trends, search volume, Mirror, the
-hourly watch, Slack, the site, the external scheduler.
+Wired end to end: Fashionphile, myGemma, Rebag, eBay, Trends, search volume,
+Mirror, the hourly watch, Slack, the site, the external scheduler.
+
+StockX was dropped on 2026-10-13. It was bot-blocked on 12 of its last 16 days,
+and the one number it gave was already excluded from alerting because it reports
+the cheapest object carrying a brand name rather than a bag. It was also the only
+reason the project had a dependency at all: removing it removed Playwright, the
+Chromium apt install that destroyed a day of capture on 2026-09-09, and with them
+the last piece of the pipeline that needed anything beyond Node and fetch.
 
 Not yet closed: The RealReal and Grailed. Both sit behind bot protection
 (PerimeterX and Cloudflare), so they cannot be polled. Instead saved searches on

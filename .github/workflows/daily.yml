@@ -50,11 +50,10 @@ concurrency:
 
 jobs:
   capture:
-    # Pinned rather than ubuntu-latest. GitHub migrates that label to Ubuntu 26
-    # from 2026-10-19, and the capture installs Chromium through apt, a step that
-    # already broke once on 2026-09-09 and is allowed to fail so the rest of the
-    # day survives. An OS bump arriving on GitHub's schedule would therefore
-    # degrade StockX silently. Bump this deliberately instead.
+    # Pinned rather than ubuntu-latest, which GitHub migrates to Ubuntu 26 from
+    # 2026-10-19. The original reason was the Chromium apt install, which has
+    # since gone with StockX; the pin stays because an OS change arriving on
+    # someone else's schedule is still a change nobody chose. Bump deliberately.
     runs-on: ubuntu-24.04
     # The job had no limit, so GitHub's 6-hour default applied and a hung crawl
     # could have burned hours before anyone noticed. A full capture ran 5.5 to
@@ -72,18 +71,6 @@ jobs:
           node-version: 20
 
       - run: npm install --no-audit --no-fund
-      # Playwright exists solely for StockX, which is best-effort, frequently
-      # bot-blocked, and whose lowest-ask figure is excluded from alerting because
-      # it reports the cheapest object carrying a brand name rather than a bag.
-      # Letting its install abort the job meant a transient apt hiccup on Google's
-      # package repo destroyed a whole day of Fashionphile, eBay, Trends and
-      # sell-through capture, which is what happened on 2026-09-09. The scraper
-      # already treats a missing browser as a StockX-only failure, so this step is
-      # allowed to fail and the capture degrades instead of dying.
-      - run: npx playwright install --with-deps chromium
-        if: github.event_name != 'push'
-        continue-on-error: true
-
       # Ad hoc eBay query testing. The Browse API credentials are repo secrets, so
       # a query cannot be tried from a laptop; this makes that possible without
       # inventing a second workflow.

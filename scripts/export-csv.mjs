@@ -5,21 +5,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { EXPORT_DIR, readAllSnapshots, listSnapshotDates, readSnapshot, toCsv, writeFile, ensureDir } from '../src/lib/util.mjs';
 
-function stockxRows(date, sx) {
-  return (sx?.items || []).map(it => ({
-    date,
-    item: it.item,
-    low: it.low ?? it.price ?? '',
-    high: it.high ?? it.price ?? ''
-  }));
-}
-
 function build() {
   const snaps = readAllSnapshots();
   if (!snaps.length) { console.log('[export] no snapshots yet'); return; }
 
-  const hunt = [], invPriced = [], supply = [], stockx = [], searchRank = [], retention = [];
-  const fp = [], trrClimb = [], vcRank = [], vcSelling = [], stockxBrands = [], ebay = [], searchVol = [], gtrends = [];
+  const hunt = [], invPriced = [], supply = [], searchRank = [], retention = [];
+  const fp = [], trrClimb = [], vcRank = [], vcSelling = [], ebay = [], searchVol = [], gtrends = [];
   const fpCondition = [], sellThrough = [], shopPrices = [], shopSell = [];
 
   for (const s of snaps) {
@@ -46,8 +37,6 @@ function build() {
           median_days_to_sell: v.medianDaysToSell ?? '', median_departure_price: v.medianDeparturePrice ?? '' });
       }
     }
-    for (const r of stockxRows(d, s.sources?.stockx_goyard)) stockx.push(r);
-    for (const f of s.sources?.stockx_brands?.focus || []) stockxBrands.push({ date: d, brand: f.brand, lowest_ask: f.low ?? '', results: f.results ?? '', results_capped: f.resultsCapped ? 'yes' : '', listed: f.listed ?? '' });
     for (const f of s.sources?.ebay?.focus || []) ebay.push({ date: d, brand: f.brand, low_price: f.low ?? '', listings: f.total ?? '' });
     for (const f of s.sources?.search_volume?.focus || []) searchVol.push({ date: d, brand: f.brand, keyword: f.keyword, monthly_searches: f.volume ?? '' });
     for (const f of s.sources?.google_trends?.focus || []) { const last = (f.series || []).slice(-1)[0]; gtrends.push({ date: d, brand: f.brand, interest: last ? last.value : '' }); }
@@ -89,8 +78,6 @@ function build() {
     ['mirror-hunt.csv', ['date', 'brand', 'item', 'requesters'], hunt],
     ['mirror-inventory-priced.csv', ['date', 'brand', 'item', 'price'], invPriced],
     ['mirror-supply-mix.csv', ['date', 'brand', 'listing_count'], supply],
-    ['stockx-goyard.csv', ['date', 'item', 'low', 'high'], stockx],
-    ['stockx-brands.csv', ['date', 'brand', 'lowest_ask', 'results', 'results_capped', 'listed'], stockxBrands],
     ['ebay.csv', ['date', 'brand', 'low_price', 'listings'], ebay],
     ['search-volume.csv', ['date', 'brand', 'keyword', 'monthly_searches'], searchVol],
     ['google-trends.csv', ['date', 'brand', 'interest'], gtrends],

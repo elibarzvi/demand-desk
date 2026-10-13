@@ -322,14 +322,6 @@
     </div>
   </details>
 
-  <details class="fold" style="margin-top:12px">
-    <summary>StockX lowest ask and Goyard floors</summary>
-    <div class="foldbody">
-      <p class="cnote">StockX reports the cheapest listing carrying a brand name, which is often an accessory rather than a bag, so these are reference figures and are excluded from alerting.</p>
-      <div class="twrap"><table><thead><tr><th>Brand</th><th style="text-align:right">Lowest ask</th></tr></thead><tbody id="stockxBrandsBody"></tbody></table></div>
-      <div class="twrap" style="margin-top:14px"><table><thead><tr><th>Goyard item</th><th style="text-align:right">Lowest ask</th></tr></thead><tbody id="stockxBody"></tbody></table></div>
-    </div>
-  </details>
 
 
 
@@ -429,7 +421,7 @@
   </details>
 
   <footer>
-    <div id="sources">Sources — Mirror Concierge, StockX, Fashionphile, eBay, DataForSEO (Google search volume + daily Trends), The RealReal, Vestiaire Collective, myGemma, Lyst, Rebag.</div>
+    <div id="sources">Sources — Mirror Concierge, Fashionphile, eBay, myGemma, Rebag, DataForSEO (Google search volume + daily Trends). Reference reports from The RealReal, Vestiaire Collective and Lyst.</div>
     <div class="disc">
       Retention figures blend Rebag's 6th annual Clair Report (Dec 2025, Hermès &amp; Goyard) and the 5th annual (2024, others), labeled by year. Supply-mix share is derived from the visible feed. Mirror is an independent marketplace, not affiliated with the brands shown. Point-in-time reads for buying research, not investment advice.
     </div>
@@ -797,21 +789,6 @@ function render(latest, history, exports, metrics, alerts){
         <div style="position:absolute;left:66.66%;top:0;bottom:0;border-left:1px dashed var(--ink-3)"></div></div>
       <div class="rv" style="color:${r.appreciates?'var(--gold)':'var(--ink-2)'}">${r.pct}%</div>
     </div>`).join('');
-
-  // ---- StockX ----
-  $('#stockxBody').innerHTML = (latest.sources.stockx_goyard?.items||[]).map(it=>{
-    const lo=it.low??it.price, hi=it.high??it.price;
-    const p = lo===hi?fmt(lo):`${fmt(lo)}–${Number(hi).toLocaleString('en-US')}`;
-    return `<tr><td><span class="b">${esc(it.item)}</span></td><td class="price">${p}</td></tr>`;
-  }).join('') || '<tr><td colspan="2" style="color:var(--ink-3)">No StockX capture in this snapshot.</td></tr>';
-
-  const sxb = (latest.sources.stockx_brands?.focus || []).slice().sort((a,b)=>(a.low??1e12)-(b.low??1e12));
-  $('#stockxBrandsBody').innerHTML = sxb.length
-    ? sxb.map(x=>`<tr><td><span class="b">${esc(x.brand)}</span></td>
-        <td style="text-align:right;font-family:var(--mono);color:var(--gold);font-variant-numeric:tabular-nums">${svCell(x.brand)}</td>
-        <td class="price">${x.low!=null?fmt(x.low):'—'}</td>
-        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.results!=null?x.results.toLocaleString('en-US'):'—'}</td></tr>`).join('')
-    : '<tr><td colspan="4" style="color:var(--ink-3)">No StockX capture in this snapshot.</td></tr>';
 
   // ---- Supply mix ----
   let counts = m.inventoryCounts;
