@@ -1,0 +1,1013 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Demand Desk</title>
+<style>
+  :root{
+    --bg:#14110e; --surface:#1c1815; --surface-2:#241f1b; --line:#332b25;
+    --ink:#ede7dd; --ink-2:#b7ac9f; --ink-3:#7d7269;
+    --gold:#d4b678; --gold-strong:#c79a3f; --gold-dim:#8a7448;
+    --cool:#6f8ea3; --heat:#c8894a; --good:#7fae6b; --warn:#c98b45;
+    --radius:14px; --maxw:1240px;
+    --serif:"Hoefler Text","Baskerville Old Face","Big Caslon",Palatino,Georgia,serif;
+    --sans:"Neue Haas Grotesk Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,"Roboto Mono",monospace;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f3efe8; --surface:#fbf9f5; --surface-2:#f6f1e8; --line:#e3dccf;
+      --ink:#201b15; --ink-2:#5f574c; --ink-3:#928777;
+      --gold:#9a7b3f; --gold-strong:#8a6a2c; --gold-dim:#b79a63;
+      --cool:#5a7d94; --heat:#b06a2e; --good:#4f7d3c; --warn:#a76a24;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14110e; --surface:#1c1815; --surface-2:#241f1b; --line:#332b25;
+    --ink:#ede7dd; --ink-2:#b7ac9f; --ink-3:#7d7269;
+    --gold:#d4b678; --gold-strong:#c79a3f; --gold-dim:#8a7448;
+    --cool:#6f8ea3; --heat:#c8894a; --good:#7fae6b; --warn:#c98b45;
+  }
+  :root[data-theme="light"]{
+    --bg:#f3efe8; --surface:#fbf9f5; --surface-2:#f6f1e8; --line:#e3dccf;
+    --ink:#201b15; --ink-2:#5f574c; --ink-3:#928777;
+    --gold:#9a7b3f; --gold-strong:#8a6a2c; --gold-dim:#b79a63;
+    --cool:#5a7d94; --heat:#b06a2e; --good:#4f7d3c; --warn:#a76a24;
+  }
+  *{box-sizing:border-box}
+  html{color-scheme:light dark;overflow-x:hidden}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    line-height:1.5;-webkit-font-smoothing:antialiased;font-size:15px;overflow-x:hidden;max-width:100%}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:22px 22px 40px;width:100%}
+
+  .mast{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
+    gap:18px;border-bottom:1px solid var(--line);padding-bottom:22px}
+  .mast .eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .mast h1{font-family:var(--serif);font-weight:500;font-size:clamp(30px,5vw,46px);
+    margin:.18em 0 .12em;letter-spacing:-.01em;text-wrap:balance;line-height:1.02}
+  .mast p{margin:0;color:var(--ink-2);max-width:56ch;font-size:14px}
+  .tabs{display:flex;gap:4px;margin-top:14px}
+  .tabs a{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;
+    padding:6px 12px;border:1px solid var(--line);border-radius:99px;color:var(--ink-2)}
+  .tabs a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .stamp{text-align:right;font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.7;white-space:nowrap}
+  .stamp b{color:var(--ink-2);font-weight:600}
+  .live{display:inline-flex;align-items:center;gap:6px;color:var(--good)}
+  .live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--good);animation:pulse 2.4s ease-out infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(127,174,107,.5)}70%,100%{box-shadow:0 0 0 7px rgba(127,174,107,0)}}
+  @media (prefers-reduced-motion: reduce){.live::before{animation:none}}
+
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0 6px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 16px 15px;position:relative;overflow:hidden}
+  .kpi::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold)}
+  .kpi .lab{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+  .kpi .val{font-family:var(--serif);font-size:26px;margin-top:7px;line-height:1.05;letter-spacing:-.01em}
+  .kpi .sub{font-size:12px;color:var(--ink-2);margin-top:5px}
+  .kpi .src{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--gold-dim);text-transform:uppercase;margin-top:9px}
+
+  .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-top:16px}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;align-items:start}
+  /* .card.full spans every column by default, which would defeat the pairing. */
+  .duo>.card{margin-top:0 !important}
+  .duo>.card.full{grid-column:auto}
+  @media (max-width:900px){.duo{grid-template-columns:1fr}}
+  .col{display:flex;flex-direction:column;gap:16px;min-width:0}
+  .card{min-width:0}
+  .rank>div{min-width:0}
+  .band{display:flex;align-items:center;gap:14px;margin:20px 2px 4px}
+  .band .lbl{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:600;white-space:nowrap}
+  .band .rule{flex:1;height:1px;background:var(--line)}
+  .band .sub{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);white-space:nowrap}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:15px 16px 14px}
+  .card.full{grid-column:1 / -1}
+  .chead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:2px}
+  .chead h2{font-family:var(--serif);font-weight:500;font-size:19px;margin:0;letter-spacing:-.01em}
+  .src-tag{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);
+    border:1px solid var(--line);border-radius:999px;padding:3px 9px;white-space:nowrap}
+  .cnote{color:var(--ink-2);font-size:12.5px;margin:2px 0 11px;line-height:1.45}
+
+  .svrow{display:grid;grid-template-columns:1fr auto;gap:3px 10px;align-items:end;margin-bottom:12px}
+  .svname{font-family:var(--serif);font-size:14px}
+  .svcol{display:flex;flex-direction:column;align-items:flex-end;line-height:1.2}
+  .svprev{font-family:var(--mono);font-size:10px;color:var(--ink-3);white-space:nowrap}
+  .mrow{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;margin-bottom:11px}
+  .mname{font-family:var(--serif);font-size:14px}
+  .mmo{font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums;min-width:50px;text-align:right}
+  #readCard{border-left:3px solid var(--gold);background:linear-gradient(120deg,var(--surface-2),var(--surface))}
+  .read-list{margin:6px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px}
+  .read-list li{position:relative;padding-left:20px;font-size:14px;color:var(--ink);line-height:1.5}
+  .read-list li::before{content:"";position:absolute;left:2px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+  .svfig{font-family:var(--mono);font-size:13px;color:var(--gold);font-variant-numeric:tabular-nums}
+  .svtrack{grid-column:1/-1;height:8px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+  .svfill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:5px;width:0;transition:width 1s cubic-bezier(.22,.61,.36,1)}
+  @media (prefers-reduced-motion: reduce){.svfill{transition:none}}
+  .alert{display:flex;gap:11px;align-items:baseline;padding:10px 12px;border-radius:6px;background:var(--surface-2);margin-bottom:8px;border-left:3px solid var(--ink-3)}
+  .alert.high{border-left-color:var(--heat)}
+  .alert.medium{border-left-color:var(--gold)}
+  .alert.low{border-left-color:var(--ink-3)}
+  .alert .atype{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);white-space:nowrap;min-width:88px}
+  .alert .amsg{font-size:13.5px;color:var(--ink);line-height:1.5}
+  table.board th,table.board td{padding:7px 9px;font-size:12.5px;white-space:nowrap}
+  table.board td.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+  table.board td.num.gold{color:var(--gold)}
+  table.board td.num.small{font-size:11px;color:var(--ink-2)}
+  table.board .sub2{font-size:10.5px;color:var(--ink-3);margin-top:1px}
+  table.board .dim{color:var(--ink-3)}
+  details.fold{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+  details.fold>summary{cursor:pointer;padding:13px 18px;font-family:var(--serif);font-size:15px;color:var(--ink);list-style:none}
+  details.fold>summary::-webkit-details-marker{display:none}
+  details.fold>summary::before{content:"▸";margin-right:9px;color:var(--gold);font-size:11px}
+  details.fold[open]>summary::before{content:"▾"}
+  details.fold .foldbody{padding:0 18px 18px}
+  .health{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}
+  .health .hlab{width:100%;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);margin-bottom:3px}
+  .hpill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:99px;background:var(--surface-2);font-size:11.5px;color:var(--ink-2)}
+  .hpill .dot{width:6px;height:6px;border-radius:50%;background:var(--good);flex:none}
+  .hpill.hstale .dot{background:var(--heat)}
+  .hpill.hstale{color:var(--ink);border:1px solid var(--heat)}
+  .hpill .hd{font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+  .divtrack{position:relative;background:var(--surface-2)}
+  .divtrack::before{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--line)}
+  .divfill{position:absolute;top:0;height:100%;border-radius:3px}
+  .stale{display:inline-block;margin-left:8px;padding:2px 7px;border-radius:4px;background:var(--heat);color:#fff;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.07em;vertical-align:middle}
+  .stalenote{font-size:12px;color:var(--heat);margin:6px 0 0}
+  .chartwrap{width:100%;overflow-x:auto;margin-top:4px}
+  .chartwrap svg{display:block;width:100%;height:auto}
+  .chartwrap .axis{fill:var(--ink-3);font-family:var(--mono);font-size:10px}
+  .chartwrap .gridline{stroke:var(--line);stroke-width:1}
+  .mvrow{display:grid;grid-template-columns:118px 1fr 62px;align-items:center;gap:10px;margin-bottom:9px}
+  .mvname{font-family:var(--serif);font-size:14px}
+  .mvbarwrap{position:relative;height:16px;background:var(--surface-2);border-radius:4px}
+  .mvfill{position:absolute;top:0;height:100%;border-radius:4px}
+  .mvval{font-family:var(--mono);font-size:12px;text-align:right;font-variant-numeric:tabular-nums}
+  .bars{display:flex;flex-direction:column;gap:11px}
+  .bar{display:grid;grid-template-columns:1fr auto auto;gap:4px 10px;align-items:center}
+  .bar .name{font-size:13px;color:var(--ink)}
+  .bar .name .brand{font-family:var(--serif);font-size:14px;margin-right:7px}
+  .bar .name .desc{color:var(--ink-2);font-size:12px}
+  .bar .spark{align-self:center}
+  .bar .fig{font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums;color:var(--gold);text-align:right;min-width:26px}
+  .delta{font-family:var(--mono);font-size:10.5px;font-variant-numeric:tabular-nums;text-align:right;min-width:30px}
+  .delta.up{color:var(--good)}.delta.down{color:var(--heat)}.delta.flat{color:var(--ink-3)}
+  .track{grid-column:1 / -1;height:9px;background:var(--surface-2);border-radius:5px;overflow:hidden}
+  .fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--gold-dim),var(--gold));width:0;transition:width 1s cubic-bezier(.22,.61,.36,1)}
+  @media (prefers-reduced-motion: reduce){.fill{transition:none}}
+
+  .rank{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .rank h3{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;
+    margin:0 0 10px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  ol.rl{list-style:none;margin:0;padding:0;counter-reset:r}
+  ol.rl li{counter-increment:r;display:flex;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px dotted var(--line);font-size:13.5px}
+  ol.rl li:last-child{border-bottom:0}
+  ol.rl li::before{content:counter(r);font-family:var(--mono);font-size:11px;color:var(--gold);width:16px;flex:none;text-align:right;font-variant-numeric:tabular-nums}
+  ol.rl li .b{font-family:var(--serif);font-size:14px}
+  ol.rl li .m{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+  .up{color:var(--good)}.down{color:var(--heat)}
+
+  .ret{position:relative}
+  .retrow{display:grid;grid-template-columns:82px 1fr 58px;align-items:center;gap:10px;margin-bottom:10px}
+  .retrow .rn{font-family:var(--serif);font-size:14px}
+  .retrack{height:16px;background:var(--surface-2);border-radius:4px;overflow:hidden;position:relative}
+  .retfill{height:100%;width:0;border-radius:4px;transition:width 1s ease}
+  .retfill.app{background:linear-gradient(90deg,var(--gold-dim),var(--gold-strong))}
+  .retfill.dep{background:var(--cool);opacity:.75}
+  .retrow .rv{font-family:var(--mono);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+  .yr{font-family:var(--mono);font-size:9px;color:var(--ink-3);margin-left:5px}
+  .refnote{font-family:var(--mono);font-size:9.5px;color:var(--ink-3);text-align:center;margin-top:2px}
+
+  .twrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:600;padding:0 12px 8px 0;border-bottom:1px solid var(--line)}
+  td{padding:9px 12px 9px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+  tr:last-child td{border-bottom:0}
+  td .b{font-family:var(--serif);font-size:14px}
+  td.price{font-family:var(--mono);text-align:right;color:var(--gold);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .chip{display:inline-block;font-size:10px;font-family:var(--mono);letter-spacing:.05em;padding:2px 7px;border-radius:999px;border:1px solid var(--line);color:var(--ink-2);text-transform:uppercase}
+
+  .comp{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
+  .comp span{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10.5px;color:#14110e;font-weight:600;min-width:0;overflow:hidden;white-space:nowrap}
+  .complegend{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:12px;font-size:12px;color:var(--ink-2)}
+  .complegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+
+  .sig{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .sigcard{border:1px solid var(--line);border-radius:12px;padding:15px 15px 14px;background:var(--surface-2)}
+  .sigcard .tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+  .sigcard .tag.buy{color:var(--good)}.sigcard .tag.hold{color:var(--warn)}.sigcard .tag.watch{color:var(--cool)}
+  .sigcard h4{font-family:var(--serif);font-weight:500;font-size:17px;margin:8px 0 6px}
+  .sigcard p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.5}
+
+  .bigrow{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+  .bigbtn{flex:1 1 240px;display:flex;flex-direction:column;gap:4px;border:1px solid var(--gold-dim);border-radius:12px;
+    padding:16px 17px;background:linear-gradient(180deg,var(--surface-2),var(--surface));text-decoration:none;color:var(--ink);transition:border-color .15s}
+  .bigbtn:hover{border-color:var(--gold)}
+  .bigbtn .t{font-family:var(--serif);font-size:17px}
+  .bigbtn .d{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .bigbtn .g{font-family:var(--mono);font-size:11px;color:var(--gold);margin-top:2px}
+  .xbuild{border:1px solid var(--gold-dim);border-radius:12px;padding:14px 16px 15px;background:linear-gradient(180deg,var(--surface-2),var(--surface));margin-bottom:16px}
+  .xbuild .xlab{font-family:var(--serif);font-size:16px;margin:0 0 11px}
+  .xrow{display:flex;flex-wrap:wrap;gap:12px 14px;align-items:flex-end}
+  .xfield{display:flex;flex-direction:column;gap:5px}
+  .xfield label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+  .xfield select,.xfield input{font-family:var(--sans);font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;height:38px;color-scheme:light dark}
+  .xfield input[type=date]{font-family:var(--mono);min-width:150px}
+  #xGo{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--bg);background:var(--ink);border:none;border-radius:8px;padding:0 18px;height:38px;cursor:pointer}
+  #xGo:hover{opacity:.88}
+  .xhint{margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .xpresets{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .xpreset{font-family:var(--mono);font-size:11px;color:var(--ink-2);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
+  .xpreset:hover{border-color:var(--gold);color:var(--ink)}
+  .xpreset[aria-pressed="true"]{border-color:var(--gold);color:var(--gold);background:var(--surface-2)}
+  .exports{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .exp{display:flex;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:10px;padding:13px 14px;
+    background:var(--surface-2);text-decoration:none;color:var(--ink);transition:border-color .15s}
+  .exp:hover{border-color:var(--gold)}
+  .exp .fn{font-family:var(--mono);font-size:12.5px;color:var(--gold)}
+  .exp .meta{font-family:var(--mono);font-size:10.5px;color:var(--ink-3)}
+  .exp .arrow{font-size:11px;color:var(--ink-3)}
+
+  footer{margin-top:26px;border-top:1px solid var(--line);padding-top:18px;color:var(--ink-3);font-size:12px}
+  footer a{color:var(--gold-dim);text-decoration:none;border-bottom:1px solid transparent}
+  footer a:hover{border-bottom-color:var(--gold-dim)}
+  footer .disc{margin-top:10px;font-size:11px;line-height:1.6}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
+  #err{display:none;margin:20px 0;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink-2);font-size:13px}
+
+  @media (max-width:860px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .grid{grid-template-columns:1fr}
+    .rank,.sig,.exports{grid-template-columns:1fr}
+    .stamp{text-align:left}
+    .band{flex-wrap:wrap}
+    .band .sub{white-space:normal;flex-basis:100%;order:3}
+    .chead{flex-direction:column;align-items:flex-start;gap:6px}
+    .src-tag{white-space:normal;max-width:100%}
+    .xrow .xfield{flex:1 1 100%}
+    .xfield select,.xfield input{width:100%}
+    #xGo{width:100%}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <div class="eyebrow">Demand Desk · Luxury Buying Intelligence</div>
+      <h1>The Demand Desk</h1>
+      <p>What luxury buyers are requesting, what's being supplied and at what price, and which pieces hold value. Captured daily, logged forever.</p>
+      <nav class="tabs" aria-label="Sections">
+        <a href="./">Listings</a>
+        <a href="./dashboard.html" class="on" aria-current="page">Dashboard</a>
+      </nav>
+    </div>
+    <div class="stamp" id="stamp">
+      <div><span class="live">LIVE</span></div>
+      <div>loading…</div>
+    </div>
+  </header>
+
+  <div id="err"></div>
+
+  <section class="kpis" id="kpis"></section>
+
+  <div class="duo">
+  <section class="card full" id="alertCard" style="margin-top:16px">
+    <div class="chead"><h2>What changed today</h2><span class="src-tag" id="alertTag">vs each series' own baseline</span></div>
+    <p class="cnote">Only series that broke out of their own normal range, moved several days in one direction, or stopped updating. Quiet here means nothing unusual, which is itself the answer.</p>
+    <div id="alertList"></div>
+    <div class="health" id="healthStrip"></div>
+  </section>
+
+  <section class="card full" id="readCard" style="margin-top:16px">
+    <div class="chead"><h2>This Week's Read</h2><span class="src-tag" id="readTag">auto-derived</span></div>
+    <p class="cnote">Conclusions the desk draws from the data — demand pressure, momentum, and supply flow. A full weekly AI analyst brief is coming.</p>
+    <ul class="read-list" id="readList"></ul>
+  </section>
+  </div>
+
+  <!-- ============ LIVE BAND — updates daily ============ -->
+  <div class="band"><span class="lbl">Live signals</span><span class="rule"></span><span class="sub">updates every day</span></div>
+
+  <!-- One row per brand. These were six separate cards repeating the same brand
+       column (and search volume twice), which cost roughly a dozen screens of
+       scrolling to read one brand across. -->
+  <section class="card full">
+    <div class="chead"><h2>Brand board</h2><span class="src-tag">every live signal, one row per brand</span></div>
+    <p class="cnote">Sorted by scarcity: search momentum minus supply momentum, each z-scored against its own history. <b>Median</b> is the market price for the tracked segment; <b>Supply</b> is how many days the current shelf lasts at the recent clearing rate; <b>clearing</b> is what sold relative to the shelf midpoint, so a positive figure means the expensive end is what moves.</p>
+    <div class="twrap"><table class="board"><thead><tr>
+      <th>Brand</th>
+      <th style="text-align:right">Scarcity</th>
+      <th style="text-align:right">Interest</th>
+      <th style="text-align:right">Searches/mo</th>
+      <th style="text-align:right">Median</th>
+      <th style="text-align:right">Supply</th>
+      <th style="text-align:right">Clearing</th>
+      <th style="text-align:right">Listings</th>
+      <th style="text-align:right">eBay</th>
+      <th style="text-align:right">Sold</th>
+      <th style="text-align:right">Turnover</th>
+      <th style="text-align:right">Days</th>
+    </tr></thead><tbody id="boardBody"></tbody></table></div>
+  </section>
+
+  <details class="fold" style="margin-top:16px">
+    <summary>Mirror buyer requests and inventory <span id="mirrorFoldTag"></span></summary>
+    <div class="foldbody">
+      <p class="cnote">Mirror publishes this feed editorially rather than live, so it is folded away by default. The source-health strip above shows how long it has been static.</p>
+      <div class="bars" id="demandBars"></div>
+      <div class="comp" id="compBar" role="img" aria-label="Inventory composition by brand" style="margin-top:16px"></div>
+      <div class="complegend" id="compLegend"></div>
+      <div class="twrap" style="margin-top:16px"><table><thead><tr><th>Brand</th><th>Piece</th><th>Category</th><th style="text-align:right">Approx. price</th></tr></thead><tbody id="invBody"></tbody></table></div>
+    </div>
+  </details>
+
+
+
+
+  <!-- ============ 7-DAY TRENDS ============ -->
+  <div class="band"><span class="lbl">7-Day Trends</span><span class="rule"></span><span class="sub">patterns from the first week of capture</span></div>
+
+  <div class="duo">
+  <section class="card full">
+    <div class="chead"><h2>Fashionphile inventory — the weekly supply cycle</h2><span class="src-tag">Fashionphile · 7d</span></div>
+    <p class="cnote" id="trendInsight">Total live listings across all tracked brands, by day.</p>
+    <div class="chartwrap" id="chartFpTotal"></div>
+  </section>
+
+  <section class="card full" style="margin-top:16px">
+    <div class="chead"><h2>7-day net movers</h2><span class="src-tag">Fashionphile · Δ listings</span></div>
+    <p class="cnote">Change in live listing count over the week, per brand. <span style="color:var(--gold)">Gold</span> = built inventory, <span style="color:var(--cool)">blue</span> = drew down.</p>
+    <div id="fpMovers"></div>
+    <p class="cnote" style="margin:14px 0 0;color:var(--ink-3)">Other sources this week: Mirror requests held steady, Google search volume was flat (it's a monthly average), and eBay's huge listing base was within daily noise — so no trend chart for those yet. More signal will emerge as weeks accumulate.</p>
+  </section>
+
+  <!-- ============ REFERENCE BAND — from published reports ============ -->
+  </div>
+
+  <details class="fold" style="margin-top:22px">
+    <summary>Reference indices <span class="dim" style="font-size:12px;color:var(--ink-3)">myGemma, Rebag, Lyst, The RealReal, Vestiaire</span></summary>
+    <div class="foldbody">
+      <p class="cnote">Published reports refreshed a few times a year, kept for context rather than daily reading.</p>
+  <div class="band"><span class="lbl">Reference</span><span class="rule"></span><span class="sub">from published reports · refreshed a few times a year</span></div>
+
+  <div class="grid">
+    <div class="col">
+      <section class="card">
+        <div class="chead"><h2>Search Demand — most-searched luxury</h2><span class="src-tag" id="mgTag">myGemma Index</span></div>
+        <p class="cnote" id="mgNote">Authenticated luxury search &amp; transaction data.</p>
+        <div class="rank">
+          <div><h3>Brands</h3><ol class="rl" id="mgBrands"></ol></div>
+          <div><h3>Handbags</h3><ol class="rl" id="mgBags"></ol></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="chead"><h2>Value Retention</h2><span class="src-tag">Rebag Clair</span></div>
+        <p class="cnote">Resale value as % of original retail. Beyond the marker = holds or gains value.</p>
+        <div class="ret" id="retChart"></div>
+        <div class="refnote">▏ marker = 100% (holds value) · year labeled per row</div>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="card">
+        <div class="chead"><h2>Brand Heat — fashion-wide</h2><span class="src-tag" id="lystTag">Lyst Index</span></div>
+        <p class="cnote">Desire + Demand + Discovery across 200M+ shoppers. Quarterly movement shown.</p>
+        <ol class="rl" id="lystList" style="columns:2;column-gap:22px"></ol>
+      </section>
+
+      <section class="card">
+        <div class="chead"><h2 id="trrHead">The RealReal — most-searched</h2><span class="src-tag">The RealReal · report</span></div>
+        <p class="cnote">Most-searched brands &amp; resale value climbers, from The RealReal's latest published Resale Report.</p>
+        <ol class="rl" id="trrSearch"></ol>
+        <p class="cnote" id="trrClimb" style="margin:12px 0 0"></p>
+      </section>
+    </div>
+  </div>
+
+  <section class="card full" style="margin-top:16px">
+    <div class="chead"><h2>Vestiaire Collective — resale report</h2><span class="src-tag" id="vcTag">Vestiaire · report</span></div>
+    <p class="cnote">Published resale data. Cloudflare blocks live server capture, so this is report-based (like The RealReal).</p>
+    <div class="rank">
+      <div>
+        <h3>Value ranking — top brands</h3>
+        <ol class="rl" id="vcRank"></ol>
+        <p class="cnote" id="vcGrow" style="margin:12px 0 0"></p>
+      </div>
+      <div>
+        <h3>Fastest-selling items</h3>
+        <ol class="rl" id="vcSelling"></ol>
+      </div>
+    </div>
+  </section>
+
+    </div>
+  </details>
+
+  <section class="card full" style="margin-top:16px">
+    <div class="chead"><h2>Buy Signals</h2><span class="src-tag">Synthesis</span></div>
+    <p class="cnote">Reading demand against value-retention and supply, for purchasing decisions.</p>
+    <div class="sig" id="signals"></div>
+  </section>
+
+  <details class="fold" style="margin-top:16px">
+    <summary>Exports, all raw data <span style="font-size:12px;color:var(--ink-3)">CSV, JSON, ZIP</span></summary>
+    <div class="foldbody">
+      <p class="cnote">Export a specific <b>day or date range</b> below, grab the whole thing as one bundle, or pull a single full sheet. Every row carries a <b>date</b>, so anything you export pivots by day, week, or month in Excel/Sheets.</p>
+    <div id="exports"></div>
+  
+    </div>
+  </details>
+
+  <footer>
+    <div id="sources">Sources — Mirror Concierge, Fashionphile, eBay, myGemma, Rebag, DataForSEO (Google search volume + daily Trends). Reference reports from The RealReal, Vestiaire Collective and Lyst.</div>
+    <div class="disc">
+      Retention figures blend Rebag's 6th annual Clair Report (Dec 2025, Hermès &amp; Goyard) and the 5th annual (2024, others), labeled by year. Supply-mix share is derived from the visible feed. Mirror is an independent marketplace, not affiliated with the brands shown. Point-in-time reads for buying research, not investment advice.
+    </div>
+  </footer>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+// Some cards were consolidated into the brand board; their computations still
+// run because other sections depend on them, so writes to absent nodes no-op.
+const setEl = (sel, html) => { const el = document.querySelector(sel); if (el) el.innerHTML = html; };
+const fmt = n => '$' + Number(n).toLocaleString('en-US');
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function downloadText(name, text, type){
+  const url = URL.createObjectURL(new Blob([text], {type: type||'application/octet-stream'}));
+  const a = document.createElement('a'); a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+}
+// Filter a tidy CSV (date is always the first column) to [from,to] inclusive.
+function filterCsvByDate(text, from, to){
+  const lines = text.replace(/\n+$/,'').split('\n');
+  const header = lines[0];
+  const rows = lines.slice(1).filter(l=>{ const c=l.indexOf(','); const d = c<0?l:l.slice(0,c); return d>=from && d<=to; });
+  return { csv: header + '\n' + rows.join('\n') + (rows.length?'\n':''), count: rows.length };
+}
+function addDays(ymd, n){ const d = new Date(ymd+'T00:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
+function clampDate(v, lo, hi){ return v < lo ? lo : (v > hi ? hi : v); }
+
+// Single-series line chart -> inline SVG string (theme-aware via CSS vars, responsive).
+function lineChart(dates, values){
+  const W=680,H=210,pl=52,pr=58,pt=14,pb=26, iw=W-pl-pr, ih=H-pt-pb;
+  const vals=values.filter(v=>v!=null); if(vals.length<2) return '';
+  let mn=Math.min(...vals), mx=Math.max(...vals); const pad=(mx-mn)*0.18||1; mn=mn-pad; mx=mx+pad;
+  const n=values.length;
+  const X=i=> pl + (n<=1?iw/2:(i/(n-1))*iw);
+  const Y=v=> pt + ih - ((v-mn)/(mx-mn||1))*ih;
+  const pts=values.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean);
+  const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area=line+` L ${pts[pts.length-1][0].toFixed(1)} ${pt+ih} L ${pts[0][0].toFixed(1)} ${pt+ih} Z`;
+  const peakV=Math.max(...vals), peakI=values.indexOf(peakV);
+  let grid='';
+  for(let g=0;g<=2;g++){ const gv=mn+(mx-mn)*g/2, gy=Y(gv);
+    grid+=`<line class="gridline" x1="${pl}" y1="${gy.toFixed(1)}" x2="${pl+iw}" y2="${gy.toFixed(1)}"/><text class="axis" x="${pl-7}" y="${(gy+3).toFixed(1)}" text-anchor="end">${Math.round(gv).toLocaleString('en-US')}</text>`; }
+  const xl=values.map((v,i)=>`<text class="axis" x="${X(i).toFixed(1)}" y="${H-8}" text-anchor="middle">${dates[i].slice(5)}</text>`).join('');
+  const circ=values.map((v,i)=>v==null?'':`<circle cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="${i===peakI?4:3}" fill="${i===peakI?'var(--gold-strong)':'var(--gold)'}"><title>${dates[i]}: ${v.toLocaleString('en-US')}</title></circle>`).join('');
+  const last=values[n-1], end=`<text x="${pl+iw+7}" y="${(Y(last)+4).toFixed(1)}" text-anchor="start" style="fill:var(--gold);font-family:var(--mono);font-size:11px">${last.toLocaleString('en-US')}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Line chart">
+    ${grid}<path d="${area}" fill="var(--gold)" opacity="0.10"/>
+    <path d="${line}" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${circ}${end}${xl}</svg>`;
+}
+
+function sparkline(vals, w=54, h=16){
+  if(!vals || vals.length < 2) return '';
+  const max = Math.max(...vals), min = Math.min(...vals), rng = max - min || 1;
+  const pts = vals.map((v,i)=>`${(i/(vals.length-1)*w).toFixed(1)},${(h-2 - (v-min)/rng*(h-4)).toFixed(1)}`).join(' ');
+  const lx = w, ly = (h-2 - (vals[vals.length-1]-min)/rng*(h-4)).toFixed(1);
+  return `<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" fill="none">
+    <polyline points="${pts}" stroke="var(--gold-dim)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${lx}" cy="${ly}" r="2" fill="var(--gold)"/></svg>`;
+}
+
+function daysBetween(a,b){ return Math.round((new Date(b)-new Date(a))/86400000); }
+function prettyDate(d){ return new Date(d+'T00:00:00Z').toLocaleDateString('en-US',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'}); }
+
+async function load(){
+  let latest, history, exports, metrics, alerts;
+  try{
+    [latest, history, metrics, alerts] = await Promise.all([
+      fetch('./data/latest.json').then(r=>r.json()),
+      fetch('./data/history.json').then(r=>r.json()),
+      fetch('./data/metrics.json').then(r=>r.json()).catch(()=>({metrics:{},signals:[]})),
+      fetch('./data/alerts.json').then(r=>r.json()).catch(()=>({alerts:[]}))
+    ]);
+    exports = await fetch('./data/exports/index.json').then(r=>r.json()).catch(()=>null);
+  }catch(e){
+    $('#err').style.display='block';
+    $('#err').innerHTML = 'Could not load snapshot data. Run <code>npm run all &amp;&amp; npm run serve</code>, or open the deployed GitHub Pages URL (data is fetched at runtime, so opening the file directly will not work).';
+    return;
+  }
+  render(latest, history, exports, metrics, alerts);
+}
+
+function render(latest, history, exports, metrics, alerts){
+  metrics = metrics || {metrics:{},signals:[]};
+  alerts = alerts || {alerts:[]};
+  const M = (key, brand) => metrics.metrics?.[key]?.brands?.[brand] || null;
+  const m = latest.sources.mirror || {};
+  const idx = latest.sources.indices || {};
+  const hunt = (m.hunt || []).slice().sort((a,b)=>b.requesters-a.requesters);
+
+  // ---- Search volume (Google monthly, via DataForSEO) — defined early so every card can use svCell ----
+  const svFocus = latest.sources.search_volume?.focus || [];
+  const svMap = {}; svFocus.forEach(f=>{ svMap[f.brand] = f.volume; });
+  const svPrev = history.searchVolPrev || {};
+  const svSorted = svFocus.slice().sort((a,b)=>(b.volume??-1)-(a.volume??-1));
+  const svMax = Math.max(...svSorted.map(x=>x.volume||0), 1);
+  setEl('#searchVolBars', svSorted.length
+    ? svSorted.map(x=>{
+        const cur = x.volume, prev = svPrev[x.brand];
+        let comp = '';
+        if(prev!=null && cur!=null){
+          const d = cur - prev;
+          const col = d>0?'var(--good)':d<0?'var(--heat)':'var(--ink-3)';
+          const tag = d===0?'–':(d>0?'▲':'▼')+Math.abs(d).toLocaleString('en-US');
+          comp = `<span class="svprev">prev ${prev.toLocaleString('en-US')} <span style="color:${col}">${tag}</span></span>`;
+        }
+        return `<div class="svrow">
+          <span class="svname">${esc(x.brand)}</span>
+          <span class="svcol">${comp}<span class="svfig">${cur!=null?cur.toLocaleString('en-US'):'—'}</span></span>
+          <div class="svtrack"><div class="svfill" data-w="${cur?(cur/svMax*100).toFixed(1):0}"></div></div>
+        </div>`;
+      }).join('')
+    : '<div style="color:var(--ink-3);font-size:13px">Awaiting first search-volume capture — populates on the next daily run.</div>');
+  const svCell = b => { const v = svMap[b]; return v!=null ? v.toLocaleString('en-US') : '—'; };
+
+  // ---- Demand Momentum (Google Trends, daily interest) ----
+  const gt = (latest.sources.google_trends?.focus || []).map(f=>{
+    const vals=(f.series||[]).map(p=>p.value);
+    let mo=null, lowSignal=false;
+    if(vals.length>=4){ const h=Math.floor(vals.length/2);
+      const prior=vals.slice(0,h), recent=vals.slice(-h);
+      const pa=prior.reduce((a,b)=>a+b,0)/prior.length, ra=recent.reduce((a,b)=>a+b,0)/recent.length;
+      // Only compute a % when there's enough interest to be meaningful — tiny 0-3 values
+      // make the percentage pure noise (e.g. The Row).
+      if(ra>=6 && pa>0) mo=(ra-pa)/pa*100; else lowSignal=true;
+    }
+    return {brand:f.brand, vals, mo, lowSignal};
+  }).filter(x=>x.vals.length).sort((a,b)=>(b.mo??-999)-(a.mo??-999));
+  setEl('#demandMomentum', gt.length
+    ? gt.map(x=>{
+        const moTxt = x.mo!=null ? ((x.mo>=0?'▲':'▼')+Math.abs(x.mo).toFixed(0)+'%') : (x.lowSignal?'low':'—');
+        const col = x.mo==null?'var(--ink-3)':(x.mo>1?'var(--good)':x.mo<-1?'var(--heat)':'var(--ink-3)');
+        return `<div class="mrow"><span class="mname">${esc(x.brand)}</span>${sparkline(x.vals,64,18)||'<span></span>'}<span class="mmo" style="color:${col}">${moTxt}</span></div>`;
+      }).join('')
+    : '<div style="color:var(--ink-3);font-size:13px">Awaiting first Google Trends capture — populates on the next daily run.</div>');
+
+  // ---- Brand board: one row per brand, replacing six single-metric cards ----
+  const boardRows = (() => {
+    const fp = latest.sources.fashionphile?.focus || [];
+    const eb = {}; (latest.sources.ebay?.focus || []).forEach(f => { eb[f.brand] = f.total; });
+    const sv = {}; (latest.sources.search_volume?.focus || []).forEach(f => { sv[f.brand] = f.volume; });
+    const stb = latest.sources.fp_sell_through?.brands || {};
+    const gtRel = {}; (latest.sources.google_trends?.focus || []).forEach(f => {
+      gtRel[f.brand] = (f.rel || []).map(p => p.value);
+    });
+    const sig = {}; (metrics.signals || []).forEach(x => { sig[x.brand] = x; });
+    const an = metrics.analytics?.brands || {};
+
+    // A brand appears only if a live source captured it today. Search volume is
+    // refreshed weekly and carried in between, so a brand dropped from tracking
+    // lingers in that payload and would otherwise ghost on the board as an empty
+    // row: Fendi did exactly that after being removed. Rolex has no Fashionphile
+    // segment but is genuinely tracked on eBay, so eBay counts as live.
+    const names = new Set([...fp.map(f => f.brand), ...Object.keys(eb)]);
+    return [...names].map(brand => {
+      const f = fp.find(x => x.brand === brand) || {};
+      const t = stb[brand] || {};
+      return {
+        brand, segment: f.segment || '',
+        scarcity: sig[brand]?.scarcity ?? null,
+        spark: gtRel[brand] || [],
+        searches: sv[brand] ?? null,
+        median: f.price?.median ?? null,
+        medianPct: M('fp.medianPrice', brand)?.dodPct ?? null,
+        // Days of supply and the clearing gap replace the p10-p90 band, which was
+        // reference detail rather than something to act on. Both come from the
+        // analytics layer, pooled over its window so the medians are not read off
+        // a single day's handful of sales.
+        supply: an[brand]?.daysOfSupply ?? null,
+        clearing: an[brand]?.clearingGapPct ?? null,
+        listings: f.live ?? f.liveAll ?? null,
+        ebay: eb[brand] ?? null,
+        sold: t.departures ?? null,
+        turnover: t.turnoverPct ?? null,
+        days: t.medianDaysToSell ?? null
+      };
+    }).sort((a, b) => (b.scarcity ?? -99) - (a.scarcity ?? -99));
+  })();
+
+  const n0 = v => v == null ? '<span class="dim">—</span>' : v.toLocaleString('en-US');
+  setEl('#boardBody', boardRows.map(r => {
+    const sc = r.scarcity == null ? '<span class="dim">—</span>'
+      : `<span style="color:${r.scarcity >= 0 ? 'var(--good)' : 'var(--heat)'}">${r.scarcity >= 0 ? '+' : ''}${r.scarcity.toFixed(2)}</span>`;
+    const dd = (r.median != null && r.medianPct != null && Math.abs(r.medianPct) >= 0.1)
+      ? `<span class="delta ${r.medianPct > 0 ? 'up' : 'down'}" style="margin-left:5px">${r.medianPct > 0 ? '+' : ''}${r.medianPct.toFixed(1)}%</span>` : '';
+    const supply = r.supply != null ? `${r.supply}d` : '<span class="dim">—</span>';
+    const clearing = r.clearing == null ? '<span class="dim">—</span>'
+      : `<span style="color:${r.clearing >= 0 ? 'var(--good)' : 'var(--heat)'}">${r.clearing >= 0 ? '+' : ''}${r.clearing.toFixed(1)}%</span>`;
+    return `<tr>
+      <td><span class="b">${esc(r.brand)}</span><div class="sub2">${esc(r.segment)}</div></td>
+      <td class="num">${sc}</td>
+      <td class="num">${sparkline(r.spark, 46, 15) || '<span class="dim">—</span>'}</td>
+      <td class="num">${n0(r.searches)}</td>
+      <td class="num gold">${r.median != null ? fmt(r.median) : '<span class="dim">—</span>'}${dd}</td>
+      <td class="num">${supply}</td>
+      <td class="num small">${clearing}</td>
+      <td class="num">${n0(r.listings)}</td>
+      <td class="num">${n0(r.ebay)}</td>
+      <td class="num gold">${n0(r.sold)}</td>
+      <td class="num">${r.turnover != null ? r.turnover.toFixed(2) + '%' : '<span class="dim">—</span>'}</td>
+      <td class="num">${r.days != null ? r.days + 'd' : '<span class="dim">—</span>'}</td>
+    </tr>`;
+  }).join(''));
+
+  // ---- Alerts: the only card that says "look here today" ----
+  // Source staleness is a standing condition, not a change. Mirror had been
+  // static for 26 days while sitting in a card titled "What changed today",
+  // crowding out the one line that had actually moved. Health belongs in its own
+  // strip; this card is reserved for things that genuinely changed.
+  const AL = alerts.alerts || [];
+  const changes = AL.filter(a => a.type !== 'stale-source');
+  $('#alertList').innerHTML = changes.length
+    ? changes.map(a=>`<div class="alert ${esc(a.severity||'low')}"><span class="atype">${esc(a.type)}</span><span class="amsg">${esc(a.message)}</span></div>`).join('')
+    : '<div style="color:var(--ink-3);font-size:13px">No series left its normal range today. Everything tracked is behaving as usual.</div>';
+  $('#alertTag').textContent = changes.length ? `${changes.length} flagged` : 'all quiet';
+
+  // Every tracked source, not only the failing ones, so a healthy pipeline is
+  // visible rather than merely implied by an absence of warnings.
+  const REFERENCE = new Set(['indices','therealreal','vestiaire']);
+  const fresh = (metrics.freshness||[]).filter(f=>!REFERENCE.has(f.source));
+  $('#healthStrip').innerHTML = fresh.length
+    ? '<div class="hlab">Source health</div>' + fresh
+        .slice().sort((a,b)=>b.unchangedDays-a.unchangedDays)
+        .map(f=>{
+          const stale = f.unchangedDays >= 3;
+          const note = f.unchangedDays === 0 ? 'updated today' : `static ${f.unchangedDays}d`;
+          const since = stale && f.lastChanged ? ` <span class="hd">since ${esc(f.lastChanged)}</span>` : '';
+          return `<span class="hpill ${stale?'hstale':''}" title="${esc(f.source)}: ${note}"><span class="dot"></span>${esc(f.source)} <span class="hd">${note}</span>${since}</span>`;
+        }).join('')
+    : '';
+
+  // ---- Scarcity: demand momentum minus supply momentum, both z-scored ----
+  const ebTotal={}; (latest.sources.ebay?.focus||[]).forEach(f=>{ ebTotal[f.brand]=f.total; });
+  const signals = (metrics.signals||[]).filter(x=>x.scarcity!=null);
+  const maxAbs = Math.max(...signals.map(x=>Math.abs(x.scarcity)), 1);
+  setEl('#demandPressure', signals.length
+    ? signals.map(x=>{
+        const pos = x.scarcity >= 0;
+        // Diverging bar: positive grows right of centre, negative left.
+        const w = (Math.abs(x.scarcity)/maxAbs*50).toFixed(1);
+        return `<div class="svrow"><span class="svname">${esc(x.brand)}</span>
+          <span class="svfig" style="color:${pos?'var(--good)':'var(--heat)'}">${pos?'+':''}${x.scarcity.toFixed(2)}</span>
+          <div class="svtrack divtrack"><div class="divfill" style="${pos?`left:50%;width:${w}%;background:var(--good)`:`right:50%;width:${w}%;background:var(--heat)`}"></div></div>
+        </div>`;
+      }).join('')
+    : '<div style="color:var(--ink-3);font-size:13px">Needs 8+ days of both demand and supply history per brand.</div>');
+  const fpDelta={}; const Tfp2=history.trends?.fp;
+  if(Tfp2){ Object.entries(Tfp2.byBrand).forEach(([b,arr])=>{ const v=arr.filter(x=>x!=null); fpDelta[b]=(v[v.length-1]??0)-(v[0]??0); }); }
+  const moMap={}; gt.forEach(x=>{ moMap[x.brand]=x.mo; });
+  const sig=[];
+  if(signals.length){ const p=signals[0];
+    const lead = p.scarcity>0
+      ? 'Demand is running ahead of the inventory arriving.'
+      : 'Even the leader is not supply-constrained today: supply is growing at least as fast as demand across every brand tracked.';
+    sig.push(`<b>Most contested:</b> ${esc(p.brand)}, scarcity <b style="color:var(--gold)">${p.scarcity>=0?'+':''}${p.scarcity.toFixed(2)}</b>, with demand momentum ${p.demandZ>=0?'+':''}${p.demandZ} against supply ${p.supplyZ>=0?'+':''}${p.supplyZ}. ${lead}`); }
+  const heat=gt.filter(x=>x.mo!=null).sort((a,b)=>b.mo-a.mo)[0];
+  if(heat && heat.mo>1) sig.push(`<b>Heating up:</b> ${esc(heat.brand)} search interest <b style="color:var(--good)">+${heat.mo.toFixed(0)}%</b> (recent vs prior).`);
+  const cool=gt.filter(x=>x.mo!=null).sort((a,b)=>a.mo-b.mo)[0];
+  if(cool && cool.mo<-1) sig.push(`<b>Cooling:</b> ${esc(cool.brand)} search interest <b style="color:var(--heat)">${cool.mo.toFixed(0)}%</b> — easing off.`);
+  const built=Object.entries(fpDelta).sort((a,b)=>b[1]-a[1])[0];
+  if(built && built[1]>0) sig.push(`<b>Supply building fastest:</b> ${esc(built[0])} (+${built[1].toLocaleString('en-US')} Fashionphile listings this week) — more competition landing.`);
+  const opp=signals.find(p=>p.scarcity>0 && moMap[p.brand]!=null && moMap[p.brand]>1);
+  if(opp) sig.push(`<b>Opportunity to watch:</b> ${esc(opp.brand)} pairs positive scarcity with rising search interest.`);
+  const clear=Object.entries(latest.sources.fp_sell_through?.brands||{}).filter(([,v])=>v.turnoverPct!=null).sort((a,b)=>b[1].turnoverPct-a[1].turnoverPct)[0];
+  if(clear) sig.push(`<b>Clearing fastest:</b> ${esc(clear[0])} turned over <b style="color:var(--gold)">${clear[1].turnoverPct.toFixed(2)}%</b> of its live inventory today${clear[1].medianDaysToSell!=null?`, at a median ${clear[1].medianDaysToSell} days on site`:''}.`);
+  const stale=(metrics.freshness||[]).filter(f=>f.unchangedDays>=3);
+  if(stale.length) sig.push(`<b>Not moving:</b> ${stale.map(f=>`${esc(f.source)} (${f.unchangedDays}d)`).join(', ')} returned identical data. Treat those cards as reference, not live signal.`);
+  $('#readList').innerHTML = sig.length ? sig.map(s=>`<li>${s}</li>`).join('') : '<li style="color:var(--ink-3)">Gathering signal — a few more days of data needed.</li>';
+
+  // ---- Stamp ----
+  const day = daysBetween(history.firstDate, latest.date) + 1;
+  $('#stamp').innerHTML =
+    `<div><span class="live">LIVE</span></div>`+
+    `<div>Snapshot <b>${prettyDate(latest.date)}</b></div>`+
+    `<div>Day ${day} · ${history.count} captured</div>`+
+    `<div>since ${prettyDate(history.firstDate)}</div>`;
+
+  // ---- KPIs ----
+  // Every headline figure is drawn from a series that actually moves. The previous
+  // four read from Mirror's frozen feed and three static annual reports, so the
+  // top of the dashboard never changed no matter what the market did.
+  const ret = (idx.rebag?.retention||[]).slice().sort((a,b)=>b.pct-a.pct);
+  const bestRet = ret[0] || {brand:'—',pct:0};
+  const topScarce = signals[0];
+  const stEntries = Object.entries(latest.sources.fp_sell_through?.brands || {});
+  const fastest = stEntries.filter(([,v])=>v.turnoverPct!=null).sort((a,b)=>b[1].turnoverPct-a[1].turnoverPct)[0];
+  // Read from the source directly: fpFocus is declared further down, and touching
+  // it here would hit the temporal dead zone.
+  const priciest = (latest.sources.fashionphile?.focus || [])
+    .filter(x=>x.price?.median!=null).sort((a,b)=>b.price.median-a.price.median)[0];
+  const highAlerts = changes.filter(a=>a.severity==='high').length;
+
+  $('#kpis').innerHTML = [
+    topScarce
+      ? ['Scarcity leader', esc(topScarce.brand), `demand ${topScarce.demandZ>=0?'+':''}${topScarce.demandZ} vs supply ${topScarce.supplyZ>=0?'+':''}${topScarce.supplyZ}`, 'Derived · z-scored']
+      : ['Scarcity leader', '—', 'needs 8+ days per brand', 'Derived'],
+    fastest
+      ? ['Fastest clearing', esc(fastest[0]), `${fastest[1].turnoverPct.toFixed(2)}% of stock sold today`, 'Fashionphile · SKU diff']
+      : ['Fastest clearing', '—', 'starts after two captures', 'Fashionphile · SKU diff'],
+    priciest
+      ? ['Highest market price', `${esc(priciest.brand)} ${fmt(priciest.price.median)}`, `median across ${(priciest.live||0).toLocaleString('en-US')} live pieces`, 'Fashionphile · live']
+      : ['Best value retention', `${esc(bestRet.brand)} ${bestRet.pct}%`, 'Appreciates above retail', idx.rebag?.source||'Rebag'],
+    [changes.length?'Flagged today':'All quiet', changes.length?String(changes.length):'0',
+      changes.length ? (highAlerts?`${highAlerts} high severity`:'see What changed today') : 'nothing outside normal range', 'Derived · alerts']
+  ].map(k=>`<div class="kpi"><div class="lab">${k[0]}</div><div class="val">${k[1]}</div><div class="sub">${k[2]}</div><div class="src">${esc(k[3])}</div></div>`).join('');
+
+  // ---- Mirror freshness ----
+  // Mirror is an editorial request feed, not a live market. It sat unchanged for
+  // 22 of the first 24 days while this card was labelled "Live Demand", so the
+  // card now states how long the feed has been static instead of implying flow.
+  const mirrorFresh = (metrics.freshness||[]).find(f=>f.source==='mirror');
+  if(mirrorFresh && mirrorFresh.unchangedDays >= 3){
+    const h = document.querySelector('#demandBars')?.closest('.card')?.querySelector('h2');
+    if(h && !h.querySelector('.stale')){
+      h.textContent = 'Buyer requests';
+      h.insertAdjacentHTML('beforeend', `<span class="stale">static ${mirrorFresh.unchangedDays}d</span>`);
+      h.closest('.chead').insertAdjacentHTML('afterend',
+        `<p class="stalenote">Unchanged since ${esc(mirrorFresh.lastChanged||'before this log began')}. Mirror publishes this feed editorially, so treat it as a standing wishlist rather than daily demand.</p>`);
+    }
+    const h2 = document.querySelector('#compBar')?.closest('.card')?.querySelector('h2');
+    if(h2 && !h2.querySelector('.stale')) h2.insertAdjacentHTML('beforeend', `<span class="stale">static ${mirrorFresh.unchangedDays}d</span>`);
+  }
+
+  // ---- Demand bars ----
+  const maxN = Math.max(...hunt.map(h=>h.requesters), 1);
+  $('#demandBars').innerHTML = hunt.map(h=>{
+    const series = (history.huntSeries[`${h.brand} — ${h.item}`]||[]).map(p=>p.requesters);
+    let delta='<span class="delta flat">new</span>';
+    if(series.length>=2){ const d=series[series.length-1]-series[series.length-2];
+      delta = d>0?`<span class="delta up">▲${d}</span>`:d<0?`<span class="delta down">▼${Math.abs(d)}</span>`:'<span class="delta flat">–</span>'; }
+    return `<div class="bar">
+      <div class="name"><span class="brand">${esc(h.brand)}</span><span class="desc">${esc(h.item)}</span></div>
+      ${sparkline(series)||'<span></span>'}
+      <span><span class="fig">${h.requesters}</span> ${delta}</span>
+      <div class="track"><div class="fill" data-w="${(h.requesters/maxN*100).toFixed(1)}"></div></div>
+    </div>`;
+  }).join('');
+
+  // ---- Search rank (myGemma) ----
+  if(idx.mygemma){
+    $('#mgTag').textContent = `${idx.mygemma.source} · ${idx.mygemma.asOf||''}`;
+    $('#mgNote').textContent = `Authenticated luxury search & transaction data${idx.mygemma.period?` · ${idx.mygemma.period}`:''}.`;
+    $('#mgBrands').innerHTML = (idx.mygemma.brands||[]).map(b=>`<li><span class="b">${esc(b)}</span></li>`).join('');
+    $('#mgBags').innerHTML = (idx.mygemma.handbags||[]).map(b=>`<li><span class="b">${esc(b)}</span></li>`).join('');
+  }
+
+  // ---- Lyst ----
+  if(idx.lyst){
+    $('#lystTag').textContent = `${idx.lyst.source} · ${idx.lyst.period||''}`;
+    $('#lystList').innerHTML = (idx.lyst.brands||[]).slice(0,10).map(b=>{
+      const cls = /^\+|new|re-entry/i.test(b.move)?'up':/^-/.test(b.move)?'down':'';
+      return `<li><span class="b">${esc(b.name)}</span><span class="m ${cls}">${esc(b.move||'')}</span></li>`;
+    }).join('');
+  }
+
+  // ---- Retention ----
+  const scale=150;
+  $('#retChart').innerHTML = (idx.rebag?.retention||[]).map(r=>`
+    <div class="retrow">
+      <div class="rn">${esc(r.brand)}<span class="yr">'${String(r.reportYear).slice(2)}</span></div>
+      <div class="retrack"><div class="retfill ${r.appreciates?'app':'dep'}" data-w="${(r.pct/scale*100).toFixed(1)}"></div>
+        <div style="position:absolute;left:66.66%;top:0;bottom:0;border-left:1px dashed var(--ink-3)"></div></div>
+      <div class="rv" style="color:${r.appreciates?'var(--gold)':'var(--ink-2)'}">${r.pct}%</div>
+    </div>`).join('');
+
+  // ---- Supply mix ----
+  let counts = m.inventoryCounts;
+  if(!counts || !counts.length){
+    const c={}; (m.inventoryPriced||m.inventory||[]).forEach(x=>c[x.brand]=(c[x.brand]||0)+1);
+    counts = Object.entries(c).map(([brand,count])=>({brand,count})).sort((a,b)=>b.count-a.count);
+  }
+  const totalC = counts.reduce((s,x)=>s+x.count,0)||1;
+  const palette=['var(--gold-strong)','var(--gold)','var(--gold-dim)','var(--cool)','var(--surface-2)'];
+  const top = counts.slice(0,4); const otherC = totalC - top.reduce((s,x)=>s+x.count,0);
+  const segs = top.map((c,i)=>({label:c.brand,count:c.count,color:palette[i]}));
+  if(otherC>0) segs.push({label:'Other',count:otherC,color:palette[4]});
+  $('#compBar').innerHTML = segs.map((s,i)=>{
+    const pct=Math.round(s.count/totalC*100);
+    const dark = i>=3;
+    return `<span style="flex:${s.count};background:${s.color};color:${dark?'var(--ink-2)':'#14110e'}">${pct>=12?esc(s.label)+' '+pct+'%':''}</span>`;
+  }).join('');
+  $('#compLegend').innerHTML = segs.map((s,i)=>`<span><i style="background:${s.color}"></i>${esc(s.label)} · ${s.count}</span>`).join('');
+
+  // ---- Inventory pricing ----
+  const inv = (m.inventoryPriced||m.inventory||[]).slice().sort((a,b)=>(b.price||0)-(a.price||0));
+  $('#invBody').innerHTML = inv.map(p=>`<tr>
+    <td><span class="b">${esc(p.brand)}</span></td><td>${esc(p.item)}</td>
+    <td><span class="chip">${esc(p.category||'—')}</span></td>
+    <td class="price">${p.price?fmt(p.price):'—'}</td></tr>`).join('');
+
+  // ---- Pre-owned marketplaces ----
+  // Sorted by median: the actual price ladder of the market, expensive first.
+  const fpFocus = (latest.sources.fashionphile?.focus || []).slice()
+    .sort((a,b)=>(b.price?.median??-1)-(a.price?.median??-1));
+  const num = v => v!=null ? v.toLocaleString('en-US') : '—';
+  const hasDist = fpFocus.some(x=>x.price?.median!=null);
+  setEl('#fpBody', !fpFocus.length
+    ? '<tr><td colspan="5" style="color:var(--ink-3)">Awaiting first Fashionphile capture. Populates on the next daily run.</td></tr>'
+    : !hasDist
+      ? '<tr><td colspan="5" style="color:var(--ink-3)">Price distribution starts with the next daily capture. Earlier days recorded only a floor price, which was not a market price.</td></tr>'
+      : fpFocus.map(x=>{
+          const md = M('fp.medianPrice', x.brand);
+          const dd = md && md.dodPct!=null && md.dodPct!==0
+            ? `<span class="delta ${md.dodPct>0?'up':'down'}" style="margin-left:6px">${md.dodPct>0?'+':''}${md.dodPct.toFixed(1)}%</span>` : '';
+          return `<tr><td><span class="b">${esc(x.brand)}</span><div style="font-size:11px;color:var(--ink-3)">${esc(x.segment||'')}</div></td>
+            <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.price?.p10!=null?fmt(x.price.p10):'—'}</td>
+            <td class="price">${x.price?.median!=null?fmt(x.price.median):'—'}${dd}</td>
+            <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.price?.p90!=null?fmt(x.price.p90):'—'}</td>
+            <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${num(x.live ?? x.liveAll ?? x.count)}</td></tr>`;
+        }).join(''));
+
+  // ---- Sell-through ----
+  const st = Object.entries(latest.sources.fp_sell_through?.brands || {})
+    .sort((a,b)=>(b[1].turnoverPct??-1)-(a[1].turnoverPct??-1));
+  const stStatus = latest.sources.fp_sell_through?.status;
+  setEl('#stBody', !st.length
+    ? `<tr><td colspan="5" style="color:var(--ink-3)">${stStatus==='baseline'
+        ? 'Baseline captured today. Sell-through needs two consecutive days and appears on the next run.'
+        : 'Awaiting the first SKU capture. Populates on the next daily run.'}</td></tr>`
+    : st.map(([brand,v])=>`<tr><td><span class="b">${esc(brand)}</span></td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--gold);font-variant-numeric:tabular-nums">${num(v.departures)}</td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${num(v.arrivals)}</td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${v.turnoverPct!=null?v.turnoverPct.toFixed(2)+'%':'—'}</td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${v.medianDaysToSell!=null?v.medianDaysToSell+'d':'—'}</td></tr>`).join(''));
+
+  const eb = (latest.sources.ebay?.focus || []).slice().sort((a,b)=>(b.total??-1)-(a.total??-1));
+  setEl('#ebayBody', eb.length
+    ? eb.map(x=>`<tr><td><span class="b">${esc(x.brand)}</span></td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--gold);font-variant-numeric:tabular-nums">${svCell(x.brand)}</td>
+        <td style="text-align:right;font-family:var(--mono);color:var(--ink-2);font-variant-numeric:tabular-nums">${x.total!=null?x.total.toLocaleString('en-US'):'—'}</td></tr>`).join('')
+    : '<tr><td colspan="3" style="color:var(--ink-3)">Awaiting first eBay capture — populates on the next daily run.</td></tr>');
+  const trr = latest.sources.therealreal || {};
+  if(trr.asOf) $('#trrHead').textContent = `The RealReal — most-searched · ${trr.asOf}`;
+  $('#trrSearch').innerHTML = (trr.mostSearchedBrands||[]).slice(0,8).map(b=>`<li><span class="b">${esc(b)}</span></li>`).join('');
+  $('#trrClimb').innerHTML = (trr.valueClimbers||[]).length
+    ? `<b style="color:var(--ink-2)">Value climbers YoY:</b> ` + trr.valueClimbers.map(c=>`${esc(c.item)} <span style="color:var(--good)">+${c.yoyPct}%</span>`).join(' · ')
+    : '';
+
+  // ---- Vestiaire (report) ----
+  const vc = latest.sources.vestiaire || {};
+  if(vc.asOf) $('#vcTag').textContent = `Vestiaire · ${vc.asOf}`;
+  $('#vcRank').innerHTML = (vc.valueRanking||[]).map(r=>`<li><span class="b">${esc(r.brand)}</span><span class="m">${r.points.toLocaleString('en-US')} pts</span></li>`).join('');
+  const fmtT = s => `${Math.floor(s/60)}m ${String(s%60).padStart(2,'0')}s`;
+  $('#vcSelling').innerHTML = (vc.fastestSelling||[]).map(x=>`<li><span class="b">${esc(x.item)}</span><span class="m">${fmtT(x.seconds)}</span></li>`).join('');
+  $('#vcGrow').innerHTML = (vc.fastestGrowing||[]).length ? `<b style="color:var(--ink-2)">Fastest-growing:</b> ${vc.fastestGrowing.map(esc).join(' · ')}` : '';
+
+  // ---- Signals, derived rather than written ----
+  // These cards used to be fixed editorial copy with two numbers injected from
+  // Mirror's frozen feed, so they said the same thing every day regardless of the
+  // market. Each card below is now generated from a measured series, and a brand
+  // only appears when its own data puts it there.
+  const retOf = b => (ret.find(r=>r.brand===b)||{}).pct;
+  const stOf = b => latest.sources.fp_sell_through?.brands?.[b] || null;
+  const cards = [];
+
+  signals.slice(0, 6).forEach(sig=>{
+    const md = M('fp.medianPrice', sig.brand);
+    const sup = M('fp.listingsAll', sig.brand);
+    const t = stOf(sig.brand);
+    const rp = retOf(sig.brand);
+    const bits = [];
+    if(md?.last!=null) bits.push(`median ${fmt(md.last)}${md.wowPct!=null&&Math.abs(md.wowPct)>=1?` (${md.wowPct>0?'+':''}${md.wowPct.toFixed(1)}% in 7d)`:''}`);
+    if(sup?.last!=null) bits.push(`${sup.last.toLocaleString('en-US')} listings${sup.streak?`, ${sup.streak>0?'up':'down'} ${Math.abs(sup.streak)}d straight`:''}`);
+    if(t?.turnoverPct!=null) bits.push(`${t.turnoverPct.toFixed(2)}% cleared today`);
+    if(rp) bits.push(`retains ${rp}% of retail`);
+    const detail = bits.length ? bits.join(' · ') : 'Not enough history yet to characterise';
+
+    if(sig.scarcity >= 0.5)
+      cards.push(['buy','Source now · demand outrunning supply', sig.brand,
+        `Scarcity +${sig.scarcity.toFixed(2)}: search momentum ${sig.demandZ>=0?'+':''}${sig.demandZ} against supply ${sig.supplyZ>=0?'+':''}${sig.supplyZ}. ${detail}.`]);
+    else if(sig.scarcity <= -0.9)
+      cards.push(['watch','Wait · supply building', sig.brand,
+        `Scarcity ${sig.scarcity.toFixed(2)}: inventory is arriving faster than interest is growing. ${detail}.`]);
+  });
+
+  // Fastest-clearing brand is a velocity call, distinct from the scarcity call.
+  const fastCard = Object.entries(latest.sources.fp_sell_through?.brands||{})
+    .filter(([,v])=>v.turnoverPct!=null).sort((a,b)=>b[1].turnoverPct-a[1].turnoverPct)[0];
+  if(fastCard) cards.push(['hold','Velocity · turns fastest', fastCard[0],
+    `${fastCard[1].turnoverPct.toFixed(2)}% of live stock sold today${fastCard[1].medianDaysToSell!=null?` at a median ${fastCard[1].medianDaysToSell} days on site`:''}. ${retOf(fastCard[0])?`Retains ${retOf(fastCard[0])}% of retail, so this is turnover rather than appreciation.`:'Buy for velocity.'}`]);
+
+  $('#signals').innerHTML = cards.length
+    ? cards.slice(0,4).map(s=>`<div class="sigcard"><div class="tag ${s[0]}">${s[1]}</div><h4>${esc(s[2])}</h4><p>${s[3]}</p></div>`).join('')
+    : `<div class="sigcard"><div class="tag watch">Building baseline</div><h4>No call yet</h4><p>Signals appear once each brand has at least 8 days of demand and supply history and one sell-through comparison. Nothing here is asserted before the data supports it.</p></div>`;
+
+  // ---- 7-Day Trends ----
+  const T = history.trends?.fp;
+  if(T && (T.total||[]).length>=2){
+    $('#chartFpTotal').innerHTML = lineChart(T.dates, T.total);
+    const tot=T.total, ds=T.dates;
+    const peakV=Math.max(...tot), peakI=tot.indexOf(peakV), peakD=ds[peakI];
+    const last=tot[tot.length-1];
+    const dow=d=>['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(d+'T00:00:00Z').getUTCDay()];
+    const swing=peakV?((peakV-last)/peakV*100):0;
+    $('#trendInsight').innerHTML = `Total live listings across all ${Object.keys(T.byBrand).length} tracked brands, by day. This week it built to a peak of <b style="color:var(--ink-2)">${peakV.toLocaleString('en-US')}</b> on <b style="color:var(--ink-2)">${prettyDate(peakD)}, ${dow(peakD)}</b>, then eased to ${last.toLocaleString('en-US')} — a ${swing.toFixed(1)}% drawdown into week's end, with every brand moving together.`;
+    const movers=Object.entries(T.byBrand).map(([b,arr])=>{const v=arr.filter(x=>x!=null);return {brand:b, delta:(v[v.length-1]??0)-(v[0]??0)};}).sort((a,b)=>b.delta-a.delta);
+    const maxAbs=Math.max(...movers.map(m=>Math.abs(m.delta)),1);
+    $('#fpMovers').innerHTML = movers.map(m=>{
+      const w=(Math.abs(m.delta)/maxAbs*50).toFixed(1), pos=m.delta>=0;
+      const fill=`<div class="mvfill" style="${pos?'left:50%;':`left:${(50-w).toFixed(1)}%;`}width:${w}%;background:${pos?'var(--gold)':'var(--cool)'}"></div>`;
+      return `<div class="mvrow"><span class="mvname">${esc(m.brand)}</span><div class="mvbarwrap"><div style="position:absolute;left:50%;top:-2px;bottom:-2px;border-left:1px solid var(--line)"></div>${fill}</div><span class="mvval" style="color:${pos?'var(--good)':'var(--heat)'}">${pos?'+':''}${m.delta.toLocaleString('en-US')}</span></div>`;
+    }).join('');
+  }
+
+  // ---- Exports ----
+  if(exports && exports.sheets){
+    const first = history.firstDate, last = history.lastDate, nDays = (history.dates||[]).length;
+    const opts = '<option value="__json__">All raw data (JSON)</option>' +
+      exports.sheets.map(s=>`<option value="${esc(s.file)}">${esc(s.file)}</option>`).join('');
+    const control = `
+      <div class="xbuild">
+        <div class="xlab">Export by date</div>
+        <div class="xrow">
+          <div class="xfield"><label for="xSheet">Data</label><select id="xSheet">${opts}</select></div>
+          <div class="xfield"><label for="xFrom">From</label><input type="date" id="xFrom" min="${first}" max="${last}" value="${first}"></div>
+          <div class="xfield"><label for="xTo">To</label><input type="date" id="xTo" min="${first}" max="${last}" value="${last}"></div>
+          <button id="xGo" type="button">Export ↓</button>
+        </div>
+        <div class="xpresets">
+          <button class="xpreset" type="button" data-preset="all">All</button>
+          <button class="xpreset" type="button" data-preset="7">Last 7 days</button>
+          <button class="xpreset" type="button" data-preset="30">Last 30 days</button>
+          <button class="xpreset" type="button" data-preset="month">This month</button>
+          <button class="xpreset" type="button" data-preset="latest">Latest day</button>
+        </div>
+        <div class="xhint" id="xHint">Data spans ${first} → ${last} · ${nDays} snapshot${nDays===1?'':'s'}. Use a preset, or set From = To for a single day.</div>
+      </div>`;
+    const bundle = exports.bundle
+      ? `<div class="bigrow"><a class="bigbtn" href="./data/exports/${exports.bundle.file}" download>
+          <span class="t">⬇ Download everything</span>
+          <span class="d">ZIP · every CSV + every daily snapshot · all dates</span>
+          <span class="g">${(exports.bundle.bytes/1024).toFixed(1)} KB</span></a></div>`
+      : '';
+    const grid = exports.sheets.map(s=>`
+      <a class="exp" href="./data/exports/${esc(s.file)}" download>
+        <span class="fn">${esc(s.file)}</span>
+        <span class="meta">${s.rows.toLocaleString('en-US')} rows · ${(s.bytes/1024).toFixed(1)} KB</span>
+        <span class="arrow">full sheet ↓</span>
+      </a>`).join('');
+    $('#exports').innerHTML = control + bundle + `<div class="exports">${grid}</div>`;
+
+    document.getElementById('xGo').addEventListener('click', async function(){
+      const sel = document.getElementById('xSheet').value;
+      let from = document.getElementById('xFrom').value, to = document.getElementById('xTo').value;
+      const hint = document.getElementById('xHint');
+      if(!from || !to){ hint.textContent = 'Pick a From and To date.'; return; }
+      if(from > to){ const t=from; from=to; to=t; }
+      hint.textContent = 'Preparing…';
+      try{
+        if(sel === '__json__'){
+          const all = await fetch('./data/exports/all-snapshots.json').then(r=>r.json());
+          const slice = all.filter(s=>s.date>=from && s.date<=to);
+          downloadText(`demand-desk_${from}_to_${to}.json`, JSON.stringify(slice,null,2), 'application/json');
+          hint.textContent = `✓ Exported ${slice.length} snapshot${slice.length===1?'':'s'} (${from} → ${to}) as JSON.`;
+        } else {
+          const text = await fetch('./data/exports/'+sel).then(r=>r.text());
+          const { csv, count } = filterCsvByDate(text, from, to);
+          downloadText(`${sel.replace(/\.csv$/,'')}_${from}_to_${to}.csv`, csv, 'text/csv');
+          hint.textContent = `✓ Exported ${count} row${count===1?'':'s'} from ${sel} (${from} → ${to}).`;
+        }
+      }catch(e){ hint.textContent = 'Export failed: ' + (e.message||e); }
+    });
+
+    document.querySelectorAll('.xpreset').forEach(b=>b.addEventListener('click', function(){
+      const p = b.dataset.preset; let f, t = last;
+      if(p === 'all') f = first;
+      else if(p === 'latest'){ f = last; t = last; }
+      else if(p === 'month') f = clampDate(last.slice(0,7) + '-01', first, last);
+      else f = clampDate(addDays(last, -(Number(p)-1)), first, last);
+      document.getElementById('xFrom').value = f;
+      document.getElementById('xTo').value = t;
+      document.querySelectorAll('.xpreset').forEach(x=>x.setAttribute('aria-pressed', x===b ? 'true' : 'false'));
+      document.getElementById('xHint').textContent = `Range set: ${f} → ${t}. Click Export ↓.`;
+    }));
+  } else {
+    $('#exports').innerHTML = '<div style="color:var(--ink-3);font-size:13px">Run <code>npm run all</code> to generate the exports.</div>';
+  }
+
+  // animate fills
+  requestAnimationFrame(()=>document.querySelectorAll('.fill,.retfill,.svfill').forEach(f=>f.style.width=f.getAttribute('data-w')+'%'));
+}
+
+load();
+</script>
+</body>
+</html>

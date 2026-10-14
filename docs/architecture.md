@@ -75,9 +75,11 @@ sell-through look like it had collapsed 75% across ten brands at once.
 - **Slack**, three channels by purpose: watch events, statistical alerts, and the
   daily digest with a fuller Monday edition. Every line carries a cooldown key,
   so a condition that persists is not re-sent daily.
-- **The site**, at `elibarzvi.github.io/demand-desk`. A dashboard, plus a
-  listings browser that reads the watch state directly from raw.githubusercontent
-  so it shows current holdings without a rebuild.
+- **The site**, at `elibarzvi.github.io/demand-desk`. The listings browser is the
+  home page, since browsing what the watches hold is the thing actually done
+  daily; it reads watch state straight from raw.githubusercontent so it is
+  current without a rebuild. The statistics dashboard lives at `/dashboard.html`,
+  and `/listings.html` redirects to the root for links made before the swap.
 - **The repository**, which is the permanent record: one snapshot per day, CSV
   exports per series, and a ZIP of the whole dataset.
 
