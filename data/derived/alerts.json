@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-10-14T18:46:49.320Z",
+  "generatedAt": "2026-10-15T00:01:01.147Z",
   "date": "2026-10-14",
-  "count": 19,
+  "count": 20,
   "alerts": [
     {
       "date": "2026-10-14",
@@ -10,11 +10,11 @@
       "series": "fp.p90Price",
       "metric": "Fashionphile 90th-pct price",
       "brand": "Cartier",
-      "value": 6745,
-      "z": -3.71,
+      "value": 6695,
+      "z": -4.05,
       "baseline": 7295,
-      "changePct": -7.54,
-      "message": "Cartier Fashionphile 90th-pct price at 6745 is -7.54% vs its 49-day normal of 7295 (z=-3.71)."
+      "changePct": -8.22,
+      "message": "Cartier Fashionphile 90th-pct price at 6695 is -8.22% vs its 49-day normal of 7295 (z=-4.05)."
     },
     {
       "date": "2026-10-14",
@@ -23,24 +23,24 @@
       "series": "ebay.listings",
       "metric": "eBay active listings",
       "brand": "Goyard",
-      "value": 7473,
-      "z": 3.39,
+      "value": 7430,
+      "z": 3.08,
       "baseline": 6998.5,
-      "changePct": 6.78,
-      "message": "Goyard eBay active listings at 7473 is +6.78% vs its 69-day normal of 6998.5 (z=3.39)."
+      "changePct": 6.17,
+      "message": "Goyard eBay active listings at 7430 is +6.17% vs its 69-day normal of 6998.5 (z=3.08)."
     },
     {
       "date": "2026-10-14",
       "type": "breakout",
-      "severity": "high",
+      "severity": "medium",
       "series": "ebay.listings",
       "metric": "eBay active listings",
       "brand": "Bottega Veneta",
-      "value": 70417,
-      "z": 3.16,
+      "value": 70135,
+      "z": 2.97,
       "baseline": 65650.5,
-      "changePct": 7.26,
-      "message": "Bottega Veneta eBay active listings at 70417 is +7.26% vs its 36-day normal of 65650.5 (z=3.16)."
+      "changePct": 6.83,
+      "message": "Bottega Veneta eBay active listings at 70135 is +6.83% vs its 36-day normal of 65650.5 (z=2.97)."
     },
     {
       "date": "2026-10-14",
@@ -49,11 +49,11 @@
       "series": "ebay.listings",
       "metric": "eBay active listings",
       "brand": "Prada",
-      "value": 231136,
-      "z": 2.72,
+      "value": 230859,
+      "z": 2.66,
       "baseline": 219211,
-      "changePct": 5.44,
-      "message": "Prada eBay active listings at 231136 is +5.44% vs its 36-day normal of 219211 (z=2.72)."
+      "changePct": 5.31,
+      "message": "Prada eBay active listings at 230859 is +5.31% vs its 36-day normal of 219211 (z=2.66)."
     },
     {
       "date": "2026-10-14",
@@ -62,24 +62,24 @@
       "series": "fp.medianPrice",
       "metric": "Fashionphile median price",
       "brand": "Hermès",
-      "value": 7215,
-      "z": 2.55,
+      "value": 7195,
+      "z": 2.4,
       "baseline": 6865,
-      "changePct": 5.1,
-      "message": "Hermès Fashionphile median price at 7215 is +5.1% vs its 49-day normal of 6865 (z=2.55)."
+      "changePct": 4.81,
+      "message": "Hermès Fashionphile median price at 7195 is +4.81% vs its 49-day normal of 6865 (z=2.4)."
     },
     {
       "date": "2026-10-14",
       "type": "breakout",
       "severity": "medium",
-      "series": "fp.p90Price",
-      "metric": "Fashionphile 90th-pct price",
-      "brand": "Bottega Veneta",
-      "value": 3440,
-      "z": -2.16,
-      "baseline": 3595,
-      "changePct": -4.31,
-      "message": "Bottega Veneta Fashionphile 90th-pct price at 3440 is -4.31% vs its 36-day normal of 3595 (z=-2.16)."
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Dior",
+      "value": 1.5981,
+      "z": 2.2,
+      "baseline": 1.49,
+      "changePct": 7.03,
+      "message": "Dior Google Trends relative interest at 1.5981 is +7.03% vs its 31-day normal of 1.49 (z=2.2)."
     },
     {
       "date": "2026-10-14",
@@ -106,6 +106,19 @@
       "baseline": 3865,
       "changePct": -4.27,
       "message": "Goyard Fashionphile 90th-pct price at 3700 is -4.27% vs its 49-day normal of 3865 (z=-2.13)."
+    },
+    {
+      "date": "2026-10-14",
+      "type": "breakout",
+      "severity": "medium",
+      "series": "fp.p90Price",
+      "metric": "Fashionphile 90th-pct price",
+      "brand": "The Row",
+      "value": 5775,
+      "z": 2.05,
+      "baseline": 5547.5,
+      "changePct": 4.1,
+      "message": "The Row Fashionphile 90th-pct price at 5775 is +4.1% vs its 49-day normal of 5547.5 (z=2.05)."
     },
     {
       "date": "2026-10-14",
@@ -143,10 +156,10 @@
       "severity": "medium",
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
-      "brand": "Chanel",
-      "value": 42,
-      "wowPct": -33.33,
-      "message": "Chanel Median days to sell moved -33.33% in 7 days to 42."
+      "brand": "Louis Vuitton",
+      "value": 33,
+      "wowPct": 32,
+      "message": "Louis Vuitton Median days to sell moved +32% in 7 days to 33."
     },
     {
       "date": "2026-10-14",
@@ -155,9 +168,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Goyard",
-      "value": 26,
-      "wowPct": 2500,
-      "message": "Goyard Median days to sell moved +2500% in 7 days to 26."
+      "value": 29,
+      "wowPct": 2800,
+      "message": "Goyard Median days to sell moved +2800% in 7 days to 29."
     },
     {
       "date": "2026-10-14",
@@ -166,9 +179,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Dior",
-      "value": 13,
-      "wowPct": -67.5,
-      "message": "Dior Median days to sell moved -67.5% in 7 days to 13."
+      "value": 20,
+      "wowPct": -50,
+      "message": "Dior Median days to sell moved -50% in 7 days to 20."
     },
     {
       "date": "2026-10-14",
@@ -177,9 +190,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Prada",
-      "value": 33,
-      "wowPct": -32.65,
-      "message": "Prada Median days to sell moved -32.65% in 7 days to 33."
+      "value": 34,
+      "wowPct": -30.61,
+      "message": "Prada Median days to sell moved -30.61% in 7 days to 34."
     },
     {
       "date": "2026-10-14",
@@ -188,20 +201,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Bottega Veneta",
-      "value": 29,
-      "wowPct": 141.67,
-      "message": "Bottega Veneta Median days to sell moved +141.67% in 7 days to 29."
-    },
-    {
-      "date": "2026-10-14",
-      "type": "weekly-move",
-      "severity": "medium",
-      "series": "fp.daysToSell",
-      "metric": "Median days to sell",
-      "brand": "Celine",
-      "value": 33,
-      "wowPct": -45.9,
-      "message": "Celine Median days to sell moved -45.9% in 7 days to 33."
+      "value": 40,
+      "wowPct": 233.33,
+      "message": "Bottega Veneta Median days to sell moved +233.33% in 7 days to 40."
     },
     {
       "date": "2026-10-14",
@@ -210,9 +212,9 @@
       "series": "fp.turnover",
       "brand": null,
       "metric": "Daily sell-through %",
-      "affected": 9,
+      "affected": 10,
       "of": 11,
-      "message": "Daily sell-through % rose across 9 of 11 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 9 separate market events."
+      "message": "Daily sell-through % rose across 10 of 11 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 10 separate market events."
     },
     {
       "date": "2026-10-14",
@@ -220,10 +222,21 @@
       "severity": "low",
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
-      "brand": "Hermès",
-      "value": 34,
-      "wowPct": -27.66,
-      "message": "Hermès Median days to sell moved -27.66% in 7 days to 34."
+      "brand": "Chanel",
+      "value": 47,
+      "wowPct": -25.4,
+      "message": "Chanel Median days to sell moved -25.4% in 7 days to 47."
+    },
+    {
+      "date": "2026-10-14",
+      "type": "weekly-move",
+      "severity": "low",
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "Celine",
+      "value": 78,
+      "wowPct": 27.87,
+      "message": "Celine Median days to sell moved +27.87% in 7 days to 78."
     }
   ]
 }
