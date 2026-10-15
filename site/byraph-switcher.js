@@ -5,18 +5,25 @@
  * No dependencies. It draws inside a shadow root, so no site's CSS can reach it and it cannot
  * reach any site's CSS.
  *
- * Use:
- *   <div data-byraph-switcher="comps"></div>              where the button should sit (in the header)
- *   <script src="byraph-switcher.js" defer></script>
- * The attribute value is the current app (batch | comps | demand | admin | hub), marked "here" in
- * the menu. With no slot on the page, it floats in the top-left corner instead. A page that adds
- * the slot later (a React header) calls window.byraphSwitcher.mount().
+ * Use, once per page:
+ *   <script src="byraph-switcher.js" data-app="comps" defer></script>
+ * data-app is the current app (batch | comps | demand | admin | hub), marked "here" in the menu.
+ *
+ * The button sits in the SAME place on every site, so flipping between them is one click in one
+ * spot (Eli, 2026-10-15): 12px from the top and left of the page, 32px square. It is placed on the
+ * page itself (not inside any header), so it scrolls away with the top of the page and never covers
+ * content further down. Each site keeps that corner clear: nothing in the top 56px x 56px.
+ * Older pages that mark the app with a <div data-byraph-switcher="demand"> slot still work; the
+ * slot only names the app now and takes no space.
  *
  * Links go through the hub (internal.byraph.com/go/<tool>), so the one hub login carries over; the
  * store admin keeps its own login at byraph.com/admin.
  */
 (() => {
   if (window.byraphSwitcher) return window.byraphSwitcher.mount();
+  const SCRIPT = document.currentScript;
+  const currentApp = () =>
+    SCRIPT?.dataset.app || document.querySelector('[data-byraph-switcher]')?.getAttribute('data-byraph-switcher') || '';
 
   const HUB = 'https://internal.byraph.com';
   const svg = (paths) =>
@@ -34,17 +41,15 @@
   const GRID = svg('<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>');
 
   const CSS = `
-    :host { all: initial; display: inline-block; position: relative; vertical-align: middle; z-index: 2147483000;
+    :host { all: initial; position: absolute; top: 12px; left: 12px; z-index: 2147483000; display: block;
       font: 13px/1.35 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #111; }
-    :host([data-floating]) { position: fixed; top: 10px; left: 10px; }
-    button.trigger { all: unset; box-sizing: border-box; width: 30px; height: 30px; display: grid; place-items: center;
+    button.trigger { all: unset; box-sizing: border-box; width: 32px; height: 32px; display: grid; place-items: center;
       border-radius: 8px; color: #444; background: rgba(255,255,255,.9); border: 1px solid rgba(0,0,0,.12); cursor: pointer; }
     button.trigger:hover, button.trigger[aria-expanded="true"] { color: #111; background: #fff; border-color: rgba(0,0,0,.25); }
     button.trigger:focus-visible, a:focus-visible { outline: 2px solid #f26b1d; outline-offset: 2px; }
     .menu { position: absolute; top: calc(100% + 6px); left: 0; width: 268px; box-sizing: border-box; padding: 6px;
       background: #fff; border: 1px solid rgba(0,0,0,.12); border-radius: 12px; box-shadow: 0 12px 32px rgba(0,0,0,.16); }
     .menu[hidden] { display: none; }
-    :host([data-align="right"]) .menu { left: auto; right: 0; }
     .title { padding: 6px 8px 4px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #777; }
     a { all: unset; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 8px;
       cursor: pointer; color: #111; }
@@ -60,9 +65,7 @@
     .foot:hover { background: none; color: #111; text-decoration: underline; }
   `;
 
-  function build(host) {
-    if (host.shadowRoot) return;
-    const current = host.getAttribute('data-byraph-switcher') || '';
+  function build(host, current) {
     const root = host.attachShadow({ mode: 'open' });
     const items = APPS.map(
       (a) => `<a href="${a.href}" role="menuitem" style="--tint:${a.tint}"${a.id === current ? ' aria-current="page"' : ''}>
@@ -100,17 +103,11 @@
   }
 
   function mount() {
-    const slots = document.querySelectorAll('[data-byraph-switcher]:not([data-floating])');
-    if (slots.length) {
-      document.querySelectorAll('[data-byraph-switcher][data-floating]').forEach((f) => f.remove()); // a header slot arrived late
-      return slots.forEach(build);
-    }
-    if (document.querySelector('[data-byraph-switcher][data-floating]')) return;
+    if (document.getElementById('byraph-switcher')) return;
     const host = document.createElement('div');
-    host.setAttribute('data-byraph-switcher', '');
-    host.setAttribute('data-floating', '');
+    host.id = 'byraph-switcher';
     document.body.appendChild(host);
-    build(host);
+    build(host, currentApp());
   }
 
   window.byraphSwitcher = { mount };

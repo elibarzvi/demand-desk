@@ -31,7 +31,7 @@
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:22px 22px 48px;width:100%}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:56px 22px 48px;width:100%}
   a{color:inherit}
 
   .mast{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding-bottom:16px;border-bottom:1px solid var(--line)}
@@ -114,7 +114,6 @@
 <div class="wrap">
   <header class="mast">
     <div>
-      <div data-byraph-switcher="demand"></div>
       <div class="eyebrow">Demand Desk · Grail Watch</div>
       <h1>Listings</h1>
       <p>Every listing the watches are tracking, live and ended. Alerts go to Slack; this is for browsing.</p>
@@ -331,6 +330,6 @@ function wire() {
   }
 })();
 </script>
-  <script src="byraph-switcher.js" defer></script>
+  <script src="byraph-switcher.js" data-app="demand" defer></script>
 </body>
 </html>
