@@ -51,7 +51,11 @@
   .kpi .val{font-family:var(--serif);font-size:26px;margin-top:3px}
   .kpi .sub{font-size:12px;color:var(--ink-2)}
 
-  .bar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
+  /* Sticks below the byraph switcher, not under it. The switcher is fixed at
+     12px and 32px square, and this bar's left edge sits at 22px whenever the
+     window is narrower than about 1284px, so at top:0 the button covered the
+     left of the search box on most laptop widths. */
+  .bar{position:sticky;top:56px;z-index:5;background:var(--bg);padding:10px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-bottom:1px solid var(--line)}
   .bar input,.bar select{font:inherit;font-size:13px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:7px 10px}
   .bar input{flex:1 1 220px;min-width:0}
   .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}

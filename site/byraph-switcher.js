@@ -10,9 +10,10 @@
  * data-app is the current app (batch | comps | demand | admin | hub), marked "here" in the menu.
  *
  * The button sits in the SAME place on every site, so flipping between them is one click in one
- * spot (Eli, 2026-10-15): 12px from the top and left of the page, 32px square. It is placed on the
- * page itself (not inside any header), so it scrolls away with the top of the page and never covers
- * content further down. Each site keeps that corner clear: nothing in the top 56px x 56px.
+ * spot (Eli, 2026-10-15): 12px from the top and left of the window, 32px square, pinned there
+ * (position: fixed) so it is always reachable, also on the store admin whose bar hides and comes
+ * back on scroll. Each site keeps that corner clear at all times: nothing in the top 56px x 56px
+ * while at the top of the page. Content scrolling underneath passes under the button.
  * Older pages that mark the app with a <div data-byraph-switcher="demand"> slot still work; the
  * slot only names the app now and takes no space.
  *
@@ -41,7 +42,7 @@
   const GRID = svg('<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>');
 
   const CSS = `
-    :host { all: initial; position: absolute; top: 12px; left: 12px; z-index: 2147483000; display: block;
+    :host { all: initial; position: fixed; top: 12px; left: 12px; z-index: 2147483000; display: block;
       font: 13px/1.35 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #111; }
     button.trigger { all: unset; box-sizing: border-box; width: 32px; height: 32px; display: grid; place-items: center;
       border-radius: 8px; color: #444; background: rgba(255,255,255,.9); border: 1px solid rgba(0,0,0,.12); cursor: pointer; }
