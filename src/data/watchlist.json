@@ -137,6 +137,46 @@
       ],
       "maxAlertsPerRun": 12,
       "notes": "Core cohort. Fashionphile confirms sales, so SOLD here is a real transaction. Set targetPrice to be told when one lists or drops below what you would pay."
+    },
+    {
+      "id": "hermes-birkin-25-stores",
+      "label": "Hermès Birkin 25 · myGemma and Rebag",
+      "enabled": true,
+      "source": "shopify",
+      "stores": [
+        "mygemma",
+        "rebag"
+      ],
+      "brands": [
+        "Hermès"
+      ],
+      "brand": "Hermès",
+      "minPrice": 0,
+      "maxPrice": null,
+      "targetPrice": null,
+      "dropPct": 5,
+      "require": {
+        "all": [
+          "birkin"
+        ],
+        "any": [
+          "25"
+        ]
+      },
+      "exclude": [
+        "wallet",
+        "pouch",
+        "card holder",
+        "charm",
+        "twilly",
+        "strap",
+        "cover",
+        "dust bag",
+        "insert",
+        "organizer"
+      ],
+      "maxAlertsPerRun": 12,
+      "notes": "Same model as hermes-birkin-25, two more retailers. Shopify keeps a sold item in its feed flagged unavailable rather than deleting it, so SOLD here is observed rather than inferred, which is stronger than Fashionphile's disappearance and far stronger than eBay, which never says why a listing ended. No seller thresholds: these are retailers, not marketplaces, so there is no feedback score to gate on. Matching requires 'birkin' and '25' as separate terms rather than the phrase 'birkin 25', because Rebag puts the size at the end of the title and would otherwise never match at all."
     }
   ],
   "_events": "Each watch reports three events. NEW: an eligible listing appeared. PRICE DROP: a tracked listing fell to a new low by at least dropPct (default 5), so a seller raising a price and trimming it back does not count. SOLD / NO LONGER LISTED: a tracked listing left the market. Fashionphile confirms sales; eBay cannot distinguish a sale from a withdrawal, so its departures are reported as no longer listed. targetPrice marks any new listing or drop at or below it as UNDER TARGET. The first run of a new watch records standing listings silently, so a month-old listing is never announced as new.",

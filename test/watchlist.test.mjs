@@ -67,4 +67,33 @@ const over = matchItem({ title: 'Chrome Hearts Levi 501 Cross Patch Jeans', pric
 assert.equal(over?.verdict, 'over-cap', 'an ask above maxPrice should be flagged over-cap');
 
 assert.equal(failures, 0, `${failures} rule fixture(s) failed`);
-console.log(`[test] watchlist: ${CASES.length} fixtures + 2 verdict checks passed`);
+// --- retailers name the same bag differently -----------------------------
+//
+// Fashionphile and myGemma write "Birkin 25". Rebag writes the size last:
+// "Birkin Handbag Bleu Zanzibar Togo with Palladium Hardware 25". A rule built
+// on the contiguous phrase matched the first two and missed every one of
+// Rebag's 113 Birkin listings, while the watch still reported thousands
+// scanned, so it looked like coverage. These pin both conventions.
+const stores = watches.find(w => w.id === 'hermes-birkin-25-stores');
+assert.ok(stores, 'hermes-birkin-25-stores watch is missing');
+
+const TITLES = [
+  ['Hermès Gold Togo Birkin 25 GHW', true],                                        // myGemma
+  ['Hermès Birkin Handbag Bleu Zanzibar Togo with Palladium Hardware 25', true],   // Rebag
+  ['Hermès Togo Birkin 25 Rose Mexico', true],                                     // Fashionphile
+  ['Hermès Birkin Handbag Brique Togo with Gold Hardware 35', false],              // wrong size
+  ['Hermès Amulet Birkin Ring Sterling Silver', false],                            // not a bag
+  ['Hermès Birkin 25 Twilly', false],                                              // an accessory
+];
+for (const [title, want] of TITLES) {
+  const r = matchItem({ title, price: 20000, id: 't', sellerPct: null, sellerScore: null }, stores);
+  const got = r !== null && r.verdict === 'match';
+  assert.equal(got, want, `store rule: expected ${want} for "${title}"`);
+}
+
+// These are retailers, not marketplaces, so there is no feedback score to gate
+// on. A null seller must not be read as an untrustworthy one and held back.
+const retailer = matchItem({ title: 'Hermès Togo Birkin 25 Gold', price: 25000, id: 't', sellerPct: null, sellerScore: null }, stores);
+assert.equal(retailer?.verdict, 'match', 'a retailer with no feedback score must not be held back');
+
+console.log(`[test] watchlist: ${CASES.length + TITLES.length} fixtures + 3 verdict checks passed`);

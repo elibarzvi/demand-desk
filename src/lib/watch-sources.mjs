@@ -1,3 +1,4 @@
+import { STORES, crawlCollection, handlesFor, toItems, normaliseBrand } from './shopify.mjs';
 // Per-marketplace adapters for the grail watcher. Each returns listings in one
 // shape and answers one question about a listing that went missing: sold, gone,
 // still live somewhere the search did not reach, or unknown.
@@ -108,4 +109,81 @@ const fashionphile = {
   }
 };
 
-export const SOURCES = { ebay, fashionphile };
+
+// ---- myGemma and Rebag (Shopify storefronts) -------------------------------
+//
+// These two give a cleaner sold signal than anything else here. Shopify keeps a
+// sold item in its collection feed with available:false rather than deleting it,
+// so the transition is observed rather than inferred. Fashionphile only lists
+// live stock, so a sale looks like a disappearance; eBay will not say whether a
+// listing ended in a sale, which is why its alerts can only read "no longer
+// listed".
+//
+// Confirmation deliberately does NOT use /products/<handle>.json. That endpoint
+// omits `available` on both stores, and myGemma returns no inventory_quantity
+// either, so there is no portable per-item check. The collection feed has
+// availability on both, so one crawl per brand per run answers both questions:
+// search reads the available items out of it, and confirm looks up the ones that
+// went missing. No extra requests, and the sold case stays explicit.
+const STORE_BY_ID = Object.fromEntries(STORES.map(s => [s.id, s]));
+
+// Populated by search() and read by confirm(), within a single watch run.
+// watch.mjs always searches before confirming, so a miss here means confirm was
+// called on its own and we say so rather than guessing a sale.
+const seen = new Map();   // `${store}:${sku}` -> { available, price }
+
+async function crawlBrand(store, brand) {
+  for (const handle of handlesFor(brand)) {
+    const r = await crawlCollection(store, handle);
+    // A partial crawl must never reach the watch: half a brand looks exactly
+    // like the other half selling out, and every missing SKU would be alerted
+    // as a sale.
+    if (!r.complete) throw new Error(`${store.id}/${handle}: incomplete crawl, refusing to diff`);
+    if (r.products.length) return r.products;
+  }
+  return [];
+}
+
+const shopify = {
+  async search(watch) {
+    const out = [];
+    for (const id of watch.stores || Object.keys(STORE_BY_ID)) {
+      const store = STORE_BY_ID[id];
+      if (!store) throw new Error(`unknown store "${id}"`);
+      for (const brand of watch.brands || []) {
+        const products = await crawlBrand(store, brand);
+        for (const p of products) {
+          const image = p.images?.[0]?.src || null;
+          for (const it of toItems([p])) {
+            if (it.brand !== normaliseBrand(brand)) continue;   // collections carry the odd cross-listing
+            const key = `${id}:${it.sku}`;
+            seen.set(key, { available: it.available, price: it.price });
+            if (!it.available) continue;                        // only live stock is a candidate
+            out.push({
+              source: id, id: key, sku: it.sku,
+              // Store titles omit the house, so an alert would read "Togo Birkin
+              // 25 Gold" with no idea whose.
+              title: `${it.brand} ${it.title || ''}`.trim(),
+              price: it.price,
+              url: it.handle ? `${store.base}/products/${it.handle}` : null,
+              image,
+              condition: it.type || null,
+              listed: it.listed,
+              seller: store.label, sellerPct: null, sellerScore: null
+            });
+          }
+        }
+      }
+    }
+    return out;
+  },
+
+  async confirm(rec) {
+    const hit = seen.get(rec.id);
+    if (!hit) return { state: 'unknown' };          // no crawl this run; say nothing
+    if (hit.available) return { state: 'still-live', price: hit.price ?? null };
+    return { state: 'sold' };                        // the feed says so outright
+  }
+};
+
+export const SOURCES = { ebay, fashionphile, mygemma: shopify, rebag: shopify, shopify };
