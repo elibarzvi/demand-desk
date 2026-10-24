@@ -1,72 +1,46 @@
 {
-  "generatedAt": "2026-10-24T12:46:01.628Z",
+  "generatedAt": "2026-10-24T17:34:35.602Z",
   "date": "2026-10-24",
-  "count": 24,
+  "count": 29,
   "alerts": [
     {
       "date": "2026-10-24",
       "type": "breakout",
       "severity": "high",
-      "series": "fp.daysToSell",
-      "metric": "Median days to sell",
-      "brand": "The Row",
-      "value": 212,
-      "z": 8.26,
-      "baseline": 34.5,
-      "changePct": 514.49,
-      "message": "The Row Median days to sell at 212 is +514.49% vs its 57-day normal of 34.5 (z=8.26)."
-    },
-    {
-      "date": "2026-10-24",
-      "type": "breakout",
-      "severity": "high",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Celine",
-      "value": 0.4327,
-      "z": -4.41,
-      "baseline": 0.61,
-      "changePct": -28.5,
-      "message": "Celine Google Trends relative interest at 0.4327 is -28.5% vs its 31-day normal of 0.61 (z=-4.41)."
-    },
-    {
-      "date": "2026-10-24",
-      "type": "breakout",
-      "severity": "high",
-      "series": "ebay.listings",
-      "metric": "eBay active listings",
-      "brand": "Goyard",
-      "value": 7644,
-      "z": 3.62,
-      "baseline": 7064.5,
-      "changePct": 8.2,
-      "message": "Goyard eBay active listings at 7644 is +8.2% vs its 79-day normal of 7064.5 (z=3.62)."
-    },
-    {
-      "date": "2026-10-24",
-      "type": "breakout",
-      "severity": "high",
       "series": "trends.interest",
       "metric": "Google Trends relative interest",
       "brand": "Goyard",
-      "value": 0.2505,
-      "z": -3.56,
+      "value": 0.2386,
+      "z": -5.24,
       "baseline": 0.31,
-      "changePct": -18.48,
-      "message": "Goyard Google Trends relative interest at 0.2505 is -18.48% vs its 31-day normal of 0.31 (z=-3.56)."
+      "changePct": -23.16,
+      "message": "Goyard Google Trends relative interest at 0.2386 is -23.16% vs its 31-day normal of 0.31 (z=-5.24)."
     },
     {
       "date": "2026-10-24",
       "type": "breakout",
       "severity": "high",
-      "series": "fp.daysToSell",
-      "metric": "Median days to sell",
-      "brand": "Hermès",
-      "value": 12,
-      "z": -3.48,
-      "baseline": 45.5,
-      "changePct": -73.63,
-      "message": "Hermès Median days to sell at 12 is -73.63% vs its 58-day normal of 45.5 (z=-3.48)."
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Celine",
+      "value": 0.4534,
+      "z": -3.9,
+      "baseline": 0.6,
+      "changePct": -23.89,
+      "message": "Celine Google Trends relative interest at 0.4534 is -23.89% vs its 31-day normal of 0.6 (z=-3.9)."
+    },
+    {
+      "date": "2026-10-24",
+      "type": "breakout",
+      "severity": "high",
+      "series": "ebay.listings",
+      "metric": "eBay active listings",
+      "brand": "Goyard",
+      "value": 7684,
+      "z": 3.87,
+      "baseline": 7064.5,
+      "changePct": 8.77,
+      "message": "Goyard eBay active listings at 7684 is +8.77% vs its 79-day normal of 7064.5 (z=3.87)."
     },
     {
       "date": "2026-10-24",
@@ -75,50 +49,50 @@
       "series": "ebay.listings",
       "metric": "eBay active listings",
       "brand": "Celine",
-      "value": 82231,
-      "z": -3.34,
+      "value": 81862,
+      "z": -3.55,
       "baseline": 88126,
-      "changePct": -6.69,
-      "message": "Celine eBay active listings at 82231 is -6.69% vs its 46-day normal of 88126 (z=-3.34)."
+      "changePct": -7.11,
+      "message": "Celine eBay active listings at 81862 is -7.11% vs its 46-day normal of 88126 (z=-3.55)."
     },
     {
       "date": "2026-10-24",
       "type": "breakout",
       "severity": "high",
-      "series": "trends.interest",
-      "metric": "Google Trends relative interest",
-      "brand": "Dior",
-      "value": 1.7764,
-      "z": 3.01,
-      "baseline": 1.57,
-      "changePct": 13.48,
-      "message": "Dior Google Trends relative interest at 1.7764 is +13.48% vs its 31-day normal of 1.57 (z=3.01)."
+      "series": "fp.p90Price",
+      "metric": "Fashionphile 90th-pct price",
+      "brand": "Hermès",
+      "value": 25645,
+      "z": 3.44,
+      "baseline": 23995,
+      "changePct": 6.88,
+      "message": "Hermès Fashionphile 90th-pct price at 25645 is +6.88% vs its 59-day normal of 23995 (z=3.44)."
     },
     {
       "date": "2026-10-24",
       "type": "breakout",
-      "severity": "medium",
+      "severity": "high",
       "series": "ebay.listings",
       "metric": "eBay active listings",
       "brand": "Chanel",
-      "value": 216462,
-      "z": 2.99,
+      "value": 216514,
+      "z": 3.01,
       "baseline": 204232,
-      "changePct": 5.99,
-      "message": "Chanel eBay active listings at 216462 is +5.99% vs its 79-day normal of 204232 (z=2.99)."
+      "changePct": 6.01,
+      "message": "Chanel eBay active listings at 216514 is +6.01% vs its 79-day normal of 204232 (z=3.01)."
     },
     {
       "date": "2026-10-24",
       "type": "breakout",
       "severity": "medium",
-      "series": "fp.daysToSell",
-      "metric": "Median days to sell",
-      "brand": "Prada",
-      "value": 72,
-      "z": 2.38,
-      "baseline": 35,
-      "changePct": 105.71,
-      "message": "Prada Median days to sell at 72 is +105.71% vs its 45-day normal of 35 (z=2.38)."
+      "series": "trends.interest",
+      "metric": "Google Trends relative interest",
+      "brand": "Louis Vuitton",
+      "value": 1.5987,
+      "z": 2.98,
+      "baseline": 1.51,
+      "changePct": 6.15,
+      "message": "Louis Vuitton Google Trends relative interest at 1.5987 is +6.15% vs its 31-day normal of 1.51 (z=2.98)."
     },
     {
       "date": "2026-10-24",
@@ -132,19 +106,6 @@
       "baseline": 2632.5,
       "changePct": -4.46,
       "message": "Goyard Fashionphile median price at 2515 is -4.46% vs its 59-day normal of 2632.5 (z=-2.23)."
-    },
-    {
-      "date": "2026-10-24",
-      "type": "breakout",
-      "severity": "medium",
-      "series": "fp.p90Price",
-      "metric": "Fashionphile 90th-pct price",
-      "brand": "Hermès",
-      "value": 24995,
-      "z": 2.08,
-      "baseline": 23995,
-      "changePct": 4.17,
-      "message": "Hermès Fashionphile 90th-pct price at 24995 is +4.17% vs its 59-day normal of 23995 (z=2.08)."
     },
     {
       "date": "2026-10-24",
@@ -183,10 +144,10 @@
       "severity": "medium",
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
-      "brand": "Cartier",
-      "value": 7,
-      "wowPct": -84.78,
-      "message": "Cartier Median days to sell moved -84.78% in 7 days to 7."
+      "brand": "The Row",
+      "value": 42,
+      "wowPct": 200,
+      "message": "The Row Median days to sell moved +200% in 7 days to 42."
     },
     {
       "date": "2026-10-24",
@@ -194,10 +155,21 @@
       "severity": "medium",
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
-      "brand": "Bottega Veneta",
-      "value": 74,
-      "wowPct": 146.67,
-      "message": "Bottega Veneta Median days to sell moved +146.67% in 7 days to 74."
+      "brand": "Cartier",
+      "value": 10,
+      "wowPct": -78.26,
+      "message": "Cartier Median days to sell moved -78.26% in 7 days to 10."
+    },
+    {
+      "date": "2026-10-24",
+      "type": "weekly-move",
+      "severity": "medium",
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "Prada",
+      "value": 58,
+      "wowPct": 152.17,
+      "message": "Prada Median days to sell moved +152.17% in 7 days to 58."
     },
     {
       "date": "2026-10-24",
@@ -206,9 +178,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Celine",
-      "value": 45,
-      "wowPct": -48.28,
-      "message": "Celine Median days to sell moved -48.28% in 7 days to 45."
+      "value": 60,
+      "wowPct": -31.03,
+      "message": "Celine Median days to sell moved -31.03% in 7 days to 60."
     },
     {
       "date": "2026-10-24",
@@ -228,9 +200,9 @@
       "series": "fp.listings",
       "brand": null,
       "metric": "Fashionphile listings (tracked segment)",
-      "affected": 7,
+      "affected": 9,
       "of": 11,
-      "message": "Fashionphile listings (tracked segment) rose across 7 of 11 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 7 separate market events."
+      "message": "Fashionphile listings (tracked segment) rose across 9 of 11 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 9 separate market events."
     },
     {
       "date": "2026-10-24",
@@ -239,9 +211,53 @@
       "series": "fp.turnover",
       "brand": null,
       "metric": "Daily sell-through %",
-      "affected": 11,
+      "affected": 8,
       "of": 11,
-      "message": "Daily sell-through % fell across 11 of 11 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 11 separate market events."
+      "message": "Daily sell-through % fell across 8 of 11 brands at once. A move that broad is usually a measurement or supply-side artifact rather than 8 separate market events."
+    },
+    {
+      "date": "2026-10-24",
+      "type": "streak",
+      "severity": "low",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Hermès",
+      "value": 2750,
+      "streak": 6,
+      "message": "Hermès Fashionphile listings (all categories) has risen 6 days straight to 2750."
+    },
+    {
+      "date": "2026-10-24",
+      "type": "streak",
+      "severity": "low",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Chanel",
+      "value": 6325,
+      "streak": 5,
+      "message": "Chanel Fashionphile listings (all categories) has risen 5 days straight to 6325."
+    },
+    {
+      "date": "2026-10-24",
+      "type": "streak",
+      "severity": "low",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Louis Vuitton",
+      "value": 8464,
+      "streak": 6,
+      "message": "Louis Vuitton Fashionphile listings (all categories) has risen 6 days straight to 8464."
+    },
+    {
+      "date": "2026-10-24",
+      "type": "streak",
+      "severity": "low",
+      "series": "fp.listingsAll",
+      "metric": "Fashionphile listings (all categories)",
+      "brand": "Dior",
+      "value": 1262,
+      "streak": 6,
+      "message": "Dior Fashionphile listings (all categories) has risen 6 days straight to 1262."
     },
     {
       "date": "2026-10-24",
@@ -250,9 +266,9 @@
       "series": "fp.listingsAll",
       "metric": "Fashionphile listings (all categories)",
       "brand": "Celine",
-      "value": 696,
+      "value": 704,
       "streak": 5,
-      "message": "Celine Fashionphile listings (all categories) has risen 5 days straight to 696."
+      "message": "Celine Fashionphile listings (all categories) has risen 5 days straight to 704."
     },
     {
       "date": "2026-10-24",
@@ -261,9 +277,31 @@
       "series": "fp.listings",
       "metric": "Fashionphile listings (tracked segment)",
       "brand": "Chanel",
-      "value": 3806,
+      "value": 3852,
       "streak": 5,
-      "message": "Chanel Fashionphile listings (tracked segment) has risen 5 days straight to 3806."
+      "message": "Chanel Fashionphile listings (tracked segment) has risen 5 days straight to 3852."
+    },
+    {
+      "date": "2026-10-24",
+      "type": "streak",
+      "severity": "low",
+      "series": "fp.listings",
+      "metric": "Fashionphile listings (tracked segment)",
+      "brand": "Louis Vuitton",
+      "value": 6194,
+      "streak": 6,
+      "message": "Louis Vuitton Fashionphile listings (tracked segment) has risen 6 days straight to 6194."
+    },
+    {
+      "date": "2026-10-24",
+      "type": "weekly-move",
+      "severity": "low",
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "Hermès",
+      "value": 46,
+      "wowPct": 17.95,
+      "message": "Hermès Median days to sell moved +17.95% in 7 days to 46."
     },
     {
       "date": "2026-10-24",
@@ -272,9 +310,9 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Chanel",
-      "value": 38,
-      "wowPct": -28.3,
-      "message": "Chanel Median days to sell moved -28.3% in 7 days to 38."
+      "value": 39,
+      "wowPct": -26.42,
+      "message": "Chanel Median days to sell moved -26.42% in 7 days to 39."
     },
     {
       "date": "2026-10-24",
@@ -283,9 +321,20 @@
       "series": "fp.daysToSell",
       "metric": "Median days to sell",
       "brand": "Louis Vuitton",
-      "value": 30,
-      "wowPct": -18.92,
-      "message": "Louis Vuitton Median days to sell moved -18.92% in 7 days to 30."
+      "value": 26,
+      "wowPct": -29.73,
+      "message": "Louis Vuitton Median days to sell moved -29.73% in 7 days to 26."
+    },
+    {
+      "date": "2026-10-24",
+      "type": "weekly-move",
+      "severity": "low",
+      "series": "fp.daysToSell",
+      "metric": "Median days to sell",
+      "brand": "Bottega Veneta",
+      "value": 36,
+      "wowPct": 20,
+      "message": "Bottega Veneta Median days to sell moved +20% in 7 days to 36."
     }
   ]
 }
