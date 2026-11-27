@@ -5,36 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>The Demand Desk</title>
 <style>
-  :root{
-    --bg:#14110e; --surface:#1c1815; --surface-2:#241f1b; --line:#332b25;
-    --ink:#ede7dd; --ink-2:#b7ac9f; --ink-3:#7d7269;
-    --gold:#d4b678; --gold-strong:#c79a3f; --gold-dim:#8a7448;
-    --cool:#6f8ea3; --heat:#c8894a; --good:#7fae6b; --warn:#c98b45;
-    --radius:14px; --maxw:1240px;
-    --serif:"Hoefler Text","Baskerville Old Face","Big Caslon",Palatino,Georgia,serif;
-    --sans:"Neue Haas Grotesk Display","Helvetica Neue",Helvetica,Arial,sans-serif;
-    --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,"Roboto Mono",monospace;
-  }
-  @media (prefers-color-scheme: light){
-    :root{
-      --bg:#f3efe8; --surface:#fbf9f5; --surface-2:#f6f1e8; --line:#e3dccf;
-      --ink:#201b15; --ink-2:#5f574c; --ink-3:#928777;
-      --gold:#9a7b3f; --gold-strong:#8a6a2c; --gold-dim:#b79a63;
-      --cool:#5a7d94; --heat:#b06a2e; --good:#4f7d3c; --warn:#a76a24;
-    }
-  }
-  :root[data-theme="dark"]{
-    --bg:#14110e; --surface:#1c1815; --surface-2:#241f1b; --line:#332b25;
-    --ink:#ede7dd; --ink-2:#b7ac9f; --ink-3:#7d7269;
-    --gold:#d4b678; --gold-strong:#c79a3f; --gold-dim:#8a7448;
-    --cool:#6f8ea3; --heat:#c8894a; --good:#7fae6b; --warn:#c98b45;
-  }
-  :root[data-theme="light"]{
-    --bg:#f3efe8; --surface:#fbf9f5; --surface-2:#f6f1e8; --line:#e3dccf;
-    --ink:#201b15; --ink-2:#5f574c; --ink-3:#928777;
-    --gold:#9a7b3f; --gold-strong:#8a6a2c; --gold-dim:#b79a63;
-    --cool:#5a7d94; --heat:#b06a2e; --good:#4f7d3c; --warn:#a76a24;
-  }
   *{box-sizing:border-box}
   html{color-scheme:light dark;overflow-x:hidden}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
@@ -203,7 +173,7 @@
   .chip{display:inline-block;font-size:10px;font-family:var(--mono);letter-spacing:.05em;padding:2px 7px;border-radius:999px;border:1px solid var(--line);color:var(--ink-2);text-transform:uppercase}
 
   .comp{display:flex;height:34px;border-radius:8px;overflow:hidden;border:1px solid var(--line)}
-  .comp span{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10.5px;color:#14110e;font-weight:600;min-width:0;overflow:hidden;white-space:nowrap}
+  .comp span{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10.5px;color:#151515;font-weight:600;min-width:0;overflow:hidden;white-space:nowrap}
   .complegend{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:12px;font-size:12px;color:var(--ink-2)}
   .complegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
 
@@ -264,6 +234,7 @@
     #xGo{width:100%}
   }
 </style>
+<link rel="stylesheet" href="byraph.css">
 </head>
 <body>
 <div class="wrap">
@@ -820,7 +791,7 @@ function render(latest, history, exports, metrics, alerts){
   $('#compBar').innerHTML = segs.map((s,i)=>{
     const pct=Math.round(s.count/totalC*100);
     const dark = i>=3;
-    return `<span style="flex:${s.count};background:${s.color};color:${dark?'var(--ink-2)':'#14110e'}">${pct>=12?esc(s.label)+' '+pct+'%':''}</span>`;
+    return `<span style="flex:${s.count};background:${s.color};color:${dark?'var(--ink-2)':'#151515'}">${pct>=12?esc(s.label)+' '+pct+'%':''}</span>`;
   }).join('');
   $('#compLegend').innerHTML = segs.map((s,i)=>`<span><i style="background:${s.color}"></i>${esc(s.label)} · ${s.count}</span>`).join('');
 

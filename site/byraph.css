@@ -1,0 +1,122 @@
+/* Demand Desk on byraph's design system.
+ *
+ * The tokens and component sizes are the hub's (byraph-hub/public/style.css),
+ * which took them from the batch tool and the admin, so a button here is the
+ * same object as a button there: 7px radius, 600 12.5px, 6px 13px of padding.
+ * Fields are 6px and 36px tall. A caption is 11px uppercase with .12em of
+ * tracking. Cards are 12px with the small shadow.
+ *
+ * Demand Desk arrived with its own palette: warm near-black, Hoefler serif
+ * headings and gold. It read as a different product to everything it sits
+ * beside in the switcher. Rather than rewrite two large pages, the house tokens
+ * are mapped onto the names those pages already use (--bg, --surface, --ink,
+ * --gold and so on), so the retheme reaches every rule that was already written
+ * against them, and only the handful of controls Eli named needed touching.
+ *
+ * --gold therefore now holds the orange. The name is wrong and kept on purpose:
+ * renaming it would mean editing several hundred call sites across two files
+ * for no visible gain, and a half-finished rename is worse than an odd name.
+ *
+ * Light is the default here, matching the other sites. Demand Desk used to lead
+ * with dark.
+ */
+
+@font-face { font-family: Cobe; src: url(fonts/Cobe-Regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: Cobe; src: url(fonts/Cobe-Medium.woff2) format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: Cobe; src: url(fonts/Cobe-Bold.woff2) format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+
+:root {
+  /* house tokens, named as the hub names them */
+  --panel:#fff; --panel-2:#f3f4f6; --line-2:#d4d4d8;
+  --accent:rgb(255,114,1); --accent-ink:#fff; --accent-soft:rgba(255,114,1,.1);
+  --ok:rgb(22,163,74); --pend:rgb(217,119,6); --pend-soft:rgba(217,119,6,.12); --danger:rgb(220,38,38);
+  --sh-sm:0 1px 2px 0 rgba(0,0,0,.05);
+  --sh-lg:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
+
+  /* the names the two pages are already written against */
+  --bg:#f3f3f3; --surface:#fff; --surface-2:#f3f4f6; --line:#e5e7eb;
+  --ink:#151515; --ink-2:#3f3f46; --ink-3:#666;
+  --gold:rgb(255,114,1); --gold-strong:rgb(230,100,0); --gold-dim:rgba(255,114,1,.45);
+  --cool:#3f6fb5; --heat:rgb(217,119,6); --good:rgb(22,163,74); --warn:rgb(217,119,6);
+  --radius:12px; --maxw:1240px;
+  --serif:Cobe,system-ui,-apple-system,sans-serif;
+  --sans:Cobe,system-ui,-apple-system,sans-serif;
+  --mono:Cobe,ui-monospace,Menlo,monospace;
+}
+
+/* Dark follows the house values rather than Demand Desk's old warm black. */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --panel:#141414; --panel-2:#1f1f1f; --line-2:rgba(255,255,255,.2);
+  --accent:rgb(255,114,1); --accent-ink:#141414; --accent-soft:rgba(255,114,1,.2);
+  --ok:rgb(74,222,128); --pend:rgb(251,191,36); --pend-soft:rgba(251,191,36,.14); --danger:rgb(248,113,113);
+  --bg:#0f0f0f; --surface:#141414; --surface-2:#1f1f1f; --line:rgba(255,255,255,.12);
+  --ink:#fafafa; --ink-2:#d4d4d8; --ink-3:#a3a3a3;
+  --gold:rgb(255,114,1); --gold-strong:rgb(255,140,50); --gold-dim:rgba(255,114,1,.5);
+  --cool:#7aa2e3; --heat:rgb(251,191,36); --good:rgb(74,222,128); --warn:rgb(251,191,36);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"] {
+  --panel:#141414; --panel-2:#1f1f1f; --line-2:rgba(255,255,255,.2);
+  --accent:rgb(255,114,1); --accent-ink:#141414; --accent-soft:rgba(255,114,1,.2);
+  --ok:rgb(74,222,128); --pend:rgb(251,191,36); --pend-soft:rgba(251,191,36,.14); --danger:rgb(248,113,113);
+  --bg:#0f0f0f; --surface:#141414; --surface-2:#1f1f1f; --line:rgba(255,255,255,.12);
+  --ink:#fafafa; --ink-2:#d4d4d8; --ink-3:#a3a3a3;
+  --gold:rgb(255,114,1); --gold-strong:rgb(255,140,50); --gold-dim:rgba(255,114,1,.5);
+  --cool:#7aa2e3; --heat:rgb(251,191,36); --good:rgb(74,222,128); --warn:rgb(251,191,36);
+  color-scheme:dark;
+}
+
+/* ---- the controls, at the house's exact sizes ---------------------------- */
+
+/* Fields and dropdowns: 36px tall, 6px radius, 13px text, orange on focus.
+   A native select keeps its own arrow on each platform, which is why the
+   appearance is reset and one drawn in, so the two sit at the same height and
+   weight as an input rather than a browser's idea of them. */
+.bar input[type="search"], .bar input[type="text"], .bar input:not([type]), .bar select {
+  height:36px; border:1px solid var(--line-2); border-radius:6px; padding:0 9px;
+  font:400 13px var(--sans); background:var(--panel); color:var(--ink);
+}
+.bar select {
+  appearance:none; -webkit-appearance:none; padding-right:30px; cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);
+  background-position:calc(100% - 15px) 16px,calc(100% - 10px) 16px;
+  background-size:5px 5px,5px 5px; background-repeat:no-repeat;
+}
+.bar input:focus-visible, .bar select:focus-visible {
+  outline:none; border-color:var(--accent); background-color:var(--accent-soft);
+}
+
+/* Segmented filters. The on state is the accent filled, the way a primary
+   button reads on the other sites, rather than the old ink-on-ink. */
+.seg { border:1px solid var(--line-2); border-radius:7px; overflow:hidden }
+.seg button {
+  font:600 12.5px var(--sans); background:var(--panel); color:var(--ink-2);
+  border:0; padding:6px 13px; cursor:pointer; min-height:36px;
+}
+/* min-height, not height: at phone width "Sold / ended" wraps to two lines and
+   a fixed 36px clipped it. The row is allowed to grow instead, and the padding
+   tightens so four segments still fit across a 375px screen. */
+@media (max-width:760px){ .seg button{ padding:6px 9px } }
+.seg button + button { border-left:1px solid var(--line-2) }
+.seg button:hover:not(.on) { color:var(--accent) }
+.seg button.on { background:var(--accent); color:var(--accent-ink) }
+.seg button:focus-visible { outline:2px solid var(--accent); outline-offset:-2px }
+
+/* Captions: 11px uppercase, .12em tracking. */
+.eyebrow, .label, .cap {
+  font:600 11px/1 var(--sans); letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3);
+}
+
+/* Pills and tabs read as buttons here, so they take the button geometry. */
+.tabs a {
+  border-radius:7px; font:600 12.5px var(--sans); padding:6px 13px;
+  border:1px solid var(--line-2); background:var(--panel); color:var(--ink-2); text-decoration:none;
+}
+.tabs a:hover { border-color:var(--accent); color:var(--accent) }
+.tabs a.on, .tabs a[aria-current="page"] { background:var(--accent); border-color:var(--accent); color:var(--accent-ink) }
+
+/* Cards: 12px and the small shadow. */
+.card, .stat, .panel { border-radius:12px; box-shadow:var(--sh-sm) }
+
+/* The back-to-top button is a control too, so it follows the accent. */
+.totop:hover { color:var(--accent-ink); background:var(--accent); border-color:var(--accent) }

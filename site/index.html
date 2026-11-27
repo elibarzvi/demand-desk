@@ -5,30 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Listings · The Demand Desk</title>
 <style>
-  :root{
-    --bg:#14110e; --surface:#1c1815; --surface-2:#241f1b; --line:#332b25;
-    --ink:#ede7dd; --ink-2:#b7ac9f; --ink-3:#7d7269;
-    --gold:#d4b678; --gold-strong:#c79a3f; --gold-dim:#8a7448;
-    --cool:#6f8ea3; --heat:#c8894a; --good:#7fae6b; --warn:#c98b45;
-    --radius:14px; --maxw:1240px;
-    --serif:"Hoefler Text","Baskerville Old Face","Big Caslon",Palatino,Georgia,serif;
-    --sans:"Neue Haas Grotesk Display","Helvetica Neue",Helvetica,Arial,sans-serif;
-    --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,"Roboto Mono",monospace;
-  }
-  @media (prefers-color-scheme: light){
-    :root:not([data-theme="dark"]){
-      --bg:#f3efe8; --surface:#fbf9f5; --surface-2:#f6f1e8; --line:#e3dccf;
-      --ink:#201b15; --ink-2:#5f574c; --ink-3:#928777;
-      --gold:#9a7b3f; --gold-strong:#8a6a2c; --gold-dim:#b79a63;
-      --cool:#5a7d94; --heat:#b06a2e; --good:#4f7d3c; --warn:#a76a24;
-    }
-  }
-  :root[data-theme="light"]{
-    --bg:#f3efe8; --surface:#fbf9f5; --surface-2:#f6f1e8; --line:#e3dccf;
-    --ink:#201b15; --ink-2:#5f574c; --ink-3:#928777;
-    --gold:#9a7b3f; --gold-strong:#8a6a2c; --gold-dim:#b79a63;
-    --cool:#5a7d94; --heat:#b06a2e; --good:#4f7d3c; --warn:#a76a24;
-  }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:56px 22px 48px;width:100%}
@@ -80,7 +56,7 @@
     padding:3px 7px;border-radius:5px;background:rgba(20,17,14,.78);color:#ede7dd}
   .badge.sold{background:#8a3a2a;color:#fff}
   .badge.gone{background:rgba(90,82,74,.85);color:#fff}
-  .badge.under{left:auto;right:8px;background:var(--gold);color:#14110e}
+  .badge.under{left:auto;right:8px;background:var(--gold);color:var(--accent-ink)}
   .badge.held{background:#6b5a2e;color:#fff}
   .why{font-size:11.5px;color:var(--heat);line-height:1.35}
   .card.heldcard{border-style:dashed}
@@ -129,6 +105,7 @@
   @media (prefers-reduced-motion: reduce){.totop{transition:none}}
   @media (prefers-reduced-motion: reduce){.card{transition:none}.card:hover{transform:none}}
 </style>
+<link rel="stylesheet" href="byraph.css">
 </head>
 <body>
 <div class="wrap">
